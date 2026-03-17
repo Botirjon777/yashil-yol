@@ -1,26 +1,60 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
+@theme {
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-heading: "Manrope", ui-sans-serif, system-ui, sans-serif;
+
+  --color-primary: #4f46e5;
+  --color-primary-dark: #4338ca;
+  --color-secondary: #0ea5e9;
+  --color-accent: #f59e0b;
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-dark-text: #0f172a;
+  --color-light-bg: #f8fafc;
+  --color-card-bg: #ffffff;
+  --color-border: #e2e8f0;
+
+  --radius-2xl: 1rem;
+
+  --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.05),
+    0 4px 6px -2px rgba(0, 0, 0, 0.025);
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
+@layer base {
+  body {
+    @apply bg-light-bg text-dark-text font-sans min-h-screen flex flex-col;
+  }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    @apply font-heading font-bold;
   }
 }
 
-body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+@layer components {
+  .premium-card {
+    @apply bg-(--color-card-bg) border border-(--color-border) rounded-2xl shadow-soft transition-all duration-300;
+  }
+
+  .premium-card:hover {
+    @apply shadow-xl shadow-primary/5 border-primary/20;
+  }
+}
+
+/* Custom Scrollbar */
+::-webkit-scrollbar {
+  width: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-gray-200 rounded-full hover:bg-gray-300;
 }
