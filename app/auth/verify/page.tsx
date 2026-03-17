@@ -1,9 +1,13 @@
 "use client";
 
-import React, { useState, useRef, useEffect } from "react";
+import React, { useState, useRef } from "react";
+import { useSearchParams } from "next/navigation";
 import Button from "@/src/components/ui/Button";
 
 const VerifyPage = () => {
+  const searchParams = useSearchParams();
+  const phone = searchParams.get("phone") || "your phone number";
+  
   const [code, setCode] = useState(["", "", "", ""]);
   const [isLoading, setIsLoading] = useState(false);
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
@@ -43,7 +47,7 @@ const VerifyPage = () => {
           </div>
           <h1 className="text-3xl font-black text-dark-text mb-4">Verify Identity</h1>
           <p className="text-gray-500 font-medium mb-10 leading-relaxed">
-            We&apos;ve sent a 4-digit verification code to your email address. Please enter it below.
+            We&apos;ve sent a 4-digit verification code to <span className="text-dark-text font-bold">{phone}</span>. Please enter it below.
           </p>
 
           <form onSubmit={handleSubmit}>

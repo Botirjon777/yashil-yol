@@ -7,11 +7,24 @@ import Button from "@/src/components/ui/Button";
 import Dropdown from "@/src/components/ui/Dropdown";
 import Calendar from "@/src/components/ui/Calendar";
 
+import { useRouter } from "next/navigation";
+
 export default function Home() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [date, setDate] = useState("");
   const [passengers, setPassengers] = useState(1);
+  const router = useRouter();
+
+  const handleSearch = () => {
+    const params = new URLSearchParams();
+    if (from) params.set("from", from);
+    if (to) params.set("to", to);
+    if (date) params.set("date", date);
+    params.set("passengers", passengers.toString());
+    
+    router.push(`/rides?${params.toString()}`);
+  };
 
   const regionOptions = UZBEKISTAN_REGIONS.map((r) => ({ id: r.id, name: r.name }));
   const passengerOptions = [
@@ -77,7 +90,10 @@ export default function Home() {
                   placeholder="1"
                   className="w-40 text-left"
                 />
-                <Button className="h-[52px] px-10 rounded-xl shadow-lg shadow-primary/30 shrink-0 font-black uppercase tracking-widest text-xs">
+                <Button 
+                  onClick={handleSearch}
+                  className="h-[52px] px-10 rounded-xl shadow-lg shadow-primary/30 shrink-0 font-black uppercase tracking-widest text-xs"
+                >
                   Search
                 </Button>
               </div>

@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { Inter, Manrope } from "next/font/google";
 import "./globals.css";
-import QueryProvider from "@/src/components/QueryProvider";
+import Providers from "@/src/providers";
 import Navbar from "@/src/components/Navbar";
 import Footer from "@/src/components/Footer";
 
@@ -28,11 +28,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
       <body className="antialiased min-h-screen flex flex-col">
-        <QueryProvider>
+        <Providers>
           <Navbar />
           <main className="grow">{children}</main>
           <Footer />
-        </QueryProvider>
+        </Providers>
       </body>
     </html>
   );

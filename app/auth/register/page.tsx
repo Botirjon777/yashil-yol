@@ -1,25 +1,10 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import Link from "next/link";
-import { HiUser, HiMail, HiLockClosed } from "react-icons/hi";
-import Button from "@/src/components/ui/Button";
-import Input from "@/src/components/ui/Input";
-import Checkbox from "@/src/components/ui/Checkbox";
+import { RegisterForm } from "@/src/features/auth/components/RegisterForm";
 
 const RegisterPage = () => {
-  const [isLoading, setIsLoading] = useState(false);
-
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
-    setIsLoading(true);
-    // Mock registration
-    setTimeout(() => {
-      setIsLoading(false);
-      window.location.href = "/auth/verify";
-    }, 1500);
-  };
-
   return (
     <div className="min-h-[90vh] flex items-center justify-center px-4 py-12">
       <div className="max-w-4xl w-full">
@@ -56,50 +41,10 @@ const RegisterPage = () => {
               </ul>
             </div>
 
-            <form onSubmit={handleSubmit} className="space-y-5">
-              <div className="grid grid-cols-2 gap-4">
-                <Input
-                  label="First Name"
-                  placeholder="Alisher"
-                  required
-                  iconLeft={<HiUser className="w-4 h-4" />}
-                />
-                <Input label="Last Name" placeholder="Navoiy" required />
-              </div>
-              <Input label="Father's Name" placeholder="Optional" />
-              <Input
-                label="Email"
-                type="email"
-                placeholder="name@example.com"
-                required
-                iconLeft={<HiMail className="w-4 h-4" />}
-              />
-              <Input
-                label="Password"
-                type="password"
-                placeholder="Min. 8 characters"
-                required
-                iconLeft={<HiLockClosed className="w-4 h-4" />}
-              />
-              <Input
-                label="Confirm Password"
-                type="password"
-                placeholder="Confirm"
-                required
-              />
+            <div>
+              <RegisterForm />
 
-              <div className="pt-2">
-                <Checkbox
-                  label="I agree to the Terms and Conditions"
-                  required
-                />
-              </div>
-
-              <Button type="submit" fullWidth size="lg" loading={isLoading}>
-                Create Account
-              </Button>
-
-              <p className="text-center text-gray-500 text-sm font-medium mt-4">
+              <p className="text-center text-gray-500 text-sm font-medium mt-6">
                 Already have an account?{" "}
                 <Link
                   href="/auth/login"
@@ -108,7 +53,7 @@ const RegisterPage = () => {
                   Log in
                 </Link>
               </p>
-            </form>
+            </div>
           </div>
         </div>
       </div>
@@ -117,3 +62,4 @@ const RegisterPage = () => {
 };
 
 export default RegisterPage;
+

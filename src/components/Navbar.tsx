@@ -2,14 +2,22 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { HiMenu, HiX, HiSearch, HiUserCircle } from "react-icons/hi";
+import { HiMenu, HiX, HiSearch, HiUserCircle, HiLogout } from "react-icons/hi";
 import { formatCurrency } from "@/src/lib/utils";
 import Button from "./ui/Button";
+import { useAuthStore } from "@/src/providers/AuthProvider";
+import { toast } from "sonner";
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false); // Mock auth state
-  const [balance, setBalance] = useState(150000); // Mock balance
+  const { user, logout } = useAuthStore();
+  const [balance] = useState(150000); // Mock balance for now
+
+  const handleLogout = () => {
+    logout();
+    toast.success("Successfully logged out");
+    window.location.href = "/";
+  };
 
   return (
     <nav className="bg-white border-b border-border sticky top-0 z-50">
@@ -34,16 +42,25 @@ const Navbar = () => {
               Find a Ride
             </Link>
             
-            {isLoggedIn ? (
+            {user ? (
               <div className="flex items-center space-x-6">
                 <div className="bg-light-bg px-4 py-2 rounded-xl border border-border">
                   <span className="text-xs text-gray-500 block leading-none mb-1">Balance</span>
                   <span className="text-dark-text font-bold leading-none">{formatCurrency(balance)}</span>
                 </div>
-                <Link href="/dashboard" className="flex items-center space-x-2 bg-white hover:bg-light-bg p-1 pr-3 rounded-full border border-border transition-all">
-                  <HiUserCircle className="w-9 h-9 text-primary" />
-                  <span className="font-semibold text-dark-text">Account</span>
-                </Link>
+                <div className="flex items-center space-x-4">
+                  <Link href="/dashboard" className="flex items-center space-x-2 bg-white hover:bg-light-bg p-1 pr-3 rounded-full border border-border transition-all">
+                    <HiUserCircle className="w-9 h-9 text-primary" />
+                    <span className="font-semibold text-dark-text">{user.first_name}</span>
+                  </Link>
+                  <button 
+                    onClick={handleLogout}
+                    className="p-2 text-gray-400 hover:text-error hover:bg-error/5 rounded-xl transition-all"
+                    title="Logout"
+                  >
+                    <HiLogout className="w-6 h-6" />
+                  </button>
+                </div>
               </div>
             ) : (
               <div className="flex items-center space-x-4">
@@ -80,18 +97,27 @@ const Navbar = () => {
             >
               Find a Ride
             </Link>
-            {isLoggedIn ? (
+            {user ? (
               <>
                 <Link
                   href="/dashboard"
                   className="block px-4 py-3 text-lg font-semibold text-dark-text hover:bg-light-bg rounded-xl transition-colors"
                   onClick={() => setIsOpen(false)}
                 >
-                  My Dashboard
+                  My Dashboard ({user.first_name})
                 </Link>
-                <div className="px-4 py-3 bg-light-bg rounded-xl">
-                  <span className="text-sm text-gray-500 block mb-1">Balance</span>
-                  <span className="text-xl font-bold text-dark-text">{formatCurrency(balance)}</span>
+                <div className="px-4 py-3 bg-light-bg rounded-xl flex justify-between items-center">
+                  <div>
+                    <span className="text-sm text-gray-500 block mb-1">Balance</span>
+                    <span className="text-xl font-bold text-dark-text">{formatCurrency(balance)}</span>
+                  </div>
+                  <button 
+                    onClick={handleLogout}
+                    className="flex items-center space-x-2 text-error font-bold px-4 py-2 hover:bg-error/5 rounded-xl transition-all"
+                  >
+                    <HiLogout className="w-5 h-5" />
+                    <span>Logout</span>
+                  </button>
                 </div>
               </>
             ) : (
