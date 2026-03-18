@@ -243,7 +243,6 @@ const RideDetailsPage = () => {
               <Button
                 fullWidth
                 size="lg"
-                className="h-16 rounded-3xl text-lg shadow-xl shadow-primary/30"
                 onClick={() => setIsBookModalOpen(true)}
               >
                 Book this Ride

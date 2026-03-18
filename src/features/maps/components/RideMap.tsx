@@ -42,7 +42,16 @@ const RideMap: React.FC<RideMapProps> = ({ origin, destination }) => {
     }
   }, [isLoaded, origin, destination, directions]);
 
-  if (!isLoaded) return <Loader className="h-[400px] w-full" />;
+  if (!isLoaded) {
+    return (
+      <div className="w-full h-[400px] bg-slate-50 rounded-[24px] flex flex-col items-center justify-center border-2 border-dashed border-slate-200">
+        <Loader size="lg" />
+        <span className="mt-4 text-slate-400 font-bold text-sm tracking-widest uppercase animate-pulse">
+          Loading Map Experience...
+        </span>
+      </div>
+    );
+  }
 
   return (
     <div className="premium-card overflow-hidden">

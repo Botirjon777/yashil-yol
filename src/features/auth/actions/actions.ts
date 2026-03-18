@@ -14,3 +14,7 @@ export const loginUser = async (data: LoginRequest): Promise<AuthResponse> => {
 export const forgotPassword = async (data: ForgotPasswordRequest): Promise<void> => {
   await api.post("/auth/forgot-password", data);
 };
+
+export const logoutUser = async (): Promise<void> => {
+  await api.post("/v1/auth/logout");
+};

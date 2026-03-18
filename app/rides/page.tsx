@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { HiSearch, HiAdjustments, HiChevronRight, HiStar, HiClock, HiUserGroup, HiLocationMarker } from "react-icons/hi";
 import { formatCurrency, formatDate } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
@@ -11,7 +11,7 @@ import { useSearchParams } from "next/navigation";
 import { MOCK_RIDES } from "@/src/lib/mock-data";
 import { UZBEKISTAN_REGIONS } from "@/src/lib/regions";
 
-const RidesPage = () => {
+const RidesContent = () => {
   const searchParams = useSearchParams();
   
   const [activeFrom, setActiveFrom] = useState(searchParams.get("from") || "tashkent_city");
@@ -91,7 +91,7 @@ const RidesPage = () => {
                   onChange={setActivePassengers}
                 />
              </div>
-             <Button className="md:w-36 h-[52px] shadow-lg shadow-primary/20 shrink-0 font-black uppercase tracking-widest text-xs">
+             <Button className="md:w-36 shrink-0">
                Update
              </Button>
           </div>
@@ -252,4 +252,21 @@ const RidesPage = () => {
   );
 };
 
+const RidesPage = () => {
+  return (
+    <Suspense fallback={
+      <div className="bg-light-bg min-h-screen py-8 md:py-12 flex items-center justify-center">
+        <div className="animate-pulse flex flex-col items-center">
+          <div className="w-16 h-16 bg-gray-200 rounded-full mb-4"></div>
+          <div className="h-4 bg-gray-200 rounded w-48 mb-2"></div>
+          <div className="h-4 bg-gray-200 rounded w-32"></div>
+        </div>
+      </div>
+    }>
+      <RidesContent />
+    </Suspense>
+  );
+};
+
 export default RidesPage;
+

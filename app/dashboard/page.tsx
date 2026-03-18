@@ -148,7 +148,6 @@ const DashboardPage = () => {
                       <Button
                         variant="secondary"
                         size="lg"
-                        className="rounded-2xl"
                         onClick={() => setIsTopUpOpen(true)}
                       >
                         <HiPlus className="mr-2" /> Top up Balance
@@ -190,7 +189,7 @@ const DashboardPage = () => {
                     type="email"
                   />
                   <div className="pt-4">
-                    <Button size="lg" className="px-12 rounded-2xl">
+                    <Button size="lg" className="px-12">
                       Save Changes
                     </Button>
                   </div>
