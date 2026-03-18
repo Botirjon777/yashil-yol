@@ -45,6 +45,27 @@
     "button": "Hisob yaratish",
     "howItWorks": "Bu qanday ishlaydi"
   },
+  "bus": {
+    "title": "Avtobus xizmatlari",
+    "subtitle": "Shaharlararo qulay avtobus sayohatlari",
+    "description": "Tez orada bizning platformamiz orqali avtobus chiptalarini band qilishingiz mumkin bo'ladi. Hozirda biz eng yaxshi tashuvchilar bilan ishlamoqdamiz."
+  },
+  "carpool": {
+    "title": "Karpul - Hamrohlar bilan sayohat",
+    "subtitle": "Xarajatlarni baham ko'ring va yangi do'stlar orttiring",
+    "description": "Karpul xizmati orqali siz o'zingizga mos yo'nalishdagi haydovchilarni topishingiz yoki o'z safaringizni e'lon qilishingiz mumkin."
+  },
+  "support": {
+    "title": "Sizga qanday yordam bera olamiz?",
+    "subtitle": "Bizning jamoamiz sizga yordam berishga doim tayyor",
+    "formTitle": "Bizga xabar qoldiring",
+    "name": "Ismingiz",
+    "email": "Elektron pochta",
+    "message": "Xabaringiz",
+    "send": "Xabarni yuborish",
+    "success": "Xabaringiz muvaffaqiyatli yuborildi!",
+    "contactInfo": "Aloqa ma'lumotlari"
+  },
   "error": {
     "title": "Voy! Adashib qoldingizmi?",
     "subtitle": "Siz qidirayotgan sahifa mavjud emas yoki boshqa manzilga ko'chirilgan.",

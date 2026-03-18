@@ -45,6 +45,27 @@
     "button": "Create Account",
     "howItWorks": "How it works"
   },
+  "bus": {
+    "title": "Bus Services",
+    "subtitle": "Comfortable intercity bus travel",
+    "description": "Soon you will be able to book bus tickets through our platform. We are currently working with the best carriers."
+  },
+  "carpool": {
+    "title": "Carpool - Travel with Companions",
+    "subtitle": "Share costs and make new friends",
+    "description": "Through our carpool service, you can find drivers heading your way or announce your own trip."
+  },
+  "support": {
+    "title": "How can we help you?",
+    "subtitle": "Our team is always ready to assist you",
+    "formTitle": "Leave us a message",
+    "name": "Your Name",
+    "email": "Email Address",
+    "message": "Your Message",
+    "send": "Send Message",
+    "success": "Your message has been sent successfully!",
+    "contactInfo": "Contact Information"
+  },
   "error": {
     "title": "Oops! Lost your way?",
     "subtitle": "The page you are looking for doesn't exist or has been moved to another region.",
