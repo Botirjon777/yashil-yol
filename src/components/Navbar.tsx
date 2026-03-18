@@ -2,21 +2,56 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { HiMenu, HiX, HiSearch, HiUserCircle, HiLogout } from "react-icons/hi";
-import { formatCurrency } from "@/src/lib/utils";
+import {
+  HiMenu,
+  HiX,
+  HiSearch,
+  HiUserCircle,
+  HiLogout,
+  HiUsers,
+  HiTicket,
+  HiChatAlt2,
+} from "react-icons/hi";
+import { formatCurrency, cn } from "@/src/lib/utils";
 import Button from "./ui/Button";
 import { useAuthStore } from "@/src/providers/AuthProvider";
+import { useLogout } from "@/src/features/auth/hooks/useAuth";
 import { toast } from "sonner";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import { HiChevronDown } from "react-icons/hi";
+
+const languageConfig = {
+  uz: { name: "O'zbekcha", flag: "https://flagcdn.com/w40/uz.png" },
+  ru: { name: "Русский", flag: "https://flagcdn.com/w40/ru.png" },
+  en: { name: "English", flag: "https://flagcdn.com/w40/us.png" },
+};
 
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const { user, logout } = useAuthStore();
+  const { language, setLanguage, t } = useLanguageStore();
+  const { mutate: logoutMutation } = useLogout();
   const [balance] = useState(150000); // Mock balance for now
 
+  React.useEffect(() => {
+    setMounted(true);
+  }, []);
+
   const handleLogout = () => {
-    logout();
-    toast.success("Successfully logged out");
-    window.location.href = "/";
+    logoutMutation(undefined, {
+      onSuccess: () => {
+        logout();
+        toast.success(t("nav", "logout") + " successfully");
+        window.location.href = "/";
+      },
+      onError: () => {
+        // Even if API fails, we might want to logout locally
+        logout();
+        toast.success("Logged out locally");
+        window.location.href = "/";
+      },
+    });
   };
 
   return (
@@ -37,23 +72,59 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-8">
-            <Link href="/rides" className="text-dark-text font-semibold hover:text-primary transition-colors flex items-center">
+            <Link
+              href="/rides"
+              className="text-dark-text font-semibold hover:text-primary transition-colors flex items-center"
+            >
               <HiSearch className="mr-2 w-5 h-5" />
-              Find a Ride
+              {t("nav", "findRide")}
             </Link>
-            
+
+            <Link
+              href="/carpool"
+              className="text-dark-text font-semibold hover:text-primary transition-colors flex items-center"
+            >
+              <HiUsers className="mr-2 w-5 h-5" />
+              {t("nav", "carpool")}
+            </Link>
+
+            <Link
+              href="/bus"
+              className="text-dark-text font-semibold hover:text-primary transition-colors flex items-center"
+            >
+              <HiTicket className="mr-2 w-5 h-5" />
+              {t("nav", "bus")}
+            </Link>
+
+            <Link
+              href="/support"
+              className="text-dark-text font-semibold hover:text-primary transition-colors flex items-center"
+            >
+              <HiChatAlt2 className="mr-2 w-5 h-5" />
+              {t("nav", "support")}
+            </Link>
+
             {user ? (
               <div className="flex items-center space-x-6">
                 <div className="bg-light-bg px-4 py-2 rounded-xl border border-border">
-                  <span className="text-xs text-gray-500 block leading-none mb-1">Balance</span>
-                  <span className="text-dark-text font-bold leading-none">{formatCurrency(balance)}</span>
+                  <span className="text-xs text-gray-500 block leading-none mb-1">
+                    {t("nav", "balance")}
+                  </span>
+                  <span className="text-dark-text font-bold leading-none">
+                    {mounted ? formatCurrency(balance) : "---"}
+                  </span>
                 </div>
                 <div className="flex items-center space-x-4">
-                  <Link href="/dashboard" className="flex items-center space-x-2 bg-white hover:bg-light-bg p-1 pr-3 rounded-full border border-border transition-all">
+                  <Link
+                    href="/dashboard"
+                    className="flex items-center space-x-2 bg-white hover:bg-light-bg p-1 pr-3 rounded-full border border-border transition-all"
+                  >
                     <HiUserCircle className="w-9 h-9 text-primary" />
-                    <span className="font-semibold text-dark-text">{user.first_name}</span>
+                    <span className="font-semibold text-dark-text">
+                      {user.first_name}
+                    </span>
                   </Link>
-                  <button 
+                  <button
                     onClick={handleLogout}
                     className="p-2 text-gray-400 hover:text-error hover:bg-error/5 rounded-xl transition-all"
                     title="Logout"
@@ -64,14 +135,54 @@ const Navbar = () => {
               </div>
             ) : (
               <div className="flex items-center space-x-4">
-                <Link href="/auth/login" className="text-dark-text font-semibold hover:text-primary transition-colors px-4 py-2">
-                  Log in
+                <Link
+                  href="/auth/login"
+                  className="text-dark-text font-semibold hover:text-primary transition-colors px-4 py-2"
+                >
+                  {t("nav", "login")}
                 </Link>
                 <Link href="/auth/register">
-                  <Button size="md">Join for Free</Button>
+                  <Button size="md">{t("nav", "joinFree")}</Button>
                 </Link>
               </div>
             )}
+
+            {/* Language Switcher Dropdown */}
+            <div className="relative group ml-4 border-l border-border pl-4">
+              <button className="flex items-center space-x-2 px-3 py-2 hover:bg-light-bg rounded-xl transition-all border border-transparent hover:border-border">
+                <img
+                  src={languageConfig[language].flag}
+                  alt={languageConfig[language].name}
+                  className="w-5 h-3.5 object-cover rounded-sm shadow-sm"
+                />
+                <span className="text-xs font-bold uppercase text-dark-text">
+                  {language}
+                </span>
+                <HiChevronDown className="w-4 h-4 text-gray-400 group-hover:rotate-180 transition-transform" />
+              </button>
+
+              <div className="absolute right-0 mt-2 w-48 bg-white rounded-2xl shadow-2xl border border-border opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-200 z-60 py-2">
+                {(["uz", "ru", "en"] as const).map((lang) => (
+                  <button
+                    key={lang}
+                    onClick={() => setLanguage(lang)}
+                    className={cn(
+                      "w-full flex items-center space-x-3 px-4 py-3 transition-colors text-left",
+                      language === lang
+                        ? "bg-primary/5 text-primary font-bold"
+                        : "text-dark-text hover:bg-light-bg",
+                    )}
+                  >
+                    <img
+                      src={languageConfig[lang].flag}
+                      alt={languageConfig[lang].name}
+                      className="w-5 h-3.5 object-cover rounded-sm"
+                    />
+                    <span className="text-sm">{languageConfig[lang].name}</span>
+                  </button>
+                ))}
+              </div>
+            </div>
           </div>
 
           {/* Mobile menu button */}
@@ -80,7 +191,11 @@ const Navbar = () => {
               onClick={() => setIsOpen(!isOpen)}
               className="p-2 rounded-xl text-gray-400 hover:text-primary hover:bg-light-bg transition-colors"
             >
-              {isOpen ? <HiX className="w-7 h-7" /> : <HiMenu className="w-7 h-7" />}
+              {isOpen ? (
+                <HiX className="w-7 h-7" />
+              ) : (
+                <HiMenu className="w-7 h-7" />
+              )}
             </button>
           </div>
         </div>
@@ -95,7 +210,28 @@ const Navbar = () => {
               className="block px-4 py-3 text-lg font-semibold text-dark-text hover:bg-light-bg rounded-xl transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              Find a Ride
+              {t("nav", "findRide")}
+            </Link>
+            <Link
+              href="/carpool"
+              className="block px-4 py-3 text-lg font-semibold text-dark-text hover:bg-light-bg rounded-xl transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              {t("nav", "carpool")}
+            </Link>
+            <Link
+              href="/bus"
+              className="block px-4 py-3 text-lg font-semibold text-dark-text hover:bg-light-bg rounded-xl transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              {t("nav", "bus")}
+            </Link>
+            <Link
+              href="/support"
+              className="block px-4 py-3 text-lg font-semibold text-dark-text hover:bg-light-bg rounded-xl transition-colors"
+              onClick={() => setIsOpen(false)}
+            >
+              {t("nav", "support")}
             </Link>
             {user ? (
               <>
@@ -108,28 +244,61 @@ const Navbar = () => {
                 </Link>
                 <div className="px-4 py-3 bg-light-bg rounded-xl flex justify-between items-center">
                   <div>
-                    <span className="text-sm text-gray-500 block mb-1">Balance</span>
-                    <span className="text-xl font-bold text-dark-text">{formatCurrency(balance)}</span>
+                    <span className="text-sm text-gray-500 block mb-1">
+                      {t("nav", "balance")}
+                    </span>
+                    <span className="text-xl font-bold text-dark-text">
+                      {mounted ? formatCurrency(balance) : "---"}
+                    </span>
                   </div>
-                  <button 
+                  <button
                     onClick={handleLogout}
                     className="flex items-center space-x-2 text-error font-bold px-4 py-2 hover:bg-error/5 rounded-xl transition-all"
                   >
                     <HiLogout className="w-5 h-5" />
-                    <span>Logout</span>
+                    <span>{t("nav", "logout")}</span>
                   </button>
                 </div>
               </>
             ) : (
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <Link href="/auth/login" onClick={() => setIsOpen(false)}>
-                  <Button variant="outline" fullWidth>Log in</Button>
+                  <Button variant="outline" fullWidth>
+                    {t("nav", "login")}
+                  </Button>
                 </Link>
                 <Link href="/auth/register" onClick={() => setIsOpen(false)}>
-                  <Button fullWidth>Sign up</Button>
+                  <Button fullWidth>{t("nav", "signup")}</Button>
                 </Link>
               </div>
             )}
+
+            <div className="grid grid-cols-3 gap-3 pt-4 border-t border-border">
+              {(["uz", "ru", "en"] as const).map((lang) => (
+                <button
+                  key={lang}
+                  onClick={() => {
+                    setLanguage(lang);
+                    setIsOpen(false);
+                  }}
+                  className={cn(
+                    "flex flex-col items-center space-y-2 p-3 rounded-2xl transition-all border",
+                    language === lang
+                      ? "bg-primary text-white border-primary shadow-xl shadow-primary/20"
+                      : "bg-white text-gray-500 border-border hover:border-primary/50",
+                  )}
+                >
+                  <img
+                    src={languageConfig[lang].flag}
+                    alt={languageConfig[lang].name}
+                    className="w-8 h-5 object-cover rounded shadow-sm"
+                  />
+                  <span className="text-[10px] font-black uppercase tracking-wider">
+                    {lang}
+                  </span>
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       )}

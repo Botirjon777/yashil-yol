@@ -56,7 +56,12 @@ const Calendar: React.FC<CalendarProps> = ({
 
   const handleDateClick = (day: number) => {
     const newDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-    const formatted = newDate.toISOString().split("T")[0];
+    // Format to YYYY-MM-DD in local time to avoid timezone shifts from toISOString()
+    const year = newDate.getFullYear();
+    const month = String(newDate.getMonth() + 1).padStart(2, '0');
+    const d = String(newDate.getDate()).padStart(2, '0');
+    const formatted = `${year}-${month}-${d}`;
+    
     onChange(formatted);
     setIsOpen(false);
   };
@@ -73,26 +78,36 @@ const Calendar: React.FC<CalendarProps> = ({
       days.push(<div key={`empty-${i}`} className="h-10 w-10" />);
     }
 
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
     // Days of current month
     for (let d = 1; d <= totalDays; d++) {
+      const currentDayDate = new Date(year, month, d);
+      currentDayDate.setHours(0, 0, 0, 0);
+
       const isSelected = selectedDate && 
         selectedDate.getDate() === d && 
         selectedDate.getMonth() === month && 
         selectedDate.getFullYear() === year;
       
-      const isToday = new Date().getDate() === d && 
-        new Date().getMonth() === month && 
-        new Date().getFullYear() === year;
+      const isToday = today.getDate() === d && 
+        today.getMonth() === month && 
+        today.getFullYear() === year;
+
+      const isPast = currentDayDate.getTime() < today.getTime();
 
       days.push(
         <button
           key={d}
           type="button"
+          disabled={isPast}
           onClick={() => handleDateClick(d)}
           className={cn(
             "h-10 w-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all",
             isSelected ? "bg-primary text-white shadow-lg shadow-primary/30" : "hover:bg-primary/10 text-dark-text",
             isToday && !isSelected && "text-primary border border-primary/20",
+            isPast && "opacity-20 cursor-not-allowed hover:bg-transparent"
           )}
         >
           {d}
@@ -167,8 +182,12 @@ const Calendar: React.FC<CalendarProps> = ({
             <button 
               type="button"
               onClick={() => {
-                const today = new Date().toISOString().split("T")[0];
-                onChange(today);
+                const now = new Date();
+                const year = now.getFullYear();
+                const month = String(now.getMonth() + 1).padStart(2, '0');
+                const d = String(now.getDate()).padStart(2, '0');
+                const todayFormatted = `${year}-${month}-${d}`;
+                onChange(todayFormatted);
                 setIsOpen(false);
               }}
               className="text-primary text-xs font-black uppercase tracking-widest hover:underline"

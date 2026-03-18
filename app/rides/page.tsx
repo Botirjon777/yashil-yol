@@ -91,7 +91,7 @@ const RidesContent = () => {
                   onChange={setActivePassengers}
                 />
              </div>
-             <Button className="md:w-36 h-[52px] shadow-lg shadow-primary/20 shrink-0 font-black uppercase tracking-widest text-xs">
+             <Button className="md:w-36 shrink-0">
                Update
              </Button>
           </div>

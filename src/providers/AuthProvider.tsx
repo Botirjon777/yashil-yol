@@ -23,8 +23,8 @@ export const useAuthStore = create<AuthState>()(
     {
       name: "auth-storage",
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
 
 export default function AuthProvider({ children }: { children: ReactNode }) {

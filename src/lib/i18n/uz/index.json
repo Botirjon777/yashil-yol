@@ -1,0 +1,59 @@
+{
+  "nav": {
+    "findRide": "Yo'sh topish",
+    "carpool": "Karpul",
+    "bus": "Avtobus",
+    "support": "Yordam",
+    "login": "Kirish",
+    "joinFree": "Bepul qo'shilish",
+    "signup": "Ro'yxatdan o'tish",
+    "logout": "Chiqish",
+    "balance": "Balans",
+    "dashboard": "Boshqaruv paneli"
+  },
+  "hero": {
+    "title": "Sayohatingiz uchun eng yaxshi hamroh",
+    "subtitle": "O'zbekiston bo'ylab qulay va arzon sayohat qiling",
+    "leavingFrom": "Qayerdan",
+    "goingTo": "Qayerga",
+    "date": "Sana",
+    "passengers": "Yo'lovchilar",
+    "passengerCount": "yo'lovchi",
+    "searchPlaceholder": "Viloyat",
+    "destinationPlaceholder": "Viloyat",
+    "datePlaceholder": "Sanani tanlang",
+    "searchButton": "Qidirish"
+  },
+  "stats": {
+    "users": "Foydalanuvchilar",
+    "regions": "Hududlar",
+    "dailyRides": "Kundalik safarlar",
+    "safe": "Xavfsiz va tekshirilgan"
+  },
+  "features": {
+    "why": "Nima uchun Yashil Yo'l?",
+    "driverTitle": "Tasdiqlangan haydovchilar",
+    "driverDesc": "Platformamizdagi har bir haydovchi shaxsan tekshiriladi. Xavfsizlik bizning asosiy vazifamiz.",
+    "priceTitle": "Eng yaxshi narxlar",
+    "priceDesc": "Butun mamlakat bo'ylab standart taksi xizmatlaridan 60% gacha arzonroq sayohat qiling.",
+    "bookingTitle": "Tezkor band qilish",
+    "bookingDesc": "Sanoqli soniyalarda yo'l toping. Qo'ng'iroqlarsiz, kutishlarsiz, shunchaki oson sayohat."
+  },
+  "cta": {
+    "title": "Birinchi sayohatingizni boshlashga tayyormisiz?",
+    "subtitle": "Bugun minglab sayohatchilarga qo'shiling va O'zbekistondagi eng yaxshi transport xizmatidan bahramand bo'ling.",
+    "button": "Hisob yaratish",
+    "howItWorks": "Bu qanday ishlaydi"
+  },
+  "error": {
+    "title": "Voy! Adashib qoldingizmi?",
+    "subtitle": "Siz qidirayotgan sahifa mavjud emas yoki boshqa manzilga ko'chirilgan.",
+    "home": "Bosh sahifaga"
+  },
+  "common": {
+    "today": "Bugun",
+    "cancel": "Bekor qilish",
+    "save": "Saqlash",
+    "loading": "Yuklanmoqda..."
+  }
+}
