@@ -8,6 +8,7 @@ import Input from "@/src/components/ui/Input";
 import Checkbox from "@/src/components/ui/Checkbox";
 import { useRegister } from "../hooks/useAuth";
 import { useAuthStore } from "@/src/providers/AuthProvider";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 export const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -23,6 +24,7 @@ export const RegisterForm = () => {
 
   const { mutate, isPending, error: apiError } = useRegister();
   const setAuth = useAuthStore((state: any) => state.setAuth);
+  const { safeT } = useLanguageStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -34,7 +36,7 @@ export const RegisterForm = () => {
     setLocalError("");
 
     if (formData.password !== formData.confirmPassword) {
-      setLocalError("Passwords do not match");
+      setLocalError(safeT("auth", "register", "passwordsDoNotMatch"));
       return;
     }
 
@@ -50,11 +52,11 @@ export const RegisterForm = () => {
       {
         onSuccess: (data) => {
           setAuth(data.user, data.token);
-          toast.success("Account created successfully!");
+          toast.success(safeT("auth", "register", "accountCreated"));
           window.location.href = `/auth/verify?phone=${encodeURIComponent(formData.phone)}`;
         },
         onError: (err: any) => {
-          toast.error(err?.response?.data?.message || err.message || "Registration failed");
+          toast.error(err?.response?.data?.message || err.message || safeT("auth", "register", "registrationFailed"));
         }
       },
     );
@@ -66,7 +68,7 @@ export const RegisterForm = () => {
     apiError?.message;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
       {displayError && (
         <div className="bg-error/10 text-error p-3 rounded-xl text-sm font-bold border border-error/20">
           {displayError}
@@ -74,76 +76,76 @@ export const RegisterForm = () => {
       )}
       <div className="grid grid-cols-2 gap-4">
         <Input
-          label="First Name"
+          label={safeT("auth", "register", "firstNameLabel")}
           name="firstName"
-          placeholder="Alisher"
+          placeholder={safeT("auth", "register", "firstNamePlaceholder")}
           required
           value={formData.firstName}
           onChange={handleChange}
           iconLeft={<HiUser className="w-4 h-4" />}
         />
         <Input
-          label="Last Name"
+          label={safeT("auth", "register", "lastNameLabel")}
           name="lastName"
-          placeholder="Navoiy"
+          placeholder={safeT("auth", "register", "lastNamePlaceholder")}
           required
           value={formData.lastName}
           onChange={handleChange}
         />
       </div>
       <Input
-        label="Father's Name"
+        label={safeT("auth", "register", "fatherNameLabel")}
         name="fatherName"
-        placeholder="Optional"
+        placeholder={safeT("auth", "register", "fatherNamePlaceholder")}
         value={formData.fatherName}
         onChange={handleChange}
       />
       <Input
-        label="Email"
+        label={safeT("auth", "register", "emailLabel")}
         name="email"
         type="email"
-        placeholder="name@example.com"
+        placeholder={safeT("auth", "register", "emailPlaceholder")}
         required
         value={formData.email}
         onChange={handleChange}
         iconLeft={<HiMail className="w-4 h-4" />}
       />
       <Input
-        label="Phone Number"
+        label={safeT("auth", "register", "phoneLabel")}
         name="phone"
         type="tel"
-        placeholder="+998 90 123 45 67"
+        placeholder={safeT("auth", "register", "phonePlaceholder")}
         required
         value={formData.phone}
         onChange={handleChange}
         iconLeft={<HiPhone className="w-4 h-4" />}
       />
       <Input
-        label="Password"
+        label={safeT("auth", "register", "passwordLabel")}
         name="password"
         type="password"
-        placeholder="Min. 8 characters"
+        placeholder={safeT("auth", "register", "passwordPlaceholder")}
         required
         value={formData.password}
         onChange={handleChange}
         iconLeft={<HiLockClosed className="w-4 h-4" />}
       />
       <Input
-        label="Confirm Password"
+        label={safeT("auth", "register", "confirmPasswordLabel")}
         name="confirmPassword"
         type="password"
-        placeholder="Confirm"
+        placeholder={safeT("auth", "register", "confirmPasswordPlaceholder")}
         required
         value={formData.confirmPassword}
         onChange={handleChange}
       />
 
       <div className="pt-2">
-        <Checkbox label="I agree to the Terms and Conditions" required />
+        <Checkbox label={safeT("auth", "register", "termsAgreement")} required />
       </div>
 
       <Button type="submit" fullWidth size="lg" loading={isPending}>
-        Create Account
+        {safeT("auth", "register", "submitButton")}
       </Button>
     </form>
   );

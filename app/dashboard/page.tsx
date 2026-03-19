@@ -60,7 +60,7 @@ const DashboardPage = () => {
               </p>
             </div>
 
-            <nav className="space-y-2">
+            <nav className="space-y-2.5 md:space-y-5">
               <DashboardNavItem
                 icon={<HiStar />}
                 label="My Rides"
@@ -85,7 +85,7 @@ const DashboardPage = () => {
           {/* Content Area */}
           <div className="lg:col-span-3">
             {activeTab === "rides" && (
-              <div className="space-y-6 animate-in fade-in slide-in-from-right-4 duration-300">
+        <div className="space-y-2.5 md:space-y-5">
                 <div className="flex items-center justify-between mb-2">
                   <h1 className="text-3xl font-black text-dark-text">
                     My Rides
@@ -164,7 +164,7 @@ const DashboardPage = () => {
                         <HiPlus className="mr-1" /> Add New
                       </button>
                     </div>
-                    <div className="space-y-4">
+                    <div className="space-y-2.5 md:space-y-5">
                       <SavedCard last4="4589" brand="Visa" />
                       <SavedCard last4="9921" brand="Uzcard" />
                     </div>
@@ -178,7 +178,7 @@ const DashboardPage = () => {
                 <h1 className="text-3xl font-black text-dark-text mb-10">
                   Account Settings
                 </h1>
-                <form className="space-y-8">
+                <form className="space-y-2.5 md:space-y-5">
                   <div className="grid grid-cols-2 gap-8">
                     <Input label="First Name" defaultValue="Alisher" />
                     <Input label="Last Name" defaultValue="Navoiy" />

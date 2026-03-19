@@ -9,6 +9,7 @@ import Input from "@/src/components/ui/Input";
 import Checkbox from "@/src/components/ui/Checkbox";
 import { useLogin } from "../hooks/useAuth";
 import { useAuthStore } from "@/src/providers/AuthProvider";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 export const LoginForm = () => {
   const [email, setEmail] = useState("");
@@ -16,6 +17,7 @@ export const LoginForm = () => {
   
   const { mutate, isPending, error: apiError } = useLogin();
   const setAuth = useAuthStore((state: any) => state.setAuth);
+  const { safeT } = useLanguageStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -25,11 +27,11 @@ export const LoginForm = () => {
       {
         onSuccess: (data) => {
           setAuth(data.user, data.token);
-          toast.success("Welcome back!");
+          toast.success(safeT("auth", "login", "welcomeBack"));
           window.location.href = "/dashboard";
         },
         onError: (err: any) => {
-          toast.error(err?.response?.data?.message || err.message || "Login failed");
+          toast.error(err?.response?.data?.message || err.message || safeT("auth", "login", "loginFailed"));
         }
       }
     );
@@ -38,43 +40,43 @@ export const LoginForm = () => {
   const displayError = (apiError as any)?.response?.data?.message || apiError?.message;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
       {displayError && (
         <div className="bg-error/10 text-error p-3 rounded-xl text-sm font-bold border border-error/20">
           {displayError}
         </div>
       )}
       <Input
-        label="Email Address"
+        label={safeT("auth", "login", "emailLabel")}
         type="email"
-        placeholder="name@example.com"
+        placeholder={safeT("auth", "login", "emailPlaceholder")}
         iconLeft={<HiMail className="w-5 h-5" />}
         required
         value={email}
         onChange={(e) => setEmail(e.target.value)}
       />
       
-      <div className="space-y-1">
+      <div className="space-y-2.5 md:space-y-5">
         <Input
-          label="Password"
+          label={safeT("auth", "login", "passwordLabel")}
           type="password"
-          placeholder="••••••••"
+          placeholder={safeT("auth", "login", "passwordPlaceholder")}
           iconLeft={<HiLockClosed className="w-5 h-5" />}
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
         />
         <div className="flex justify-end">
-          <Link href="/auth/forgot-password" title="Forgot password?" className="text-sm font-bold text-primary hover:underline">
-            Forgot password?
+          <Link href="/auth/forgot-password" title={safeT("auth", "login", "forgotPassword")} className="text-sm font-bold text-primary hover:underline">
+            {safeT("auth", "login", "forgotPassword")}
           </Link>
         </div>
       </div>
 
-      <Checkbox label="Remember me for 30 days" />
+      <Checkbox label={safeT("auth", "login", "rememberMe")} />
 
       <Button type="submit" fullWidth size="lg" loading={isPending}>
-        Sign In
+        {safeT("auth", "login", "submitButton")}
       </Button>
     </form>
   );

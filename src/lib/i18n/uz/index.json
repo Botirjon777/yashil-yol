@@ -13,6 +13,11 @@
   },
   "hero": {
     "title": "Sayohatingiz uchun eng yaxshi hamroh",
+    "titleOptions": [
+      "Sayohatingiz uchun eng yaxshi hamroh",
+      "Eng arzon narxlar va qulay to'lovlar",
+      "Xavfsizlik biz uchun 1-o'rinda"
+    ],
     "subtitle": "O'zbekiston bo'ylab qulay va arzon sayohat qiling",
     "leavingFrom": "Qayerdan",
     "goingTo": "Qayerga",
@@ -76,5 +81,87 @@
     "cancel": "Bekor qilish",
     "save": "Saqlash",
     "loading": "Yuklanmoqda..."
+  },
+  "footer": {
+    "tagline": "Biz O'zbekistonda har bir kishi uchun hamroh topishni oson, xavfsiz va hamyonbop qilamiz.",
+    "explore": "Kashf qilish",
+    "company": "Kompaniya",
+    "connect": "Biz bilan bog'laning",
+    "coverage": "O'zbekistonning barcha 14 ta viloyatida mavjud.",
+    "rights": "Barcha huquqlar himoyalangan.",
+    "privacy": "Maxfiylik siyosati",
+    "cookie": "Kuki siyosati",
+    "about": "Biz haqimizda",
+    "contact": "Aloqa",
+    "terms": "Xizmat ko'rsatish shartlari",
+    "howItWorks": "Bu qanday ishlaydi",
+    "becomeDriver": "Haydovchi bo'lish"
+  },
+  "auth": {
+    "login": {
+      "title": "Xush kelibsiz",
+      "subtitle": "Mukammal sayohatni topish uchun tizimga kiring",
+      "emailLabel": "Elektron pochta manzili",
+      "emailPlaceholder": "ism@example.com",
+      "passwordLabel": "Parol",
+      "passwordPlaceholder": "••••••••",
+      "forgotPassword": "Parolni unutdingizmi?",
+      "rememberMe": "Meni 30 kunga eslab qolish",
+      "submitButton": "Tizimga kirish",
+      "noAccount": "Akkauntingiz yo'qmi?",
+      "createAccount": "Hozir yarating",
+      "welcomeBack": "Xush kelibsiz!",
+      "loginFailed": "Tizimga kirishda xatolik"
+    },
+    "register": {
+      "title": "Hisob yaratish",
+      "subtitle": "Bizning hamjamiyatimizga qo'shiling va butun mamlakat bo'ylab aqlli sayohat qilishni boshlang.",
+      "benefits": [
+        "Sayohatda 60% gacha tejang",
+        "Tasdiqlangan va baholangan haydovchilar",
+        "Balansga asoslangan oson to'lovlar"
+      ],
+      "firstNameLabel": "Ism",
+      "firstNamePlaceholder": "Alisher",
+      "lastNameLabel": "Familiya",
+      "lastNamePlaceholder": "Navoiy",
+      "fatherNameLabel": "Otasining ismi",
+      "fatherNamePlaceholder": "Ixtiyoriy",
+      "emailLabel": "Elektron pochta",
+      "emailPlaceholder": "ism@example.com",
+      "phoneLabel": "Telefon raqami",
+      "phonePlaceholder": "+998 90 123 45 67",
+      "passwordLabel": "Parol",
+      "passwordPlaceholder": "Kamida 8 ta belgi",
+      "confirmPasswordLabel": "Parolni tasdiqlash",
+      "confirmPasswordPlaceholder": "Tasdiqlang",
+      "termsAgreement": "Men Foydalanish shartlariga roziman",
+      "submitButton": "Hisob yaratish",
+      "hasAccount": "Akkauntingiz bormi?",
+      "login": "Kirish",
+      "passwordsDoNotMatch": "Parollar mos kelmadi",
+      "accountCreated": "Hisob muvaffaqiyatli yaratildi!",
+      "registrationFailed": "Ro'yxatdan o'tishda xatolik"
+    },
+    "forgotPassword": {
+      "title": "Parolni unutdingizmi?",
+      "subtitle": "Xavotir olmang! Elektron pochta manzilingizni kiriting va biz sizga parolni tiklash havolasini yuboramiz.",
+      "emailLabel": "Elektron pochta manzili",
+      "emailPlaceholder": "ism@example.com",
+      "submitButton": "Tiklash havolasini yuborish",
+      "successTitle": "Elektron pochtangizni tekshiring",
+      "successSubtitle": "Biz parolni tiklash havolasini yubordik:",
+      "resendEmail": "Pochtani qayta yuborish",
+      "returnToLogin": "Kirish sahifasiga qaytish",
+      "resetLinkSent": "Tiklash havolasi elektron pochtangizga yuborildi!",
+      "resetFailed": "Tiklash havolasini yuborib bo'lmadi"
+    },
+    "verify": {
+      "title": "Shaxsni tasdiqlash",
+      "subtitle": "Biz {phone} raqamiga 4 xonali tasdiqlash kodini yubordik. Uni quyida kiriting.",
+      "button": "Tasdiqlash va kirish",
+      "resend": "Kod kelmadimi? Qayta yuborish",
+      "success": "Muvaffaqiyatli tasdiqlandi!"
+    }
   }
 }

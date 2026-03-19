@@ -19,6 +19,37 @@
 
   --shadow-soft: 0 10px 15px -3px rgba(0, 0, 0, 0.05),
     0 4px 6px -2px rgba(0, 0, 0, 0.025);
+
+  /* Breakpoints */
+  --breakpoint-xs: 480px;
+  --breakpoint-sm: 640px;
+  --breakpoint-md: 768px;
+  --breakpoint-lg: 1024px;
+  --breakpoint-xl: 1280px;
+  --breakpoint-2xl: 1440px;
+}
+
+@layer utilities {
+  .container-custom {
+    @apply mx-auto w-full px-4 sm:px-6 lg:px-8;
+    max-width: 100%;
+  }
+
+  @media (min-width: 640px) {
+    .container-custom { max-width: 640px; }
+  }
+  @media (min-width: 768px) {
+    .container-custom { max-width: 768px; }
+  }
+  @media (min-width: 1024px) {
+    .container-custom { max-width: 1024px; }
+  }
+  @media (min-width: 1280px) {
+    .container-custom { max-width: 1280px; }
+  }
+  @media (min-width: 1440px) {
+    .container-custom { max-width: 1440px; }
+  }
 }
 
 @layer base {
@@ -38,7 +69,7 @@
 
 @layer components {
   .premium-card {
-    @apply bg-(--color-card-bg) border border-(--color-border) rounded-2xl shadow-soft transition-all duration-300;
+    @apply bg-card-bg border-border rounded-lg shadow-soft transition-all duration-300;
   }
 
   .premium-card:hover {
@@ -57,4 +88,32 @@
 
 ::-webkit-scrollbar-thumb {
   @apply bg-gray-200 rounded-full hover:bg-gray-300;
+}
+
+/* Global Animations - Standard CSS for maximum reliability */
+@keyframes slide-in-top {
+  from { transform: translateY(-30px); opacity: 0; }
+  to { transform: translateY(0); opacity: 1; }
+}
+
+@keyframes slide-in-left {
+  from { transform: translateX(-30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+@keyframes slide-in-right {
+  from { transform: translateX(30px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+.animate-in-top {
+  animation: slide-in-top 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-in-left {
+  animation: slide-in-left 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.animate-in-right {
+  animation: slide-in-right 0.8s cubic-bezier(0.16, 1, 0.3, 1) both;
 }

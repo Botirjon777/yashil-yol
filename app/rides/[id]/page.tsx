@@ -72,7 +72,7 @@ const RideDetailsPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Main Info */}
-          <div className="lg:col-span-2 space-y-8">
+          <div className="lg:col-span-2 space-y-5 md:space-y-8">
             {/* Route Card */}
             <div className="premium-card p-8 md:p-10">
               <div className="flex items-center justify-between mb-10">
@@ -84,7 +84,7 @@ const RideDetailsPage = () => {
                 </div>
               </div>
 
-              <div className="relative flex flex-col space-y-12 before:absolute before:left-[23px] before:top-4 before:bottom-4 before:w-1 before:bg-linear-to-b before:from-primary before:to-secondary/50 before:rounded-full">
+              <div className="relative flex flex-col space-y-8 md:space-y-12 before:absolute before:left-[23px] before:top-4 before:bottom-4 before:w-1 before:bg-linear-to-b before:from-primary before:to-secondary/50 before:rounded-full">
                 <div className="flex items-start relative z-10">
                   <div className="w-12 h-12 bg-primary rounded-2xl flex items-center justify-center text-white shadow-lg shadow-primary/30 mr-6 shrink-0">
                     <HiLocationMarker className="w-6 h-6" />
@@ -117,7 +117,7 @@ const RideDetailsPage = () => {
             </div>
 
             {/* Map Section */}
-            <div className="space-y-4">
+            <div className="space-y-2.5 md:space-y-5">
               <h3 className="text-xl font-black text-dark-text flex items-center">
                 <HiLocationMarker className="mr-2 text-primary w-6 h-6" /> Route
                 Visualization
@@ -248,7 +248,7 @@ const RideDetailsPage = () => {
                 Book this Ride
               </Button>
 
-              <div className="mt-8 pt-8 border-t border-border space-y-6">
+              <div className="mt-8 pt-8 border-t border-border space-y-2.5 md:space-y-5">
                 <div className="flex items-center text-sm font-bold text-gray-500">
                   <HiCreditCard className="mr-3 text-primary w-5 h-5" /> Pay
                   using internal balance
@@ -288,7 +288,7 @@ const RideDetailsPage = () => {
             </Link>
           </div>
         ) : (
-          <div className="space-y-6">
+          <div className="space-y-2.5 md:space-y-5">
             <div className="bg-light-bg p-6 rounded-3xl border border-border">
               <div className="flex items-center justify-between mb-4">
                 <span className="text-gray-500 font-bold">Route</span>

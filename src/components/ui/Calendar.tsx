@@ -22,7 +22,9 @@ const Calendar: React.FC<CalendarProps> = ({
   error,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
-  const [viewDate, setViewDate] = useState(() => (value ? new Date(value) : new Date()));
+  const [viewDate, setViewDate] = useState(() =>
+    value ? new Date(value) : new Date(),
+  );
   const calendarRef = useRef<HTMLDivElement>(null);
 
   // Parse current value
@@ -30,7 +32,10 @@ const Calendar: React.FC<CalendarProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (calendarRef.current && !calendarRef.current.contains(event.target as Node)) {
+      if (
+        calendarRef.current &&
+        !calendarRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -39,12 +44,24 @@ const Calendar: React.FC<CalendarProps> = ({
   }, []);
 
   const monthNames = [
-    "January", "February", "March", "April", "May", "June",
-    "July", "August", "September", "October", "November", "December"
+    "January",
+    "February",
+    "March",
+    "April",
+    "May",
+    "June",
+    "July",
+    "August",
+    "September",
+    "October",
+    "November",
+    "December",
   ];
 
-  const daysInMonth = (year: number, month: number) => new Date(year, month + 1, 0).getDate();
-  const firstDayOfMonth = (year: number, month: number) => new Date(year, month, 1).getDay();
+  const daysInMonth = (year: number, month: number) =>
+    new Date(year, month + 1, 0).getDate();
+  const firstDayOfMonth = (year: number, month: number) =>
+    new Date(year, month, 1).getDay();
 
   const handlePrevMonth = () => {
     setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() - 1, 1));
@@ -58,10 +75,10 @@ const Calendar: React.FC<CalendarProps> = ({
     const newDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
     // Format to YYYY-MM-DD in local time to avoid timezone shifts from toISOString()
     const year = newDate.getFullYear();
-    const month = String(newDate.getMonth() + 1).padStart(2, '0');
-    const d = String(newDate.getDate()).padStart(2, '0');
+    const month = String(newDate.getMonth() + 1).padStart(2, "0");
+    const d = String(newDate.getDate()).padStart(2, "0");
     const formatted = `${year}-${month}-${d}`;
-    
+
     onChange(formatted);
     setIsOpen(false);
   };
@@ -86,13 +103,15 @@ const Calendar: React.FC<CalendarProps> = ({
       const currentDayDate = new Date(year, month, d);
       currentDayDate.setHours(0, 0, 0, 0);
 
-      const isSelected = selectedDate && 
-        selectedDate.getDate() === d && 
-        selectedDate.getMonth() === month && 
+      const isSelected =
+        selectedDate &&
+        selectedDate.getDate() === d &&
+        selectedDate.getMonth() === month &&
         selectedDate.getFullYear() === year;
-      
-      const isToday = today.getDate() === d && 
-        today.getMonth() === month && 
+
+      const isToday =
+        today.getDate() === d &&
+        today.getMonth() === month &&
         today.getFullYear() === year;
 
       const isPast = currentDayDate.getTime() < today.getTime();
@@ -105,13 +124,15 @@ const Calendar: React.FC<CalendarProps> = ({
           onClick={() => handleDateClick(d)}
           className={cn(
             "h-10 w-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all",
-            isSelected ? "bg-primary text-white shadow-lg shadow-primary/30" : "hover:bg-primary/10 text-dark-text",
+            isSelected
+              ? "bg-primary text-white shadow-lg shadow-primary/30"
+              : "hover:bg-primary/10 text-dark-text",
             isToday && !isSelected && "text-primary border border-primary/20",
-            isPast && "opacity-20 cursor-not-allowed hover:bg-transparent"
+            isPast && "opacity-20 cursor-not-allowed hover:bg-transparent",
           )}
         >
           {d}
-        </button>
+        </button>,
       );
     }
 
@@ -125,20 +146,26 @@ const Calendar: React.FC<CalendarProps> = ({
           {label}
         </label>
       )}
-      
+
       <button
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full bg-white border border-border text-dark-text rounded-xl px-4 py-3 text-left flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary",
+          "w-full bg-white border border-border text-dark-text rounded-xl px-4 py-3 text-left flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-base",
           isOpen && "border-primary ring-2 ring-primary/20",
           error && "border-error focus:ring-error/20 focus:border-error",
-          !value && "text-gray-400"
+          !value && "text-gray-400",
         )}
       >
         <HiCalendar className="w-5 h-5 mr-3 text-gray-400" />
         <span className="grow">
-          {value ? new Date(value).toLocaleDateString("en-US", { day: 'numeric', month: 'short', year: 'numeric' }) : placeholder}
+          {value
+            ? new Date(value).toLocaleDateString("en-US", {
+                day: "numeric",
+                month: "short",
+                year: "numeric",
+              })
+            : placeholder}
         </span>
       </button>
 
@@ -149,16 +176,16 @@ const Calendar: React.FC<CalendarProps> = ({
               {monthNames[viewDate.getMonth()]} {viewDate.getFullYear()}
             </h4>
             <div className="flex space-x-1">
-              <button 
+              <button
                 type="button"
-                onClick={handlePrevMonth} 
+                onClick={handlePrevMonth}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <HiChevronLeft className="w-5 h-5 text-gray-500" />
               </button>
-              <button 
+              <button
                 type="button"
-                onClick={handleNextMonth} 
+                onClick={handleNextMonth}
                 className="p-2 hover:bg-gray-100 rounded-lg transition-colors"
               >
                 <HiChevronRight className="w-5 h-5 text-gray-500" />
@@ -167,25 +194,26 @@ const Calendar: React.FC<CalendarProps> = ({
           </div>
 
           <div className="grid grid-cols-7 gap-1 mb-2">
-            {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map(day => (
-              <div key={day} className="h-10 w-10 flex items-center justify-center text-[10px] font-black text-gray-400 uppercase tracking-widest">
+            {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
+              <div
+                key={day}
+                className="h-10 w-10 flex items-center justify-center text-[10px] font-black text-gray-400 uppercase tracking-widest"
+              >
                 {day}
               </div>
             ))}
           </div>
 
-          <div className="grid grid-cols-7 gap-1">
-            {renderDays()}
-          </div>
-          
+          <div className="grid grid-cols-7 gap-1">{renderDays()}</div>
+
           <div className="mt-4 pt-4 border-t border-border flex justify-end">
-            <button 
+            <button
               type="button"
               onClick={() => {
                 const now = new Date();
                 const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, '0');
-                const d = String(now.getDate()).padStart(2, '0');
+                const month = String(now.getMonth() + 1).padStart(2, "0");
+                const d = String(now.getDate()).padStart(2, "0");
                 const todayFormatted = `${year}-${month}-${d}`;
                 onChange(todayFormatted);
                 setIsOpen(false);
@@ -197,8 +225,10 @@ const Calendar: React.FC<CalendarProps> = ({
           </div>
         </div>
       )}
-      
-      {error && <p className="mt-1.5 text-xs text-error font-medium ml-1">{error}</p>}
+
+      {error && (
+        <p className="mt-1.5 text-xs text-error font-medium ml-1">{error}</p>
+      )}
     </div>
   );
 };
