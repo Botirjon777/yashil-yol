@@ -96,5 +96,72 @@
     "terms": "Условия использования",
     "howItWorks": "Как это работает",
     "becomeDriver": "Стать водителем"
+  },
+  "auth": {
+    "login": {
+      "title": "С возвращением",
+      "subtitle": "Войдите, чтобы найти идеальную поездку",
+      "emailLabel": "Адрес электронной почты",
+      "emailPlaceholder": "name@example.com",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "••••••••",
+      "forgotPassword": "Забыли пароль?",
+      "rememberMe": "Запомнить меня на 30 дней",
+      "submitButton": "Войти",
+      "noAccount": "Нет аккаунта?",
+      "createAccount": "Создайте сейчас",
+      "welcomeBack": "С возвращением!",
+      "loginFailed": "Ошибка входа"
+    },
+    "register": {
+      "title": "Создать аккаунт",
+      "subtitle": "Присоединяйтесь к нашему сообществу и начните путешествовать умнее по всей стране.",
+      "benefits": [
+        "Экономьте до 60% на поездках",
+        "Проверенные и оцененные водители",
+        "Простая оплата через баланс"
+      ],
+      "firstNameLabel": "Имя",
+      "firstNamePlaceholder": "Алишер",
+      "lastNameLabel": "Фамилия",
+      "lastNamePlaceholder": "Навои",
+      "fatherNameLabel": "Отчество",
+      "fatherNamePlaceholder": "Необязательно",
+      "emailLabel": "Электронная почта",
+      "emailPlaceholder": "name@example.com",
+      "phoneLabel": "Номер телефона",
+      "phonePlaceholder": "+998 90 123 45 67",
+      "passwordLabel": "Пароль",
+      "passwordPlaceholder": "Мин. 8 символов",
+      "confirmPasswordLabel": "Подтвердите пароль",
+      "confirmPasswordPlaceholder": "Подтвердите",
+      "termsAgreement": "Я согласен с Условиями использования",
+      "submitButton": "Создать аккаунт",
+      "hasAccount": "Уже есть аккаунт?",
+      "login": "Войти",
+      "passwordsDoNotMatch": "Пароли не совпадают",
+      "accountCreated": "Аккаунт успешно создан!",
+      "registrationFailed": "Ошибка регистрации"
+    },
+    "forgotPassword": {
+      "title": "Забыли пароль?",
+      "subtitle": "Не волнуйтесь! Введите свой адрес электронной почты, и мы отправим вам ссылку для сброса пароля.",
+      "emailLabel": "Адрес электронной почты",
+      "emailPlaceholder": "name@example.com",
+      "submitButton": "Отправить ссылку для сброса",
+      "successTitle": "Проверьте свою почту",
+      "successSubtitle": "Мы отправили ссылку для сброса пароля на:",
+      "resendEmail": "Отправить повторно",
+      "returnToLogin": "Вернуться к входу",
+      "resetLinkSent": "Ссылка для сброса отправлена на вашу почту!",
+      "resetFailed": "Не удалось отправить ссылку для сброса"
+    },
+    "verify": {
+      "title": "Подтверждение личности",
+      "subtitle": "Мы отправили 4-значный код подтверждения на номер {phone}. Введите его ниже.",
+      "button": "Подтвердить и войти",
+      "resend": "Не получили код? Переотправить",
+      "success": "Успешно подтверждено!"
+    }
   }
 }

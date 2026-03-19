@@ -7,10 +7,15 @@ import { translations, Language } from "@/src/lib/i18n/translations";
 interface LanguageState {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: <T extends keyof typeof translations.uz>(
-    category: T,
-    key: keyof typeof translations.uz[T]
+  t: (
+    category: any,
+    key: any
   ) => any;
+  safeT: (
+    category: string,
+    section: string,
+    key: string
+  ) => string;
 }
 
 export const useLanguageStore = create<LanguageState>()(
@@ -20,10 +25,15 @@ export const useLanguageStore = create<LanguageState>()(
       setLanguage: (lang) => set({ language: lang }),
       t: (category, key) => {
         const lang = get().language;
-        // @ts-ignore
-        const value = translations[lang]?.[category]?.[key] || 
-                      // @ts-ignore
-                      translations.en?.[category]?.[key] || 
+        const value = (translations[lang] as any)?.[category]?.[key] || 
+                      (translations.en as any)?.[category]?.[key] || 
+                      String(key);
+        return value;
+      },
+      safeT: (category, section, key) => {
+        const lang = get().language;
+        const value = (translations[lang] as any)?.[category]?.[section]?.[key] || 
+                      (translations.en as any)?.[category]?.[section]?.[key] || 
                       String(key);
         return value;
       },

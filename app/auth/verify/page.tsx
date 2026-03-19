@@ -3,9 +3,12 @@
 import React, { useState, useRef, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import Button from "@/src/components/ui/Button";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import { toast } from "sonner";
 
 const VerifyForm = () => {
   const searchParams = useSearchParams();
+  const { safeT } = useLanguageStore();
   const phone = searchParams.get("phone") || "your phone number";
   
   const [code, setCode] = useState(["", "", "", ""]);
@@ -34,6 +37,7 @@ const VerifyForm = () => {
     setIsLoading(true);
     setTimeout(() => {
       setIsLoading(false);
+      toast.success(safeT("auth", "verify", "success"));
       window.location.href = "/dashboard";
     }, 1500);
   };
@@ -45,9 +49,9 @@ const VerifyForm = () => {
           <div className="w-20 h-20 bg-primary/10 text-primary rounded-3xl flex items-center justify-center mx-auto mb-8">
              <span className="text-3xl font-black">4</span>
           </div>
-          <h1 className="text-3xl font-black text-dark-text mb-4">Verify Identity</h1>
+          <h1 className="text-3xl font-black text-dark-text mb-4">{safeT("auth", "verify", "title")}</h1>
           <p className="text-gray-500 font-medium mb-10 leading-relaxed">
-            We&apos;ve sent a 4-digit verification code to <span className="text-dark-text font-bold">{phone}</span>. Please enter it below.
+            {safeT("auth", "verify", "subtitle").replace("{phone}", phone)}
           </p>
 
           <form onSubmit={handleSubmit}>
@@ -69,11 +73,11 @@ const VerifyForm = () => {
             </div>
 
             <Button type="submit" fullWidth size="lg" loading={isLoading}>
-              Verify & Log In
+              {safeT("auth", "verify", "button")}
             </Button>
             
             <button type="button" className="mt-8 text-primary font-bold hover:underline">
-              Didn&apos;t receive code? Resend
+              {safeT("auth", "verify", "resend")}
             </button>
           </form>
         </div>

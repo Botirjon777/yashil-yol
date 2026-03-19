@@ -96,5 +96,72 @@
     "terms": "Terms of Service",
     "howItWorks": "How it works",
     "becomeDriver": "Become a Driver"
+  },
+  "auth": {
+    "login": {
+      "title": "Welcome Back",
+      "subtitle": "Log in to find your perfect ride",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "name@example.com",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "••••••••",
+      "forgotPassword": "Forgot password?",
+      "rememberMe": "Remember me for 30 days",
+      "submitButton": "Sign In",
+      "noAccount": "Don't have an account?",
+      "createAccount": "Create one now",
+      "welcomeBack": "Welcome back!",
+      "loginFailed": "Login failed"
+    },
+    "register": {
+      "title": "Create Account",
+      "subtitle": "Join our community and start traveling smarter across the country.",
+      "benefits": [
+        "Save up to 60% on travel",
+        "Verified & rated drivers",
+        "Easy balance-based payments"
+      ],
+      "firstNameLabel": "First Name",
+      "firstNamePlaceholder": "Alisher",
+      "lastNameLabel": "Last Name",
+      "lastNamePlaceholder": "Navoiy",
+      "fatherNameLabel": "Father's Name",
+      "fatherNamePlaceholder": "Optional",
+      "emailLabel": "Email",
+      "emailPlaceholder": "name@example.com",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "+998 90 123 45 67",
+      "passwordLabel": "Password",
+      "passwordPlaceholder": "Min. 8 characters",
+      "confirmPasswordLabel": "Confirm Password",
+      "confirmPasswordPlaceholder": "Confirm",
+      "termsAgreement": "I agree to the Terms and Conditions",
+      "submitButton": "Create Account",
+      "hasAccount": "Already have an account?",
+      "login": "Log in",
+      "passwordsDoNotMatch": "Passwords do not match",
+      "accountCreated": "Account created successfully!",
+      "registrationFailed": "Registration failed"
+    },
+    "forgotPassword": {
+      "title": "Forgot Password?",
+      "subtitle": "No worries! Enter your email address and we'll send you a link to reset your password.",
+      "emailLabel": "Email Address",
+      "emailPlaceholder": "name@example.com",
+      "submitButton": "Send Reset Link",
+      "successTitle": "Check your email",
+      "successSubtitle": "We've sent a password reset link to:",
+      "resendEmail": "Resend email",
+      "returnToLogin": "Return to Log in",
+      "resetLinkSent": "Reset link sent to your email!",
+      "resetFailed": "Failed to send reset link"
+    },
+    "verify": {
+      "title": "Verify Identity",
+      "subtitle": "We've sent a 4-digit verification code to {phone}. Please enter it below.",
+      "button": "Verify & Log In",
+      "resend": "Didn't receive code? Resend",
+      "success": "Verified successfully!"
+    }
   }
 }

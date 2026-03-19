@@ -151,7 +151,7 @@ const Calendar: React.FC<CalendarProps> = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full bg-white border border-border text-dark-text rounded-xl px-4 py-3 text-left flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary",
+          "w-full bg-white border border-border text-dark-text rounded-xl px-4 py-3 text-left flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-base",
           isOpen && "border-primary ring-2 ring-primary/20",
           error && "border-error focus:ring-error/20 focus:border-error",
           !value && "text-gray-400",

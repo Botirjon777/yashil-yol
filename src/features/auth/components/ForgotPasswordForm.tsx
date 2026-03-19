@@ -7,12 +7,14 @@ import { toast } from "sonner";
 import Button from "@/src/components/ui/Button";
 import Input from "@/src/components/ui/Input";
 import { useForgotPassword } from "../hooks/useAuth";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 export const ForgotPasswordForm = () => {
   const [email, setEmail] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
   
   const { mutate, isPending, error: apiError } = useForgotPassword();
+  const { safeT } = useLanguageStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -22,10 +24,10 @@ export const ForgotPasswordForm = () => {
       {
         onSuccess: () => {
           setIsSubmitted(true);
-          toast.success("Reset link sent to your email!");
+          toast.success(safeT("auth", "forgotPassword", "resetLinkSent"));
         },
         onError: (err: any) => {
-          toast.error(err?.response?.data?.message || err.message || "Failed to send reset link");
+          toast.error(err?.response?.data?.message || err.message || safeT("auth", "forgotPassword", "resetFailed"));
         }
       }
     );
@@ -40,10 +42,10 @@ export const ForgotPasswordForm = () => {
           <HiMail className="w-10 h-10" />
         </div>
         <h2 className="text-2xl font-black text-dark-text mb-4">
-          Check your email
+          {safeT("auth", "forgotPassword", "successTitle")}
         </h2>
         <p className="text-gray-500 font-medium mb-8 text-center text-balance">
-          We've sent a password reset link to <br />
+          {safeT("auth", "forgotPassword", "successSubtitle")} <br />
           <span className="text-dark-text font-black">{email}</span>
         </p>
         <Button 
@@ -52,11 +54,11 @@ export const ForgotPasswordForm = () => {
           onClick={() => setIsSubmitted(false)}
           className="mb-4"
         >
-          Resend email
+          {safeT("auth", "forgotPassword", "resendEmail")}
         </Button>
         <Link href="/auth/login" className="block w-full">
           <Button variant="ghost" fullWidth>
-            Return to Log in
+            {safeT("auth", "forgotPassword", "returnToLogin")}
           </Button>
         </Link>
       </div>
@@ -66,10 +68,10 @@ export const ForgotPasswordForm = () => {
   return (
     <>
       <h1 className="text-3xl font-black text-dark-text mb-4">
-        Forgot Password?
+        {safeT("auth", "forgotPassword", "title")}
       </h1>
       <p className="text-gray-500 font-medium mb-8">
-        No worries! Enter your email address and we'll send you a link to reset your password.
+        {safeT("auth", "forgotPassword", "subtitle")}
       </p>
 
       <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
@@ -79,9 +81,9 @@ export const ForgotPasswordForm = () => {
           </div>
         )}
         <Input
-          label="Email Address"
+          label={safeT("auth", "forgotPassword", "emailLabel")}
           type="email"
-          placeholder="name@example.com"
+          placeholder={safeT("auth", "forgotPassword", "emailPlaceholder")}
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
@@ -89,7 +91,7 @@ export const ForgotPasswordForm = () => {
         />
 
         <Button type="submit" fullWidth size="lg" loading={isPending}>
-          Send Reset Link
+          {safeT("auth", "forgotPassword", "submitButton")}
         </Button>
       </form>
     </>
