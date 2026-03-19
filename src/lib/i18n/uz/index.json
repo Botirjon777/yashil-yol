@@ -13,6 +13,11 @@
   },
   "hero": {
     "title": "Sayohatingiz uchun eng yaxshi hamroh",
+    "titleOptions": [
+      "Sayohatingiz uchun eng yaxshi hamroh",
+      "Eng arzon narxlar va qulay to'lovlar",
+      "Xavfsizlik biz uchun 1-o'rinda"
+    ],
     "subtitle": "O'zbekiston bo'ylab qulay va arzon sayohat qiling",
     "leavingFrom": "Qayerdan",
     "goingTo": "Qayerga",

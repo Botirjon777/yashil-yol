@@ -13,12 +13,13 @@ import {
   HiChatAlt2,
 } from "react-icons/hi";
 import { formatCurrency, cn } from "@/src/lib/utils";
-import Button from "./ui/Button";
+import Button from "@/src/components/ui/Button";
 import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useLogout } from "@/src/features/auth/hooks/useAuth";
 import { toast } from "sonner";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { HiChevronDown } from "react-icons/hi";
+import { translations } from "@/src/lib/i18n/translations";
 
 const languageConfig = {
   uz: { name: "O'zbekcha", flag: "https://flagcdn.com/w40/uz.png" },
@@ -34,6 +35,16 @@ const Navbar = () => {
   const { mutate: logoutMutation } = useLogout();
   const [balance] = useState(150000); // Mock balance for now
 
+  // Use Uzbek for SSR and initial client render to avoid hydration mismatch,
+  // then switch to user's preferred language after mounting.
+  const safeT = (category: any, key: any) => {
+    if (!mounted) {
+      // @ts-ignore
+      return translations.uz?.[category]?.[key] || String(key);
+    }
+    return t(category, key);
+  };
+
   React.useEffect(() => {
     setMounted(true);
   }, []);
@@ -42,7 +53,7 @@ const Navbar = () => {
     logoutMutation(undefined, {
       onSuccess: () => {
         logout();
-        toast.success(t("nav", "logout") + " successfully");
+        toast.success(safeT("nav", "logout") + " successfully");
         window.location.href = "/";
       },
       onError: () => {
@@ -56,7 +67,7 @@ const Navbar = () => {
 
   return (
     <nav className="bg-white border-b border-border sticky top-0 z-50">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div className="container-custom">
         <div className="flex justify-between h-20">
           {/* Logo */}
           <div className="flex items-center">
@@ -77,7 +88,7 @@ const Navbar = () => {
               className="text-dark-text font-semibold hover:text-primary transition-colors flex items-center"
             >
               <HiSearch className="mr-2 w-5 h-5" />
-              {t("nav", "findRide")}
+              {safeT("nav", "findRide")}
             </Link>
 
             <Link
@@ -85,7 +96,7 @@ const Navbar = () => {
               className="text-dark-text font-semibold hover:text-primary transition-colors flex items-center"
             >
               <HiUsers className="mr-2 w-5 h-5" />
-              {t("nav", "carpool")}
+              {safeT("nav", "carpool")}
             </Link>
 
             <Link
@@ -93,7 +104,7 @@ const Navbar = () => {
               className="text-dark-text font-semibold hover:text-primary transition-colors flex items-center"
             >
               <HiTicket className="mr-2 w-5 h-5" />
-              {t("nav", "bus")}
+              {safeT("nav", "bus")}
             </Link>
 
             <Link
@@ -101,14 +112,14 @@ const Navbar = () => {
               className="text-dark-text font-semibold hover:text-primary transition-colors flex items-center"
             >
               <HiChatAlt2 className="mr-2 w-5 h-5" />
-              {t("nav", "support")}
+              {safeT("nav", "support")}
             </Link>
 
-            {user ? (
+            {mounted && user ? (
               <div className="flex items-center space-x-6">
                 <div className="bg-light-bg px-4 py-2 rounded-xl border border-border">
                   <span className="text-xs text-gray-500 block leading-none mb-1">
-                    {t("nav", "balance")}
+                    {safeT("nav", "balance")}
                   </span>
                   <span className="text-dark-text font-bold leading-none">
                     {mounted ? formatCurrency(balance) : "---"}
@@ -139,10 +150,10 @@ const Navbar = () => {
                   href="/auth/login"
                   className="text-dark-text font-semibold hover:text-primary transition-colors px-4 py-2"
                 >
-                  {t("nav", "login")}
+                  {safeT("nav", "login")}
                 </Link>
                 <Link href="/auth/register">
-                  <Button size="md">{t("nav", "joinFree")}</Button>
+                  <Button size="md">{safeT("nav", "joinFree")}</Button>
                 </Link>
               </div>
             )}
@@ -210,30 +221,30 @@ const Navbar = () => {
               className="block px-4 py-3 text-lg font-semibold text-dark-text hover:bg-light-bg rounded-xl transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              {t("nav", "findRide")}
+              {safeT("nav", "findRide")}
             </Link>
             <Link
               href="/carpool"
               className="block px-4 py-3 text-lg font-semibold text-dark-text hover:bg-light-bg rounded-xl transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              {t("nav", "carpool")}
+              {safeT("nav", "carpool")}
             </Link>
             <Link
               href="/bus"
               className="block px-4 py-3 text-lg font-semibold text-dark-text hover:bg-light-bg rounded-xl transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              {t("nav", "bus")}
+              {safeT("nav", "bus")}
             </Link>
             <Link
               href="/support"
               className="block px-4 py-3 text-lg font-semibold text-dark-text hover:bg-light-bg rounded-xl transition-colors"
               onClick={() => setIsOpen(false)}
             >
-              {t("nav", "support")}
+              {safeT("nav", "support")}
             </Link>
-            {user ? (
+            {mounted && user ? (
               <>
                 <Link
                   href="/dashboard"
@@ -245,7 +256,7 @@ const Navbar = () => {
                 <div className="px-4 py-3 bg-light-bg rounded-xl flex justify-between items-center">
                   <div>
                     <span className="text-sm text-gray-500 block mb-1">
-                      {t("nav", "balance")}
+                      {safeT("nav", "balance")}
                     </span>
                     <span className="text-xl font-bold text-dark-text">
                       {mounted ? formatCurrency(balance) : "---"}
@@ -256,7 +267,7 @@ const Navbar = () => {
                     className="flex items-center space-x-2 text-error font-bold px-4 py-2 hover:bg-error/5 rounded-xl transition-all"
                   >
                     <HiLogout className="w-5 h-5" />
-                    <span>{t("nav", "logout")}</span>
+                    <span>{safeT("nav", "logout")}</span>
                   </button>
                 </div>
               </>
@@ -264,11 +275,11 @@ const Navbar = () => {
               <div className="grid grid-cols-2 gap-4 pt-2">
                 <Link href="/auth/login" onClick={() => setIsOpen(false)}>
                   <Button variant="outline" fullWidth>
-                    {t("nav", "login")}
+                    {safeT("nav", "login")}
                   </Button>
                 </Link>
                 <Link href="/auth/register" onClick={() => setIsOpen(false)}>
-                  <Button fullWidth>{t("nav", "signup")}</Button>
+                  <Button fullWidth>{safeT("nav", "signup")}</Button>
                 </Link>
               </div>
             )}

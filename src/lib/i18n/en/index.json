@@ -13,6 +13,11 @@
   },
   "hero": {
     "title": "Your best companion for your journey",
+    "titleOptions": [
+      "The best companion for your journey",
+      "Lowest prices and convenient payments",
+      "Safety is our #1 priority"
+    ],
     "subtitle": "Travel comfortably and affordably across Uzbekistan",
     "leavingFrom": "Leaving from",
     "goingTo": "Going to",

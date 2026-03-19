@@ -10,7 +10,7 @@ interface LanguageState {
   t: <T extends keyof typeof translations.uz>(
     category: T,
     key: keyof typeof translations.uz[T]
-  ) => string;
+  ) => any;
 }
 
 export const useLanguageStore = create<LanguageState>()(
@@ -25,7 +25,7 @@ export const useLanguageStore = create<LanguageState>()(
                       // @ts-ignore
                       translations.en?.[category]?.[key] || 
                       String(key);
-        return String(value);
+        return value;
       },
     }),
     {
