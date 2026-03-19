@@ -4,6 +4,8 @@ import "./globals.css";
 import Providers from "@/src/providers";
 import Navbar from "@/src/components/layout/Navbar";
 import Footer from "@/src/components/layout/Footer";
+import MobileNavbar from "@/src/components/layout/MobileNavbar";
+import MobileFooter from "@/src/components/layout/MobileFooter";
 import ScrollToTop from "@/src/components/ui/ScrollToTop";
 
 const inter = Inter({
@@ -31,8 +33,10 @@ export default function RootLayout({
       <body className="antialiased min-h-screen flex flex-col">
         <Providers>
           <Navbar />
-          <main className="grow">{children}</main>
+          <MobileNavbar />
+          <main className="grow pt-16 md:pt-0">{children}</main>
           <Footer />
+          <MobileFooter />
           <ScrollToTop />
         </Providers>
       </body>

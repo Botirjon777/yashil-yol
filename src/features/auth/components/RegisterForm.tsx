@@ -66,7 +66,7 @@ export const RegisterForm = () => {
     apiError?.message;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-5">
+    <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
       {displayError && (
         <div className="bg-error/10 text-error p-3 rounded-xl text-sm font-bold border border-error/20">
           {displayError}

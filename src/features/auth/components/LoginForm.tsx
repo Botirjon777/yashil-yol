@@ -38,7 +38,7 @@ export const LoginForm = () => {
   const displayError = (apiError as any)?.response?.data?.message || apiError?.message;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6">
+    <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
       {displayError && (
         <div className="bg-error/10 text-error p-3 rounded-xl text-sm font-bold border border-error/20">
           {displayError}
@@ -54,7 +54,7 @@ export const LoginForm = () => {
         onChange={(e) => setEmail(e.target.value)}
       />
       
-      <div className="space-y-1">
+      <div className="space-y-2.5 md:space-y-5">
         <Input
           label="Password"
           type="password"

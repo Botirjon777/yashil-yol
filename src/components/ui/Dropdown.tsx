@@ -35,7 +35,10 @@ const Dropdown: React.FC<DropdownProps> = ({
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(event.target as Node)) {
+      if (
+        dropdownRef.current &&
+        !dropdownRef.current.contains(event.target as Node)
+      ) {
         setIsOpen(false);
       }
     };
@@ -57,12 +60,17 @@ const Dropdown: React.FC<DropdownProps> = ({
           "w-full bg-white border border-border text-dark-text rounded-xl px-4 py-3 text-left flex items-center justify-between transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary",
           isOpen && "border-primary ring-2 ring-primary/20",
           error && "border-error focus:ring-error/20 focus:border-error",
-          !selectedOption && "text-gray-400"
+          !selectedOption && "text-gray-400",
         )}
       >
-        <span className="truncate mr-2">{selectedOption ? selectedOption.name : placeholder}</span>
+        <span className="truncate mr-2">
+          {selectedOption ? selectedOption.name : placeholder}
+        </span>
         <HiChevronDown
-          className={cn("w-5 h-5 transition-transform duration-200 shrink-0", isOpen && "rotate-180")}
+          className={cn(
+            "w-5 h-5 transition-transform duration-200 shrink-0",
+            isOpen && "rotate-180",
+          )}
         />
       </button>
 
@@ -78,18 +86,22 @@ const Dropdown: React.FC<DropdownProps> = ({
                 }}
                 className={cn(
                   "px-4 py-2.5 hover:bg-primary/5 cursor-pointer transition-colors text-dark-text text-sm",
-                  value === option.id && "bg-primary/10 text-primary font-bold"
+                  value === option.id && "bg-primary/10 text-primary font-bold",
                 )}
               >
                 {option.name}
               </li>
             ))
           ) : (
-            <li className="px-4 py-2.5 text-gray-400 text-sm">No options available</li>
+            <li className="px-4 py-2.5 text-gray-400 text-sm">
+              No options available
+            </li>
           )}
         </ul>
       )}
-      {error && <p className="mt-1.5 text-xs text-error font-medium ml-1">{error}</p>}
+      {error && (
+        <p className="mt-1.5 text-xs text-error font-medium ml-1">{error}</p>
+      )}
     </div>
   );
 };

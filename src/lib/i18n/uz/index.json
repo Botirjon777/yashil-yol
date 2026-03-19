@@ -81,5 +81,20 @@
     "cancel": "Bekor qilish",
     "save": "Saqlash",
     "loading": "Yuklanmoqda..."
+  },
+  "footer": {
+    "tagline": "Biz O'zbekistonda har bir kishi uchun hamroh topishni oson, xavfsiz va hamyonbop qilamiz.",
+    "explore": "Kashf qilish",
+    "company": "Kompaniya",
+    "connect": "Biz bilan bog'laning",
+    "coverage": "O'zbekistonning barcha 14 ta viloyatida mavjud.",
+    "rights": "Barcha huquqlar himoyalangan.",
+    "privacy": "Maxfiylik siyosati",
+    "cookie": "Kuki siyosati",
+    "about": "Biz haqimizda",
+    "contact": "Aloqa",
+    "terms": "Xizmat ko'rsatish shartlari",
+    "howItWorks": "Bu qanday ishlaydi",
+    "becomeDriver": "Haydovchi bo'lish"
   }
 }

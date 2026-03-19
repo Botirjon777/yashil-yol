@@ -16,16 +16,16 @@ export default function FeaturesSection() {
     <section
       ref={ref}
       className={cn(
-        "py-24 bg-light-bg",
+        "py-10 md:py-16 bg-light-bg",
         isInView ? "animate-in-right" : "opacity-0"
       )}
     >
       <div className="container-custom">
-        <div className="text-center mb-16">
-          <h2 className="text-3xl md:text-5xl font-black text-dark-text mb-4 font-heading">
+        <div className="text-center mb-16 px-4">
+          <h2 className="text-2xl md:text-5xl font-black text-dark-text mb-4 font-heading uppercase tracking-tighter">
             {t("features", "why")}
           </h2>
-          <div className="h-1.5 w-20 bg-primary mx-auto rounded-full" />
+          <div className="h-1.5 w-16 md:w-24 bg-primary mx-auto rounded-full" />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">

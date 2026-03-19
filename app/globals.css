@@ -69,7 +69,7 @@
 
 @layer components {
   .premium-card {
-    @apply bg-card-bg border-border rounded-2xl shadow-soft transition-all duration-300;
+    @apply bg-card-bg border-border rounded-lg shadow-soft transition-all duration-300;
   }
 
   .premium-card:hover {

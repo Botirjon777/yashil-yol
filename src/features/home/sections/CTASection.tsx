@@ -13,22 +13,22 @@ export default function CTASection() {
     <section
       ref={ref}
       className={cn(
-        "py-24",
+        "py-10 md:py-16",
         isInView ? "animate-in-top" : "opacity-0"
       )}
     >
       <div className="container-custom">
-        <div className="bg-primary rounded-[40px] p-8 md:p-16 flex flex-col md:flex-row items-center justify-between text-white overflow-hidden relative font-heading">
+        <div className="bg-primary rounded-lg p-5 md:p-10 flex flex-col md:flex-row items-center justify-between text-white overflow-hidden relative font-heading">
           <div className="absolute top-0 right-0 w-1/2 h-full bg-white opacity-5 -skew-x-12 translate-x-20" />
 
           <div className="max-w-xl text-center md:text-left z-10">
-            <h2 className="text-3xl md:text-5xl font-black mb-6">
+            <h2 className="text-2xl md:text-5xl font-black mb-6 uppercase tracking-tighter">
               {t("cta", "title")}
             </h2>
-            <p className="text-indigo-100 text-lg md:text-xl font-medium mb-10">
+            <p className="text-indigo-100 text-sm md:text-lg font-bold mb-10">
               {t("cta", "subtitle")}
             </p>
-            <div className="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+            <div className="flex flex-col sm:flex-row space-y-2.5 sm:space-y-0 sm:space-x-4">
               <Button variant="secondary" size="lg">
                 {t("cta", "button")}
               </Button>

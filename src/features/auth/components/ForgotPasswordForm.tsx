@@ -72,7 +72,7 @@ export const ForgotPasswordForm = () => {
         No worries! Enter your email address and we'll send you a link to reset your password.
       </p>
 
-      <form onSubmit={handleSubmit} className="space-y-6">
+      <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
         {displayError && (
           <div className="bg-error/10 text-error p-3 rounded-xl text-sm font-bold border border-error/20 text-center">
             {displayError}

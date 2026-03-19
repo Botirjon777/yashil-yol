@@ -81,5 +81,20 @@
     "cancel": "Cancel",
     "save": "Save",
     "loading": "Loading..."
+  },
+  "footer": {
+    "tagline": "We make ride-sharing easy, safe, and affordable for everyone in Uzbekistan.",
+    "explore": "Explore",
+    "company": "Company",
+    "connect": "Connect with us",
+    "coverage": "Available across all 14 regions of Uzbekistan.",
+    "rights": "All rights reserved.",
+    "privacy": "Privacy Policy",
+    "cookie": "Cookie Policy",
+    "about": "About Us",
+    "contact": "Contact",
+    "terms": "Terms of Service",
+    "howItWorks": "How it works",
+    "becomeDriver": "Become a Driver"
   }
 }

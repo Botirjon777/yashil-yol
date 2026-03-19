@@ -16,24 +16,22 @@ export default function StatsSection() {
       )}
     >
       <div className="container-custom">
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center uppercase tracking-widest text-xs font-bold text-gray-400">
-          <div>
-            <span className="block text-2xl text-dark-text mb-1">20,000+</span>
-            {t('stats', 'users')}
+          <div className="flex flex-col items-center">
+            <span className="block text-3xl md:text-5xl font-black text-dark-text mb-2 transition-all group-hover:scale-110">20,000+</span>
+            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">{t('stats', 'users')}</span>
           </div>
-          <div>
-            <span className="block text-2xl text-dark-text mb-1">14</span>
-            {t('stats', 'regions')}
+          <div className="flex flex-col items-center">
+            <span className="block text-3xl md:text-5xl font-black text-dark-text mb-2 transition-all group-hover:scale-110">14</span>
+            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">{t('stats', 'regions')}</span>
           </div>
-          <div>
-            <span className="block text-2xl text-dark-text mb-1">5,000+</span>
-            {t('stats', 'dailyRides')}
+          <div className="flex flex-col items-center">
+            <span className="block text-3xl md:text-5xl font-black text-dark-text mb-2 transition-all group-hover:scale-110">5,000+</span>
+            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">{t('stats', 'dailyRides')}</span>
           </div>
-          <div>
-            <span className="block text-2xl text-dark-text mb-1">100%</span>
-            {t('stats', 'safe')}
+          <div className="flex flex-col items-center">
+            <span className="block text-3xl md:text-5xl font-black text-dark-text mb-2 transition-all group-hover:scale-110">100%</span>
+            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">{t('stats', 'safe')}</span>
           </div>
-        </div>
       </div>
     </section>
   );

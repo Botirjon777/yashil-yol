@@ -54,14 +54,14 @@ export default function HeroSection({
       </div>
 
       <div className="container-custom text-center">
-        <h1 className="text-4xl md:text-7xl font-black text-dark-text mb-6 tracking-tight animate-in fade-in slide-in-from-bottom-6 duration-700 font-heading min-h-[1.2em]">
+        <h1 className="text-4xl md:text-7xl font-black text-dark-text mb-6 tracking-tight animate-in fade-in slide-in-from-bottom-6 duration-700 font-heading min-h-[3.5em] md:min-h-[1.2em] flex items-center justify-center">
           <Typewriter phrases={finalTitleOptions} pauseDuration={3000} />
         </h1>
         <p className="text-gray-500 text-xl md:text-2xl font-medium mb-12 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
           {t("hero", "subtitle")}
         </p>
 
-        <div className="premium-card p-6 md:p-10 container-custom animate-in fade-in zoom-in duration-500 delay-300 relative z-30">
+        <div className="premium-card p-2.5 md:p-5 container-custom animate-in fade-in zoom-in duration-500 delay-300 relative z-30">
           <div className="flex flex-col md:flex-row md:items-end gap-6">
             <div className="grow grid grid-cols-1 md:grid-cols-3 gap-6">
               <Dropdown

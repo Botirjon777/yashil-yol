@@ -34,13 +34,13 @@ const SupportPage = () => {
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
           {/* Contact Info */}
-          <div className="lg:col-span-1 space-y-6">
+          <div className="lg:col-span-1 space-y-2.5 md:space-y-5">
             <div className="bg-white p-8 rounded-[32px] border border-border shadow-sm">
               <h3 className="text-xl font-black text-dark-text mb-8 uppercase tracking-widest">
                 {t("support", "contactInfo")}
               </h3>
 
-              <div className="space-y-6">
+              <div className="space-y-2.5 md:space-y-5">
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-primary/10 rounded-2xl flex items-center justify-center shrink-0">
                     <HiMail className="w-6 h-6 text-primary" />
@@ -93,9 +93,9 @@ const SupportPage = () => {
                 {t("support", "formTitle")}
               </h3>
 
-              <form onSubmit={handleSubmit} className="space-y-6">
+              <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                  <div className="space-y-2">
+                  <div className="space-y-2.5 md:space-y-5">
                     <label className="text-sm font-bold text-gray-500 uppercase tracking-widest ml-1">
                       {t("support", "name")}
                     </label>
@@ -105,7 +105,7 @@ const SupportPage = () => {
                       className="w-full px-6 py-4 bg-light-bg border border-border rounded-2xl focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-semibold"
                     />
                   </div>
-                  <div className="space-y-2">
+                  <div className="space-y-2.5 md:space-y-5">
                     <label className="text-sm font-bold text-gray-500 uppercase tracking-widest ml-1">
                       {t("support", "email")}
                     </label>
@@ -117,7 +117,7 @@ const SupportPage = () => {
                   </div>
                 </div>
 
-                <div className="space-y-2">
+                <div className="space-y-2.5 md:space-y-5">
                   <label className="text-sm font-bold text-gray-500 uppercase tracking-widest ml-1">
                     {t("support", "message")}
                   </label>
