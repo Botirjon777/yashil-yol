@@ -43,6 +43,25 @@ export interface ForgotPasswordRequest {
   email: string;
 }
 
+export interface BecomeDriverRequest {
+  driving_license_number: string;
+  driving_license_expiration_date: string;
+  birthday: string;
+}
+
+export interface UploadDocumentsRequest {
+  driving_licence_front: File;
+  driving_licence_back: File;
+  driver_passport_image: File;
+}
+
+export interface UploadCarImagesRequest {
+  vehicle_id: number | string;
+  tech_passport_front: File;
+  tech_passport_back: File;
+  car_images: File[];
+}
+
 // ─── Responses ───────────────────────────────────────────────────────────────
 
 export interface AuthUser {

@@ -17,6 +17,22 @@ export interface TripVehicle {
   plate_number?: string;
 }
 
+export interface VehicleRequest {
+  vehicle_number: string;
+  seats: number | string;
+  car_color_id: number | string;
+  tech_passport_number: string;
+  car_model: string;
+}
+
+export interface CarColor {
+  id: number;
+  name: string;
+  name_uz?: string;
+  name_ru?: string;
+  name_en?: string;
+}
+
 export interface Trip {
   id: number;
   driver_id: number;

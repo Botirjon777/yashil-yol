@@ -13,4 +13,7 @@ export {
   getMe,
   updateProfile,
   updateUserLanguage,
+  becomeDriver,
+  uploadDriverDocuments,
+  uploadCarImages,
 } from "@/src/lib/api/auth";

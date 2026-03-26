@@ -9,8 +9,11 @@ import {
   HiStar,
   HiLocationMarker,
   HiClock,
+  HiStatusOnline,
+  HiIdentification,
 } from "react-icons/hi";
-import { formatCurrency, formatDate } from "@/src/lib/utils";
+import Link from "next/link";
+import { cn, formatCurrency, formatDate } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import Modal from "@/src/components/ui/Modal";
 import Input from "@/src/components/ui/Input";
@@ -124,7 +127,58 @@ const DashboardPage = () => {
           </div>
 
           {/* Content Area */}
-          <div className="lg:col-span-3">
+          <div className="lg:col-span-3 space-y-8">
+            {/* Driver Application Status */}
+            {!isDriver && user?.driving_verification_status && (
+              <div className={cn(
+                "premium-card p-6 flex items-center justify-between border-l-8 animate-in fade-in slide-in-from-top-4 duration-500",
+                user.driving_verification_status === "pending" && "border-warning bg-warning/5",
+                user.driving_verification_status === "verified" && "border-success bg-success/5",
+                user.driving_verification_status === "rejected" && "border-error bg-error/5",
+                user.driving_verification_status === "blocked" && "border-gray-400 bg-gray-50"
+              )}>
+                <div className="flex items-center space-x-5">
+                  <div className={cn(
+                    "w-12 h-12 rounded-2xl flex items-center justify-center text-2xl shadow-sm",
+                    user.driving_verification_status === "pending" && "bg-warning/20 text-warning",
+                    user.driving_verification_status === "verified" && "bg-success/20 text-success",
+                    user.driving_verification_status === "rejected" && "bg-error/20 text-error",
+                    user.driving_verification_status === "blocked" && "bg-gray-200 text-gray-500"
+                  )}>
+                    <HiIdentification />
+                  </div>
+                  <div>
+                    <h3 className="font-black text-dark-text">Driver Application Status</h3>
+                    <p className="text-sm font-bold text-gray-500 capitalize">
+                      {user.driving_verification_status} – {
+                        user.driving_verification_status === "pending" ? "We're reviewing your information." :
+                        user.driving_verification_status === "verified" ? "Congratulations! You can now start driving." :
+                        user.driving_verification_status === "rejected" ? "Your application was rejected. Please contact support." :
+                        "Your account has been blocked."
+                      }
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {!isDriver && !user?.driving_verification_status && (
+              <div className="premium-card p-8 bg-linear-to-r from-accent/10 to-primary/10 border-accent/20 flex flex-col md:flex-row items-center justify-between gap-6">
+                <div className="flex items-center space-x-5">
+                  <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-3xl text-accent shadow-sm">
+                    🚗
+                  </div>
+                  <div>
+                    <h3 className="text-xl font-black text-dark-text">Want to earn with Qadam?</h3>
+                    <p className="text-gray-500 font-medium">Register as a driver and start your journey today!</p>
+                  </div>
+                </div>
+                <Link href="/become-a-driver">
+                  <Button variant="outline" size="lg">Learn More</Button>
+                </Link>
+              </div>
+            )}
+
             {activeTab === "rides" && (
               <div className="space-y-6">
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
