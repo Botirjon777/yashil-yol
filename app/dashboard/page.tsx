@@ -12,6 +12,7 @@ import {
   HiStatusOnline,
   HiIdentification,
 } from "react-icons/hi";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
 import { cn, formatCurrency, formatDate } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
@@ -29,9 +30,18 @@ import {
 import { toast } from "sonner";
 
 const DashboardPage = () => {
-  const { user: storedUser } = useAuthStore();
+  const router = useRouter();
+  const { user: storedUser, token } = useAuthStore();
   const { data: userData, isLoading: isUserLoading } = useMe();
   const { data: balanceData } = useBalance();
+
+  useEffect(() => {
+    if (!token) {
+      router.push("/auth/login?returnTo=/dashboard");
+    }
+  }, [token, router]);
+
+  if (!token) return null;
   
   const [activeTab, setActiveTab] = useState<"rides" | "balance" | "profile">("rides");
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);

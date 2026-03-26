@@ -12,7 +12,7 @@ import {
   getDriverCanceledTrips,
 } from "../actions/actions";
 import { Trip, TripSearchParams } from "../types";
-import { PaginatedTrips } from "@/src/lib/api/trips";
+import { PaginatedTrips } from "../actions/actions";
 
 /** Paginated list of public trips */
 export const usePublicTrips = (page = 1) =>

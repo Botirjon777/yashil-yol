@@ -1,7 +1,7 @@
 "use client";
 
 import React, { useState } from "react";
-import { useParams } from "next/navigation";
+import { useParams, useRouter } from "next/navigation";
 import {
   HiLocationMarker,
   HiClock,
@@ -17,6 +17,7 @@ import Button from "@/src/components/ui/Button";
 import Link from "next/link";
 import Modal from "@/src/components/ui/Modal";
 import RideMap from "@/src/features/maps/components/RideMap";
+import { useAuthStore } from "@/src/providers/AuthProvider";
 
 // Mock Coordinates for Tashkent and Samarkand
 const MOCK_ORIGIN = { lat: 41.2995, lng: 69.2401 };
@@ -47,9 +48,19 @@ const MOCK_RIDE = {
 
 const RideDetailsPage = () => {
   const params = useParams();
+  const router = useRouter();
+  const { token } = useAuthStore();
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   const [isBooking, setIsBooking] = useState(false);
   const [isSuccess, setIsSuccess] = useState(false);
+
+  React.useEffect(() => {
+    if (!token) {
+      router.push(`/auth/login?returnTo=/rides/${params.id}`);
+    }
+  }, [token, params.id, router]);
+
+  if (!token) return null;
 
   const handleBook = () => {
     setIsBooking(true);

@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addVehicle, getCarColors } from "@/src/lib/api/vehicles";
+import { addVehicle, getCarColors } from "../actions/actions";
 import { VehicleRequest, CarColor } from "@/src/features/rides/types";
 
 export const useAddVehicle = () => {

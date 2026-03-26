@@ -11,9 +11,6 @@ import {
   getMe,
   updateProfile,
   updateUserLanguage,
-  becomeDriver,
-  uploadDriverDocuments,
-  uploadCarImages,
 } from "../actions/actions";
 import {
   RegisterRequest,
@@ -28,9 +25,6 @@ import {
   AuthUser,
   UpdateProfileRequest,
   MeResponse,
-  BecomeDriverRequest,
-  UploadDocumentsRequest,
-  UploadCarImagesRequest,
 } from "../types";
 
 // ─── Auth mutations ──────────────────────────────────────────────────────────
@@ -69,29 +63,7 @@ export const useUpdateUserLanguage = () =>
     mutationFn: updateUserLanguage,
   });
 
-export const useBecomeDriver = () => {
-  const qc = useQueryClient();
-  return useMutation<{ status: string; message: string }, Error, BecomeDriverRequest>({
-    mutationFn: becomeDriver,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["me"] }),
-  });
-};
 
-export const useUploadDocuments = () => {
-  const qc = useQueryClient();
-  return useMutation<{ status: string; message: string }, Error, UploadDocumentsRequest>({
-    mutationFn: uploadDriverDocuments,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["me"] }),
-  });
-};
-
-export const useUploadCarImages = () => {
-  const qc = useQueryClient();
-  return useMutation<{ status: string; message: string }, Error, UploadCarImagesRequest>({
-    mutationFn: uploadCarImages,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["me"] }),
-  });
-};
 
 export const useLogout = () => {
   const qc = useQueryClient();
