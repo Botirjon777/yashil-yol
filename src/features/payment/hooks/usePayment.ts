@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getBalance, getTransactionHistory } from "@/src/lib/api/payment";
+import { getBalance, getTransactionHistory } from "../actions/actions";
 
 export const useBalance = () =>
   useQuery({
