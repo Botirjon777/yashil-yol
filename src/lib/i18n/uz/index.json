@@ -24,8 +24,8 @@
     "date": "Sana",
     "passengers": "Yo'lovchilar",
     "passengerCount": "yo'lovchi",
-    "searchPlaceholder": "Viloyat",
-    "destinationPlaceholder": "Viloyat",
+    "searchPlaceholder": "Viloyat, Tuman, Mahalla...",
+    "destinationPlaceholder": "Viloyat, Tuman, Mahalla...",
     "datePlaceholder": "Sanani tanlang",
     "searchButton": "Qidirish"
   },
@@ -163,5 +163,11 @@
       "resend": "Kod kelmadimi? Qayta yuborish",
       "success": "Muvaffaqiyatli tasdiqlandi!"
     }
+  },
+  "location": {
+    "selectRegion": "Viloyatni tanlang",
+    "selectDistrict": "Tumanni tanlang",
+    "selectVillage": "Mahallani tanlang",
+    "placeholder": "Viloyat, Tuman, Mahalla..."
   }
 }

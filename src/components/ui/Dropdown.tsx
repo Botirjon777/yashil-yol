@@ -17,6 +17,7 @@ interface DropdownProps {
   placeholder?: string;
   error?: string;
   className?: string;
+  disabled?: boolean;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -27,6 +28,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   placeholder = "Select an option",
   error,
   className,
+  disabled = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -55,11 +57,13 @@ const Dropdown: React.FC<DropdownProps> = ({
       )}
       <button
         type="button"
-        onClick={() => setIsOpen(!isOpen)}
+        onClick={() => !disabled && setIsOpen(!isOpen)}
+        disabled={disabled}
         className={cn(
           "w-full bg-white border border-border text-dark-text rounded-xl px-4 py-3 text-left flex items-center justify-between transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-base",
           isOpen && "border-primary ring-2 ring-primary/20",
           error && "border-error focus:ring-error/20 focus:border-error",
+          disabled && "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed",
           !selectedOption && "text-gray-400",
         )}
       >
