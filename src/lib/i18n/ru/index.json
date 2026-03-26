@@ -24,8 +24,8 @@
     "date": "Дата",
     "passengers": "Пассажиры",
     "passengerCount": "пассажир",
-    "searchPlaceholder": "Регион",
-    "destinationPlaceholder": "Регион",
+    "searchPlaceholder": "Область, Район, Махалля...",
+    "destinationPlaceholder": "Область, Район, Махалля...",
     "datePlaceholder": "Выберите дату",
     "searchButton": "Найти"
   },
@@ -163,5 +163,11 @@
       "resend": "Не получили код? Переотправить",
       "success": "Успешно подтверждено!"
     }
+  },
+  "location": {
+    "selectRegion": "Выберите область",
+    "selectDistrict": "Выберите район",
+    "selectVillage": "Выберите махаллю/село",
+    "placeholder": "Область, Район, Махалля..."
   }
 }

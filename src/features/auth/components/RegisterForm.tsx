@@ -48,12 +48,12 @@ export const RegisterForm = () => {
         email: formData.email,
         phone: formData.phone,
         password: formData.password,
+        password_confirmation: formData.confirmPassword,
       },
       {
-        onSuccess: (data) => {
-          setAuth(data.user, data.token);
-          toast.success(safeT("auth", "register", "accountCreated"));
-          window.location.href = `/auth/verify?phone=${encodeURIComponent(formData.phone)}`;
+        onSuccess: (data: any) => {
+          toast.success(data.message || safeT("auth", "register", "accountCreated"));
+          window.location.href = `/auth/verify?phone=${encodeURIComponent(formData.phone)}&code=${data.code}`;
         },
         onError: (err: any) => {
           toast.error(err?.response?.data?.message || err.message || safeT("auth", "register", "registrationFailed"));
@@ -65,7 +65,9 @@ export const RegisterForm = () => {
   const displayError =
     localError ||
     (apiError as any)?.response?.data?.message ||
-    apiError?.message;
+    (apiError as any)?.response?.data?.errors 
+      ? Object.values((apiError as any).response.data.errors).flat().join(", ")
+      : apiError?.message;
 
   return (
     <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">

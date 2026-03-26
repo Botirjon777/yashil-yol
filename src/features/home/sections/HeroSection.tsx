@@ -1,42 +1,50 @@
-import Dropdown from "@/src/components/ui/Dropdown";
 import Calendar from "@/src/components/ui/Calendar";
 import Button from "@/src/components/ui/Button";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { useInView } from "@/src/hooks/useInView";
 import { cn } from "@/src/lib/utils";
 import Typewriter from "@/src/components/ui/Typewriter";
+import Autocomplete from "@/src/components/ui/Autocomplete";
 
 interface HeroSectionProps {
-  from: string;
-  setFrom: (val: string) => void;
-  to: string;
-  setTo: (val: string) => void;
+  fromLocation: any;
+  setFromLocation: (val: any) => void;
+  toLocation: any;
+  setToLocation: (val: any) => void;
+  
+  fromQuery: string;
+  setFromQuery: (val: string) => void;
+  toQuery: string;
+  setToQuery: (val: string) => void;
+  
+  fromSuggestions: any[];
+  toSuggestions: any[];
+
   date: string;
   setDate: (val: string) => void;
-  passengers: number;
-  setPassengers: (val: number) => void;
   handleSearch: () => void;
-  regionOptions: { id: string | number; name: string }[];
-  passengerOptions: { id: string | number; name: string }[];
+  loading?: boolean;
 }
 
 export default function HeroSection({
-  from,
-  setFrom,
-  to,
-  setTo,
+  fromLocation,
+  setFromLocation,
+  toLocation,
+  setToLocation,
+  fromQuery,
+  setFromQuery,
+  toQuery,
+  setToQuery,
+  fromSuggestions,
+  toSuggestions,
   date,
   setDate,
-  passengers,
-  setPassengers,
   handleSearch,
-  regionOptions,
-  passengerOptions,
+  loading,
 }: HeroSectionProps) {
   const { t } = useLanguageStore();
   const { ref, isInView } = useInView({ triggerOnce: true });
 
-  // Get title options from translations, fallback to static title if not available
   const titleOptions = t("hero", "titleOptions") as unknown as string[];
   const finalTitleOptions = Array.isArray(titleOptions) ? titleOptions : [t("hero", "title")];
 
@@ -44,7 +52,7 @@ export default function HeroSection({
     <section
       ref={ref}
       className={cn(
-        "relative h-[650px] flex items-center justify-center z-20",
+        "relative min-h-[750px] flex items-center justify-center z-20 py-20",
         isInView ? "animate-in-top" : "opacity-0"
       )}
     >
@@ -54,32 +62,37 @@ export default function HeroSection({
       </div>
 
       <div className="container-custom text-center">
-        <h1 className="text-4xl md:text-7xl font-black text-dark-text mb-6 tracking-tight animate-in fade-in slide-in-from-bottom-6 duration-700 font-heading min-h-[3.5em] md:min-h-[1.2em] flex items-center justify-center">
+        <h1 className="text-4xl md:text-7xl font-black text-dark-text mb-6 tracking-tight animate-in fade-in slide-in-from-bottom-6 duration-700 font-heading flex items-center justify-center">
           <Typewriter phrases={finalTitleOptions} pauseDuration={3000} />
         </h1>
         <p className="text-gray-500 text-xl md:text-2xl font-medium mb-12 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
           {t("hero", "subtitle")}
         </p>
 
-        <div className="premium-card p-2.5 md:p-5 container-custom animate-in fade-in zoom-in duration-500 delay-300 relative z-30">
-          <div className="flex flex-col md:flex-row md:items-end gap-6">
-            <div className="grow grid grid-cols-1 md:grid-cols-3 gap-6">
-              <Dropdown
-                label={t("hero", "leavingFrom")}
-                options={regionOptions}
-                value={from}
-                onChange={setFrom}
-                placeholder={t("hero", "searchPlaceholder")}
-                className="text-left"
-              />
-              <Dropdown
-                label={t("hero", "goingTo")}
-                options={regionOptions}
-                value={to}
-                onChange={setTo}
-                placeholder={t("hero", "destinationPlaceholder")}
-                className="text-left"
-              />
+        <div className="premium-card p-4 md:p-8 container-custom animate-in fade-in zoom-in duration-500 delay-300 relative z-30 shadow-2xl max-w-5xl mx-auto">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+            <Autocomplete
+              label={t("hero", "leavingFrom")}
+              placeholder={t("hero", "searchPlaceholder")}
+              value={fromLocation?.name}
+              suggestions={fromSuggestions}
+              onInputChange={setFromQuery}
+              onSelect={setFromLocation}
+              isLoading={loading}
+            />
+            <Autocomplete
+              label={t("hero", "goingTo")}
+              placeholder={t("hero", "destinationPlaceholder")}
+              value={toLocation?.name}
+              suggestions={toSuggestions}
+              onInputChange={setToQuery}
+              onSelect={setToLocation}
+              isLoading={loading}
+            />
+          </div>
+
+          <div className="flex flex-col md:flex-row items-end gap-6 pt-6 border-t border-border">
+            <div className="grow w-full">
               <Calendar
                 label={t("hero", "date")}
                 value={date}
@@ -88,19 +101,15 @@ export default function HeroSection({
                 className="text-left"
               />
             </div>
-            <div className="flex items-end space-x-4">
-              <Dropdown
-                label={t("hero", "passengers")}
-                options={passengerOptions}
-                value={passengers}
-                onChange={setPassengers}
-                placeholder="1"
-                className="w-40 text-left"
-              />
-              <Button onClick={handleSearch}>
-                {t("hero", "searchButton")}
-              </Button>
-            </div>
+            <Button 
+              onClick={handleSearch} 
+              size="lg" 
+              className="w-full md:w-64 h-14 text-lg"
+              loading={loading}
+              disabled={!fromLocation || !toLocation}
+            >
+              {t("hero", "searchButton")}
+            </Button>
           </div>
         </div>
       </div>

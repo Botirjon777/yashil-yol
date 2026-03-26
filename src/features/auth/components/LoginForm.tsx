@@ -2,7 +2,7 @@
 
 import React, { useState } from "react";
 import Link from "next/link";
-import { HiMail, HiLockClosed } from "react-icons/hi";
+import { HiPhone, HiLockClosed } from "react-icons/hi";
 import { toast } from "sonner";
 import Button from "@/src/components/ui/Button";
 import Input from "@/src/components/ui/Input";
@@ -12,7 +12,7 @@ import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 export const LoginForm = () => {
-  const [email, setEmail] = useState("");
+  const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
   
   const { mutate, isPending, error: apiError } = useLogin();
@@ -23,10 +23,10 @@ export const LoginForm = () => {
     e.preventDefault();
     
     mutate(
-      { email, password },
+      { phone, password },
       {
         onSuccess: (data) => {
-          setAuth(data.user, data.token);
+          setAuth(data.user, data.authorisation?.token);
           toast.success(safeT("auth", "login", "welcomeBack"));
           window.location.href = "/dashboard";
         },
@@ -48,12 +48,12 @@ export const LoginForm = () => {
       )}
       <Input
         label={safeT("auth", "login", "emailLabel")}
-        type="email"
-        placeholder={safeT("auth", "login", "emailPlaceholder")}
-        iconLeft={<HiMail className="w-5 h-5" />}
+        type="tel"
+        placeholder="+998 xx xxx xx xx"
+        iconLeft={<HiPhone className="w-5 h-5" />}
         required
-        value={email}
-        onChange={(e) => setEmail(e.target.value)}
+        value={phone}
+        onChange={(e) => setPhone(e.target.value)}
       />
       
       <div className="space-y-2.5 md:space-y-5">

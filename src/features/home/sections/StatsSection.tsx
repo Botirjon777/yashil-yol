@@ -15,22 +15,22 @@ export default function StatsSection() {
         isInView ? "animate-in-left" : "opacity-0"
       )}
     >
-      <div className="container-custom">
-          <div className="flex flex-col items-center">
+      <div className="container-custom grid grid-cols-2 gap-8 md:gap-16">
+          <div className="flex flex-col items-center group">
             <span className="block text-3xl md:text-5xl font-black text-dark-text mb-2 transition-all group-hover:scale-110">20,000+</span>
-            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">{t('stats', 'users')}</span>
+            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest text-center">{t('stats', 'users')}</span>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center group">
             <span className="block text-3xl md:text-5xl font-black text-dark-text mb-2 transition-all group-hover:scale-110">14</span>
-            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">{t('stats', 'regions')}</span>
+            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest text-center">{t('stats', 'regions')}</span>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center group">
             <span className="block text-3xl md:text-5xl font-black text-dark-text mb-2 transition-all group-hover:scale-110">5,000+</span>
-            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">{t('stats', 'dailyRides')}</span>
+            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest text-center">{t('stats', 'dailyRides')}</span>
           </div>
-          <div className="flex flex-col items-center">
+          <div className="flex flex-col items-center group">
             <span className="block text-3xl md:text-5xl font-black text-dark-text mb-2 transition-all group-hover:scale-110">100%</span>
-            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">{t('stats', 'safe')}</span>
+            <span className="text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest text-center">{t('stats', 'safe')}</span>
           </div>
       </div>
     </section>

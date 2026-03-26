@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, useEffect, useCallback, useMemo } from "react";
 
 interface TypewriterProps {
   phrases: string[];
@@ -62,13 +62,29 @@ const Typewriter: React.FC<TypewriterProps> = ({
     setReverse(false);
   }, [phrases]);
 
+  // Determine the phrase with the maximum height impact (longest for now)
+  const longestPhrase = useMemo(() => {
+    return phrases.reduce((a, b) => (a.length > b.length ? a : b), "");
+  }, [phrases]);
+
   return (
-    <span className="inline-block">
-      {phrases[index].substring(0, subIndex)}
-      <span 
-        className={`inline-block ml-1 border-r-4 border-primary h-[0.9em] align-middle ${blink ? 'opacity-100' : 'opacity-0'}`}
-      ></span>
-    </span>
+    <div className="relative inline-block w-full">
+      {/* Ghost element to reserve space - hidden but takes up layout */}
+      <div className="invisible pointer-events-none" aria-hidden="true">
+        {longestPhrase}
+        <span className="inline-block ml-1 border-r-4 border-transparent h-[0.9em] align-middle"></span>
+      </div>
+      
+      {/* Actual typing text - absolute positioned to overlap the ghost */}
+      <div className="absolute inset-0 flex items-center justify-center">
+        <span className="inline-block">
+          {phrases[index].substring(0, subIndex)}
+          <span 
+            className={`inline-block ml-1 border-r-4 border-primary h-[0.9em] align-middle ${blink ? 'opacity-100' : 'opacity-0'}`}
+          ></span>
+        </span>
+      </div>
+    </div>
   );
 };
 

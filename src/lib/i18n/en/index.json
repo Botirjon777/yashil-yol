@@ -24,8 +24,8 @@
     "date": "Date",
     "passengers": "Passengers",
     "passengerCount": "Passenger",
-    "searchPlaceholder": "Region",
-    "destinationPlaceholder": "Region",
+    "searchPlaceholder": "Region, District, Village...",
+    "destinationPlaceholder": "Region, District, Village...",
     "datePlaceholder": "Select date",
     "searchButton": "Search"
   },
@@ -163,5 +163,11 @@
       "resend": "Didn't receive code? Resend",
       "success": "Verified successfully!"
     }
+  },
+  "location": {
+    "selectRegion": "Select Region",
+    "selectDistrict": "Select District",
+    "selectVillage": "Select Village",
+    "placeholder": "Region, District, Village..."
   }
 }
