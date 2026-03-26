@@ -56,6 +56,7 @@ export interface AuthUser {
   role: "client" | "driver" | "admin";
   is_verified: boolean;
   driving_verification_status?: "pending" | "verified" | "rejected" | "blocked";
+  language?: string;
   balance?: {
     balance: string; // Backend decimal
   };
