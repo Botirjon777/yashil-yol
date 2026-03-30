@@ -74,11 +74,32 @@ export interface AuthUser {
   image?: string;
   role: "client" | "driver" | "admin";
   is_verified: boolean;
-  driving_verification_status?: "pending" | "verified" | "rejected" | "blocked";
+  driving_verification_status?: "none" | "pending" | "approved" | "rejected" | "blocked";
+  has_driving_licence?: boolean;
+  has_passport?: boolean;
   language?: string;
   balance?: {
     balance: string; // Backend decimal
   };
+  vehicles?: {
+    id: number;
+    model: string;
+    car_number: string;
+    tech_passport_number: string;
+    seats: number;
+    vehicle_images?: {
+      id: number;
+      type: string;
+      side: string;
+      url: string;
+    }[];
+    color?: {
+      title_uz?: string;
+      title_ru?: string;
+      title_en?: string;
+      code: string;
+    };
+  }[];
   created_at: string;
   updated_at: string;
 }

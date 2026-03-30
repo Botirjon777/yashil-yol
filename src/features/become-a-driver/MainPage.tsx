@@ -23,49 +23,50 @@ import { CarImagesStep } from "./sections/CarImagesStep";
 import { CompleteStep } from "./sections/CompleteStep";
 import { Step, Step1Data, Step2Data, Step3Data, Step4Data } from "./types";
 
+import { useBecomeDriverStore } from "./store/becomeDriverStore";
+
 const MainPage = () => {
-  const [currentStep, setCurrentStep] = useState<Step>("info");
+  const {
+    currentStep,
+    setCurrentStep,
+    step1Data,
+    setStep1Data,
+    step2Data,
+    setStep2Data,
+    step3Data,
+    setStep3Data,
+    step4Data,
+    setStep4Data,
+    generatedVehicleId,
+    setGeneratedVehicleId,
+    _hasHydrated,
+    reset,
+  } = useBecomeDriverStore();
+
   const router = useRouter();
 
   // Step 1: Basic Info
   const { mutate: becomeDriver, isPending: isStep1Pending } = useBecomeDriver();
-  const [step1Data, setStep1Data] = useState<Step1Data>({
-    driving_license_number: "",
-    driving_license_expiration_date: "",
-    birthday: "",
-  });
 
   // Step 2: Driver Documents
   const { mutate: uploadDocuments, isPending: isStep2Pending } =
     useUploadDocuments();
-  const [step2Data, setStep2Data] = useState<Step2Data>({
-    driving_licence_front: null,
-    driving_licence_back: null,
-    driver_passport_image: null,
-  });
 
   // Step 3: Vehicle Info
   const { mutate: addVehicle, isPending: isStep3Pending } = useAddVehicle();
   const { data: colors } = useCarColors();
-  const [step3Data, setStep3Data] = useState<Step3Data>({
-    vehicle_number: "",
-    seats: "4",
-    car_color_id: "",
-    tech_passport_number: "",
-    car_model: "",
-  });
-  const [generatedVehicleId, setGeneratedVehicleId] = useState<
-    number | string | null
-  >(null);
 
   // Step 4: Car Images
   const { mutate: uploadCarImages, isPending: isStep4Pending } =
     useUploadCarImages();
-  const [step4Data, setStep4Data] = useState<Step4Data>({
-    tech_passport_front: null,
-    tech_passport_back: null,
-    car_images: [],
-  });
+
+  if (!_hasHydrated) {
+    return (
+      <div className="min-h-screen flex items-center justify-center">
+        <div className="animate-spin rounded-full h-12 w-12 border-t-2 border-b-2 border-primary"></div>
+      </div>
+    );
+  }
 
   const handleStep1Submit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -244,7 +245,12 @@ const MainPage = () => {
         </div>
 
         {currentStep === "complete" ? (
-          <CompleteStep onGoToDashboard={() => router.push("/dashboard")} />
+          <CompleteStep 
+            onGoToDashboard={() => {
+              reset();
+              router.push("/dashboard");
+            }} 
+          />
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
             {/* Info Cards */}
