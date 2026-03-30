@@ -60,7 +60,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/auth/register"
+                  href="/become-a-driver"
                   className="text-gray-500 hover:text-primary font-medium transition-colors"
                 >
                   {safeT("footer", "becomeDriver")}

@@ -17,6 +17,7 @@ import { formatCurrency, cn } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useLogout } from "@/src/features/auth/hooks/useAuth";
+import { useBalance } from "@/src/features/payment/hooks/usePayment";
 import { toast } from "sonner";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { translations } from "@/src/lib/i18n/translations";
@@ -30,10 +31,11 @@ const languageConfig = {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { user, logout } = useAuthStore();
+  const { user, logout, _hasHydrated } = useAuthStore();
   const { language, setLanguage, t } = useLanguageStore();
   const { mutate: logoutMutation } = useLogout();
-  const [balance] = useState(150000); // Mock balance for now
+  const { data: balanceData } = useBalance();
+  const balance = balanceData?.balance ? parseFloat(balanceData.balance) : 0;
 
   const safeT = (category: any, key: any) => {
     if (!mounted) {
@@ -138,7 +140,7 @@ const Navbar = () => {
               </button>
 
               <div className="absolute right-0 mt-2 w-64 bg-white rounded-lg shadow-3xl border border-border opacity-0 invisible group-hover/profile:opacity-100 group-hover/profile:visible transition-all duration-200 z-60 overflow-hidden">
-                {mounted && user ? (
+                {mounted && _hasHydrated && user ? (
                   <>
                     <div className="px-5 py-4 bg-light-bg/50 border-b border-border">
                       <p className="font-bold text-dark-text truncate text-sm md:text-base">{user.first_name} {user.last_name}</p>

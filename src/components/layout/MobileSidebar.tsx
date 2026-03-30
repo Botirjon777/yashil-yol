@@ -17,6 +17,7 @@ import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { translations } from "@/src/lib/i18n/translations";
 import { useLogout } from "@/src/features/auth/hooks/useAuth";
+import { useBalance } from "@/src/features/payment/hooks/usePayment";
 import { toast } from "sonner";
 
 interface MobileSidebarProps {
@@ -31,11 +32,12 @@ const languageConfig = {
 };
 
 const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
-  const { user, logout } = useAuthStore();
+  const { user, logout, _hasHydrated } = useAuthStore();
   const { language, setLanguage, t } = useLanguageStore();
   const { mutate: logoutMutation } = useLogout();
   const [mounted, setMounted] = useState(false);
-  const [balance] = useState(150000);
+  const { data: balanceData } = useBalance();
+  const balance = balanceData?.balance ? parseFloat(balanceData.balance) : 0;
 
   useEffect(() => {
     setMounted(true);
@@ -108,7 +110,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
         <div className="flex-1 overflow-y-auto p-2.5 space-y-2.5 md:space-y-5">
           {/* User Section */}
           <div className="space-y-2.5 md:space-y-5">
-            {mounted && user ? (
+            {mounted && _hasHydrated && user ? (
               <div className="p-2.5 bg-primary/5 rounded-lg border border-primary/10">
                 <div className="flex items-center space-x-4 mb-4">
                   <div className="w-12 h-12 bg-white rounded-lg border border-primary/20 flex items-center justify-center overflow-hidden">
@@ -130,7 +132,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
                       {safeT("nav", "balance")}
                     </p>
                     <p className="text-xs md:text-sm font-black text-primary">
-                      {formatCurrency(150000)}
+                      {formatCurrency(balance)}
                     </p>
                   </div>
                   <Link 
