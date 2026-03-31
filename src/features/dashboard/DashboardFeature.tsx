@@ -9,6 +9,7 @@ import { ProfileSection } from "./sections/ProfileSection";
 import { DriverSection } from "./sections/DriverSection";
 import AddCardModal from "./components/AddCardModal";
 import TopUpModal from "./components/TopUpModal";
+import AddVehicleModal from "./components/AddVehicleModal";
 
 export default function DashboardFeature() {
   const {
@@ -31,6 +32,8 @@ export default function DashboardFeature() {
     isDriver,
     balance,
     vehicles,
+    isAddVehicleOpen,
+    setIsAddVehicleOpen,
   } = useDashboard();
 
   if (isUserLoading) {
@@ -87,7 +90,11 @@ export default function DashboardFeature() {
             )}
 
             {activeTab === "driver" && (
-              <DriverSection user={user} vehicles={vehicles} />
+              <DriverSection 
+                user={user} 
+                vehicles={vehicles} 
+                onAddVehicleClick={() => setIsAddVehicleOpen(true)} 
+              />
             )}
           </div>
         </div>
@@ -97,6 +104,10 @@ export default function DashboardFeature() {
       <AddCardModal
         isOpen={isAddCardOpen}
         onClose={() => setIsAddCardOpen(false)}
+      />
+      <AddVehicleModal
+        isOpen={isAddVehicleOpen}
+        onClose={() => setIsAddVehicleOpen(false)}
       />
     </div>
   );

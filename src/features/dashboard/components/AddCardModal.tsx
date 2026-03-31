@@ -25,12 +25,6 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose }) => {
 
   const user = useAuthStore(state => state.user);
 
-  useEffect(() => {
-    if (user?.phone && !formData.phone) {
-      setFormData(prev => ({ ...prev, phone: user.phone }));
-    }
-  }, [user]);
-
   const { mutate: addCard, isPending: isAdding } = useAddCard();
   const { mutate: verifyCard, isPending: isVerifying } = useVerifyCard();
 

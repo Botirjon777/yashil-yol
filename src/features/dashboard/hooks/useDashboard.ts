@@ -24,6 +24,7 @@ export function useDashboard() {
   const [activeTab, setActiveTab] = useState<"rides" | "balance" | "profile" | "driver">("rides");
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
+  const [isAddVehicleOpen, setIsAddVehicleOpen] = useState(false);
   const [rideType, setRideType] = useState<"passenger" | "driver">("passenger");
 
   // Load persisted tab on mount
@@ -117,6 +118,8 @@ export function useDashboard() {
     setIsAddCardOpen,
     rideType,
     handleRideTypeChange,
+    isAddVehicleOpen,
+    setIsAddVehicleOpen,
     activeRides,
     historyRides,
     profileForm,

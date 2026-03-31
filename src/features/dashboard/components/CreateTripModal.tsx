@@ -8,6 +8,7 @@ import Button from "@/src/components/ui/Button";
 import {
   useRegions,
   useDistrictsByRegion,
+  useQuartersByDistrict,
 } from "@/src/features/location/hooks/useLocation";
 import { useCreateTrip } from "@/src/features/rides/hooks/useRides";
 import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
@@ -33,6 +34,8 @@ export default function CreateTripModal({
     end_region_id: "",
     start_district_id: "",
     end_district_id: "",
+    start_quarter_id: "",
+    end_quarter_id: "",
     start_lat: "41.3111", // Default to Tashkent for demo if not using map
     start_long: "69.2797",
     end_lat: "40.7128",
@@ -44,6 +47,8 @@ export default function CreateTripModal({
     formData.start_region_id,
   );
   const { data: endDistricts } = useDistrictsByRegion(formData.end_region_id);
+  const { data: startQuarters } = useQuartersByDistrict(formData.start_district_id);
+  const { data: endQuarters } = useQuartersByDistrict(formData.end_district_id);
   const { data: vehicles } = useVehicles();
 
   const { mutate: createTrip, isPending } = useCreateTrip();
@@ -57,9 +62,11 @@ export default function CreateTripModal({
     setFormData((prev) => ({
       ...prev,
       [name]: value,
-      // Reset district if region changes
-      ...(name === "start_region_id" ? { start_district_id: "" } : {}),
-      ...(name === "end_region_id" ? { end_district_id: "" } : {}),
+      // Reset hierarchical children
+      ...(name === "start_region_id" ? { start_district_id: "", start_quarter_id: "" } : {}),
+      ...(name === "end_region_id" ? { end_district_id: "", end_quarter_id: "" } : {}),
+      ...(name === "start_district_id" ? { start_quarter_id: "" } : {}),
+      ...(name === "end_district_id" ? { end_quarter_id: "" } : {}),
     }));
   };
 
@@ -118,6 +125,8 @@ export default function CreateTripModal({
           end_region_id: "",
           start_district_id: "",
           end_district_id: "",
+          start_quarter_id: "",
+          end_quarter_id: "",
           start_lat: "41.3111",
           start_long: "69.2797",
           end_lat: "40.7128",
@@ -217,6 +226,19 @@ export default function CreateTripModal({
               disabled={!formData.start_region_id}
             />
           </div>
+          <Dropdown
+            label="Quarter / Village"
+            options={
+              startQuarters?.map((q) => ({
+                id: q.id,
+                name: q.name_uz || q.name,
+              })) || []
+            }
+            value={formData.start_quarter_id}
+            onChange={(val) => handleSelectChange("start_quarter_id", val)}
+            placeholder="Select Quarter"
+            disabled={!formData.start_district_id}
+          />
         </div>
 
         <div className="space-y-4">
@@ -248,6 +270,19 @@ export default function CreateTripModal({
               disabled={!formData.end_region_id}
             />
           </div>
+          <Dropdown
+            label="Quarter / Village"
+            options={
+              endQuarters?.map((q) => ({
+                id: q.id,
+                name: q.name_uz || q.name,
+              })) || []
+            }
+            value={formData.end_quarter_id}
+            onChange={(val) => handleSelectChange("end_quarter_id", val)}
+            placeholder="Select Quarter"
+            disabled={!formData.end_district_id}
+          />
         </div>
 
         <div className="flex justify-end pt-4">
