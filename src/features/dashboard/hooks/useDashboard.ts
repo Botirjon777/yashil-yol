@@ -4,10 +4,12 @@ import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useMe, useUpdateProfile } from "@/src/features/auth/hooks/useAuth";
 import { useBalance } from "@/src/features/payment/hooks/usePayment";
 import { 
-  useClientInprogressTrips, 
+  useClientInprogressTrips,
   useClientCompletedTrips,
+  useClientCanceledTrips,
   useDriverActiveTrips,
-  useDriverCompletedTrips 
+  useDriverCompletedTrips,
+  useDriverCanceledTrips,
 } from "@/src/features/rides/hooks/useRides";
 import { toast } from "sonner";
 
@@ -49,9 +51,11 @@ export function useDashboard() {
 
   // Trips Hooks
   const { data: passengerActive } = useClientInprogressTrips();
-  const { data: passengerHistory } = useClientCompletedTrips();
+  const { data: passengerCompleted } = useClientCompletedTrips();
+  const { data: passengerCanceled } = useClientCanceledTrips();
   const { data: driverActive } = useDriverActiveTrips();
-  const { data: driverHistory } = useDriverCompletedTrips();
+  const { data: driverCompleted } = useDriverCompletedTrips();
+  const { data: driverCanceled } = useDriverCanceledTrips();
 
   // Profile Form State
   const [profileForm, setProfileForm] = useState({
@@ -72,7 +76,14 @@ export function useDashboard() {
   const isDriver = user?.role === "driver";
 
   const activeRides = rideType === "driver" ? driverActive : passengerActive;
-  const historyRides = rideType === "driver" ? driverHistory : passengerHistory;
+  
+  const historyRides = rideType === "driver" 
+    ? [...(driverCompleted || []), ...(driverCanceled || [])].sort((a, b) => 
+        new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
+      )
+    : [...(passengerCompleted || []), ...(passengerCanceled || [])].sort((a, b) => 
+        new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
+      );
 
   useEffect(() => {
     if (user) {

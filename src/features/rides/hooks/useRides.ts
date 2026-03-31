@@ -13,6 +13,7 @@ import {
   getDriverAllTrips,
   getDriverTripById,
   createTrip,
+  bookTrip,
 } from "../actions/actions";
 import { Trip, TripSearchParams, CreateTripRequest } from "../types";
 import { PaginatedTrips } from "../actions/actions";
@@ -106,6 +107,17 @@ export const useCreateTrip = () => {
     mutationFn: (data: CreateTripRequest) => createTrip(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
+    },
+  });
+};
+
+export const useBookTrip = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { trip_id: number | string; seats_booked: number }) => bookTrip(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["client-trips"] });
+      queryClient.invalidateQueries({ queryKey: ["trip"] });
     },
   });
 };
