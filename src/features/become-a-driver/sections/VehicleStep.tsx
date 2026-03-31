@@ -5,6 +5,7 @@ import Button from "@/src/components/ui/Button";
 import Input from "@/src/components/ui/Input";
 import { Step3Data } from "../types";
 import { CarColor } from "@/src/features/rides/types";
+import { CAR_COLORS } from "../../rides/constants/colors";
 
 interface VehicleStepProps {
   data: Step3Data;
@@ -15,38 +16,6 @@ interface VehicleStepProps {
   isPending: boolean;
 }
 
-const FALLBACK_COLORS = [
-  { id: 1, name: "Qizil" },
-  { id: 2, name: "Yashil" },
-  { id: 3, name: "Ko'k" },
-  { id: 4, name: "Sariq" },
-  { id: 5, name: "Qora" },
-  { id: 6, name: "Oq" },
-  { id: 7, name: "Kulrang" },
-  { id: 8, name: "To‘q ko‘k" },
-  { id: 9, name: "Jigarrang" },
-  { id: 10, name: "To‘q yashil" },
-  { id: 11, name: "Olcha" },
-  { id: 12, name: "Zaytun" },
-  { id: 13, name: "Kumush" },
-  { id: 14, name: "Olovrang" },
-  { id: 15, name: "Siyohrang" },
-  { id: 16, name: "Pushti" },
-  { id: 17, name: "Ko‘k-yashil" },
-  { id: 18, name: "Aqua" },
-  { id: 19, name: "Shaftoli" },
-  { id: 20, name: "Oltin" },
-  { id: 21, name: "Bej" },
-  { id: 22, name: "Shokolad" },
-  { id: 23, name: "Karamel" },
-  { id: 24, name: "Quyosh" },
-  { id: 25, name: "Dengiz to‘lqini" },
-  { id: 26, name: "Pushti binafsha" },
-  { id: 27, name: "Qaymoqrang" },
-  { id: 28, name: "Jigar binafsha" },
-  { id: 29, name: "Zangori" },
-  { id: 30, name: "To‘q kulrang" },
-];
 
 export function VehicleStep({
   data,
@@ -56,7 +25,7 @@ export function VehicleStep({
   onBack,
   isPending,
 }: VehicleStepProps) {
-  const colors = apiColors?.length ? apiColors : (FALLBACK_COLORS as CarColor[]);
+  const colors = apiColors?.length ? apiColors : (CAR_COLORS as any as CarColor[]);
   const [isColorOpen, setIsColorOpen] = useState(false);
   const colorRef = useRef<HTMLDivElement>(null);
 
@@ -131,7 +100,7 @@ export function VehicleStep({
                 <>
                   <div 
                     className="w-6 h-6 rounded-full border border-gray-200 shadow-sm"
-                    style={{ backgroundColor: getVehicleColorHex(selectedColor.name || selectedColor.title_en || "") }}
+                    style={{ backgroundColor: selectedColor.code || getVehicleColorHex(selectedColor.name || selectedColor.title_en || "") }}
                   />
                   <span className="text-dark-text">
                     <span className="text-gray-400 font-bold mr-2">ID: {selectedColor.id}</span>
@@ -171,7 +140,7 @@ export function VehicleStep({
                   >
                     <div 
                       className="w-8 h-8 rounded-full border border-gray-100 shadow-sm"
-                      style={{ backgroundColor: getVehicleColorHex(color.name || color.title_en || color.title_uz || "") }}
+                      style={{ backgroundColor: color.code || getVehicleColorHex(color.name || color.title_en || color.title_uz || "") }}
                     />
                     <div className="flex flex-col">
                       <span className={cn("font-bold text-sm", String(data.car_color_id) === String(color.id) ? "text-primary" : "text-dark-text")}>
