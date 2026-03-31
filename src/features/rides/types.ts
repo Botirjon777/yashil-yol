@@ -26,11 +26,12 @@ export interface VehicleRequest {
 }
 
 export interface CarColor {
-  id: number;
-  name: string;
-  name_uz?: string;
-  name_ru?: string;
-  name_en?: string;
+  id: number | string;
+  name?: string;
+  title_uz?: string;
+  title_ru?: string;
+  title_en?: string;
+  code?: string;
 }
 
 export interface Trip {
@@ -80,4 +81,19 @@ export interface TripSearchParams {
   end_quarter_id?: number | string;
   departure_date?: string; // YYYY-MM-DD
   passengers?: number;
+}
+
+export interface CreateTripRequest {
+  start_time: string; // Y-m-d H:i:s
+  end_time: string; // Y-m-d H:i:s
+  price_per_seat: number | string;
+  available_seats: number | string;
+  start_lat: number | string;
+  start_long: number | string;
+  end_lat: number | string;
+  end_long: number | string;
+  start_region_id: number | string;
+  end_region_id: number | string;
+  start_district_id: number | string;
+  end_district_id: number | string;
 }

@@ -103,6 +103,8 @@
       "subtitle": "Войдите, чтобы найти идеальную поездку",
       "emailLabel": "Адрес электронной почты",
       "emailPlaceholder": "name@example.com",
+      "phoneLabel": "Номер телефона",
+      "phonePlaceholder": "+998 xx xxx xx xx",
       "passwordLabel": "Пароль",
       "passwordPlaceholder": "••••••••",
       "forgotPassword": "Забыли пароль?",

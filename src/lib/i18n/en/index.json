@@ -103,6 +103,8 @@
       "subtitle": "Log in to find your perfect ride",
       "emailLabel": "Email Address",
       "emailPlaceholder": "name@example.com",
+      "phoneLabel": "Phone Number",
+      "phonePlaceholder": "+998 xx xxx xx xx",
       "passwordLabel": "Password",
       "passwordPlaceholder": "••••••••",
       "forgotPassword": "Forgot password?",

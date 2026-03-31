@@ -21,12 +21,12 @@ const RidesContent = () => {
   const searchParams = useSearchParams();
 
   const queryParams = {
-    start_region_id: searchParams.get("from_region_id") || "",
-    end_region_id: searchParams.get("to_region_id") || "",
-    start_district_id: searchParams.get("from_district_id") || "",
-    end_district_id: searchParams.get("to_district_id") || "",
-    start_quarter_id: searchParams.get("from_quarter_id") || "",
-    end_quarter_id: searchParams.get("to_quarter_id") || "",
+    start_region_id: searchParams.get("start_region_id") || "",
+    end_region_id: searchParams.get("end_region_id") || "",
+    start_district_id: searchParams.get("start_district_id") || "",
+    end_district_id: searchParams.get("end_district_id") || "",
+    start_quarter_id: searchParams.get("start_quarter_id") || "",
+    end_quarter_id: searchParams.get("end_quarter_id") || "",
     departure_date: searchParams.get("departure_date") || "",
     passengers: Number(searchParams.get("passengers")) || 1,
   };

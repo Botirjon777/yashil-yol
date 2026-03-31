@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getPublicTrips,
   getAllPublicTrips,
@@ -10,8 +10,11 @@ import {
   getDriverActiveTrips,
   getDriverCompletedTrips,
   getDriverCanceledTrips,
+  getDriverAllTrips,
+  getDriverTripById,
+  createTrip,
 } from "../actions/actions";
-import { Trip, TripSearchParams } from "../types";
+import { Trip, TripSearchParams, CreateTripRequest } from "../types";
 import { PaginatedTrips } from "../actions/actions";
 
 /** Paginated list of public trips */
@@ -83,3 +86,26 @@ export const useDriverCanceledTrips = () =>
     queryKey: ["driver-trips", "canceled"],
     queryFn: getDriverCanceledTrips,
   });
+
+export const useDriverAllTrips = () =>
+  useQuery<Trip[], Error>({
+    queryKey: ["driver-trips", "all"],
+    queryFn: getDriverAllTrips,
+  });
+
+export const useDriverTripById = (id: string | number | null) =>
+  useQuery<Trip, Error>({
+    queryKey: ["driver-trips", "detail", id],
+    queryFn: () => getDriverTripById(id!),
+    enabled: id !== null && id !== undefined,
+  });
+
+export const useCreateTrip = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreateTripRequest) => createTrip(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
+    },
+  });
+};

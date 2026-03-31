@@ -103,6 +103,8 @@
       "subtitle": "Mukammal sayohatni topish uchun tizimga kiring",
       "emailLabel": "Elektron pochta manzili",
       "emailPlaceholder": "ism@example.com",
+      "phoneLabel": "Telefon raqami",
+      "phonePlaceholder": "+998 xx xxx xx xx",
       "passwordLabel": "Parol",
       "passwordPlaceholder": "••••••••",
       "forgotPassword": "Parolni unutdingizmi?",
