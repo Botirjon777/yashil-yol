@@ -4,10 +4,11 @@ import { cn, getVehicleColorHex } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import Input from "@/src/components/ui/Input";
 import { Step3Data } from "../types";
+import { CarColor } from "@/src/features/rides/types";
 
 interface VehicleStepProps {
   data: Step3Data;
-  colors: { id: string | number; name: string }[] | undefined;
+  colors: CarColor[] | undefined;
   onChange: (data: Step3Data) => void;
   onSubmit: (e: React.FormEvent) => void;
   onBack: () => void;
@@ -55,9 +56,13 @@ export function VehicleStep({
   onBack,
   isPending,
 }: VehicleStepProps) {
-  const colors = apiColors?.length ? apiColors : FALLBACK_COLORS;
+  const colors = apiColors?.length ? apiColors : (FALLBACK_COLORS as CarColor[]);
   const [isColorOpen, setIsColorOpen] = useState(false);
   const colorRef = useRef<HTMLDivElement>(null);
+
+  const getColorName = (color: CarColor) => {
+    return color.name || color.title_uz || color.title_en || color.title_ru || `Color ${color.id}`;
+  };
 
   const selectedColor = colors?.find((c) => String(c.id) === String(data.car_color_id));
 
@@ -126,11 +131,11 @@ export function VehicleStep({
                 <>
                   <div 
                     className="w-6 h-6 rounded-full border border-gray-200 shadow-sm"
-                    style={{ backgroundColor: getVehicleColorHex(selectedColor.name) }}
+                    style={{ backgroundColor: getVehicleColorHex(selectedColor.name || selectedColor.title_en || "") }}
                   />
                   <span className="text-dark-text">
                     <span className="text-gray-400 font-bold mr-2">ID: {selectedColor.id}</span>
-                    {selectedColor.name}
+                    {getColorName(selectedColor)}
                   </span>
                 </>
               ) : (
@@ -166,11 +171,11 @@ export function VehicleStep({
                   >
                     <div 
                       className="w-8 h-8 rounded-full border border-gray-100 shadow-sm"
-                      style={{ backgroundColor: getVehicleColorHex(color.name) }}
+                      style={{ backgroundColor: getVehicleColorHex(color.name || color.title_en || color.title_uz || "") }}
                     />
                     <div className="flex flex-col">
                       <span className={cn("font-bold text-sm", String(data.car_color_id) === String(color.id) ? "text-primary" : "text-dark-text")}>
-                        {color.name}
+                        {getColorName(color)}
                       </span>
                       <span className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                         Color ID: {color.id}
