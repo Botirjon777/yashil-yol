@@ -112,7 +112,21 @@ export default function CreateTripModal({
       start_long: Number(formData.start_long),
       end_lat: Number(formData.end_lat),
       end_long: Number(formData.end_long),
+      // IDs MUST be strings according to backend requirements
+      start_region_id: String(formData.start_region_id),
+      end_region_id: String(formData.end_region_id),
+      start_district_id: String(formData.start_district_id),
+      end_district_id: String(formData.end_district_id),
+      vehicle_id: String(formData.vehicle_id),
     };
+
+    // Only include quarters if selected, also as strings
+    if (formData.start_quarter_id) {
+      payload.start_quarter_id = String(formData.start_quarter_id);
+    }
+    if (formData.end_quarter_id) {
+      payload.end_quarter_id = String(formData.end_quarter_id);
+    }
 
     createTrip(payload, {
       onSuccess: () => {

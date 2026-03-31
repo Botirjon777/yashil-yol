@@ -79,8 +79,8 @@ export interface TripSearchParams {
   end_region_id?: number | string;
   start_district_id?: number | string;
   end_district_id?: number | string;
-  start_quarter_id?: number | string;
-  end_quarter_id?: number | string;
+  start_quarter_id?: string | number;
+  end_quarter_id?: string | number;
   departure_date?: string; // YYYY-MM-DD
   passengers?: number;
 }
@@ -94,8 +94,11 @@ export interface CreateTripRequest {
   start_long: number | string;
   end_lat: number | string;
   end_long: number | string;
-  start_region_id: number | string;
-  end_region_id: number | string;
-  start_district_id: number | string;
-  end_district_id: number | string;
+  start_region_id: string | number;
+  end_region_id: string | number;
+  start_district_id: string | number;
+  end_district_id: string | number;
+  start_quarter_id?: string | number;
+  end_quarter_id?: string | number;
+  vehicle_id?: string | number;
 }

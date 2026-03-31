@@ -130,10 +130,10 @@ const RideDetailsPage = () => {
                 </div>
                 <div className={cn(
                   "px-4 py-1.5 text-xs font-black rounded-full uppercase tracking-widest",
-                  trip.status === "active" ? "bg-success/10 text-success" : 
-                  trip.status === "completed" ? "bg-primary/10 text-primary" : "bg-error/10 text-error"
+                  String(trip.status) === "active" ? "bg-success/10 text-success" : 
+                  String(trip.status) === "completed" ? "bg-primary/10 text-primary" : "bg-error/10 text-error"
                 )}>
-                  {trip.status}
+                  {typeof trip.status === 'string' ? trip.status : 'Active'}
                 </div>
               </div>
 

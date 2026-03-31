@@ -103,13 +103,13 @@ export const getDriverCanceledTrips = async (): Promise<Trip[]> => {
 /** GET /driver/trips — all trips for driver */
 export const getDriverAllTrips = async (): Promise<Trip[]> => {
   const res = await api.get<any>("driver/trips");
-  return res.data?.data?.data ?? res.data?.data ?? [];
+  return res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
 };
 
 /** GET /driver/trips/:id — single trip for driver */
 export const getDriverTripById = async (id: string | number): Promise<Trip> => {
-  const res = await api.get<Trip>(`driver/trips/${id}`);
-  return res.data;
+  const res = await api.get<any>(`driver/trips/${id}`);
+  return res.data?.data ?? res.data;
 };
 
 /** POST /driver/trips */
