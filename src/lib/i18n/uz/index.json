@@ -1,6 +1,6 @@
 {
   "nav": {
-    "findRide": "Yo'sh topish",
+    "findRide": "Yo'nalish topish",
     "carpool": "Karpul",
     "bus": "Avtobus",
     "support": "Yordam",
@@ -9,7 +9,11 @@
     "signup": "Ro'yxatdan o'tish",
     "logout": "Chiqish",
     "balance": "Balans",
-    "dashboard": "Boshqaruv paneli"
+    "dashboard": "Boshqaruv paneli",
+    "becomeDriver": "Haydovchi bo'lish",
+    "menu": "Menyu",
+    "services": "Xizmatlar",
+    "language": "Til"
   },
   "hero": {
     "title": "Sayohatingiz uchun eng yaxshi hamroh",
@@ -80,7 +84,8 @@
     "today": "Bugun",
     "cancel": "Bekor qilish",
     "save": "Saqlash",
-    "loading": "Yuklanmoqda..."
+    "loading": "Yuklanmoqda...",
+    "scrollToTop": "Tepaga qaytish"
   },
   "footer": {
     "tagline": "Biz O'zbekistonda har bir kishi uchun hamroh topishni oson, xavfsiz va hamyonbop qilamiz.",
@@ -171,5 +176,22 @@
     "selectDistrict": "Tumanni tanlang",
     "selectVillage": "Mahallani tanlang",
     "placeholder": "Viloyat, Tuman, Mahalla..."
+  },
+  "rides": {
+    "title": "Mavjud safarlar",
+    "found": "ta safar topildi",
+    "searching": "Eng yaxshi safarlar qidirilmoqda...",
+    "noRides": "Safarlar topilmadi",
+    "noRidesDesc": "Filtrlarni o'zgartirib ko'ring yoki boshqa yo'nalishni qidiring.",
+    "newSearch": "Yangi qidiruv",
+    "changeSearch": "Qidiruvni o'zgartirish",
+    "filters": "Filtrlar",
+    "departureTime": "Ketish vaqti",
+    "morning": "Ertalab (06:00 - 12:00)",
+    "afternoon": "Kush (12:00 - 18:00)",
+    "evening": "Kechqurun va Tun",
+    "maxPrice": "Maksimal narx",
+    "seatsLeft": "joy qoldi",
+    "joinRide": "Safarga qo'shilish"
   }
 }

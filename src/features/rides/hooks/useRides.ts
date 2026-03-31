@@ -27,11 +27,11 @@ export const usePublicTrips = (page = 1) =>
     queryFn: () => getPublicTrips(page),
   });
 
-/** Full list of all public trips */
-export const useAllPublicTrips = () =>
+export const useAllPublicTrips = (enabled = true) =>
   useQuery<Trip[], Error>({
     queryKey: ["all-public-trips"],
     queryFn: getAllPublicTrips,
+    enabled,
   });
 
 /** Search available trips with filters */

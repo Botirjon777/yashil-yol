@@ -96,7 +96,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
         {/* Header */}
         <div className="p-2.5 flex items-center justify-between border-b border-border bg-light-bg/30">
           <span className="text-lg font-black text-dark-text uppercase">
-            Menu
+            {safeT("nav", "menu")}
           </span>
           <button
             onClick={onClose}
@@ -170,7 +170,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
           {/* Navigation Links */}
           <div className="space-y-2.5 md:space-y-5">
             <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest mb-4">
-              Services
+              {safeT("nav", "services")}
             </p>
             <Link
               href="/rides"
@@ -209,6 +209,18 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
               </span>
             </Link>
             <Link
+              href="/become-a-driver"
+              onClick={onClose}
+              className="flex items-center space-x-4 p-2.5 hover:bg-light-bg rounded-lg transition-colors border border-transparent hover:border-border"
+            >
+              <div className="w-10 h-10 bg-primary/10 text-primary rounded-lg flex items-center justify-center">
+                <HiUserCircle className="w-5 h-5" />
+              </div>
+              <span className="font-bold text-dark-text">
+                {safeT("nav", "becomeDriver")}
+              </span>
+            </Link>
+            <Link
               href="/support"
               onClick={onClose}
               className="flex items-center space-x-4 p-2.5 hover:bg-light-bg rounded-2xl transition-colors border border-transparent hover:border-border"
@@ -216,14 +228,16 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
               <div className="w-10 h-10 bg-gray-100 text-gray-500 rounded-xl flex items-center justify-center">
                 <HiChatAlt2 className="w-5 h-5" />
               </div>
-              <span className="font-bold text-dark-text">Support Center</span>
+              <span className="font-bold text-dark-text">
+                {safeT("nav", "support")}
+              </span>
             </Link>
           </div>
 
           {/* Language Switcher */}
           <div className="space-y-2.5 md:space-y-5 pt-4 border-t border-border">
             <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">
-              Language
+              {safeT("nav", "language")}
             </p>
             <div className="grid grid-cols-3 gap-3">
               {(["uz", "ru", "en"] as const).map((lang) => (

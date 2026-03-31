@@ -11,6 +11,7 @@ interface CalendarProps {
   placeholder?: string;
   className?: string;
   error?: string;
+  showTime?: boolean;
 }
 
 const Calendar: React.FC<CalendarProps> = ({
@@ -20,6 +21,7 @@ const Calendar: React.FC<CalendarProps> = ({
   placeholder = "Select date",
   className,
   error,
+  showTime = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [viewDate, setViewDate] = useState(() =>
@@ -29,6 +31,16 @@ const Calendar: React.FC<CalendarProps> = ({
 
   // Parse current value
   const selectedDate = useMemo(() => (value ? new Date(value) : null), [value]);
+
+  const [hour, setHour] = useState(() => (selectedDate ? selectedDate.getHours() : 12));
+  const [minute, setMinute] = useState(() => (selectedDate ? selectedDate.getMinutes() : 0));
+
+  useEffect(() => {
+    if (selectedDate) {
+      setHour(selectedDate.getHours());
+      setMinute(selectedDate.getMinutes());
+    }
+  }, [selectedDate]);
 
   useEffect(() => {
     const handleClickOutside = (event: MouseEvent) => {
@@ -71,16 +83,40 @@ const Calendar: React.FC<CalendarProps> = ({
     setViewDate(new Date(viewDate.getFullYear(), viewDate.getMonth() + 1, 1));
   };
 
+  const formatValue = (date: Date, h: number, m: number) => {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, "0");
+    const d = String(date.getDate()).padStart(2, "0");
+    
+    if (showTime) {
+      const hh = String(h).padStart(2, "0");
+      const mm = String(m).padStart(2, "0");
+      return `${year}-${month}-${d} ${hh}:${mm}`;
+    }
+    return `${year}-${month}-${d}`;
+  };
+
   const handleDateClick = (day: number) => {
     const newDate = new Date(viewDate.getFullYear(), viewDate.getMonth(), day);
-    // Format to YYYY-MM-DD in local time to avoid timezone shifts from toISOString()
-    const year = newDate.getFullYear();
-    const month = String(newDate.getMonth() + 1).padStart(2, "0");
-    const d = String(newDate.getDate()).padStart(2, "0");
-    const formatted = `${year}-${month}-${d}`;
+    if (showTime) {
+      // Just update current view/selection in memory but keep open to adjust time
+      setViewDate(newDate);
+      const formatted = formatValue(newDate, hour, minute);
+      onChange(formatted);
+    } else {
+      const formatted = formatValue(newDate, 0, 0);
+      onChange(formatted);
+      setIsOpen(false);
+    }
+  };
 
-    onChange(formatted);
-    setIsOpen(false);
+  const handleTimeChange = (h: number, m: number) => {
+    setHour(h);
+    setMinute(m);
+    if (selectedDate) {
+      const formatted = formatValue(selectedDate, h, m);
+      onChange(formatted);
+    }
   };
 
   const renderDays = () => {
@@ -142,7 +178,7 @@ const Calendar: React.FC<CalendarProps> = ({
   return (
     <div className={cn("w-full relative", className)} ref={calendarRef}>
       {label && (
-        <label className="block text-sm font-semibold text-dark-text mb-1.5 ml-1">
+        <label className="block text-sm font-semibold text-dark-text mb-1.5 ml-1 leading-tight capitalize">
           {label}
         </label>
       )}
@@ -164,13 +200,14 @@ const Calendar: React.FC<CalendarProps> = ({
                 day: "numeric",
                 month: "short",
                 year: "numeric",
+                ...(showTime && { hour: '2-digit', minute: '2-digit' })
               })
             : placeholder}
         </span>
       </button>
 
       {isOpen && (
-        <div className="absolute z-100 mt-2 bg-white border border-border rounded-2xl shadow-2xl p-4 w-[320px] animate-in fade-in zoom-in duration-200 left-0">
+        <div className="absolute z-[100] mt-2 bg-white border border-border rounded-2xl shadow-2xl p-4 w-[320px] animate-in fade-in zoom-in duration-200 left-0">
           <div className="flex items-center justify-between mb-4">
             <h4 className="font-black text-dark-text">
               {monthNames[viewDate.getMonth()]} {viewDate.getFullYear()}
@@ -206,21 +243,57 @@ const Calendar: React.FC<CalendarProps> = ({
 
           <div className="grid grid-cols-7 gap-1">{renderDays()}</div>
 
-          <div className="mt-4 pt-4 border-t border-border flex justify-end">
+          {showTime && (
+            <div className="mt-4 pt-4 border-t border-border">
+              <div className="flex items-center justify-between">
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Time Selection</span>
+                <div className="flex items-center space-x-2">
+                  <select 
+                    value={hour} 
+                    onChange={(e) => handleTimeChange(Number(e.target.value), minute)}
+                    className="bg-light-bg border border-border rounded-lg px-2 py-1 text-sm font-bold outline-none focus:border-primary"
+                  >
+                    {Array.from({ length: 24 }).map((_, i) => (
+                      <option key={i} value={i}>{String(i).padStart(2, '0')}</option>
+                    ))}
+                  </select>
+                  <span className="font-bold">:</span>
+                  <select 
+                    value={minute} 
+                    onChange={(e) => handleTimeChange(hour, Number(e.target.value))}
+                    className="bg-light-bg border border-border rounded-lg px-2 py-1 text-sm font-bold outline-none focus:border-primary"
+                  >
+                    {Array.from({ length: 60 }).map((_, i) => (
+                      <option key={i} value={i}>{String(i).padStart(2, '0')}</option>
+                    ))}
+                  </select>
+                </div>
+              </div>
+            </div>
+          )}
+
+          <div className="mt-4 pt-4 border-t border-border flex justify-between items-center">
             <button
               type="button"
               onClick={() => {
                 const now = new Date();
-                const year = now.getFullYear();
-                const month = String(now.getMonth() + 1).padStart(2, "0");
-                const d = String(now.getDate()).padStart(2, "0");
-                const todayFormatted = `${year}-${month}-${d}`;
-                onChange(todayFormatted);
+                const formatted = formatValue(now, now.getHours(), now.getMinutes());
+                onChange(formatted);
                 setIsOpen(false);
               }}
               className="text-primary text-xs font-black uppercase tracking-widest hover:underline"
             >
-              Today
+              Now
+            </button>
+            <button
+              type="button"
+              onClick={() => setIsOpen(false)}
+              className={cn(
+                "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                value ? "bg-primary text-white shadow-lg shadow-primary/30" : "bg-gray-100 text-gray-400"
+              )}
+            >
+              Confirm
             </button>
           </div>
         </div>

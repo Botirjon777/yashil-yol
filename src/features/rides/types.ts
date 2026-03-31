@@ -58,6 +58,8 @@ export interface Trip {
   end_region?: { id: number; name: string; name_uz?: string; name_en?: string };
   start_district?: { id: number; name: string; name_uz?: string; name_en?: string };
   end_district?: { id: number; name: string; name_uz?: string; name_en?: string };
+  start_quarter?: { id: number; name: string; name_uz?: string; name_en?: string };
+  end_quarter?: { id: number; name: string; name_uz?: string; name_en?: string };
   bookings?: Booking[];
 }
 
