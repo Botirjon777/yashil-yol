@@ -1,5 +1,5 @@
 import api from "@/src/lib/axios";
-import { VehicleRequest, CarColor, Trip, TripSearchParams } from "../types";
+import { VehicleRequest, CarColor, Trip, TripSearchParams, Booking } from "../types";
 
 export interface PaginatedTrips {
   data: Trip[];
@@ -116,4 +116,16 @@ export const createTrip = async (data: any): Promise<{ status: string; message: 
 export const bookTrip = async (data: { trip_id: number | string; seats_booked: number }): Promise<any> => {
   const res = await api.post("client/bookings", data);
   return res.data;
+};
+
+/** GET /client/booking — all bookings for client */
+export const getClientBookings = async (): Promise<Booking[]> => {
+  const res = await api.get<any>("client/booking");
+  return res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
+};
+
+/** GET /client/trips/booking/:id — specific booking details */
+export const getClientBookingById = async (id: string | number): Promise<Booking> => {
+  const res = await api.get<any>(`client/trips/booking/${id}`);
+  return res.data?.data ?? res.data;
 };

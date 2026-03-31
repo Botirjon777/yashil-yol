@@ -16,9 +16,11 @@ import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import { useSearchTrips } from "@/src/features/rides/hooks/useRides";
 import Loader from "@/src/components/ui/Loader";
+import { useAuthStore } from "@/src/providers/AuthProvider";
 
 const RidesContent = () => {
   const searchParams = useSearchParams();
+  const { user } = useAuthStore();
 
   const queryParams = {
     start_region_id: searchParams.get("start_region_id") || "",
@@ -48,6 +50,9 @@ const RidesContent = () => {
   };
 
   const filteredRides = (rides || []).filter((ride) => {
+    // A driver cannot book their own ride
+    if (user && Number(ride.driver_id) === Number(user.id)) return false;
+
     const price = ride.price_per_seat || 0;
     const matchesPrice = price <= priceRange;
     

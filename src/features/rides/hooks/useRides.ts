@@ -14,8 +14,10 @@ import {
   getDriverTripById,
   createTrip,
   bookTrip,
+  getClientBookings,
+  getClientBookingById,
 } from "../actions/actions";
-import { Trip, TripSearchParams, CreateTripRequest } from "../types";
+import { Trip, TripSearchParams, CreateTripRequest, Booking } from "../types";
 import { PaginatedTrips } from "../actions/actions";
 
 /** Paginated list of public trips */
@@ -118,6 +120,20 @@ export const useBookTrip = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["client-trips"] });
       queryClient.invalidateQueries({ queryKey: ["trip"] });
+      queryClient.invalidateQueries({ queryKey: ["client-bookings"] });
     },
   });
 };
+
+export const useClientBookings = () =>
+  useQuery<Booking[], Error>({
+    queryKey: ["client-bookings"],
+    queryFn: getClientBookings,
+  });
+
+export const useClientBookingById = (id: string | number | null) =>
+  useQuery<Booking, Error>({
+    queryKey: ["client-bookings", "detail", id],
+    queryFn: () => getClientBookingById(id!),
+    enabled: id !== null && id !== undefined,
+  });
