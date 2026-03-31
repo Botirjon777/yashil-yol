@@ -11,12 +11,10 @@ interface HeroSectionProps {
   setFromLocation: (val: any) => void;
   toLocation: any;
   setToLocation: (val: any) => void;
-  
-  fromQuery: string;
+
   setFromQuery: (val: string) => void;
-  toQuery: string;
   setToQuery: (val: string) => void;
-  
+
   fromSuggestions: any[];
   toSuggestions: any[];
 
@@ -31,9 +29,7 @@ export default function HeroSection({
   setFromLocation,
   toLocation,
   setToLocation,
-  fromQuery,
   setFromQuery,
-  toQuery,
   setToQuery,
   fromSuggestions,
   toSuggestions,
@@ -46,19 +42,26 @@ export default function HeroSection({
   const { ref, isInView } = useInView({ triggerOnce: true });
 
   const titleOptions = t("hero", "titleOptions") as unknown as string[];
-  const finalTitleOptions = Array.isArray(titleOptions) ? titleOptions : [t("hero", "title")];
+  const finalTitleOptions = Array.isArray(titleOptions)
+    ? titleOptions
+    : [t("hero", "title")];
 
   return (
     <section
       ref={ref}
       className={cn(
         "relative min-h-[750px] flex items-center justify-center z-20 py-20",
-        isInView ? "animate-in-top" : "opacity-0"
+        isInView ? "animate-in-top" : "opacity-0",
       )}
     >
-      <div className="absolute inset-0 overflow-hidden -z-10 bg-[#EEF2FF]">
-        <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-l from-primary/10 to-transparent" />
-        <div className="absolute -top-24 -left-24 w-96 h-96 bg-secondary/10 rounded-full blur-3xl" />
+      <div className="absolute inset-0 overflow-hidden -z-10">
+        <img
+          src="/assets/home/hero-bg.webp"
+          alt="Hero Background"
+          className="absolute inset-0 w-full h-full object-cover"
+        />
+        <div className="absolute inset-0 bg-linear-to-b from-white/55 via-white/50 to-white/95" />
+        <div className="absolute top-0 right-0 w-1/2 h-full bg-linear-to-l from-primary/5 to-transparent" />
       </div>
 
       <div className="container-custom text-center">
@@ -101,9 +104,9 @@ export default function HeroSection({
                 className="text-left"
               />
             </div>
-            <Button 
-              onClick={handleSearch} 
-              size="lg" 
+            <Button
+              onClick={handleSearch}
+              size="lg"
               className="w-full md:w-64 h-14 text-lg"
               loading={loading}
               disabled={!fromLocation || !toLocation}

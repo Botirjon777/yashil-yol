@@ -13,6 +13,7 @@ import {
 import { useCreateTrip } from "@/src/features/rides/hooks/useRides";
 import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { toast } from "sonner";
+import Calendar from "@/src/components/ui/Calendar";
 
 interface CreateTripModalProps {
   isOpen: boolean;
@@ -47,7 +48,9 @@ export default function CreateTripModal({
     formData.start_region_id,
   );
   const { data: endDistricts } = useDistrictsByRegion(formData.end_region_id);
-  const { data: startQuarters } = useQuartersByDistrict(formData.start_district_id);
+  const { data: startQuarters } = useQuartersByDistrict(
+    formData.start_district_id,
+  );
   const { data: endQuarters } = useQuartersByDistrict(formData.end_district_id);
   const { data: vehicles } = useVehicles();
 
@@ -63,8 +66,12 @@ export default function CreateTripModal({
       ...prev,
       [name]: value,
       // Reset hierarchical children
-      ...(name === "start_region_id" ? { start_district_id: "", start_quarter_id: "" } : {}),
-      ...(name === "end_region_id" ? { end_district_id: "", end_quarter_id: "" } : {}),
+      ...(name === "start_region_id"
+        ? { start_district_id: "", start_quarter_id: "" }
+        : {}),
+      ...(name === "end_region_id"
+        ? { end_district_id: "", end_quarter_id: "" }
+        : {}),
       ...(name === "start_district_id" ? { start_quarter_id: "" } : {}),
       ...(name === "end_district_id" ? { end_quarter_id: "" } : {}),
     }));
@@ -86,32 +93,21 @@ export default function CreateTripModal({
       return;
     }
 
-    // Format dates to Y-m-d H:i:s
-    const formatDateTime = (val: string) => {
+    // Custom calendar returns "YYYY-MM-DD HH:mm"
+    // Backend expects "YYYY-MM-DD HH:mm:ss"
+    const formatDateTimeForBackend = (val: string) => {
       if (!val) return "";
-      const date = new Date(val);
-      const y = date.getFullYear();
-      const m = String(date.getMonth() + 1).padStart(2, "0");
-      const d = String(date.getDate()).padStart(2, "0");
-      const h = String(date.getHours()).padStart(2, "0");
-      const min = String(date.getMinutes()).padStart(2, "0");
-      const s = "00";
-      return `${y}-${m}-${d} ${h}:${min}:${s}`;
+      // If it already has seconds (unlikely from our component), return as is
+      if (val.split(":").length === 3) return val;
+      return `${val}:00`;
     };
 
     const payload = {
       ...formData,
-      start_time: formatDateTime(formData.start_time),
-      end_time: formatDateTime(formData.end_time),
+      start_time: formatDateTimeForBackend(formData.start_time),
+      end_time: formatDateTimeForBackend(formData.end_time),
       price_per_seat: Number(formData.price_per_seat),
       available_seats: Number(formData.available_seats),
-      start_region_id: String(formData.start_region_id),
-      end_region_id: String(formData.end_region_id),
-      start_district_id: String(formData.start_district_id),
-      end_district_id: String(formData.end_district_id),
-      start_quarter_id: String(formData.start_quarter_id),
-      end_quarter_id: String(formData.end_quarter_id),
-      vehicle_id: String(formData.vehicle_id),
       start_lat: Number(formData.start_lat),
       start_long: Number(formData.start_long),
       end_lat: Number(formData.end_lat),
@@ -153,21 +149,19 @@ export default function CreateTripModal({
     <Modal isOpen={isOpen} onClose={onClose} title="Create New Trip" size="lg">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          <Input
+          <Calendar
             label="Departure Time"
-            type="datetime-local"
-            name="start_time"
+            showTime
             value={formData.start_time}
-            onChange={handleInputChange}
-            required
+            onChange={(val) => handleSelectChange("start_time", val)}
+            placeholder="Select departure"
           />
-          <Input
+          <Calendar
             label="Arrival Time (Estimated)"
-            type="datetime-local"
-            name="end_time"
+            showTime
             value={formData.end_time}
-            onChange={handleInputChange}
-            required
+            onChange={(val) => handleSelectChange("end_time", val)}
+            placeholder="Select arrival"
           />
         </div>
 

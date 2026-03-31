@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaTelegram, FaInstagram, FaFacebook } from "react-icons/fa";
+import { HiArrowUp } from "react-icons/hi";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { translations } from "@/src/lib/i18n/translations";
 
@@ -20,6 +21,13 @@ const MobileFooter = () => {
       return translations.uz?.[category]?.[key] || String(key);
     }
     return t(category, key);
+  };
+
+  const scrollToTop = () => {
+    window.scrollTo({
+      top: 0,
+      behavior: "smooth",
+    });
   };
 
   return (
@@ -41,7 +49,7 @@ const MobileFooter = () => {
           {/* Social */}
           <div className="flex flex-col items-center space-y-2.5 md:space-y-5">
              <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest underline decoration-primary/30 underline-offset-4 decoration-2">
-                Connect with us
+                {safeT("footer", "connect")}
              </p>
              <div className="flex justify-center space-x-6">
                 <a href="#" className="w-12 h-12 bg-light-bg flex items-center justify-center rounded-2xl text-primary border border-border">
@@ -61,6 +69,17 @@ const MobileFooter = () => {
              <p className="text-xs font-bold text-gray-600">
                 {safeT("footer", "coverage")}
              </p>
+          </div>
+
+          {/* Back to Top */}
+          <div className="flex justify-center pt-4">
+            <button
+              onClick={scrollToTop}
+              className="flex items-center space-x-2 px-4 py-2 bg-primary/5 text-primary rounded-xl font-bold text-xs hover:bg-primary/10 transition-colors"
+            >
+              <HiArrowUp className="w-4 h-4" />
+              <span>{safeT("common", "scrollToTop")}</span>
+            </button>
           </div>
 
           {/* Copyright & Links */}
