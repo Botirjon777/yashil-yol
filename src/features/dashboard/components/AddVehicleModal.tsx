@@ -10,13 +10,14 @@ import {
   HiChevronLeft,
   HiUpload,
   HiCheckCircle,
+  HiChevronDown,
 } from "react-icons/hi";
 import {
   useCarColors,
   useAddVehicle,
 } from "@/src/features/rides/hooks/useVehicles";
 import { useUploadCarImages } from "@/src/features/become-a-driver/hooks/useBecomeDriver";
-import { cn } from "@/src/lib/utils";
+import { cn, getVehicleColorHex } from "@/src/lib/utils";
 import { toast } from "sonner";
 import { CarColor } from "@/src/features/rides/types";
 
@@ -38,6 +39,8 @@ export default function AddVehicleModal({
     useUploadCarImages();
 
   const [vehicleId, setVehicleId] = useState<number | null>(null);
+  const [isColorOpen, setIsColorOpen] = useState(false);
+  const colorRef = React.useRef<HTMLDivElement>(null);
 
   // Step 1 Data
   const [details, setDetails] = useState({
@@ -137,10 +140,26 @@ export default function AddVehicleModal({
     });
     onClose();
   };
+  React.useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      if (
+        colorRef.current &&
+        !colorRef.current.contains(event.target as Node)
+      ) {
+        setIsColorOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   const handleFileChange = (name: string, file: File | null) => {
     setFiles((prev) => ({ ...prev, [name]: file }));
   };
+
+  const selectedColor = colors?.find(
+    (c: any) => String(c.id) === String(details.car_color_id),
+  );
 
   const handleCarImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -213,17 +232,95 @@ export default function AddVehicleModal({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Dropdown
-              label="Car Color"
-              options={
-                colors?.map((c) => ({ id: c.id, name: getColorName(c) })) || []
-              }
-              value={details.car_color_id}
-              onChange={(val) =>
-                setDetails({ ...details, car_color_id: String(val) })
-              }
-              placeholder="Select Color"
-            />
+            <div className="w-full relative" ref={colorRef}>
+              <label className="text-xs font-black uppercase text-gray-400 ml-1">
+                Car Color
+              </label>
+              <button
+                type="button"
+                onClick={() => setIsColorOpen(!isColorOpen)}
+                className="w-full px-4 py-3 bg-light-bg border border-border rounded-xl outline-none transition-all font-bold text-base mt-1.5 flex items-center justify-between hover:border-primary group"
+              >
+                <div className="flex items-center space-x-3">
+                  {selectedColor ? (
+                    <>
+                      <div
+                        className="w-6 h-6 rounded-full border border-gray-200 shadow-sm"
+                        style={{
+                          backgroundColor:
+                            selectedColor.code ||
+                            getVehicleColorHex(
+                              selectedColor.name ||
+                                selectedColor.title_en ||
+                                "",
+                            ),
+                        }}
+                      />
+                      <span className="text-dark-text">
+                        {getColorName(selectedColor)}
+                      </span>
+                    </>
+                  ) : (
+                    <span className="text-gray-400">Select Color</span>
+                  )}
+                </div>
+                <HiChevronDown
+                  className={cn(
+                    "text-gray-400 transition-transform",
+                    isColorOpen && "rotate-180",
+                  )}
+                />
+              </button>
+
+              {isColorOpen && (
+                <div className="absolute z-50 w-full mt-2 bg-white border border-border rounded-xl shadow-2xl max-h-64 overflow-y-auto py-2 animate-in fade-in zoom-in duration-200">
+                  {colors?.map((color: any) => (
+                    <button
+                      key={color.id}
+                      type="button"
+                      onClick={() => {
+                        setDetails({
+                          ...details,
+                          car_color_id: String(color.id),
+                        });
+                        setIsColorOpen(false);
+                      }}
+                      className={cn(
+                        "w-full flex items-center space-x-4 px-5 py-3 hover:bg-light-bg transition-colors text-left",
+                        String(details.car_color_id) === String(color.id) &&
+                          "bg-primary/5 border-l-4 border-primary",
+                      )}
+                    >
+                      <div
+                        className="w-8 h-8 rounded-full border border-gray-100 shadow-sm"
+                        style={{
+                          backgroundColor:
+                            color.code ||
+                            getVehicleColorHex(
+                              color.name ||
+                                color.title_en ||
+                                color.title_uz ||
+                                "",
+                            ),
+                        }}
+                      />
+                      <div className="flex flex-col">
+                        <span
+                          className={cn(
+                            "font-bold text-sm",
+                            String(details.car_color_id) === String(color.id)
+                              ? "text-primary"
+                              : "text-dark-text",
+                          )}
+                        >
+                          {getColorName(color)}
+                        </span>
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
             <Input
               label="Available Seats"
               type="number"
