@@ -11,6 +11,7 @@ import {
   useDriverCompletedTrips,
   useDriverCanceledTrips,
 } from "@/src/features/rides/hooks/useRides";
+import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { toast } from "sonner";
 
 export function useDashboard() {
@@ -56,6 +57,7 @@ export function useDashboard() {
   const { data: driverActive } = useDriverActiveTrips();
   const { data: driverCompleted } = useDriverCompletedTrips();
   const { data: driverCanceled } = useDriverCanceledTrips();
+  const { data: vehiclesData } = useVehicles();
 
   // Profile Form State
   const [profileForm, setProfileForm] = useState({
@@ -123,5 +125,6 @@ export function useDashboard() {
     isUpdating,
     isDriver,
     balance: balanceData?.balance ? parseFloat(balanceData.balance) : 0,
+    vehicles: vehiclesData || [],
   };
 }

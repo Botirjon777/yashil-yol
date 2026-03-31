@@ -1,12 +1,16 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import Modal from "@/src/components/ui/Modal";
 import Input from "@/src/components/ui/Input";
 import Dropdown from "@/src/components/ui/Dropdown";
 import Button from "@/src/components/ui/Button";
-import { useRegions, useDistrictsByRegion } from "@/src/features/location/hooks/useLocation";
+import {
+  useRegions,
+  useDistrictsByRegion,
+} from "@/src/features/location/hooks/useLocation";
 import { useCreateTrip } from "@/src/features/rides/hooks/useRides";
+import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { toast } from "sonner";
 
 interface CreateTripModalProps {
@@ -14,9 +18,12 @@ interface CreateTripModalProps {
   onClose: () => void;
 }
 
-export default function CreateTripModal({ isOpen, onClose }: CreateTripModalProps) {
+export default function CreateTripModal({
+  isOpen,
+  onClose,
+}: CreateTripModalProps) {
   const { data: regions } = useRegions();
-  
+
   const [formData, setFormData] = useState({
     start_time: "",
     end_time: "",
@@ -30,10 +37,14 @@ export default function CreateTripModal({ isOpen, onClose }: CreateTripModalProp
     start_long: "69.2797",
     end_lat: "40.7128",
     end_long: "-74.0060",
+    vehicle_id: "",
   });
 
-  const { data: startDistricts } = useDistrictsByRegion(formData.start_region_id);
+  const { data: startDistricts } = useDistrictsByRegion(
+    formData.start_region_id,
+  );
   const { data: endDistricts } = useDistrictsByRegion(formData.end_region_id);
+  const { data: vehicles } = useVehicles();
 
   const { mutate: createTrip, isPending } = useCreateTrip();
 
@@ -43,8 +54,8 @@ export default function CreateTripModal({ isOpen, onClose }: CreateTripModalProp
   };
 
   const handleSelectChange = (name: string, value: any) => {
-    setFormData((prev) => ({ 
-      ...prev, 
+    setFormData((prev) => ({
+      ...prev,
       [name]: value,
       // Reset district if region changes
       ...(name === "start_region_id" ? { start_district_id: "" } : {}),
@@ -56,8 +67,15 @@ export default function CreateTripModal({ isOpen, onClose }: CreateTripModalProp
     e.preventDefault();
 
     // Basic validation
-    if (!formData.start_time || !formData.end_time || !formData.price_per_seat || !formData.start_region_id || !formData.end_region_id) {
-      toast.error("Please fill in all required fields");
+    if (
+      !formData.start_time ||
+      !formData.end_time ||
+      !formData.price_per_seat ||
+      !formData.start_region_id ||
+      !formData.end_region_id ||
+      !formData.vehicle_id
+    ) {
+      toast.error("Please fill in all required fields including a vehicle");
       return;
     }
 
@@ -92,22 +110,25 @@ export default function CreateTripModal({ isOpen, onClose }: CreateTripModalProp
         onClose();
         // Reset form
         setFormData({
-            start_time: "",
-            end_time: "",
-            price_per_seat: "",
-            available_seats: "4",
-            start_region_id: "",
-            end_region_id: "",
-            start_district_id: "",
-            end_district_id: "",
-            start_lat: "41.3111",
-            start_long: "69.2797",
-            end_lat: "40.7128",
-            end_long: "-74.0060",
+          start_time: "",
+          end_time: "",
+          price_per_seat: "",
+          available_seats: "4",
+          start_region_id: "",
+          end_region_id: "",
+          start_district_id: "",
+          end_district_id: "",
+          start_lat: "41.3111",
+          start_long: "69.2797",
+          end_lat: "40.7128",
+          end_long: "-74.0060",
+          vehicle_id: "",
         });
       },
       onError: (err: any) => {
-        toast.error(err.response?.data?.message || err.message || "Failed to create trip");
+        toast.error(
+          err.response?.data?.message || err.message || "Failed to create trip",
+        );
       },
     });
   };
@@ -154,19 +175,42 @@ export default function CreateTripModal({ isOpen, onClose }: CreateTripModalProp
           />
         </div>
 
+        <Dropdown
+          label="Select Vehicle"
+          options={
+            vehicles?.map((v) => ({
+              id: v.id,
+              name: `${v.model} (${v.car_number})`,
+            })) || []
+          }
+          value={formData.vehicle_id}
+          onChange={(val) => handleSelectChange("vehicle_id", val)}
+          placeholder="Select one of your vehicles"
+        />
+
         <div className="space-y-4">
           <h4 className="font-bold text-gray-700">From</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Dropdown
               label="Region"
-              options={regions?.map(r => ({ id: r.id, name: r.name_uz || r.name })) || []}
+              options={
+                regions?.map((r) => ({
+                  id: r.id,
+                  name: r.name_uz || r.name,
+                })) || []
+              }
               value={formData.start_region_id}
               onChange={(val) => handleSelectChange("start_region_id", val)}
               placeholder="Select Region"
             />
             <Dropdown
               label="District"
-              options={startDistricts?.map(d => ({ id: d.id, name: d.name_uz || d.name })) || []}
+              options={
+                startDistricts?.map((d) => ({
+                  id: d.id,
+                  name: d.name_uz || d.name,
+                })) || []
+              }
               value={formData.start_district_id}
               onChange={(val) => handleSelectChange("start_district_id", val)}
               placeholder="Select District"
@@ -180,14 +224,24 @@ export default function CreateTripModal({ isOpen, onClose }: CreateTripModalProp
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Dropdown
               label="Region"
-              options={regions?.map(r => ({ id: r.id, name: r.name_uz || r.name })) || []}
+              options={
+                regions?.map((r) => ({
+                  id: r.id,
+                  name: r.name_uz || r.name,
+                })) || []
+              }
               value={formData.end_region_id}
               onChange={(val) => handleSelectChange("end_region_id", val)}
               placeholder="Select Region"
             />
             <Dropdown
               label="District"
-              options={endDistricts?.map(d => ({ id: d.id, name: d.name_uz || d.name })) || []}
+              options={
+                endDistricts?.map((d) => ({
+                  id: d.id,
+                  name: d.name_uz || d.name,
+                })) || []
+              }
               value={formData.end_district_id}
               onChange={(val) => handleSelectChange("end_district_id", val)}
               placeholder="Select District"

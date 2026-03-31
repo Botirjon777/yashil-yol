@@ -1,8 +1,5 @@
 "use client";
 
-import React from "react";
-import Button from "@/src/components/ui/Button";
-import Modal from "@/src/components/ui/Modal";
 import { useDashboard } from "./hooks/useDashboard";
 import { Sidebar } from "./sections/Sidebar";
 import { DriverStatusBanner } from "./sections/DriverStatusBanner";
@@ -17,7 +14,6 @@ export default function DashboardFeature() {
   const {
     user,
     isUserLoading,
-    balanceData,
     activeTab,
     handleTabChange,
     isTopUpOpen,
@@ -33,7 +29,8 @@ export default function DashboardFeature() {
     handleProfileSubmit,
     isUpdating,
     isDriver,
-    balance
+    balance,
+    vehicles,
   } = useDashboard();
 
   if (isUserLoading) {
@@ -49,11 +46,11 @@ export default function DashboardFeature() {
       <div className="max-w-7xl mx-auto px-4">
         <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
           {/* Sidebar Navigation */}
-          <Sidebar 
-            user={user} 
-            activeTab={activeTab} 
-            handleTabChange={handleTabChange} 
-            isDriver={isDriver} 
+          <Sidebar
+            user={user}
+            activeTab={activeTab}
+            handleTabChange={handleTabChange}
+            isDriver={isDriver}
           />
 
           {/* Content Area */}
@@ -61,7 +58,7 @@ export default function DashboardFeature() {
             <DriverStatusBanner user={user} isDriver={isDriver} />
 
             {activeTab === "rides" && (
-              <RidesSection 
+              <RidesSection
                 rideType={rideType}
                 handleRideTypeChange={handleRideTypeChange}
                 activeRides={activeRides || []}
@@ -72,15 +69,15 @@ export default function DashboardFeature() {
             )}
 
             {activeTab === "balance" && (
-              <BalanceSection 
-                balance={balance} 
+              <BalanceSection
+                balance={balance}
                 onTopUpClick={() => setIsTopUpOpen(true)}
                 onAddCardClick={() => setIsAddCardOpen(true)}
               />
             )}
 
             {activeTab === "profile" && (
-              <ProfileSection 
+              <ProfileSection
                 user={user}
                 profileForm={profileForm}
                 setProfileForm={setProfileForm}
@@ -90,14 +87,17 @@ export default function DashboardFeature() {
             )}
 
             {activeTab === "driver" && (
-              <DriverSection user={user} />
+              <DriverSection user={user} vehicles={vehicles} />
             )}
           </div>
         </div>
       </div>
 
       <TopUpModal isOpen={isTopUpOpen} onClose={() => setIsTopUpOpen(false)} />
-      <AddCardModal isOpen={isAddCardOpen} onClose={() => setIsAddCardOpen(false)} />
+      <AddCardModal
+        isOpen={isAddCardOpen}
+        onClose={() => setIsAddCardOpen(false)}
+      />
     </div>
   );
 }
