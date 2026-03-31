@@ -63,13 +63,13 @@ export const useHomeSearch = () => {
   const setFromLocation = (loc: any) => setLocation('from', loc);
   const setToLocation = (loc: any) => setLocation('to', loc);
 
-  const getSuggestions = (query: string, districts: any[] = [], quarters: any[] = []) => {
+  const getSuggestions = (query: string, type: 'from' | 'to', districts: any[] = [], quarters: any[] = []) => {
     if (!query || !regions) return [];
     
     const parts = query.split(',').map(p => p.trim());
     const currentSearch = parts[parts.length - 1].toLowerCase();
-
     const suggestions: any[] = [];
+    const currentLoc = type === 'from' ? fromLocation : toLocation;
 
     // Level 1: Region search
     if (parts.length === 1) {
@@ -89,7 +89,6 @@ export const useHomeSearch = () => {
     } 
     // Level 2: District search
     else if (parts.length === 2 && districts) {
-      // Find region name from parts[0] just for the display label
       const regionName = parts[0];
       const matched = districts.filter((d: ApiDistrict) => 
         (d.name_uz || d.name).toLowerCase().includes(currentSearch)
@@ -101,7 +100,7 @@ export const useHomeSearch = () => {
           name: `${regionName}, ${d.name_uz || d.name}`,
           type: "district" as const,
           subtext: `District in ${regionName}`,
-          region_id: d.region_id,
+          region_id: currentLoc?.region_id || d.region_id,
           district_id: d.id
         });
       });
@@ -120,8 +119,8 @@ export const useHomeSearch = () => {
           name: `${regionName}, ${districtName}, ${q.name_uz || q.name}`,
           type: "quarter" as const,
           subtext: `Village in ${districtName}`,
-          region_id: fromLocation?.region_id || toLocation?.region_id, // Fallback if needed
-          district_id: q.district_id,
+          region_id: currentLoc?.region_id,
+          district_id: currentLoc?.district_id || q.district_id,
           quarter_id: q.id
         });
       });
@@ -131,13 +130,13 @@ export const useHomeSearch = () => {
   };
 
   const fromSuggestions = useMemo(() => 
-    getSuggestions(fromQuery, fromDistricts, fromQuarters), 
-    [fromQuery, regions, fromDistricts, fromQuarters]
+    getSuggestions(fromQuery, 'from', fromDistricts, fromQuarters), 
+    [fromQuery, regions, fromDistricts, fromQuarters, fromLocation]
   );
   
   const toSuggestions = useMemo(() => 
-    getSuggestions(toQuery, toDistricts, toQuarters), 
-    [toQuery, regions, toDistricts, toQuarters]
+    getSuggestions(toQuery, 'to', toDistricts, toQuarters), 
+    [toQuery, regions, toDistricts, toQuarters, toLocation]
   );
 
   const handleSearch = () => {

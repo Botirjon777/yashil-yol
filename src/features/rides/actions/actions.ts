@@ -14,6 +14,12 @@ export const addVehicle = async (data: VehicleRequest): Promise<{ status: string
   return res.data;
 };
 
+/** GET /vehicles */
+export const getVehicles = async (): Promise<any[]> => {
+  const res = await api.get<any>("vehicles");
+  return res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
+};
+
 /** GET /car-colors */
 export const getCarColors = async (): Promise<CarColor[]> => {
   const res = await api.get<CarColor[] | { data: CarColor[] }>("car-colors");

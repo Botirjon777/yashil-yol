@@ -1,5 +1,5 @@
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
-import { addVehicle, getCarColors } from "../actions/actions";
+import { addVehicle, getCarColors, getVehicles } from "../actions/actions";
 import { VehicleRequest, CarColor } from "@/src/features/rides/types";
 
 export const useAddVehicle = () => {
@@ -15,4 +15,10 @@ export const useCarColors = () =>
     queryKey: ["car-colors"],
     queryFn: getCarColors,
     staleTime: Infinity,
+  });
+
+export const useVehicles = () =>
+  useQuery<any[], Error>({
+    queryKey: ["vehicles"],
+    queryFn: getVehicles,
   });

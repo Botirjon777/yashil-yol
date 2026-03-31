@@ -8,9 +8,10 @@ import { SubStatus } from "../components/SubStatus";
 
 interface DriverSectionProps {
   user: any;
+  vehicles: any[];
 }
 
-export function DriverSection({ user }: DriverSectionProps) {
+export function DriverSection({ user, vehicles }: DriverSectionProps) {
   return (
     <div className="space-y-8 animate-in fade-in slide-in-from-right-4 duration-300">
       <div className="flex items-center justify-between">
@@ -46,13 +47,13 @@ export function DriverSection({ user }: DriverSectionProps) {
           </Link>
         </div>
 
-        {!user?.vehicles || user.vehicles.length === 0 ? (
+        {!vehicles || vehicles.length === 0 ? (
           <div className="premium-card p-12 text-center text-gray-500 font-medium">
             No vehicles registered yet.
           </div>
         ) : (
           <div className="grid grid-cols-1 gap-6">
-            {user.vehicles.map((vehicle: any) => {
+            {vehicles.map((vehicle: any) => {
               const isGlobalApproved = user?.driving_verification_status === "approved";
               const vehicleColorName = vehicle.color?.title_en || vehicle.color?.title_uz || "Unknown";
               const vehicleColorCode = vehicle.color?.code || getVehicleColorHex(vehicleColorName);
