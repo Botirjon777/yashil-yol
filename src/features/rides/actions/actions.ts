@@ -1,5 +1,5 @@
 import api from "@/src/lib/axios";
-import { VehicleRequest, CarColor, Trip, TripSearchParams } from "../types";
+import { VehicleRequest, CarColor, Trip, TripSearchParams, Booking } from "../types";
 
 export interface PaginatedTrips {
   data: Trip[];
@@ -45,13 +45,17 @@ export const searchTrips = async (params: TripSearchParams): Promise<Trip[]> => 
     params: formattedParams,
   });
 
-  return res.data?.data?.departure_trips?.data ?? [];
+  return res.data?.data?.departure_trips?.data 
+    ?? res.data?.data?.data 
+    ?? res.data?.data 
+    ?? res.data 
+    ?? [];
 };
 
 /** GET /public/trips/view/:id */
 export const getTripById = async (id: string | number): Promise<Trip> => {
-  const res = await api.get<Trip>(`public/trips/view/${id}`);
-  return res.data;
+  const res = await api.get<any>(`public/trips/view/${id}`);
+  return res.data?.data ?? res.data;
 };
 
 /** GET /client/trips/get-inprogress-trips */
@@ -88,4 +92,40 @@ export const getDriverCompletedTrips = async (): Promise<Trip[]> => {
 export const getDriverCanceledTrips = async (): Promise<Trip[]> => {
   const res = await api.get<any>("driver/trips/get-canceled-trips/driver");
   return res.data?.data?.data ?? res.data?.data ?? [];
+};
+
+/** GET /driver/trips — all trips for driver */
+export const getDriverAllTrips = async (): Promise<Trip[]> => {
+  const res = await api.get<any>("driver/trips");
+  return res.data?.data?.data ?? res.data?.data ?? [];
+};
+
+/** GET /driver/trips/:id — single trip for driver */
+export const getDriverTripById = async (id: string | number): Promise<Trip> => {
+  const res = await api.get<Trip>(`driver/trips/${id}`);
+  return res.data;
+};
+
+/** POST /driver/trips */
+export const createTrip = async (data: any): Promise<{ status: string; message: string }> => {
+  const res = await api.post<{ status: string; message: string }>("driver/trips", data);
+  return res.data;
+};
+
+/** POST /client/bookings */
+export const bookTrip = async (data: { trip_id: number | string; seats_booked: number }): Promise<any> => {
+  const res = await api.post("client/bookings", data);
+  return res.data;
+};
+
+/** GET /client/booking — all bookings for client */
+export const getClientBookings = async (): Promise<Booking[]> => {
+  const res = await api.get<any>("client/booking");
+  return res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
+};
+
+/** GET /client/trips/booking/:id — specific booking details */
+export const getClientBookingById = async (id: string | number): Promise<Booking> => {
+  const res = await api.get<any>(`client/trips/booking/${id}`);
+  return res.data?.data ?? res.data;
 };

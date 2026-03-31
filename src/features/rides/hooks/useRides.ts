@@ -1,4 +1,4 @@
-import { useQuery } from "@tanstack/react-query";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
 import {
   getPublicTrips,
   getAllPublicTrips,
@@ -10,8 +10,14 @@ import {
   getDriverActiveTrips,
   getDriverCompletedTrips,
   getDriverCanceledTrips,
+  getDriverAllTrips,
+  getDriverTripById,
+  createTrip,
+  bookTrip,
+  getClientBookings,
+  getClientBookingById,
 } from "../actions/actions";
-import { Trip, TripSearchParams } from "../types";
+import { Trip, TripSearchParams, CreateTripRequest, Booking } from "../types";
 import { PaginatedTrips } from "../actions/actions";
 
 /** Paginated list of public trips */
@@ -82,4 +88,52 @@ export const useDriverCanceledTrips = () =>
   useQuery<Trip[], Error>({
     queryKey: ["driver-trips", "canceled"],
     queryFn: getDriverCanceledTrips,
+  });
+
+export const useDriverAllTrips = () =>
+  useQuery<Trip[], Error>({
+    queryKey: ["driver-trips", "all"],
+    queryFn: getDriverAllTrips,
+  });
+
+export const useDriverTripById = (id: string | number | null) =>
+  useQuery<Trip, Error>({
+    queryKey: ["driver-trips", "detail", id],
+    queryFn: () => getDriverTripById(id!),
+    enabled: id !== null && id !== undefined,
+  });
+
+export const useCreateTrip = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreateTripRequest) => createTrip(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
+    },
+  });
+};
+
+export const useBookTrip = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: { trip_id: number | string; seats_booked: number }) => bookTrip(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["client-trips"] });
+      queryClient.invalidateQueries({ queryKey: ["trip"] });
+      queryClient.invalidateQueries({ queryKey: ["client-bookings"] });
+    },
+  });
+};
+
+export const useClientBookings = () =>
+  useQuery<Booking[], Error>({
+    queryKey: ["client-bookings"],
+    queryFn: getClientBookings,
+  });
+
+export const useClientBookingById = (id: string | number | null) =>
+  useQuery<Booking, Error>({
+    queryKey: ["client-bookings", "detail", id],
+    queryFn: () => getClientBookingById(id!),
+    enabled: id !== null && id !== undefined,
   });

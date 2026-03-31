@@ -47,9 +47,9 @@ export const LoginForm = () => {
         </div>
       )}
       <Input
-        label={safeT("auth", "login", "emailLabel")}
+        label={safeT("auth", "login", "phoneLabel")}
         type="tel"
-        placeholder="+998 xx xxx xx xx"
+        placeholder={safeT("auth", "login", "phonePlaceholder")}
         iconLeft={<HiPhone className="w-5 h-5" />}
         required
         value={phone}

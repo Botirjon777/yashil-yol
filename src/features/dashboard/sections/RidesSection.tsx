@@ -1,5 +1,9 @@
-import React from "react";
+import React, { useState } from "react";
 import { RideCard } from "../components/RideCard";
+import CreateTripModal from "../components/CreateTripModal";
+import Button from "@/src/components/ui/Button";
+import { HiPlus } from "react-icons/hi";
+import { AuthUser } from "../../auth/types";
 
 interface RidesSectionProps {
   rideType: "passenger" | "driver";
@@ -7,6 +11,7 @@ interface RidesSectionProps {
   activeRides: any[];
   historyRides: any[];
   isDriver: boolean;
+  user: AuthUser | null;
 }
 
 export function RidesSection({ 
@@ -14,8 +19,11 @@ export function RidesSection({
   handleRideTypeChange, 
   activeRides, 
   historyRides, 
-  isDriver 
+  isDriver,
+  user
 }: RidesSectionProps) {
+  const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
+  const isApproved = user?.driving_verification_status === "approved";
   return (
     <div className="space-y-6">
       <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 mb-2">
@@ -36,7 +44,21 @@ export function RidesSection({
             </button>
           </div>
         )}
+        
+        {isDriver && isApproved && rideType === "driver" && (
+          <Button 
+            onClick={() => setIsCreateModalOpen(true)}
+            icon={<HiPlus className="w-5 h-5" />}
+          >
+            Create Trip
+          </Button>
+        )}
       </div>
+
+      <CreateTripModal 
+        isOpen={isCreateModalOpen} 
+        onClose={() => setIsCreateModalOpen(false)} 
+      />
 
       <div className="space-y-4">
         <h2 className="text-lg font-black text-gray-400 uppercase tracking-widest">Active & Upcoming</h2>

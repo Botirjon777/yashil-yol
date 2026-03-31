@@ -7,7 +7,6 @@ import Button from "@/src/components/ui/Button";
 import Input from "@/src/components/ui/Input";
 import Checkbox from "@/src/components/ui/Checkbox";
 import { useRegister } from "../hooks/useAuth";
-import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 export const RegisterForm = () => {
@@ -23,7 +22,6 @@ export const RegisterForm = () => {
   const [localError, setLocalError] = useState("");
 
   const { mutate, isPending, error: apiError } = useRegister();
-  const setAuth = useAuthStore((state: any) => state.setAuth);
   const { safeT } = useLanguageStore();
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -52,12 +50,18 @@ export const RegisterForm = () => {
       },
       {
         onSuccess: (data: any) => {
-          toast.success(data.message || safeT("auth", "register", "accountCreated"));
+          toast.success(
+            data.message || safeT("auth", "register", "accountCreated"),
+          );
           window.location.href = `/auth/verify?phone=${encodeURIComponent(formData.phone)}&code=${data.code}`;
         },
         onError: (err: any) => {
-          toast.error(err?.response?.data?.message || err.message || safeT("auth", "register", "registrationFailed"));
-        }
+          toast.error(
+            err?.response?.data?.message ||
+              err.message ||
+              safeT("auth", "register", "registrationFailed"),
+          );
+        },
       },
     );
   };
@@ -65,8 +69,10 @@ export const RegisterForm = () => {
   const displayError =
     localError ||
     (apiError as any)?.response?.data?.message ||
-    (apiError as any)?.response?.data?.errors 
-      ? Object.values((apiError as any).response.data.errors).flat().join(", ")
+    (apiError as any)?.response?.data?.errors
+      ? Object.values((apiError as any).response.data.errors)
+          .flat()
+          .join(", ")
       : apiError?.message;
 
   return (
@@ -143,7 +149,10 @@ export const RegisterForm = () => {
       />
 
       <div className="pt-2">
-        <Checkbox label={safeT("auth", "register", "termsAgreement")} required />
+        <Checkbox
+          label={safeT("auth", "register", "termsAgreement")}
+          required
+        />
       </div>
 
       <Button type="submit" fullWidth size="lg" loading={isPending}>

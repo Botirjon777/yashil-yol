@@ -67,6 +67,7 @@ export default function DashboardFeature() {
                 activeRides={activeRides || []}
                 historyRides={historyRides || []}
                 isDriver={isDriver}
+                user={user}
               />
             )}
 
