@@ -32,8 +32,12 @@ const Calendar: React.FC<CalendarProps> = ({
   // Parse current value
   const selectedDate = useMemo(() => (value ? new Date(value) : null), [value]);
 
-  const [hour, setHour] = useState(() => (selectedDate ? selectedDate.getHours() : 12));
-  const [minute, setMinute] = useState(() => (selectedDate ? selectedDate.getMinutes() : 0));
+  const [hour, setHour] = useState(() =>
+    selectedDate ? selectedDate.getHours() : 12,
+  );
+  const [minute, setMinute] = useState(() =>
+    selectedDate ? selectedDate.getMinutes() : 0,
+  );
 
   useEffect(() => {
     if (selectedDate) {
@@ -87,11 +91,11 @@ const Calendar: React.FC<CalendarProps> = ({
     const year = date.getFullYear();
     const month = String(date.getMonth() + 1).padStart(2, "0");
     const d = String(date.getDate()).padStart(2, "0");
-    
+
     if (showTime) {
       const hh = String(h).padStart(2, "0");
       const mm = String(m).padStart(2, "0");
-      return `${year}-${month}-${d} ${hh}:${mm}`;
+      return `${year}-${month}-${d} ${hh}:${mm}:00`;
     }
     return `${year}-${month}-${d}`;
   };
@@ -200,14 +204,14 @@ const Calendar: React.FC<CalendarProps> = ({
                 day: "numeric",
                 month: "short",
                 year: "numeric",
-                ...(showTime && { hour: '2-digit', minute: '2-digit' })
+                ...(showTime && { hour: "2-digit", minute: "2-digit" }),
               })
             : placeholder}
         </span>
       </button>
 
       {isOpen && (
-        <div className="absolute z-[100] mt-2 bg-white border border-border rounded-2xl shadow-2xl p-4 w-[320px] animate-in fade-in zoom-in duration-200 left-0">
+        <div className="absolute z-100 mt-2 bg-white border border-border rounded-2xl shadow-2xl p-4 w-[320px] animate-in fade-in zoom-in duration-200 left-0">
           <div className="flex items-center justify-between mb-4">
             <h4 className="font-black text-dark-text">
               {monthNames[viewDate.getMonth()]} {viewDate.getFullYear()}
@@ -246,25 +250,35 @@ const Calendar: React.FC<CalendarProps> = ({
           {showTime && (
             <div className="mt-4 pt-4 border-t border-border">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">Time Selection</span>
+                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                  Time Selection
+                </span>
                 <div className="flex items-center space-x-2">
-                  <select 
-                    value={hour} 
-                    onChange={(e) => handleTimeChange(Number(e.target.value), minute)}
+                  <select
+                    value={hour}
+                    onChange={(e) =>
+                      handleTimeChange(Number(e.target.value), minute)
+                    }
                     className="bg-light-bg border border-border rounded-lg px-2 py-1 text-sm font-bold outline-none focus:border-primary"
                   >
                     {Array.from({ length: 24 }).map((_, i) => (
-                      <option key={i} value={i}>{String(i).padStart(2, '0')}</option>
+                      <option key={i} value={i}>
+                        {String(i).padStart(2, "0")}
+                      </option>
                     ))}
                   </select>
                   <span className="font-bold">:</span>
-                  <select 
-                    value={minute} 
-                    onChange={(e) => handleTimeChange(hour, Number(e.target.value))}
+                  <select
+                    value={minute}
+                    onChange={(e) =>
+                      handleTimeChange(hour, Number(e.target.value))
+                    }
                     className="bg-light-bg border border-border rounded-lg px-2 py-1 text-sm font-bold outline-none focus:border-primary"
                   >
                     {Array.from({ length: 60 }).map((_, i) => (
-                      <option key={i} value={i}>{String(i).padStart(2, '0')}</option>
+                      <option key={i} value={i}>
+                        {String(i).padStart(2, "0")}
+                      </option>
                     ))}
                   </select>
                 </div>
@@ -277,7 +291,11 @@ const Calendar: React.FC<CalendarProps> = ({
               type="button"
               onClick={() => {
                 const now = new Date();
-                const formatted = formatValue(now, now.getHours(), now.getMinutes());
+                const formatted = formatValue(
+                  now,
+                  now.getHours(),
+                  now.getMinutes(),
+                );
                 onChange(formatted);
                 setIsOpen(false);
               }}
@@ -290,7 +308,9 @@ const Calendar: React.FC<CalendarProps> = ({
               onClick={() => setIsOpen(false)}
               className={cn(
                 "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
-                value ? "bg-primary text-white shadow-lg shadow-primary/30" : "bg-gray-100 text-gray-400"
+                value
+                  ? "bg-primary text-white shadow-lg shadow-primary/30"
+                  : "bg-gray-100 text-gray-400",
               )}
             >
               Confirm

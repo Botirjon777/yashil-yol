@@ -193,5 +193,235 @@
     "maxPrice": "Maksimal narx",
     "seatsLeft": "joy qoldi",
     "joinRide": "Safarga qo'shilish"
+  },
+  "dashboard": {
+    "sidebar": {
+      "myRides": "Mening safarlarim",
+      "balance": "Balans va kartalar",
+      "profile": "Profil sozlamalari",
+      "driverProfile": "Haydovchi profili",
+      "traveler": "Yo'lovchi",
+      "driver": "Haydovchi"
+    },
+    "rides": {
+      "title": "Mening safarlarim",
+      "asPassenger": "Yo'lovchi sifatida",
+      "asDriver": "Haydovchi sifatida",
+      "createTrip": "Safar yaratish",
+      "bannerTitle": "O'z yo'lingizni baham ko'ring",
+      "bannerDesc": "Bugun o'z safaringizni yarating va hamrohlar to'plang!",
+      "active": "Faol va kelgusi",
+      "history": "Tarix",
+      "noActive": "Faol safarlar topilmadi.",
+      "noHistory": "Safar tarixi topilmadi."
+    },
+    "balance": {
+      "title": "To'lovlar va balans",
+      "available": "Mavjud balans",
+      "topUp": "Balansni to'ldirish",
+      "savedCards": "Saqlangan kartalar",
+      "addNew": "Yangi qo'shish",
+      "noCards": "Hozircha kartalar ulanmagan.",
+      "deleteCard": "Kartani o'chirish"
+    },
+    "profile": {
+      "title": "Hisob sozlamalari",
+      "verified": "Tasdiqlangan hisob",
+      "unverified": "Tasdiqlanmagan",
+      "firstName": "Ism",
+      "lastName": "Familiya",
+      "email": "Elektron pochta",
+      "phone": "Telefon raqami",
+      "saveChanges": "O'zgarishlarni saqlash"
+    },
+    "driver": {
+      "statusTitle": "Haydovchi arizasi holati",
+      "pending": "Biz sizning ma'lumotingizni ko'rib chiqyapmiz.",
+      "approved": "Tabriklaymiz! Siz endi hayday olasiz.",
+      "rejected": "Sizning arizangiz rad etildi. Iltimos, qo'llab-quvvatlash xizmatiga murojaat qiling.",
+      "blocked": "Sizning hisobingiz bloklangan.",
+      "noneTitle": "Biz bilan pul ishlashni xohlaysizmi?",
+      "noneDesc": "Haydovchi bo'ling va safarlaringizni baham ko'rish orqali pul ishlashni boshlang!",
+      "becomeDriver": "Haydovchi bo'lish"
+    },
+    "driverSection": {
+      "title": "Haydovchi profili",
+      "statusLabel": "Holat",
+      "drivingLicence": "Haydovchilik guvohnomasi",
+      "driverPassport": "Haydovchi pasporti",
+      "registeredVehicles": "Ro'yxatdan o'tgan mashinalar",
+      "addNew": "Yangi qo'shish",
+      "noVehicles": "Hozircha mashinalar qo'shilmagan.",
+      "overall": "Umumiy",
+      "statuses": {
+        "approved": "Tasdiqlangan",
+        "pending": "Kutilmoqda",
+        "notUploaded": "Yuklanmagan"
+      },
+      "vehicleLabels": {
+        "car": "Mashina",
+        "passport": "Pasport",
+        "photos": "Suratlar"
+      }
+    },
+    "createTrip": {
+      "title": "Yangi safar yaratish",
+      "departureTime": "Ketish vaqti",
+      "selectDeparture": "Ketish vaqtini tanlang",
+      "arrivalTime": "Yetib borish vaqti (Taxminiy)",
+      "selectArrival": "Yetib borish vaqtini tanlang",
+      "pricePerSeat": "Har bir o'rin uchun narx (so'm)",
+      "pricePlaceholder": "masalan, 50000",
+      "availableSeats": "Mavjud o'rinlar",
+      "selectVehicle": "Mashinani tanlang",
+      "vehiclePlaceholder": "Mashinalaringizdan birini tanlang",
+      "from": "Qayerdan",
+      "to": "Qayerga",
+      "region": "Viloyat",
+      "selectRegion": "Viloyatni tanlang",
+      "district": "Tuman",
+      "selectDistrict": "Tumanni tanlang",
+      "quarter": "Mahalla / Qishloq",
+      "selectQuarter": "Mahallani tanlang",
+      "cancel": "Bekor qilish",
+      "submit": "Safar yaratish",
+      "errors": {
+        "fillAll": "Iltimos, barcha majburiy maydonlarni, jumladan transport vositasini to'ldiring",
+        "failed": "Safar yaratib bo'lmadi"
+      },
+      "success": "Safar muvaffaqiyatli yaratildi!"
+    }
+  },
+  "becomeDriver": {
+    "title": "Qadam haydovchisi bo'ling",
+    "subtitle": "Biz bilan daromad olishni boshlash uchun quyidagi 4 bosqichni bajaring.",
+    "steps": {
+      "license": "Haydovchilik guvohnomasi",
+      "idPhotos": "Shaxsni tasdiqlash",
+      "vehicle": "Transport vositasi",
+      "carPhotos": "Mashina suratlari"
+    },
+    "cards": {
+      "verified": {
+        "title": "Faqat tasdiqlanganlar",
+        "desc": "Xavfsizlik barcha uchun bizning ustuvor vazifamizdir."
+      },
+      "security": {
+        "title": "Ma'lumotlar xavfsizligi",
+        "desc": "Sizning ma'lumotlaringiz shifrlangan va xavfsiz holatda."
+      }
+    },
+    "step1": {
+      "title": "Haydovchilik guvohnomasi ma'lumoti",
+      "desc": "Boshlash uchun asosiy hujjat ma'lumotlarini kiriting.",
+      "licenseLabel": "Haydovchilik guvohnomasi raqami",
+      "licensePlaceholder": "masalan, AB1234567",
+      "expirationLabel": "Amal qilish muddati",
+      "birthdayLabel": "Tug'ilgan kuningiz",
+      "datePlaceholder": "KK.OO.YYYY",
+      "next": "Keyingisi: Shaxsni tasdiqlash"
+    },
+    "step2": {
+      "title": "Hujjat suratlari",
+      "desc": "Haydovchilik guvohnomangiz va pasportingizning aniq suratlari.",
+      "licenseFront": "Haydovchilik guvohnomasi (Oldi)",
+      "licenseBack": "Haydovchilik guvohnomasi (Orqasi)",
+      "passport": "Pasport surati",
+      "back": "Orqaga",
+      "next": "Keyingisi: Transport vositasi ma'lumotlari"
+    },
+    "step3": {
+      "title": "Transport vositasini ro'yxatdan o'tkazish",
+      "desc": "Mashinangiz haqida asosiy ma'lumotlar.",
+      "modelLabel": "Mashina modeli",
+      "modelPlaceholder": "masalan, Chevrolet Nexia 3",
+      "numberLabel": "Davlat raqami",
+      "numberPlaceholder": "masalan, 01 A 123 AA",
+      "colorLabel": "Mashina rangi",
+      "colorSelect": "Rangni tanlang",
+      "seatsLabel": "Mavjud o'rinlar soni",
+      "techPassportLabel": "Texnik pasport raqami",
+      "techPassportPlaceholder": "masalan, TTR1234567",
+      "next": "Keyingisi: Mashina suratlari"
+    },
+    "step4": {
+      "title": "Transport vositasi suratlari",
+      "desc": "Mashinangiz va texnik pasportingiz suratlari.",
+      "techFront": "Texnik pasport (Oldi)",
+      "techBack": "Texnik pasport (Orqasi)",
+      "carImages": "Mashina suratlari (Bir nechta)",
+      "addMore": "Yana qo'shish",
+      "remove": "O'CHIRISH",
+      "submit": "Arizani yakunlash"
+    },
+    "complete": {
+      "title": "Hammasi tayyor!",
+      "desc": "Biz sizning arizangizni va transport vositasi ma'lumotlarini qabul qildik. Bizning jamoamiz ularni tez orada ko'rib chiqadi. Holatni boshqaruv panelida kuzatishingiz mumkin.",
+      "dashboard": "Boshqaruv paneliga o'tish"
+    },
+    "uploader": {
+      "select": "Rasm tanlang"
+    },
+    "toasts": {
+      "step1Success": "Guvohnoma ma'lumotlari saqlandi!",
+      "step1Error": "Ma'lumotlarni saqlab bo'lmadi",
+      "step2Success": "Hujjatlar muvaffaqiyatli yuklandi!",
+      "step2Error": "Hujjatlarni yuklab bo'lmadi",
+      "step2Warning": "Iltimos, barcha zarur hujjatlarni yuklang",
+      "step3Success": "Transport vositasi ro'yxatdan o'tkazildi!",
+      "step3Error": "Transport vositasini ro'yxatdan o'tkazib bo'lmadi",
+      "step4Success": "Barcha ma'lumotlar yuborildi! Xush kelibsiz.",
+      "step4Error": "Mashina suratlarini yuklab bo'lmadi",
+      "step4Warning": "Iltimos, barcha zarur hujjatlarni va kamida bitta mashina suratini yuklang",
+      "fileSizeError": "Fayl hajmi 1MB dan oshmasligi kerak",
+      "licenseFormatError": "Guvohnoma raqami noto'g'ri (masalan, AB1234567)",
+      "dateInvalidError": "Sana noto'g'ri (KK.OO.YYYY)",
+      "dateFutureError": "Sana kelajakda bo'lishi kerak",
+      "datePastError": "Tug'ilgan sana o'tmishda bo'lishi kerak",
+      "expirationBirthError": "Amal qilish muddati tug'ilgan yildan katta bo'lishi kerak",
+      "processError": "Jarayon xatosi: Mashina ID raqami mavjud emas"
+    }
+  },
+  "rideDetails": {
+    "backToDashboard": "Boshqaruvga qaytish",
+    "backToResults": "Natijalarga qaytish",
+    "departureAt": "Ketish vaqti",
+    "estimatedArrival": "Taxminiy yetib borish",
+    "arrivalVaries": "Kelish vaqti o'zgarishi mumkin",
+    "routeVisualization": "Yo'nalish xaritasi",
+    "rideInfo": "Safar ma'lumotlari",
+    "verifiedDriver": "tasdiqlangan haydovchi",
+    "carModel": "Mashina modeli",
+    "carColor": "Mashina rangi",
+    "plateNumber": "Davlat raqami",
+    "seats": "O'rinlar",
+    "of": "dan",
+    "passengerList": "Yo'lovchilar ro'yxati",
+    "noBookings": "Hozircha bandlar yo'q",
+    "earningsEstim": "Taxminiy daromad",
+    "editTrip": "Safarni tahrirlash",
+    "cancelTrip": "Safarni bekor qilish",
+    "pricePerSeat": "Bitta o'rin narxi",
+    "total": "Jami",
+    "bookRide": "Safarni band qilish",
+    "fullyBooked": "Joylar yo'q",
+    "payBalance": "Ichki balans orqali to'lash",
+    "chatWith": "bilan suhbatlashish",
+    "confirmBooking": "Band qilishni tasdiqlash",
+    "amountToPay": "To'lov miqdori",
+    "bookingSuccess": "Safar muvaffaqiyatli band qilindi!",
+    "route": "Yo'nalish",
+    "date": "Sana",
+    "perSeat": "har bir o'rin uchun",
+    "departure": "Ketish",
+    "destination": "Borish"
+  },
+  "status": {
+    "active": "Faol",
+    "completed": "Tugallangan",
+    "canceled": "Bekor qilingan",
+    "cancelled": "Bekor qilingan",
+    "pending": "Kutilmoqda",
+    "confirmed": "Tasdiqlangan"
   }
 }

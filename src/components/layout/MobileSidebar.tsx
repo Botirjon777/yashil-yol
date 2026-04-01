@@ -142,7 +142,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
                   >
                     <HiUsers className="w-4 h-4 mb-1" />
                     <span className="text-[9px] md:text-[10px] font-black uppercase tracking-tighter">
-                      Dashboard
+                      {t("nav", "dashboard")}
                     </span>
                   </Link>
                 </div>

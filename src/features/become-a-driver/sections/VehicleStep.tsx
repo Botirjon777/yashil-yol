@@ -6,6 +6,7 @@ import Input from "@/src/components/ui/Input";
 import { Step3Data } from "../types";
 import { CarColor } from "@/src/features/rides/types";
 import { CAR_COLORS } from "../../rides/constants/colors";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 interface VehicleStepProps {
   data: Step3Data;
@@ -28,9 +29,10 @@ export function VehicleStep({
   const colors = apiColors?.length ? apiColors : (CAR_COLORS as any as CarColor[]);
   const [isColorOpen, setIsColorOpen] = useState(false);
   const colorRef = useRef<HTMLDivElement>(null);
+  const { t, language } = useLanguageStore();
 
   const getColorName = (color: CarColor) => {
-    return color.name || color.title_uz || color.title_en || color.title_ru || `Color ${color.id}`;
+    return color[`title_${language}` as keyof CarColor] || color.name || color.title_uz || color.title_en || color.title_ru || `Color ${color.id}`;
   };
 
   const selectedColor = colors?.find((c) => String(c.id) === String(data.car_color_id));
@@ -52,31 +54,31 @@ export function VehicleStep({
     >
       <div className="flex items-center justify-between">
         <h2 className="text-2xl font-black text-dark-text">
-          Vehicle Registration
+          {t("becomeDriver", "step3")?.title}
         </h2>
         <button
           type="button"
           onClick={onBack}
           className="text-gray-400 hover:text-dark-text transition-colors flex items-center text-sm font-bold"
         >
-          <HiChevronLeft className="mr-1" /> Back
+          <HiChevronLeft className="mr-1" /> {t("becomeDriver", "step2")?.back}
         </button>
       </div>
       <p className="text-gray-500 text-sm font-medium">
-        Basic info about your car.
+        {t("becomeDriver", "step3")?.desc}
       </p>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <Input
-          label="Car Model"
-          placeholder="e.g. Chevrolet Nexia 3"
+          label={t("becomeDriver", "step3")?.modelLabel}
+          placeholder={t("becomeDriver", "step3")?.modelPlaceholder}
           value={data.car_model}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) => onChange({ ...data, car_model: e.target.value })}
           required
         />
         <Input
-          label="Plate Number"
-          placeholder="e.g. 01 A 123 AA"
+          label={t("becomeDriver", "step3")?.numberLabel}
+          placeholder={t("becomeDriver", "step3")?.numberPlaceholder}
           value={data.vehicle_number}
           onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
             onChange({ ...data, vehicle_number: e.target.value })
@@ -88,7 +90,7 @@ export function VehicleStep({
       <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
         <div className="w-full relative" ref={colorRef}>
           <label className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-widest ml-1">
-            Car Color
+            {t("becomeDriver", "step3")?.colorLabel}
           </label>
           <button
             type="button"
@@ -108,7 +110,7 @@ export function VehicleStep({
                   </span>
                 </>
               ) : (
-                <span className="text-gray-400">Select Color</span>
+                <span className="text-gray-400">{t("becomeDriver", "step3")?.colorSelect}</span>
               )}
             </div>
             <HiChevronDown className={cn("text-gray-400 transition-transform", isColorOpen && "rotate-180")} />
@@ -157,7 +159,7 @@ export function VehicleStep({
           )}
         </div>
         <Input
-          label="Available Seats"
+          label={t("becomeDriver", "step3")?.seatsLabel}
           type="number"
           min="1"
           max="8"
@@ -168,8 +170,8 @@ export function VehicleStep({
       </div>
 
       <Input
-        label="Tech Passport Number"
-        placeholder="e.g. TTR1234567"
+        label={t("becomeDriver", "step3")?.techPassportLabel}
+        placeholder={t("becomeDriver", "step3")?.techPassportPlaceholder}
         value={data.tech_passport_number}
         onChange={(e: React.ChangeEvent<HTMLInputElement>) =>
           onChange({ ...data, tech_passport_number: e.target.value })
@@ -185,7 +187,7 @@ export function VehicleStep({
           loading={isPending}
           icon={<HiChevronRight className="order-last ml-2" />}
         >
-          Next: Car Photos
+          {t("becomeDriver", "step3")?.next}
         </Button>
       </div>
     </form>

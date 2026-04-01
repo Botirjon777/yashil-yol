@@ -37,25 +37,36 @@ export const getPublicTrips = async (page = 1): Promise<PaginatedTrips> => {
 /** GET /public/trips/view — full public list */
 export const getAllPublicTrips = async (): Promise<Trip[]> => {
   const res = await api.get<any>("public/trips/view");
-  return res.data?.data?.data ?? res.data?.data ?? [];
+  const data = res.data?.data?.data ?? res.data?.data ?? res.data;
+  return Array.isArray(data) ? data : [];
 };
 
 /** GET /public/trips/search/available-trips */
 export const searchTrips = async (params: TripSearchParams): Promise<Trip[]> => {
-  const formattedParams = { ...params };
-  if (formattedParams.departure_date && formattedParams.departure_date.length === 10) {
-    formattedParams.departure_date = `${formattedParams.departure_date} 00:00:00`;
+  // Filter out empty values to prevent 500 errors on the backend
+  const formattedParams = Object.fromEntries(
+    Object.entries(params).filter(([_, v]) => v !== "" && v !== null && v !== undefined)
+  ) as any;
+
+  if (formattedParams.departure_date) {
+    const d = String(formattedParams.departure_date);
+    if (d.length === 10) {
+      formattedParams.departure_date = `${d} 00:00:00`;
+    } else if (d.length === 16) {
+      formattedParams.departure_date = `${d}:00`;
+    }
   }
 
   const res = await api.get<any>("public/trips/search/available-trips", {
     params: formattedParams,
   });
 
-  return res.data?.data?.departure_trips?.data 
+  const data = res.data?.data?.departure_trips?.data 
     ?? res.data?.data?.data 
     ?? res.data?.data 
-    ?? res.data 
-    ?? [];
+    ?? res.data;
+
+  return Array.isArray(data) ? data : [];
 };
 
 /** GET /public/trips/view/:id */

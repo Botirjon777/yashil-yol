@@ -1,6 +1,7 @@
 import React from "react";
 import { HiUser, HiCreditCard, HiStar, HiIdentification } from "react-icons/hi";
 import { DashboardNavItem } from "../components/DashboardNavItem";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 interface SidebarProps {
   user: any;
@@ -10,6 +11,8 @@ interface SidebarProps {
 }
 
 export function Sidebar({ user, activeTab, handleTabChange, isDriver }: SidebarProps) {
+  const { t } = useLanguageStore();
+
   return (
     <div className="lg:col-span-1 space-y-4">
       <div className="premium-card p-8 mb-8 text-center bg-primary text-white border-none shadow-primary/20">
@@ -22,33 +25,33 @@ export function Sidebar({ user, activeTab, handleTabChange, isDriver }: SidebarP
         </div>
         <h2 className="text-xl font-black">{user?.first_name} {user?.last_name}</h2>
         <p className="text-indigo-100 text-sm font-medium uppercase tracking-widest">
-          {user?.role || "Traveler"}
+          {isDriver ? t("dashboard", "sidebar")?.driver : t("dashboard", "sidebar")?.traveler}
         </p>
       </div>
 
       <nav className="space-y-2.5">
         <DashboardNavItem
           icon={<HiStar />}
-          label="My Rides"
+          label={t("dashboard", "sidebar")?.myRides}
           active={activeTab === "rides"}
           onClick={() => handleTabChange("rides")}
         />
         <DashboardNavItem
           icon={<HiCreditCard />}
-          label="Balance & Cards"
+          label={t("dashboard", "sidebar")?.balance}
           active={activeTab === "balance"}
           onClick={() => handleTabChange("balance")}
         />
         <DashboardNavItem
           icon={<HiUser />}
-          label="Profile Settings"
+          label={t("dashboard", "sidebar")?.profile}
           active={activeTab === "profile"}
           onClick={() => handleTabChange("profile")}
         />
         {isDriver && (
           <DashboardNavItem
             icon={<HiIdentification />}
-            label="Driver Profile"
+            label={t("dashboard", "sidebar")?.driverProfile}
             active={activeTab === "driver"}
             onClick={() => handleTabChange("driver")}
           />

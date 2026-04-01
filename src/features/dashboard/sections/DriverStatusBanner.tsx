@@ -1,7 +1,8 @@
 import Link from "next/link";
-import { HiIdentification } from "react-icons/hi";
+import { HiIdentification, HiTruck } from "react-icons/hi";
 import Button from "@/src/components/ui/Button";
 import { cn } from "@/src/lib/utils";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 interface DriverStatusBannerProps {
   user: any;
@@ -12,9 +13,11 @@ export function DriverStatusBanner({
   user,
   isDriver,
 }: DriverStatusBannerProps) {
+  const { t } = useLanguageStore();
+
   if (isDriver) return null;
 
-  if (user?.driving_verification_status) {
+  if (user?.driving_verification_status && user.driving_verification_status !== "none") {
     return (
       <div
         className={cn(
@@ -47,17 +50,17 @@ export function DriverStatusBanner({
           </div>
           <div>
             <h3 className="font-black text-dark-text">
-              Driver Application Status
+              {t("dashboard", "driver")?.statusTitle}
             </h3>
             <p className="text-sm font-bold text-gray-500 capitalize">
               {user.driving_verification_status} –{" "}
               {user.driving_verification_status === "pending"
-                ? "We're reviewing your information."
+                ? t("dashboard", "driver")?.pending
                 : user.driving_verification_status === "approved"
-                  ? "Congratulations! You can now start driving."
+                  ? t("dashboard", "driver")?.approved
                   : user.driving_verification_status === "rejected"
-                    ? "Your application was rejected. Please contact support."
-                    : "Your account has been blocked."}
+                    ? t("dashboard", "driver")?.rejected
+                    : t("dashboard", "driver")?.blocked}
             </p>
           </div>
         </div>
@@ -69,14 +72,14 @@ export function DriverStatusBanner({
     <div className="premium-card p-8 bg-linear-to-r from-accent/10 to-primary/10 border-accent/20 flex flex-col md:flex-row items-center justify-between gap-6">
       <div className="flex items-center space-x-5">
         <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-3xl text-accent shadow-sm">
-          🚗
+          <HiTruck />
         </div>
         <div>
           <h3 className="text-xl font-black text-dark-text">
-            Want to earn with us?
+            {t("dashboard", "driver")?.noneTitle}
           </h3>
           <p className="text-gray-500 font-medium">
-            Become a driver and start earning by sharing your rides!
+            {t("dashboard", "driver")?.noneDesc}
           </p>
         </div>
       </div>
@@ -86,7 +89,7 @@ export function DriverStatusBanner({
           size="lg"
           className="px-8 shadow-lg shadow-primary/20"
         >
-          Become a Driver
+          {t("dashboard", "driver")?.becomeDriver}
         </Button>
       </Link>
     </div>

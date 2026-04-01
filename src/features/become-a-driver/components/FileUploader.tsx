@@ -1,5 +1,6 @@
 import { HiCheckCircle, HiCamera } from "react-icons/hi";
 import { cn } from "@/src/lib/utils";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 interface FileUploaderProps {
   label: string;
@@ -12,6 +13,8 @@ export function FileUploader({
   onFileSelect,
   selectedFile,
 }: FileUploaderProps) {
+  const { t } = useLanguageStore();
+
   return (
     <div className="w-full">
       <label className="text-xs md:text-sm font-bold text-gray-500 uppercase tracking-widest ml-1">
@@ -45,7 +48,7 @@ export function FileUploader({
             <>
               <HiCamera className="w-6 h-6 text-gray-400 mb-1 group-hover:text-primary transition-colors" />
               <span className="text-[10px] font-bold text-gray-400 group-hover:text-primary transition-colors text-center px-4">
-                Select photo
+                {t("becomeDriver", "uploader")?.select}
               </span>
             </>
           )}

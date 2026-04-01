@@ -11,10 +11,11 @@ export interface TripDriver {
 
 export interface TripVehicle {
   id: number;
-  brand: string;
+  brand?: string;
   model: string;
-  color?: string;
+  color?: string | CarColor;
   plate_number?: string;
+  car_number?: string;
 }
 
 export interface VehicleRequest {
@@ -38,15 +39,26 @@ export interface Trip {
   id: number;
   driver_id: number;
   vehicle_id: number;
-  start_region_id: number;
-  end_region_id: number;
-  start_district_id: number;
-  end_district_id: number;
+  
+  // Standard naming
+  start_region_id?: number;
+  end_region_id?: number;
+  start_district_id?: number;
+  end_district_id?: number;
   start_quarter_id?: number;
   end_quarter_id?: number;
+
+  // Alternative naming from dashboard API
+  from_region_id?: number;
+  to_region_id?: number;
+  from_district_id?: number;
+  to_district_id?: number;
+  from_quarter_id?: number;
+  to_quarter_id?: number;
+
   start_time: string;
   end_time?: string;
-  price_per_seat: number;
+  price_per_seat: number | string;
   total_seats: number;
   available_seats: number;
   status: "active" | "completed" | "canceled" | string;

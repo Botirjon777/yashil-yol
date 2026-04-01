@@ -109,7 +109,7 @@ export default function HeroSection({
               size="lg"
               className="w-full md:w-64 h-14 text-lg"
               loading={loading}
-              disabled={!fromLocation || !toLocation}
+              disabled={!fromLocation || !toLocation || !date}
             >
               {t("hero", "searchButton")}
             </Button>

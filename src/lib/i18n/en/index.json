@@ -193,5 +193,232 @@
     "maxPrice": "Max Price",
     "seatsLeft": "seats left",
     "joinRide": "Join Ride"
+  },
+  "dashboard": {
+    "sidebar": {
+      "myRides": "My Rides",
+      "balance": "Balance & Cards",
+      "profile": "Profile Settings",
+      "driverProfile": "Driver Profile",
+      "traveler": "Passenger",
+      "driver": "Driver"
+    },
+    "rides": {
+      "title": "My Rides",
+      "asPassenger": "As Passenger",
+      "asDriver": "As Driver",
+      "createTrip": "Create Trip",
+      "bannerTitle": "Share Your Journey",
+      "bannerDesc": "Create your ride today and find companions for your trip!",
+      "active": "Active & Upcoming",
+      "history": "History",
+      "noActive": "No active rides found.",
+      "noHistory": "No ride history found."
+    },
+    "balance": {
+      "title": "Payment & Balance",
+      "available": "Available Balance",
+      "topUp": "Top up Balance",
+      "savedCards": "Saved Cards",
+      "addNew": "Add New",
+      "noCards": "No cards connected yet.",
+      "deleteCard": "Delete card"
+    },
+    "profile": {
+      "title": "Account Settings",
+      "verified": "Verified Account",
+      "unverified": "Unverified",
+      "firstName": "First Name",
+      "lastName": "Last Name",
+      "email": "Email Address",
+      "phone": "Phone Number",
+      "saveChanges": "Save Changes"
+    },
+    "driver": {
+      "statusTitle": "Driver Application Status",
+      "pending": "We're reviewing your information.",
+      "approved": "Congratulations! You can now start driving.",
+      "rejected": "Your application was rejected. Please contact support.",
+      "blocked": "Your account has been blocked.",
+      "noneTitle": "Want to earn with us?",
+      "noneDesc": "Become a driver and start earning by sharing your rides!",
+      "becomeDriver": "Become a Driver"
+    },
+    "driverSection": {
+      "title": "Driver Profile",
+      "statusLabel": "Status",
+      "drivingLicence": "Driving Licence",
+      "driverPassport": "Driver Passport",
+      "registeredVehicles": "Registered Vehicles",
+      "addNew": "Add New",
+      "noVehicles": "No vehicles registered yet.",
+      "overall": "Overall",
+      "statuses": {
+        "approved": "Approved",
+        "pending": "Pending",
+        "notUploaded": "Not Uploaded"
+      },
+      "vehicleLabels": {
+        "car": "Car",
+        "passport": "Passport",
+        "photos": "Photos"
+      }
+    },
+    "createTrip": {
+      "title": "Create New Trip",
+      "departureTime": "Departure Time",
+      "selectDeparture": "Select departure",
+      "arrivalTime": "Arrival Time (Estimated)",
+      "selectArrival": "Select arrival",
+      "pricePerSeat": "Price per Seat (UZS)",
+      "pricePlaceholder": "e.g. 50000",
+      "availableSeats": "Available Seats",
+      "selectVehicle": "Select Vehicle",
+      "vehiclePlaceholder": "Select one of your vehicles",
+      "from": "From",
+      "to": "To",
+      "region": "Region",
+      "selectRegion": "Select Region",
+      "district": "District",
+      "selectDistrict": "Select District",
+      "quarter": "Quarter / Village",
+      "selectQuarter": "Select Quarter",
+      "cancel": "Cancel",
+      "submit": "Create Trip",
+      "errors": {
+        "fillAll": "Please fill in all required fields including a vehicle",
+        "failed": "Failed to create trip"
+      },
+      "success": "Trip created successfully!"
+    }
+  },
+  "becomeDriver": {
+    "title": "Become a Qadam Driver",
+    "subtitle": "Complete these 4 steps to start earning with us.",
+    "steps": {
+      "license": "License",
+      "idPhotos": "ID Photos",
+      "vehicle": "Vehicle",
+      "carPhotos": "Car Photos"
+    },
+    "cards": {
+      "verified": {
+        "title": "Verified Only",
+        "desc": "Safety is our top priority for everyone."
+      },
+      "security": {
+        "title": "Data Security",
+        "desc": "Your data is encrypted and safe."
+      }
+    },
+    "step1": {
+      "title": "Driver License Info",
+      "desc": "Enter your basic document details to start.",
+      "licenseLabel": "Driving License Number",
+      "licensePlaceholder": "e.g. AB1234567",
+      "expirationLabel": "Expiration Date",
+      "birthdayLabel": "Birthday",
+      "datePlaceholder": "DD.MM.YYYY",
+      "next": "Next: ID Photos"
+    },
+    "step2": {
+      "title": "Document Photos",
+      "desc": "Clear photos of your driver's license and passport.",
+      "licenseFront": "Driving License (Front)",
+      "licenseBack": "Driving License (Back)",
+      "passport": "Passport Photo",
+      "back": "Back",
+      "next": "Next: Vehicle Details"
+    },
+    "step3": {
+      "title": "Vehicle Registration",
+      "desc": "Basic info about your car.",
+      "modelLabel": "Car Model",
+      "modelPlaceholder": "e.g. Chevrolet Nexia 3",
+      "numberLabel": "Plate Number",
+      "numberPlaceholder": "e.g. 01 A 123 AA",
+      "colorLabel": "Car Color",
+      "colorSelect": "Select Color",
+      "seatsLabel": "Available Seats",
+      "techPassportLabel": "Tech Passport Number",
+      "techPassportPlaceholder": "e.g. TTR1234567",
+      "next": "Next: Car Photos"
+    },
+    "step4": {
+      "title": "Vehicle Photos",
+      "desc": "Photos of your car and tech passport.",
+      "techFront": "Tech Passport (Front)",
+      "techBack": "Tech Passport (Back)",
+      "carImages": "Car Images (Multiple)",
+      "addMore": "Add More",
+      "remove": "REMOVE",
+      "submit": "Complete Application"
+    },
+    "complete": {
+      "title": "You're all set!",
+      "desc": "We've received your application and vehicle details. Our team will review them shortly. You can track your status on the dashboard.",
+      "dashboard": "Go to Dashboard"
+    },
+    "uploader": {
+      "select": "Select photo"
+    },
+    "toasts": {
+      "step1Success": "License info saved!",
+      "step1Error": "Failed to save license info",
+      "step2Success": "Documents uploaded successfully!",
+      "step2Error": "Failed to upload documents",
+      "step2Warning": "Please upload all required documents",
+      "step3Success": "Vehicle registered!",
+      "step3Error": "Failed to register vehicle",
+      "step4Success": "All information submitted! Welcome aboard.",
+      "step4Error": "Failed to upload vehicle images",
+      "step4Warning": "Please upload all required vehicle documents and at least one car image",
+      "fileSizeError": "File size exceeds 1MB limit",
+      "licenseFormatError": "Invalid license format (e.g. AB1234567)",
+      "dateInvalidError": "Invalid date (DD.MM.YYYY)",
+      "dateFutureError": "Date must be in the future",
+      "datePastError": "Birthday must be in the past",
+      "expirationBirthError": "Expiration date must be after birth year",
+      "processError": "Process error: Vehicle ID does not exist"
+    }
+  },
+  "rideDetails": {
+    "backToDashboard": "Back to Dashboard",
+    "backToResults": "Back to results",
+    "departureAt": "Departure at",
+    "estimatedArrival": "Estimated arrival",
+    "arrivalVaries": "Arrival time varies",
+    "routeVisualization": "Route Visualization",
+    "rideInfo": "Ride Details",
+    "verifiedDriver": "verified driver",
+    "carModel": "Car Model",
+    "carColor": "Car Color",
+    "plateNumber": "Plate Number",
+    "seats": "Seats",
+    "of": "of",
+    "passengerList": "Passenger List",
+    "noBookings": "No bookings yet",
+    "earningsEstim": "Earnings Estim.",
+    "editTrip": "Edit Trip Info",
+    "cancelTrip": "Cancel Trip",
+    "pricePerSeat": "Price per seat",
+    "total": "Total",
+    "bookRide": "Book this Ride",
+    "fullyBooked": "Fully Booked",
+    "payBalance": "Pay using internal balance",
+    "chatWith": "Chat with",
+    "confirmBooking": "Confirm Booking",
+    "amountToPay": "Amount to pay",
+    "bookingSuccess": "Ride booked successfully!",
+    "route": "Route",
+    "date": "Date",
+    "perSeat": "per seat"
+  },
+  "status": {
+    "active": "Active",
+    "completed": "Completed",
+    "canceled": "Canceled",
+    "pending": "Pending",
+    "confirmed": "Confirmed"
   }
 }
