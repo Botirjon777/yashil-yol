@@ -43,18 +43,32 @@ export const getAllPublicTrips = async (): Promise<Trip[]> => {
 
 /** GET /public/trips/search/available-trips */
 export const searchTrips = async (params: TripSearchParams): Promise<Trip[]> => {
-  // Filter out empty values to prevent 500 errors on the backend
-  const formattedParams = Object.fromEntries(
-    Object.entries(params).filter(([_, v]) => v !== "" && v !== null && v !== undefined)
-  ) as any;
+  // We build the object explicitly to ensure parameter order (important for some backends)
+  const formattedParams: any = {};
+  
+  if (params.start_region_id) formattedParams.start_region_id = params.start_region_id;
+  if (params.end_region_id) formattedParams.end_region_id = params.end_region_id;
+  if (params.start_district_id) formattedParams.start_district_id = params.start_district_id;
+  if (params.end_district_id) formattedParams.end_district_id = params.end_district_id;
+  if (params.start_quarter_id) formattedParams.start_quarter_id = params.start_quarter_id;
+  if (params.end_quarter_id) formattedParams.end_quarter_id = params.end_quarter_id;
+  if (params.passengers) formattedParams.passengers = params.passengers;
 
-  if (formattedParams.departure_date) {
-    const d = String(formattedParams.departure_date);
-    if (d.length === 10) {
-      formattedParams.departure_date = `${d} 00:00:00`;
-    } else if (d.length === 16) {
-      formattedParams.departure_date = `${d}:00`;
+  if (params.departure_date) {
+    const d = String(params.departure_date);
+    const datePart = d.substring(0, 10); // Extract YYYY-MM-DD
+    
+    const now = new Date();
+    // Get today's date in local YYYY-MM-DD
+    const todayStr = `${now.getFullYear()}-${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+    
+    let timePart = "00:00:00";
+    if (datePart === todayStr) {
+      // For today's searches, we only want upcoming trips
+      timePart = now.toTimeString().split(' ')[0];
     }
+    
+    formattedParams.departure_date = `${datePart} ${timePart}`;
   }
 
   const res = await api.get<any>("public/trips/search/available-trips", {
@@ -62,6 +76,7 @@ export const searchTrips = async (params: TripSearchParams): Promise<Trip[]> => 
   });
 
   const data = res.data?.data?.departure_trips?.data 
+    ?? res.data?.data?.departure_trips
     ?? res.data?.data?.data 
     ?? res.data?.data 
     ?? res.data;
