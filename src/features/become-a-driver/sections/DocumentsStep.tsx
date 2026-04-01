@@ -3,6 +3,7 @@ import { HiChevronRight, HiChevronLeft } from "react-icons/hi";
 import Button from "@/src/components/ui/Button";
 import { FileUploader } from "../components/FileUploader";
 import { Step2Data } from "../types";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 interface DocumentsStepProps {
   data: Step2Data;
@@ -19,38 +20,42 @@ export function DocumentsStep({
   onBack,
   isPending,
 }: DocumentsStepProps) {
+  const { t } = useLanguageStore();
+
   return (
     <form
       onSubmit={onSubmit}
       className="space-y-8 animate-in slide-in-from-right duration-500"
     >
       <div className="flex items-center justify-between">
-        <h2 className="text-2xl font-black text-dark-text">Document Photos</h2>
+        <h2 className="text-2xl font-black text-dark-text">
+          {t("becomeDriver", "step2")?.title}
+        </h2>
         <button
           type="button"
           onClick={onBack}
           className="text-gray-400 hover:text-dark-text transition-colors flex items-center text-sm font-bold"
         >
-          <HiChevronLeft className="mr-1" /> Back
+          <HiChevronLeft className="mr-1" /> {t("becomeDriver", "step2")?.back}
         </button>
       </div>
       <p className="text-gray-500 text-sm font-medium">
-        Clear photos of your driver's license and passport.
+        {t("becomeDriver", "step2")?.desc}
       </p>
 
       <div className="space-y-6">
         <FileUploader
-          label="Driving License (Front)"
+          label={t("becomeDriver", "step2")?.licenseFront}
           onFileSelect={(f) => onFileSelect("driving_licence_front", f)}
           selectedFile={data.driving_licence_front}
         />
         <FileUploader
-          label="Driving License (Back)"
+          label={t("becomeDriver", "step2")?.licenseBack}
           onFileSelect={(f) => onFileSelect("driving_licence_back", f)}
           selectedFile={data.driving_licence_back}
         />
         <FileUploader
-          label="Passport Photo"
+          label={t("becomeDriver", "step2")?.passport}
           onFileSelect={(f) => onFileSelect("driver_passport_image", f)}
           selectedFile={data.driver_passport_image}
         />
@@ -64,7 +69,7 @@ export function DocumentsStep({
           loading={isPending}
           icon={<HiChevronRight className="order-last ml-2" />}
         >
-          Next: Vehicle Details
+          {t("becomeDriver", "step2")?.next}
         </Button>
       </div>
     </form>

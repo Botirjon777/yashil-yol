@@ -152,7 +152,7 @@ const Navbar = () => {
                     <div className="p-2">
                       <Link href="/dashboard" className="flex items-center space-x-3 px-3 py-2.5 text-xs md:text-sm font-semibold text-gray-600 hover:bg-light-bg hover:text-primary rounded-lg transition-all">
                         <HiUsers className="w-5 h-5 opacity-70" />
-                        <span>Dashboard</span>
+                        <span>{t("nav", "dashboard")}</span>
                       </Link>
                       <Link href="/support" className="flex items-center space-x-3 px-3 py-2.5 text-xs md:text-sm font-semibold text-gray-600 hover:bg-light-bg hover:text-primary rounded-lg transition-all">
                         <HiChatAlt2 className="w-5 h-5 opacity-70" />

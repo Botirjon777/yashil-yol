@@ -152,7 +152,8 @@ export const useHomeSearch = () => {
     addLocationParams("start", fromLocation);
     addLocationParams("end", toLocation);
 
-    if (date) params.set("departure_date", date);
+    if (!date) return;
+    params.set("departure_date", date);
 
     router.push(`/rides?${params.toString()}`);
   };

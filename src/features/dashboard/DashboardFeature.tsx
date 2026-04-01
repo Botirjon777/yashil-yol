@@ -10,6 +10,9 @@ import { DriverSection } from "./sections/DriverSection";
 import AddCardModal from "./components/AddCardModal";
 import TopUpModal from "./components/TopUpModal";
 import AddVehicleModal from "./components/AddVehicleModal";
+import { useRegions, useDistricts, useQuarters } from "@/src/features/location/hooks/useLocation";
+import { useLocationStore } from "@/src/providers/LocationStore";
+import { useEffect } from "react";
 
 export default function DashboardFeature() {
   const {
@@ -35,6 +38,8 @@ export default function DashboardFeature() {
     isAddVehicleOpen,
     setIsAddVehicleOpen,
   } = useDashboard();
+
+  // Location Sync
 
   if (isUserLoading) {
     return (

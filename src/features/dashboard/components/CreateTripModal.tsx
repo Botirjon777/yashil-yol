@@ -14,6 +14,7 @@ import { useCreateTrip } from "@/src/features/rides/hooks/useRides";
 import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { toast } from "sonner";
 import Calendar from "@/src/components/ui/Calendar";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 interface CreateTripModalProps {
   isOpen: boolean;
@@ -24,6 +25,8 @@ export default function CreateTripModal({
   isOpen,
   onClose,
 }: CreateTripModalProps) {
+  const { t, language } = useLanguageStore();
+  const ct = t("dashboard", "createTrip");
   const { data: regions } = useRegions();
 
   const [formData, setFormData] = useState({
@@ -89,7 +92,7 @@ export default function CreateTripModal({
       !formData.end_region_id ||
       !formData.vehicle_id
     ) {
-      toast.error("Please fill in all required fields including a vehicle");
+      toast.error(ct?.errors?.fillAll || "Please fill in all required fields including a vehicle");
       return;
     }
 
@@ -130,7 +133,7 @@ export default function CreateTripModal({
 
     createTrip(payload, {
       onSuccess: () => {
-        toast.success("Trip created successfully!");
+        toast.success(ct?.success || "Trip created successfully!");
         onClose();
         // Reset form
         setFormData({
@@ -153,44 +156,48 @@ export default function CreateTripModal({
       },
       onError: (err: any) => {
         toast.error(
-          err.response?.data?.message || err.message || "Failed to create trip",
+          err.response?.data?.message || err.message || ct?.errors?.failed || "Failed to create trip",
         );
       },
     });
   };
 
+  const getLocalizedName = (item: any) => {
+    return item[`name_${language}`] || item.name_uz || item.name;
+  };
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title="Create New Trip" size="lg">
+    <Modal isOpen={isOpen} onClose={onClose} title={ct?.title} size="lg">
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Calendar
-            label="Departure Time"
+            label={ct?.departureTime}
             showTime
             value={formData.start_time}
             onChange={(val) => handleSelectChange("start_time", val)}
-            placeholder="Select departure"
+            placeholder={ct?.selectDeparture}
           />
           <Calendar
-            label="Arrival Time (Estimated)"
+            label={ct?.arrivalTime}
             showTime
             value={formData.end_time}
             onChange={(val) => handleSelectChange("end_time", val)}
-            placeholder="Select arrival"
+            placeholder={ct?.selectArrival}
           />
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Input
-            label="Price per Seat (UZS)"
+            label={ct?.pricePerSeat}
             type="number"
             name="price_per_seat"
             value={formData.price_per_seat}
             onChange={handleInputChange}
-            placeholder="e.g. 50000"
+            placeholder={ct?.pricePlaceholder}
             required
           />
           <Input
-            label="Available Seats"
+            label={ct?.availableSeats}
             type="number"
             name="available_seats"
             value={formData.available_seats}
@@ -200,7 +207,7 @@ export default function CreateTripModal({
         </div>
 
         <Dropdown
-          label="Select Vehicle"
+          label={ct?.selectVehicle}
           options={
             vehicles?.map((v) => ({
               id: v.id,
@@ -209,93 +216,93 @@ export default function CreateTripModal({
           }
           value={formData.vehicle_id}
           onChange={(val) => handleSelectChange("vehicle_id", val)}
-          placeholder="Select one of your vehicles"
+          placeholder={ct?.vehiclePlaceholder}
         />
 
         <div className="space-y-4">
-          <h4 className="font-bold text-gray-700">From</h4>
+          <h4 className="font-bold text-gray-700">{ct?.from}</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Dropdown
-              label="Region"
+              label={ct?.region}
               options={
                 regions?.map((r) => ({
                   id: r.id,
-                  name: r.name_uz || r.name,
+                  name: getLocalizedName(r),
                 })) || []
               }
               value={formData.start_region_id}
               onChange={(val) => handleSelectChange("start_region_id", val)}
-              placeholder="Select Region"
+              placeholder={ct?.selectRegion}
             />
             <Dropdown
-              label="District"
+              label={ct?.district}
               options={
                 startDistricts?.map((d) => ({
                   id: d.id,
-                  name: d.name_uz || d.name,
+                  name: getLocalizedName(d),
                 })) || []
               }
               value={formData.start_district_id}
               onChange={(val) => handleSelectChange("start_district_id", val)}
-              placeholder="Select District"
+              placeholder={ct?.selectDistrict}
               disabled={!formData.start_region_id}
             />
           </div>
           <Dropdown
-            label="Quarter / Village"
+            label={ct?.quarter}
             options={
               startQuarters?.map((q) => ({
                 id: q.id,
-                name: q.name_uz || q.name,
+                name: getLocalizedName(q),
               })) || []
             }
             value={formData.start_quarter_id}
             onChange={(val) => handleSelectChange("start_quarter_id", val)}
-            placeholder="Select Quarter"
+            placeholder={ct?.selectQuarter}
             disabled={!formData.start_district_id}
           />
         </div>
 
         <div className="space-y-4">
-          <h4 className="font-bold text-gray-700">To</h4>
+          <h4 className="font-bold text-gray-700">{ct?.to}</h4>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Dropdown
-              label="Region"
+              label={ct?.region}
               options={
                 regions?.map((r) => ({
                   id: r.id,
-                  name: r.name_uz || r.name,
+                  name: getLocalizedName(r),
                 })) || []
               }
               value={formData.end_region_id}
               onChange={(val) => handleSelectChange("end_region_id", val)}
-              placeholder="Select Region"
+              placeholder={ct?.selectRegion}
             />
             <Dropdown
-              label="District"
+              label={ct?.district}
               options={
                 endDistricts?.map((d) => ({
                   id: d.id,
-                  name: d.name_uz || d.name,
+                  name: getLocalizedName(d),
                 })) || []
               }
               value={formData.end_district_id}
               onChange={(val) => handleSelectChange("end_district_id", val)}
-              placeholder="Select District"
+              placeholder={ct?.selectDistrict}
               disabled={!formData.end_region_id}
             />
           </div>
           <Dropdown
-            label="Quarter / Village"
+            label={ct?.quarter}
             options={
               endQuarters?.map((q) => ({
                 id: q.id,
-                name: q.name_uz || q.name,
+                name: getLocalizedName(q),
               })) || []
             }
             value={formData.end_quarter_id}
             onChange={(val) => handleSelectChange("end_quarter_id", val)}
-            placeholder="Select Quarter"
+            placeholder={ct?.selectQuarter}
             disabled={!formData.end_district_id}
           />
         </div>
@@ -308,10 +315,10 @@ export default function CreateTripModal({
             onClick={onClose}
             disabled={isPending}
           >
-            Cancel
+            {ct?.cancel}
           </Button>
           <Button type="submit" loading={isPending}>
-            Create Trip
+            {ct?.submit}
           </Button>
         </div>
       </form>

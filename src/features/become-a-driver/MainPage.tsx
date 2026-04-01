@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React from "react";
 import { HiShieldCheck, HiFingerPrint } from "react-icons/hi";
 import {
   useBecomeDriver,
@@ -21,9 +21,9 @@ import { DocumentsStep } from "./sections/DocumentsStep";
 import { VehicleStep } from "./sections/VehicleStep";
 import { CarImagesStep } from "./sections/CarImagesStep";
 import { CompleteStep } from "./sections/CompleteStep";
-import { Step, Step1Data, Step2Data, Step3Data, Step4Data } from "./types";
 
 import { useBecomeDriverStore } from "./store/becomeDriverStore";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 const MainPage = () => {
   const {
@@ -44,6 +44,7 @@ const MainPage = () => {
   } = useBecomeDriverStore();
 
   const router = useRouter();
+  const { t } = useLanguageStore();
 
   // Step 1: Basic Info
   const { mutate: becomeDriver, isPending: isStep1Pending } = useBecomeDriver();
@@ -72,12 +73,13 @@ const MainPage = () => {
     e.preventDefault();
     becomeDriver(step1Data, {
       onSuccess: () => {
-        toast.success("License info saved!");
+        toast.success(t("becomeDriver", "toasts")?.step1Success);
         setCurrentStep("documents");
       },
       onError: (err: any) => {
         toast.error(
-          err.response?.data?.message || "Failed to save license info",
+          err.response?.data?.message ||
+            t("becomeDriver", "toasts")?.step1Error,
         );
       },
     });
@@ -90,7 +92,7 @@ const MainPage = () => {
       !step2Data.driving_licence_back ||
       !step2Data.driver_passport_image
     ) {
-      toast.error("Please upload all required documents");
+      toast.error(t("becomeDriver", "toasts")?.step2Warning);
       return;
     }
     uploadDocuments(
@@ -101,12 +103,13 @@ const MainPage = () => {
       },
       {
         onSuccess: () => {
-          toast.success("Documents uploaded successfully!");
+          toast.success(t("becomeDriver", "toasts")?.step2Success);
           setCurrentStep("vehicle");
         },
         onError: (err: any) => {
           toast.error(
-            err.response?.data?.message || "Failed to upload documents",
+            err.response?.data?.message ||
+              t("becomeDriver", "toasts")?.step2Error,
           );
         },
       },
@@ -117,7 +120,7 @@ const MainPage = () => {
     e.preventDefault();
     addVehicle(step3Data, {
       onSuccess: (res) => {
-        toast.success("Vehicle registered!");
+        toast.success(t("becomeDriver", "toasts")?.step3Success);
         if (res.data?.id) {
           setGeneratedVehicleId(res.data.id);
         }
@@ -125,7 +128,8 @@ const MainPage = () => {
       },
       onError: (err: any) => {
         toast.error(
-          err.response?.data?.message || "Failed to register vehicle",
+          err.response?.data?.message ||
+            t("becomeDriver", "toasts")?.step3Error,
         );
       },
     });
@@ -134,7 +138,7 @@ const MainPage = () => {
   const handleStep4Submit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!generatedVehicleId) {
-      toast.error("Process error: missing vehicle ID");
+      toast.error(t("becomeDriver", "toasts")?.processError);
       return;
     }
     if (
@@ -142,9 +146,7 @@ const MainPage = () => {
       !step4Data.tech_passport_back ||
       step4Data.car_images.length === 0
     ) {
-      toast.error(
-        "Please upload all required vehicle documents and at least one car image",
-      );
+      toast.error(t("becomeDriver", "toasts")?.step4Warning);
       return;
     }
     uploadCarImages(
@@ -156,12 +158,13 @@ const MainPage = () => {
       },
       {
         onSuccess: () => {
-          toast.success("All information submitted! Welcome aboard.");
+          toast.success(t("becomeDriver", "toasts")?.step4Success);
           setCurrentStep("complete");
         },
         onError: (err: any) => {
           toast.error(
-            err.response?.data?.message || "Failed to upload vehicle images",
+            err.response?.data?.message ||
+              t("becomeDriver", "toasts")?.step4Error,
           );
         },
       },
@@ -173,7 +176,7 @@ const MainPage = () => {
     callback: (f: File | null) => void,
   ) => {
     if (file && file.size > 1 * 1024 * 1024) {
-      toast.error("File size exceeds 1MB limit");
+      toast.error(t("becomeDriver", "toasts")?.fileSizeError);
       return;
     }
     callback(file);
@@ -184,7 +187,7 @@ const MainPage = () => {
     const newFiles = Array.from(files);
     const validFiles = newFiles.filter((f) => {
       if (f.size > 1 * 1024 * 1024) {
-        toast.error(`${f.name} exceeds 1MB limit`);
+        toast.error(`${f.name} ${t("becomeDriver", "toasts")?.fileSizeError}`);
         return false;
       }
       return true;
@@ -197,14 +200,16 @@ const MainPage = () => {
 
   return (
     <div className="bg-light-bg min-h-screen py-16">
-      <div className="max-w-4xl mx-auto px-4">
+      <div className="max-w-7xl mx-auto px-4">
         {/* Header Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-black text-dark-text mb-6">
-            Become a <span className="text-primary">Qadam</span> Driver
+            {t("becomeDriver", "title")?.split("Qadam")[0]}
+            <span className="text-primary">Qadam</span>
+            {t("becomeDriver", "title")?.split("Qadam")[1]}
           </h1>
           <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto">
-            Complete these 4 steps to start earning with us.
+            {t("becomeDriver", "subtitle")}
           </p>
         </div>
 
@@ -220,7 +225,7 @@ const MainPage = () => {
               "car-images",
               "complete",
             ].includes(currentStep)}
-            label="License"
+            label={t("becomeDriver", "steps")?.license}
           />
           <StepIndicator
             step={2}
@@ -228,28 +233,28 @@ const MainPage = () => {
             completed={["vehicle", "car-images", "complete"].includes(
               currentStep,
             )}
-            label="ID Photos"
+            label={t("becomeDriver", "steps")?.idPhotos}
           />
           <StepIndicator
             step={3}
             active={currentStep === "vehicle"}
             completed={["car-images", "complete"].includes(currentStep)}
-            label="Vehicle"
+            label={t("becomeDriver", "steps")?.vehicle}
           />
           <StepIndicator
             step={4}
             active={currentStep === "car-images"}
             completed={currentStep === "complete"}
-            label="Car Photos"
+            label={t("becomeDriver", "steps")?.carPhotos}
           />
         </div>
 
         {currentStep === "complete" ? (
-          <CompleteStep 
+          <CompleteStep
             onGoToDashboard={() => {
               reset();
               router.push("/dashboard");
-            }} 
+            }}
           />
         ) : (
           <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
@@ -257,13 +262,13 @@ const MainPage = () => {
             <div className="hidden lg:block lg:col-span-1 space-y-6">
               <InfoCard
                 icon={<HiShieldCheck className="w-6 h-6 text-secondary" />}
-                title="Verified Only"
-                description="Safety is our top priority for everyone."
+                title={t("becomeDriver", "cards")?.verified?.title}
+                description={t("becomeDriver", "cards")?.verified?.desc}
               />
               <InfoCard
                 icon={<HiFingerPrint className="w-6 h-6 text-accent" />}
-                title="Data Security"
-                description="Your data is encrypted and safe."
+                title={t("becomeDriver", "cards")?.security?.title}
+                description={t("becomeDriver", "cards")?.security?.desc}
               />
             </div>
 
