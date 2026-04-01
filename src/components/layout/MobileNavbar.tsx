@@ -21,15 +21,6 @@ const MobileNavbar = () => {
 
         {/* Right Controls */}
         <div className="flex items-center space-x-2">
-          {/* Search Icon */}
-          <Link
-            href="/rides"
-            className="p-2 text-dark-text hover:text-primary transition-colors hover:bg-light-bg rounded-lg"
-            aria-label="Search"
-          >
-            <HiSearch className="w-6 h-6" />
-          </Link>
-
           {/* Menu Button */}
           <button
             onClick={() => setIsSidebarOpen(true)}

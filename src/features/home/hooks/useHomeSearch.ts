@@ -7,6 +7,9 @@ import {
   useQuartersByDistrict
 } from "@/src/features/location/hooks/useLocation";
 import { ApiRegion, ApiDistrict, ApiQuarter } from "@/src/features/location/types";
+import { searchTrips } from "@/src/features/rides/actions/actions";
+import { Trip } from "@/src/features/rides/types";
+import { toast } from "sonner";
 
 interface SelectedLocation {
   id: string | number;
@@ -28,6 +31,11 @@ export const useHomeSearch = () => {
   const [toQuery, setToQuery] = useState("");
 
   const [date, setDate] = useState("");
+
+  // Result State
+  const [searchResults, setSearchResults] = useState<Trip[]>([]);
+  const [isSearching, setIsSearching] = useState(false);
+  const [hasSearched, setHasSearched] = useState(false);
 
   // Data Queries
   const { data: regions, isLoading: regionsLoading } = useRegions();
@@ -139,23 +147,42 @@ export const useHomeSearch = () => {
     [toQuery, regions, toDistricts, toQuarters, toLocation]
   );
 
-  const handleSearch = () => {
-    const params = new URLSearchParams();
+  const handleSearch = async () => {
+    if (!fromLocation || !toLocation || !date) {
+      toast.error(t("common", "error"));
+      return;
+    }
+
+    setIsSearching(true);
+    setHasSearched(true);
     
-    const addLocationParams = (prefix: string, loc: any) => {
-      if (!loc) return;
-      if (loc.region_id) params.set(`${prefix}_region_id`, loc.region_id.toString());
-      if (loc.district_id) params.set(`${prefix}_district_id`, loc.district_id.toString());
-      if (loc.quarter_id) params.set(`${prefix}_quarter_id`, loc.quarter_id.toString());
-    };
+    try {
+      const tripParams = {
+        start_region_id: fromLocation.region_id,
+        start_district_id: fromLocation.district_id,
+        start_quarter_id: fromLocation.quarter_id,
+        end_region_id: toLocation.region_id,
+        end_district_id: toLocation.district_id,
+        end_quarter_id: toLocation.quarter_id,
+        departure_date: date,
+      };
 
-    addLocationParams("start", fromLocation);
-    addLocationParams("end", toLocation);
-
-    if (!date) return;
-    params.set("departure_date", date);
-
-    router.push(`/rides?${params.toString()}`);
+      const results = await searchTrips(tripParams);
+      setSearchResults(results);
+      
+      // Scroll to results after a short delay to allow rendering
+      setTimeout(() => {
+        const resultsElement = document.getElementById("search-results-section");
+        if (resultsElement) {
+          resultsElement.scrollIntoView({ behavior: "smooth", block: "start" });
+        }
+      }, 100);
+    } catch (error) {
+      console.error("Search failed:", error);
+      toast.error("Search failed. Please try again.");
+    } finally {
+      setIsSearching(false);
+    }
   };
 
   return {
@@ -168,6 +195,10 @@ export const useHomeSearch = () => {
     date, setDate,
     handleSearch,
     
+    searchResults,
+    isSearching,
+    hasSearched,
+
     loading: regionsLoading || 
              fromDistrictsLoading || fromQuartersLoading || 
              toDistrictsLoading || toQuartersLoading,

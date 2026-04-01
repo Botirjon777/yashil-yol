@@ -78,15 +78,6 @@ const Navbar = () => {
 
           {/* Desktop Menu */}
           <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-            {/* Search Icon Only */}
-            <Link
-              href="/rides"
-              className="p-2 text-dark-text hover:text-primary transition-colors hover:bg-light-bg rounded-full"
-              title={safeT("nav", "findRide")}
-            >
-              <HiSearch className="w-6 h-6" />
-            </Link>
-
             {/* Service Group: Carpool | Bus */}
             <div className="flex items-center bg-light-bg border border-border rounded-full px-1 py-1">
               <Link
