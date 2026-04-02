@@ -87,9 +87,9 @@ export function useDashboard() {
   const trulyActive = allActive.filter(ride => new Date(ride.start_time) >= now);
   const autoArchived = allActive.filter(ride => new Date(ride.start_time) < now);
   
-  const rawHistory = (rideType === "driver" 
+  const rawHistory = rideType === "driver" 
     ? [...(driverCompleted || []), ...(driverCanceled || [])]
-    : [...(passengerCompleted || []), ...(passengerCanceled || [])]) || [];
+    : [...(passengerCompleted || []), ...(passengerCanceled || [])];
 
   const activeRides = trulyActive;
   const historyRides = [...rawHistory, ...autoArchived].sort((a, b) => 
