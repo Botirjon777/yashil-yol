@@ -80,7 +80,7 @@ export function DriverSection({
         </div>
 
         {!vehicles || vehicles.length === 0 ? (
-          <div className="premium-card p-12 text-center text-gray-500 font-medium">
+          <div className="premium-card p-6 lg:p-12 text-center text-gray-500 font-medium">
             {ds?.noVehicles}
           </div>
         ) : (
@@ -101,7 +101,7 @@ export function DriverSection({
               return (
                 <div
                   key={vehicle.id}
-                  className="premium-card p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 group hover:border-primary transition-colors"
+                  className="premium-card p-2.5 lg:p-6 flex flex-col md:flex-row md:items-center justify-between gap-6 group hover:border-primary transition-colors"
                 >
                   <div className="flex items-center space-x-6">
                     <div className="w-16 h-16 bg-light-bg rounded-2xl flex items-center justify-center text-3xl shadow-inner border border-border group-hover:bg-primary/5 transition-all text-primary">

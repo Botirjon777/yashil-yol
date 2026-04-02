@@ -10,9 +10,16 @@ import { DriverSection } from "./sections/DriverSection";
 import AddCardModal from "./components/AddCardModal";
 import TopUpModal from "./components/TopUpModal";
 import AddVehicleModal from "./components/AddVehicleModal";
-import { useRegions, useDistricts, useQuarters } from "@/src/features/location/hooks/useLocation";
-import { useLocationStore } from "@/src/providers/LocationStore";
-import { useEffect } from "react";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+
+const TAB_ORDER = {
+  rides: 0,
+  balance: 1,
+  profile: 2,
+  driver: 3,
+};
 
 export default function DashboardFeature() {
   const {
@@ -37,9 +44,32 @@ export default function DashboardFeature() {
     vehicles,
     isAddVehicleOpen,
     setIsAddVehicleOpen,
+    isSectionOpen,
+    setIsSectionOpen,
   } = useDashboard();
 
-  // Location Sync
+  const { t } = useLanguageStore();
+
+  const [prevTab, setPrevTab] = useState(activeTab);
+  const [isMobile, setIsMobile] = useState(false);
+  const direction =
+    (TAB_ORDER[activeTab as keyof typeof TAB_ORDER] || 0) >=
+    (TAB_ORDER[prevTab as keyof typeof TAB_ORDER] || 0)
+      ? 1
+      : -1;
+
+  useEffect(() => {
+    const checkMobile = () => setIsMobile(window.innerWidth < 1024);
+    checkMobile();
+    window.addEventListener("resize", checkMobile);
+    return () => window.removeEventListener("resize", checkMobile);
+  }, []);
+
+  useEffect(() => {
+    if (activeTab !== prevTab) {
+      setPrevTab(activeTab);
+    }
+  }, [activeTab, prevTab]);
 
   if (isUserLoading) {
     return (
@@ -49,60 +79,137 @@ export default function DashboardFeature() {
     );
   }
 
+  const currentSection = (
+    <>
+      {activeTab === "rides" && (
+        <RidesSection
+          rideType={rideType}
+          handleRideTypeChange={handleRideTypeChange}
+          activeRides={activeRides || []}
+          historyRides={historyRides || []}
+          isDriver={isDriver}
+          user={user}
+        />
+      )}
+      {activeTab === "balance" && (
+        <BalanceSection
+          balance={balance}
+          onTopUpClick={() => setIsTopUpOpen(true)}
+          onAddCardClick={() => setIsAddCardOpen(true)}
+        />
+      )}
+      {activeTab === "profile" && (
+        <ProfileSection
+          user={user}
+          profileForm={profileForm}
+          setProfileForm={setProfileForm}
+          handleProfileSubmit={handleProfileSubmit}
+          isUpdating={isUpdating}
+        />
+      )}
+      {activeTab === "driver" && (
+        <DriverSection
+          user={user}
+          vehicles={vehicles}
+          onAddVehicleClick={() => setIsAddVehicleOpen(true)}
+        />
+      )}
+    </>
+  );
+
   return (
-    <div className="bg-light-bg min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-4">
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-12">
-          {/* Sidebar Navigation */}
-          <Sidebar
-            user={user}
-            activeTab={activeTab}
-            handleTabChange={handleTabChange}
-            isDriver={isDriver}
-          />
-
-          {/* Content Area */}
-          <div className="lg:col-span-3 space-y-8">
-            <DriverStatusBanner user={user} isDriver={isDriver} />
-
-            {activeTab === "rides" && (
-              <RidesSection
-                rideType={rideType}
-                handleRideTypeChange={handleRideTypeChange}
-                activeRides={activeRides || []}
-                historyRides={historyRides || []}
+    <div className="bg-light-bg min-h-screen py-2.5 lg:py-5 overflow-x-hidden">
+      <div className="max-w-7xl mx-auto px-2.5 lg:px-5 relative">
+        {!isMobile ? (
+          /* Desktop Layout - Totally Static */
+          <div className="grid grid-cols-4 gap-5">
+            <div className="col-span-1">
+              <Sidebar
+                user={user}
+                activeTab={activeTab}
+                handleTabChange={handleTabChange}
                 isDriver={isDriver}
-                user={user}
               />
-            )}
-
-            {activeTab === "balance" && (
-              <BalanceSection
-                balance={balance}
-                onTopUpClick={() => setIsTopUpOpen(true)}
-                onAddCardClick={() => setIsAddCardOpen(true)}
-              />
-            )}
-
-            {activeTab === "profile" && (
-              <ProfileSection
-                user={user}
-                profileForm={profileForm}
-                setProfileForm={setProfileForm}
-                handleProfileSubmit={handleProfileSubmit}
-                isUpdating={isUpdating}
-              />
-            )}
-
-            {activeTab === "driver" && (
-              <DriverSection 
-                user={user} 
-                vehicles={vehicles} 
-                onAddVehicleClick={() => setIsAddVehicleOpen(true)} 
-              />
-            )}
+            </div>
+            <div className="col-span-3 space-y-8">
+              <DriverStatusBanner user={user} isDriver={isDriver} />
+              {currentSection}
+            </div>
           </div>
-        </div>
+        ) : (
+          /* Mobile Layout - Premium Framer Motion Transitions */
+          <AnimatePresence
+            mode="popLayout"
+            initial={false}
+            custom={isSectionOpen}
+          >
+            {!isSectionOpen ? (
+              <motion.div
+                key="sidebar"
+                custom={isSectionOpen}
+                initial={{ x: "-100%", opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: "-100%", opacity: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="absolute left-2.5 right-2.5 lg:relative lg:left-0 lg:right-0 lg:w-full"
+              >
+                <Sidebar
+                  user={user}
+                  activeTab={activeTab}
+                  handleTabChange={handleTabChange}
+                  isDriver={isDriver}
+                />
+              </motion.div>
+            ) : (
+              <motion.div
+                key="content"
+                custom={isSectionOpen}
+                initial={{ x: "100%", opacity: 0 }}
+                animate={{ x: 0, opacity: 1 }}
+                exit={{ x: "100%", opacity: 0 }}
+                transition={{ type: "spring", stiffness: 300, damping: 30 }}
+                className="absolute left-2.5 right-2.5 lg:relative lg:left-0 lg:right-0 lg:w-full space-y-5"
+              >
+                <button
+                  onClick={() => setIsSectionOpen(false)}
+                  className="flex items-center text-primary font-black uppercase text-xs tracking-widest hover:text-secondary mb-6 bg-white py-3 px-5 rounded-md shadow-sm border border-border/50 active:scale-95 transition-transform"
+                >
+                  <span className="mr-2 text-lg">←</span>{" "}
+                  {t("common", "back") || "Back to Menu"}
+                </button>
+
+                <DriverStatusBanner user={user} isDriver={isDriver} />
+
+                <AnimatePresence mode="wait" initial={false} custom={direction}>
+                  <motion.div
+                    key={activeTab}
+                    custom={direction}
+                    variants={{
+                      enter: (dir: number) => ({
+                        x: dir > 0 ? "20%" : "-20%",
+                        opacity: 0,
+                      }),
+                      center: { x: 0, opacity: 1 },
+                      exit: (dir: number) => ({
+                        x: dir < 0 ? "20%" : "-20%",
+                        opacity: 0,
+                      }),
+                    }}
+                    initial="enter"
+                    animate="center"
+                    exit="exit"
+                    transition={{
+                      x: { type: "spring", stiffness: 300, damping: 30 },
+                      opacity: { duration: 0.2 },
+                    }}
+                  >
+                    {currentSection}
+                  </motion.div>
+                </AnimatePresence>
+              </motion.div>
+            )}
+          </AnimatePresence>
+        )}
       </div>
 
       <TopUpModal isOpen={isTopUpOpen} onClose={() => setIsTopUpOpen(false)} />

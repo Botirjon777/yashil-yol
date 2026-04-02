@@ -51,7 +51,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   return (
     <div className={cn("w-full relative", className)} ref={dropdownRef}>
       {label && (
-        <label className="block text-sm font-semibold text-dark-text mb-1.5 ml-1">
+        <label className="block text-xs font-bold text-gray-500 ml-1 mb-1">
           {label}
         </label>
       )}
@@ -60,7 +60,7 @@ const Dropdown: React.FC<DropdownProps> = ({
         onClick={() => !disabled && setIsOpen(!isOpen)}
         disabled={disabled}
         className={cn(
-          "w-full bg-white border border-border text-dark-text rounded-xl px-4 py-3 text-left flex items-center justify-between transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-base",
+          "w-full bg-light-bg border border-border text-dark-text rounded-xl px-4 py-2.5 text-left flex items-center justify-between transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm font-medium",
           isOpen && "border-primary ring-2 ring-primary/20",
           error && "border-error focus:ring-error/20 focus:border-error",
           disabled && "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed",

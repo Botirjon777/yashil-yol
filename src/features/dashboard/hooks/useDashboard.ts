@@ -22,6 +22,7 @@ export function useDashboard() {
   const { data: balanceData } = useBalance();
 
   const [activeTab, setActiveTab] = useState<"rides" | "balance" | "profile" | "driver">("rides");
+  const [isSectionOpen, setIsSectionOpen] = useState(false);
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
   const [isAddVehicleOpen, setIsAddVehicleOpen] = useState(false);
@@ -43,6 +44,7 @@ export function useDashboard() {
   // Update localStorage when tab or rideType changes
   const handleTabChange = (tab: "rides" | "balance" | "profile" | "driver") => {
     setActiveTab(tab);
+    setIsSectionOpen(true);
     localStorage.setItem("dashboard_active_tab", tab);
   };
 
@@ -78,15 +80,21 @@ export function useDashboard() {
   const user = userData?.user || storedUser;
   const isDriver = user?.role === "driver";
 
-  const activeRides = rideType === "driver" ? driverActive : passengerActive;
+  const now = new Date();
+  const allActive = (rideType === "driver" ? driverActive : passengerActive) || [];
   
-  const historyRides = rideType === "driver" 
-    ? [...(driverCompleted || []), ...(driverCanceled || [])].sort((a, b) => 
-        new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
-      )
-    : [...(passengerCompleted || []), ...(passengerCanceled || [])].sort((a, b) => 
-        new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
-      );
+  // Filter out trips where departure time is in the past
+  const trulyActive = allActive.filter(ride => new Date(ride.start_time) >= now);
+  const autoArchived = allActive.filter(ride => new Date(ride.start_time) < now);
+  
+  const rawHistory = rideType === "driver" 
+    ? [...(driverCompleted || []), ...(driverCanceled || [])]
+    : [...(passengerCompleted || []), ...(passengerCanceled || [])];
+
+  const activeRides = trulyActive;
+  const historyRides = [...rawHistory, ...autoArchived].sort((a, b) => 
+    new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
+  );
 
   useEffect(() => {
     if (user) {
@@ -112,6 +120,8 @@ export function useDashboard() {
     balanceData,
     activeTab,
     handleTabChange,
+    isSectionOpen,
+    setIsSectionOpen,
     isTopUpOpen,
     setIsTopUpOpen,
     isAddCardOpen,

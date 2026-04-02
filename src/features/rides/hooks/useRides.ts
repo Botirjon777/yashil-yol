@@ -16,9 +16,11 @@ import {
   bookTrip,
   getClientBookings,
   getClientBookingById,
+  cancelTrip,
 } from "../actions/actions";
 import { Trip, TripSearchParams, CreateTripRequest, Booking } from "../types";
 import { PaginatedTrips } from "../actions/actions";
+import { toast } from "sonner";
 
 /** Paginated list of public trips */
 export const usePublicTrips = (page = 1) =>
@@ -130,6 +132,20 @@ export const useClientBookings = () =>
     queryKey: ["client-bookings"],
     queryFn: getClientBookings,
   });
+
+export const useCancelTrip = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string | number) => cancelTrip(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
+      toast.success("Trip canceled successfully");
+    },
+    onError: (err: any) => {
+      toast.error(err.message || "Failed to cancel trip");
+    },
+  });
+};
 
 export const useClientBookingById = (id: string | number | null) =>
   useQuery<Booking, Error>({

@@ -92,7 +92,10 @@ export default function CreateTripModal({
       !formData.end_region_id ||
       !formData.vehicle_id
     ) {
-      toast.error(ct?.errors?.fillAll || "Please fill in all required fields including a vehicle");
+      toast.error(
+        ct?.errors?.fillAll ||
+          "Please fill in all required fields including a vehicle",
+      );
       return;
     }
 
@@ -131,6 +134,15 @@ export default function CreateTripModal({
       payload.end_quarter_id = String(formData.end_quarter_id);
     }
 
+    // Step 2: Logical Date Validation
+    if (new Date(payload.end_time) <= new Date(payload.start_time)) {
+      toast.error(
+        ct?.errors?.timeError ||
+          "Arrival time must be strictly after departure time",
+      );
+      return;
+    }
+
     createTrip(payload, {
       onSuccess: () => {
         toast.success(ct?.success || "Trip created successfully!");
@@ -156,7 +168,10 @@ export default function CreateTripModal({
       },
       onError: (err: any) => {
         toast.error(
-          err.response?.data?.message || err.message || ct?.errors?.failed || "Failed to create trip",
+          err.response?.data?.message ||
+            err.message ||
+            ct?.errors?.failed ||
+            "Failed to create trip",
         );
       },
     });
@@ -166,27 +181,41 @@ export default function CreateTripModal({
     return item[`name_${language}`] || item.name_uz || item.name;
   };
 
+  const minDate = new Date();
+
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={ct?.title} size="lg">
-      <form onSubmit={handleSubmit} className="space-y-6">
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={ct?.title}
+      size="lg"
+      fullMobile
+    >
+      <form onSubmit={handleSubmit} className="space-y-5">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Calendar
             label={ct?.departureTime}
             showTime
             value={formData.start_time}
-            onChange={(val) => handleSelectChange("start_time", val)}
+            onChange={(val: string) => handleSelectChange("start_time", val)}
             placeholder={ct?.selectDeparture}
+            minDate={minDate}
           />
           <Calendar
             label={ct?.arrivalTime}
             showTime
             value={formData.end_time}
-            onChange={(val) => handleSelectChange("end_time", val)}
+            onChange={(val: string) => handleSelectChange("end_time", val)}
             placeholder={ct?.selectArrival}
+            minDate={
+              formData.start_time
+                ? new Date(formData.start_time)
+                : minDate
+            }
           />
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Input
             label={ct?.pricePerSeat}
             type="number"
@@ -221,7 +250,7 @@ export default function CreateTripModal({
 
         <div className="space-y-4">
           <h4 className="font-bold text-gray-700">{ct?.from}</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <Dropdown
               label={ct?.region}
               options={
@@ -265,7 +294,7 @@ export default function CreateTripModal({
 
         <div className="space-y-4">
           <h4 className="font-bold text-gray-700">{ct?.to}</h4>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <Dropdown
               label={ct?.region}
               options={

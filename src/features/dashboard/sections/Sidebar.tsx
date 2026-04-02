@@ -1,4 +1,3 @@
-import React from "react";
 import { HiUser, HiCreditCard, HiStar, HiIdentification } from "react-icons/hi";
 import { DashboardNavItem } from "../components/DashboardNavItem";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
@@ -10,26 +9,41 @@ interface SidebarProps {
   isDriver: boolean;
 }
 
-export function Sidebar({ user, activeTab, handleTabChange, isDriver }: SidebarProps) {
+export function Sidebar({
+  user,
+  activeTab,
+  handleTabChange,
+  isDriver,
+}: SidebarProps) {
   const { t } = useLanguageStore();
 
   return (
-    <div className="lg:col-span-1 space-y-4">
-      <div className="premium-card p-8 mb-8 text-center bg-primary text-white border-none shadow-primary/20">
-        <div className="w-20 h-20 bg-white/20 rounded-full flex items-center justify-center mx-auto mb-4 text-3xl font-black backdrop-blur-md overflow-hidden">
+    <div className="lg:col-span-1 space-y-2.5 bg-white p-2.5 lg:p-5 rounded-lg shadow-sm border border-border/50">
+      <div className="flex items-center gap-3 px-1 mb-4">
+        <div className="w-[25px] h-[25px] bg-primary text-white rounded-full flex items-center justify-center text-[10px] font-black shrink-0 overflow-hidden shadow-sm shadow-primary/20">
           {user?.image ? (
-            <img src={user.image} alt="Avatar" className="w-full h-full object-cover" />
+            <img
+              src={user.image}
+              alt="Avatar"
+              className="w-full h-full object-cover"
+            />
           ) : (
             user?.first_name?.[0] || "U"
           )}
         </div>
-        <h2 className="text-xl font-black">{user?.first_name} {user?.last_name}</h2>
-        <p className="text-indigo-100 text-sm font-medium uppercase tracking-widest">
-          {isDriver ? t("dashboard", "sidebar")?.driver : t("dashboard", "sidebar")?.traveler}
-        </p>
+        <div className="min-w-0">
+          <h2 className="text-sm font-black text-dark-text truncate leading-none mb-1">
+            {user?.first_name} {user?.last_name}
+          </h2>
+          <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest leading-none">
+            {isDriver
+              ? t("dashboard", "sidebar")?.driver
+              : t("dashboard", "sidebar")?.traveler}
+          </p>
+        </div>
       </div>
 
-      <nav className="space-y-2.5">
+      <nav className="space-y-1.5">
         <DashboardNavItem
           icon={<HiStar />}
           label={t("dashboard", "sidebar")?.myRides}

@@ -2,9 +2,11 @@
 
 export interface TripDriver {
   id: number;
-  first_name: string;
+  name?: string;
+  first_name?: string;
   last_name: string;
   phone?: string;
+  role?: string;
   rating?: number;
   avatar?: string;
 }
@@ -13,9 +15,10 @@ export interface TripVehicle {
   id: number;
   brand?: string;
   model: string;
-  color?: string | CarColor;
+  color?: string | CarColor | { id: number | string };
   plate_number?: string;
   car_number?: string;
+  seats?: number | string;
 }
 
 export interface VehicleRequest {
@@ -58,20 +61,27 @@ export interface Trip {
 
   start_time: string;
   end_time?: string;
+  duration?: string;
   price_per_seat: number | string;
   total_seats: number;
   available_seats: number;
+  start_lat?: string;
+  start_long?: string;
+  end_lat?: string;
+  end_long?: string;
   status: "active" | "completed" | "canceled" | string;
   
   // Relations (if included in response)
   driver?: TripDriver;
   vehicle?: TripVehicle;
-  start_region?: { id: number; name: string; name_uz?: string; name_en?: string };
-  end_region?: { id: number; name: string; name_uz?: string; name_en?: string };
-  start_district?: { id: number; name: string; name_uz?: string; name_en?: string };
-  end_district?: { id: number; name: string; name_uz?: string; name_en?: string };
-  start_quarter?: { id: number; name: string; name_uz?: string; name_en?: string };
-  end_quarter?: { id: number; name: string; name_uz?: string; name_en?: string };
+  start_region?: any; // Can be object or string now
+  end_region?: any;
+  start_district?: any;
+  end_district?: any;
+  start_quarter?: any;
+  end_quarter?: any;
+  starting_point?: { id: number; lat: string; long: string };
+  ending_point?: { id: number; lat: string; long: string };
   bookings?: Booking[];
 }
 

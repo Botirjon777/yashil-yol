@@ -25,6 +25,7 @@ import {
   useTripById,
   useDriverTripById,
   useBookTrip,
+  useCancelTrip,
 } from "@/src/features/rides/hooks/useRides";
 import Loader from "@/src/components/ui/Loader";
 import { toast } from "sonner";
@@ -99,14 +100,37 @@ const RideDetailsPage = () => {
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   const [numSeats, setNumSeats] = useState(1);
   const { mutate: bookTrip, isPending: isBooking } = useBookTrip();
+  const { mutate: cancelTrip, isPending: isCanceling } = useCancelTrip();
 
-  React.useEffect(() => {
-    if (!token) {
-      router.push(`/auth/login?returnTo=/rides/${tripId}`);
+  const isPast = useMemo(() => {
+    if (!trip) return false;
+    return new Date(trip.start_time).getTime() < Date.now();
+  }, [trip]);
+
+  const canCancel = useMemo(() => {
+    if (!trip || !isDriver || isPast) return false;
+    const diffInMinutes = (new Date(trip.start_time).getTime() - Date.now()) / (1000 * 60);
+    return diffInMinutes > 30;
+  }, [trip, isDriver, isPast]);
+
+  const handleCancel = () => {
+    if (window.confirm("Are you sure you want to cancel this trip?")) {
+      cancelTrip(tripId, {
+        onSuccess: () => {
+          router.push("/dashboard");
+        }
+      });
     }
-  }, [token, tripId, router]);
+  };
 
-  if (!token) return null;
+  // Remove mandatory redirect on load - allow guests to see the ride
+  // React.useEffect(() => {
+  //   if (!token) {
+  //     router.push(`/auth/login?returnTo=/rides/${tripId}`);
+  //   }
+  // }, [token, tripId, router]);
+
+  // if (!token) return null;
 
   if (isLoading) {
     return (
@@ -139,6 +163,12 @@ const RideDetailsPage = () => {
   }
 
   const handleBook = () => {
+    if (!token) {
+      toast.error(rd("loginRequired") || "Please login to book a ride");
+      router.push(`/auth/login?returnTo=/rides/${tripId}`);
+      return;
+    }
+
     bookTrip(
       { trip_id: trip.id, seats_booked: numSeats },
       {
@@ -155,44 +185,64 @@ const RideDetailsPage = () => {
   };
 
   const fromRegion =
-    resolveLocationName(
-      trip.start_region,
-      trip.start_region_id || trip.from_region_id,
-      regions,
-      language,
-    ) || "---";
-  const fromDistrict = resolveLocationName(
-    trip.start_district,
-    trip.start_district_id || trip.from_district_id,
-    districts,
-    language,
-  );
-  const fromQuarter = resolveLocationName(
-    trip.start_quarter,
-    trip.start_quarter_id || trip.from_quarter_id,
-    quarters,
-    language,
-  );
+    typeof trip.start_region === "string"
+      ? trip.start_region
+      : resolveLocationName(
+          trip.start_region,
+          trip.start_region_id || trip.from_region_id,
+          regions,
+          language,
+        ) || "---";
+
+  const fromDistrict = 
+    typeof trip.start_district === "string"
+      ? trip.start_district
+      : resolveLocationName(
+          trip.start_district,
+          trip.start_district_id || trip.from_district_id,
+          districts,
+          language,
+        );
+
+  const fromQuarter = 
+    typeof trip.start_quarter === "string"
+      ? trip.start_quarter
+      : resolveLocationName(
+          trip.start_quarter,
+          trip.start_quarter_id || trip.from_quarter_id,
+          quarters,
+          language,
+        );
 
   const toRegion =
-    resolveLocationName(
-      trip.end_region,
-      trip.end_region_id || trip.to_region_id,
-      regions,
-      language,
-    ) || "---";
-  const toDistrict = resolveLocationName(
-    trip.end_district,
-    trip.end_district_id || trip.to_district_id,
-    districts,
-    language,
-  );
-  const toQuarter = resolveLocationName(
-    trip.end_quarter,
-    trip.end_quarter_id || trip.to_quarter_id,
-    quarters,
-    language,
-  );
+    typeof trip.end_region === "string"
+      ? trip.end_region
+      : resolveLocationName(
+          trip.end_region,
+          trip.end_region_id || trip.to_region_id,
+          regions,
+          language,
+        ) || "---";
+
+  const toDistrict = 
+    typeof trip.end_district === "string"
+      ? trip.end_district
+      : resolveLocationName(
+          trip.end_district,
+          trip.end_district_id || trip.to_district_id,
+          districts,
+          language,
+        );
+
+  const toQuarter = 
+    typeof trip.end_quarter === "string"
+      ? trip.end_quarter
+      : resolveLocationName(
+          trip.end_quarter,
+          trip.end_quarter_id || trip.to_quarter_id,
+          quarters,
+          language,
+        );
 
   const from = [fromRegion, fromDistrict, fromQuarter]
     .filter(Boolean)
@@ -200,7 +250,7 @@ const RideDetailsPage = () => {
   const to = [toRegion, toDistrict, toQuarter].filter(Boolean).join(", ");
 
   const driverName = trip.driver
-    ? `${trip.driver.first_name} ${trip.driver.last_name}`
+    ? `${trip.driver.name || trip.driver.first_name || ""} ${trip.driver.last_name || ""}`.trim()
     : "Driver";
 
   // Properly access localized color title if it's an object
@@ -378,8 +428,8 @@ const RideDetailsPage = () => {
                           </div>
                           <div>
                             <div className="font-black text-dark-text">
-                              {booking.user?.first_name}{" "}
-                              {booking.user?.last_name}
+                              {booking.user?.name || booking.user?.first_name || ""}{" "}
+                              {booking.user?.last_name || ""}
                             </div>
                             <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">
                               {booking.seats_booked} {rd("seats")} ·{" "}
@@ -434,13 +484,22 @@ const RideDetailsPage = () => {
                     {rd("editTrip")}
                   </Button>
                 </div>
-                <Button
-                  fullWidth
-                  variant="outline"
-                  className="text-error border-error/20 hover:bg-error/5"
-                >
-                  {rd("cancelTrip")}
-                </Button>
+                {canCancel && (
+                  <Button
+                    fullWidth
+                    variant="outline"
+                    className="text-error border-error/20 hover:bg-error/5"
+                    onClick={handleCancel}
+                    loading={isCanceling}
+                  >
+                    {rd("cancelTrip")}
+                  </Button>
+                )}
+                {!canCancel && isDriver && !isPast && String(trip.status) === "active" && (
+                   <p className="text-[10px] text-center text-gray-400 font-bold uppercase tracking-widest px-4">
+                     Cannot cancel trip less than 30 mins before departure
+                   </p>
+                )}
               </div>
             ) : (
               <div className="premium-card p-8 sticky top-28">
@@ -498,12 +557,14 @@ const RideDetailsPage = () => {
                 <Button
                   fullWidth
                   size="lg"
-                  disabled={Number(trip.available_seats) === 0}
+                  disabled={Number(trip.available_seats) === 0 || isPast}
                   onClick={() => setIsBookModalOpen(true)}
                 >
-                  {Number(trip.available_seats) === 0
-                    ? rd("fullyBooked")
-                    : rd("bookRide")}
+                  {isPast 
+                    ? (rd("pastTrip") || "Past Trip") 
+                    : Number(trip.available_seats) === 0
+                      ? rd("fullyBooked")
+                      : rd("bookRide")}
                 </Button>
 
                 <div className="mt-8 pt-8 border-t border-border space-y-4">

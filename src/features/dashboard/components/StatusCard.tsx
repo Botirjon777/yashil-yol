@@ -16,7 +16,7 @@ export function StatusCard({ title, status }: StatusCardProps) {
   const displayStatus = statusLabels[status] || status;
 
   return (
-    <div className="premium-card p-5 flex items-center justify-between">
+    <div className="premium-card p-2.5 lg:p-5 flex items-center justify-between">
       <div>
         <h4 className="text-sm font-bold text-gray-400 uppercase tracking-widest mb-1">{title}</h4>
         <p className="text-dark-text font-black capitalize">{displayStatus}</p>

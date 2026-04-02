@@ -22,7 +22,7 @@ export function BalanceSection({ balance, onTopUpClick, onAddCardClick }: Balanc
       <h1 className="text-3xl font-black text-dark-text mb-6">{t("dashboard", "balance")?.title}</h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="premium-card bg-linear-to-br from-primary to-primary-dark text-white p-10 border-none shadow-xl shadow-primary/30 relative overflow-hidden">
+        <div className="premium-card bg-linear-to-br from-primary to-primary-dark text-white p-5 lg:p-10 border-none shadow-xl shadow-primary/30 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
           <div className="relative z-10">
             <div className="text-indigo-100 font-bold uppercase tracking-widest text-xs mb-2">{t("dashboard", "balance")?.available}</div>
@@ -35,7 +35,7 @@ export function BalanceSection({ balance, onTopUpClick, onAddCardClick }: Balanc
           </div>
         </div>
 
-        <div className="premium-card p-8">
+        <div className="premium-card p-5 lg:p-8">
           <div className="flex items-center justify-between mb-8">
             <h3 className="font-black text-dark-text text-lg">{t("dashboard", "balance")?.savedCards}</h3>
             <button 
@@ -53,7 +53,7 @@ export function BalanceSection({ balance, onTopUpClick, onAddCardClick }: Balanc
               </div>
             ) : cards.length > 0 ? (
               cards.map((card) => (
-                <div key={card.id} className="flex items-center justify-between p-4 bg-light-bg rounded-2xl border border-border group/card">
+                <div key={card.id} className="flex items-center justify-between p-2.5 lg:p-4 bg-light-bg rounded-2xl border border-border group/card">
                   <div className="flex items-center space-x-4">
                     <div className="w-10 h-10 bg-white rounded-xl border border-border flex items-center justify-center text-primary group-hover/card:bg-primary group-hover/card:text-white transition-all">
                       <HiCreditCard className="w-5 h-5" />
