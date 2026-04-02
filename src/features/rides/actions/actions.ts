@@ -3,9 +3,12 @@ import { VehicleRequest, CarColor, Trip, TripSearchParams, Booking } from "../ty
 
 export interface PaginatedTrips {
   data: Trip[];
-  current_page: number;
-  last_page: number;
-  total: number;
+  meta: {
+    current_page: number;
+    last_page: number;
+    per_page?: number;
+    total: number;
+  };
 }
 
 /** POST /vehicles */
@@ -28,10 +31,24 @@ export const getCarColors = async (): Promise<CarColor[]> => {
 
 /** GET /public/trips — paginated list with less info */
 export const getPublicTrips = async (page = 1): Promise<PaginatedTrips> => {
-  const res = await api.get<PaginatedTrips>("public/trips", {
+  const res = await api.get<any>("public/trips", {
     params: { page },
   });
-  return res.data;
+  
+  // Handle the case where the API returns { data: [...], meta: {...} }
+  if (res.data?.meta) {
+    return res.data;
+  }
+  
+  // Fallback for older/different formats
+  return {
+    data: res.data?.data || [],
+    meta: {
+      current_page: res.data?.current_page || 1,
+      last_page: res.data?.last_page || 1,
+      total: res.data?.total || 0
+    }
+  };
 };
 
 /** GET /public/trips/view — full public list */
@@ -160,4 +177,10 @@ export const getClientBookings = async (): Promise<Booking[]> => {
 export const getClientBookingById = async (id: string | number): Promise<Booking> => {
   const res = await api.get<any>(`client/trips/booking/${id}`);
   return res.data?.data ?? res.data;
+};
+
+/** POST /driver/trips/delete-trip/:id — cancel trip (driver) */
+export const cancelTrip = async (id: string | number): Promise<{ status: string; message: string }> => {
+  const res = await api.post<{ status: string; message: string }>(`driver/trips/delete-trip/${id}`);
+  return res.data;
 };

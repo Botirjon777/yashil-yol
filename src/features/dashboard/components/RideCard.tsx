@@ -1,4 +1,4 @@
-import { HiTruck } from "react-icons/hi";
+import { HiTruck, HiX } from "react-icons/hi";
 import { formatCurrency, formatDate, cn } from "@/src/lib/utils";
 import Link from "next/link";
 import { Trip } from "@/src/features/rides/types";
@@ -10,6 +10,9 @@ import {
   useDistricts,
   useQuarters,
 } from "@/src/features/location/hooks/useLocation";
+import { useAuthStore } from "@/src/providers/AuthProvider";
+import { useCancelTrip } from "@/src/features/rides/hooks/useRides";
+import Button from "@/src/components/ui/Button";
 
 interface RideCardProps {
   ride: Trip;
@@ -17,6 +20,14 @@ interface RideCardProps {
 }
 
 export function RideCard({ ride, isHistory = false }: RideCardProps) {
+  const { user } = useAuthStore();
+  const { mutate: cancelTrip, isPending: isCanceling } = useCancelTrip();
+  
+  const isDriver = user?.id === ride.driver_id;
+  const departureDate = new Date(ride.start_time);
+  const diffInMinutes = (departureDate.getTime() - Date.now()) / (1000 * 60);
+  const canCancel = !isHistory && isDriver && diffInMinutes > 30;
+
   const { language, t } = useLanguageStore();
   const {
     regions,
@@ -119,49 +130,51 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
             <div className="w-3 h-3 rounded-full border-[3px] border-secondary bg-white shadow-sm shadow-secondary/20"></div>
           </div>
 
-          <div className="min-w-0 flex-1 space-y-4">
-            {/* Locations Timeline */}
-            <div className="space-y-4">
-              <div className="min-w-0">
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1 flex items-center">
-                  {t("rideDetails", "departure")}
-                  <span className="mx-2 w-1 h-1 rounded-full bg-gray-300"></span>
-                  <span className="normal-case tracking-normal">
-                    {new Date(ride.start_time).toLocaleTimeString([], {
-                      hour: "2-digit",
-                      minute: "2-digit",
-                    })}
-                  </span>
-                </div>
-                <div
-                  className="text-sm md:text-[15px] font-black text-dark-text leading-snug wrap-break-word"
-                  title={fullFrom}
-                >
-                  {fullFrom}
-                </div>
-              </div>
-
-              <div className="min-w-0">
-                <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1 flex items-center">
-                  {t("rideDetails", "destination")}
-                  <span className="mx-2 w-1 h-1 rounded-full bg-gray-300"></span>
-                  <span className="normal-case tracking-normal">
-                    {ride.end_time
-                      ? new Date(ride.end_time).toLocaleTimeString([], {
+              <div className="min-w-0 flex-1 space-y-4">
+                {/* Locations Timeline */}
+                <div className="space-y-4">
+                  <div className="min-w-0">
+                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1 flex items-center">
+                      {t("rideDetails", "departure")}
+                      <span className="mx-2 w-1 h-1 rounded-full bg-gray-300"></span>
+                      <span className="normal-case tracking-normal text-primary">
+                        {new Date(ride.start_time).toLocaleDateString([], { month: 'short', day: 'numeric' })}, {new Date(ride.start_time).toLocaleTimeString([], {
                           hour: "2-digit",
                           minute: "2-digit",
-                        })
-                      : "---"}
-                  </span>
+                        })}
+                      </span>
+                    </div>
+                    <div
+                      className="text-sm md:text-[15px] font-black text-dark-text leading-snug wrap-break-word"
+                      title={fullFrom}
+                    >
+                      {fullFrom}
+                    </div>
+                  </div>
+
+                  <div className="min-w-0">
+                    <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1 flex items-center">
+                      {t("rideDetails", "destination")}
+                      <span className="mx-2 w-1 h-1 rounded-full bg-gray-300"></span>
+                      <span className="normal-case tracking-normal text-secondary/70">
+                        {ride.end_time ? (
+                          <>
+                            {new Date(ride.end_time).toLocaleDateString([], { month: 'short', day: 'numeric' })}, {new Date(ride.end_time).toLocaleTimeString([], {
+                              hour: "2-digit",
+                              minute: "2-digit",
+                            })}
+                          </>
+                        ) : "---"}
+                      </span>
+                    </div>
+                    <div
+                      className="text-sm md:text-[15px] font-black text-dark-text leading-tight wrap-break-word"
+                      title={fullTo}
+                    >
+                      {fullTo}
+                    </div>
+                  </div>
                 </div>
-                <div
-                  className="text-sm md:text-[15px] font-black text-dark-text leading-tight wrap-break-word"
-                  title={fullTo}
-                >
-                  {fullTo}
-                </div>
-              </div>
-            </div>
 
             {/* Car Meta Info & Date */}
             <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-light-bg">
@@ -209,6 +222,23 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           >
             {t("status", ride.status) || ride.status}
           </div>
+          {canCancel && (
+            <Button
+              variant="danger"
+              size="sm"
+              onClick={(e) => {
+                e.preventDefault();
+                e.stopPropagation();
+                if (window.confirm("Are you sure you want to cancel this trip?")) {
+                  cancelTrip(ride.id);
+                }
+              }}
+              loading={isCanceling}
+              className="mt-1 shadow-md shadow-error/10"
+            >
+              Cancel Trip
+            </Button>
+          )}
         </div>
       </div>
     </Link>

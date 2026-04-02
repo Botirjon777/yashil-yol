@@ -12,8 +12,10 @@ export function DashboardNavItem({ icon, label, active, onClick }: DashboardNavI
   return (
     <button
       onClick={onClick}
-      className={`w-full flex items-center space-x-4 px-6 py-4 rounded-2xl font-bold transition-all ${
-        active ? "bg-white text-primary shadow-lg shadow-gray-200/50" : "text-gray-500 hover:bg-gray-100"
+      className={`w-full flex items-center space-x-3 px-3 py-2.5 rounded-md font-bold transition-all ${
+        active 
+          ? "bg-primary text-white shadow-md shadow-primary/20 scale-[1.02]" 
+          : "bg-gray-50/80 text-gray-500 hover:bg-gray-100/80 active:scale-95"
       }`}
     >
       <span className="text-xl">{icon}</span>

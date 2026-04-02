@@ -22,6 +22,7 @@ export function useDashboard() {
   const { data: balanceData } = useBalance();
 
   const [activeTab, setActiveTab] = useState<"rides" | "balance" | "profile" | "driver">("rides");
+  const [isSectionOpen, setIsSectionOpen] = useState(false);
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
   const [isAddVehicleOpen, setIsAddVehicleOpen] = useState(false);
@@ -43,6 +44,7 @@ export function useDashboard() {
   // Update localStorage when tab or rideType changes
   const handleTabChange = (tab: "rides" | "balance" | "profile" | "driver") => {
     setActiveTab(tab);
+    setIsSectionOpen(true);
     localStorage.setItem("dashboard_active_tab", tab);
   };
 
@@ -112,6 +114,8 @@ export function useDashboard() {
     balanceData,
     activeTab,
     handleTabChange,
+    isSectionOpen,
+    setIsSectionOpen,
     isTopUpOpen,
     setIsTopUpOpen,
     isAddCardOpen,

@@ -25,8 +25,8 @@ export function ProfileSection({
   const { t } = useLanguageStore();
 
   return (
-    <div className="premium-card p-10 animate-in fade-in slide-in-from-right-4 duration-300">
-      <div className="flex items-center justify-between mb-10">
+    <div className="premium-card p-5 lg:p-10 animate-in fade-in slide-in-from-right-4 duration-300">
+      <div className="flex items-center justify-between mb-5 lg:mb-10">
         <h1 className="text-3xl font-black text-dark-text">{t("dashboard", "profile")?.title}</h1>
         <span className={`px-4 py-1.5 rounded-full text-xs font-black uppercase tracking-widest ${user?.is_verified ? "bg-success/10 text-success" : "bg-warning/10 text-warning"}`}>
           {user?.is_verified ? t("dashboard", "profile")?.verified : t("dashboard", "profile")?.unverified}

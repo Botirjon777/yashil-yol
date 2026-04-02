@@ -163,7 +163,7 @@ const Calendar: React.FC<CalendarProps> = ({
           disabled={isPast}
           onClick={() => handleDateClick(d)}
           className={cn(
-            "h-10 w-10 rounded-xl flex items-center justify-center text-sm font-semibold transition-all",
+            "h-10 w-10 rounded-xl flex items-center justify-center text-sm font-medium transition-all",
             isSelected
               ? "bg-primary text-white shadow-lg shadow-primary/30"
               : "hover:bg-primary/10 text-dark-text",
@@ -182,7 +182,7 @@ const Calendar: React.FC<CalendarProps> = ({
   return (
     <div className={cn("w-full relative", className)} ref={calendarRef}>
       {label && (
-        <label className="block text-sm font-semibold text-dark-text mb-1.5 ml-1 leading-tight capitalize">
+        <label className="block text-xs font-bold text-gray-500 ml-1 mb-1 leading-tight capitalize">
           {label}
         </label>
       )}
@@ -191,7 +191,7 @@ const Calendar: React.FC<CalendarProps> = ({
         type="button"
         onClick={() => setIsOpen(!isOpen)}
         className={cn(
-          "w-full bg-white border border-border text-dark-text rounded-xl px-4 py-3 text-left flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-base",
+          "w-full bg-white border border-border text-dark-text rounded-xl px-4 py-2.5 text-left flex items-center transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm font-medium",
           isOpen && "border-primary ring-2 ring-primary/20",
           error && "border-error focus:ring-error/20 focus:border-error",
           !value && "text-gray-400",
@@ -213,7 +213,7 @@ const Calendar: React.FC<CalendarProps> = ({
       {isOpen && (
         <div className="absolute z-100 mt-2 bg-white border border-border rounded-2xl shadow-2xl p-4 w-[320px] animate-in fade-in zoom-in duration-200 left-0">
           <div className="flex items-center justify-between mb-4">
-            <h4 className="font-black text-dark-text">
+            <h4 className="font-bold text-dark-text">
               {monthNames[viewDate.getMonth()]} {viewDate.getFullYear()}
             </h4>
             <div className="flex space-x-1">
@@ -238,7 +238,7 @@ const Calendar: React.FC<CalendarProps> = ({
             {["Su", "Mo", "Tu", "We", "Th", "Fr", "Sa"].map((day) => (
               <div
                 key={day}
-                className="h-10 w-10 flex items-center justify-center text-[10px] font-black text-gray-400 uppercase tracking-widest"
+                className="h-10 w-10 flex items-center justify-center text-[10px] font-bold text-gray-400 uppercase tracking-widest"
               >
                 {day}
               </div>
@@ -250,7 +250,7 @@ const Calendar: React.FC<CalendarProps> = ({
           {showTime && (
             <div className="mt-4 pt-4 border-t border-border">
               <div className="flex items-center justify-between">
-                <span className="text-[10px] font-black uppercase tracking-widest text-gray-400">
+                <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400">
                   Time Selection
                 </span>
                 <div className="flex items-center space-x-2">
@@ -299,7 +299,7 @@ const Calendar: React.FC<CalendarProps> = ({
                 onChange(formatted);
                 setIsOpen(false);
               }}
-              className="text-primary text-xs font-black uppercase tracking-widest hover:underline"
+              className="text-primary text-[10px] font-bold uppercase tracking-widest hover:underline"
             >
               Now
             </button>
@@ -307,7 +307,7 @@ const Calendar: React.FC<CalendarProps> = ({
               type="button"
               onClick={() => setIsOpen(false)}
               className={cn(
-                "px-4 py-2 rounded-xl text-xs font-black uppercase tracking-widest transition-all",
+                "px-4 py-2 rounded-xl text-[10px] font-bold uppercase tracking-widest transition-all",
                 value
                   ? "bg-primary text-white shadow-lg shadow-primary/30"
                   : "bg-gray-100 text-gray-400",

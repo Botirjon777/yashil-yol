@@ -7,6 +7,7 @@ import Footer from "@/src/components/layout/Footer";
 import MobileNavbar from "@/src/components/layout/MobileNavbar";
 import MobileFooter from "@/src/components/layout/MobileFooter";
 import ScrollToTop from "@/src/components/ui/ScrollToTop";
+import PageTransition from "@/src/components/layout/PageTransition";
 
 const inter = Inter({
   subsets: ["latin"],

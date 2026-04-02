@@ -21,7 +21,7 @@ export function DriverStatusBanner({
     return (
       <div
         className={cn(
-          "premium-card p-6 flex items-center justify-between border-l-8 animate-in fade-in slide-in-from-top-4 duration-500",
+          "premium-card p-2.5 lg:p-5 flex items-center justify-between border-l-8 animate-in fade-in slide-in-from-top-4 duration-500",
           user.driving_verification_status === "pending" &&
             "border-warning bg-warning/5",
           user.driving_verification_status === "approved" &&
@@ -69,7 +69,7 @@ export function DriverStatusBanner({
   }
 
   return (
-    <div className="premium-card p-8 bg-linear-to-r from-accent/10 to-primary/10 border-accent/20 flex flex-col md:flex-row items-center justify-between gap-6">
+    <div className="premium-card p-5 lg:p-8 bg-linear-to-r from-accent/10 to-primary/10 border-accent/20 flex flex-col md:flex-row items-center justify-between gap-6">
       <div className="flex items-center space-x-5">
         <div className="w-14 h-14 bg-white rounded-2xl flex items-center justify-center text-3xl text-accent shadow-sm">
           <HiTruck />

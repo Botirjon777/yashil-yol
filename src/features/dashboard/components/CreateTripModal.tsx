@@ -92,7 +92,10 @@ export default function CreateTripModal({
       !formData.end_region_id ||
       !formData.vehicle_id
     ) {
-      toast.error(ct?.errors?.fillAll || "Please fill in all required fields including a vehicle");
+      toast.error(
+        ct?.errors?.fillAll ||
+          "Please fill in all required fields including a vehicle",
+      );
       return;
     }
 
@@ -156,7 +159,10 @@ export default function CreateTripModal({
       },
       onError: (err: any) => {
         toast.error(
-          err.response?.data?.message || err.message || ct?.errors?.failed || "Failed to create trip",
+          err.response?.data?.message ||
+            err.message ||
+            ct?.errors?.failed ||
+            "Failed to create trip",
         );
       },
     });
@@ -167,7 +173,13 @@ export default function CreateTripModal({
   };
 
   return (
-    <Modal isOpen={isOpen} onClose={onClose} title={ct?.title} size="lg">
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
+      title={ct?.title}
+      size="lg"
+      fullMobile
+    >
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
           <Calendar
