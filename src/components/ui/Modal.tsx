@@ -69,7 +69,9 @@ const Modal: React.FC<ModalProps> = ({
       <div
         className={cn(
           "absolute inset-0 bg-dark-text/40 transition-all duration-500 ease-out",
-          animate ? "opacity-100 backdrop-blur-sm" : "opacity-0 backdrop-blur-0",
+          animate
+            ? "opacity-100 backdrop-blur-sm"
+            : "opacity-0 backdrop-blur-0",
         )}
         onClick={onClose}
       />
@@ -79,18 +81,18 @@ const Modal: React.FC<ModalProps> = ({
         className={cn(
           "relative flex flex-col w-full bg-white shadow-2xl overflow-hidden transition-all duration-500 ease-[cubic-bezier(0.16,1,0.3,1)]",
           fullMobile
-            ? "h-full md:h-auto rounded-none md:rounded-[32px] md:max-h-[85vh]"
-            : "rounded-3xl max-h-[90vh]",
+            ? "h-full md:h-auto rounded-none md:rounded-md md:max-h-[85vh]"
+            : "max-h-[90vh]",
           // Desktop Animation: Scale + Fade
-          !fullMobile && (animate ? "opacity-100 scale-100" : "opacity-0 scale-95"),
+          !fullMobile &&
+            (animate ? "opacity-100 scale-100" : "opacity-0 scale-95"),
           // Mobile Animation: Slide Up
-          fullMobile && (animate ? "translate-y-0" : "translate-y-full md:translate-y-0"),
-          // Desktop fallback for mobile variant
           fullMobile &&
-            !animate &&
-            "md:opacity-0 md:scale-95 md:translate-y-0",
-          fullMobile && 
-            animate && 
+            (animate ? "translate-y-0" : "translate-y-full md:translate-y-0"),
+          // Desktop fallback for mobile variant
+          fullMobile && !animate && "md:opacity-0 md:scale-95 md:translate-y-0",
+          fullMobile &&
+            animate &&
             "md:opacity-100 md:scale-100 md:translate-y-0",
           sizes[size],
           className,

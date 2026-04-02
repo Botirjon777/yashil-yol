@@ -80,15 +80,21 @@ export function useDashboard() {
   const user = userData?.user || storedUser;
   const isDriver = user?.role === "driver";
 
-  const activeRides = rideType === "driver" ? driverActive : passengerActive;
+  const now = new Date();
+  const allActive = (rideType === "driver" ? driverActive : passengerActive) || [];
   
-  const historyRides = rideType === "driver" 
-    ? [...(driverCompleted || []), ...(driverCanceled || [])].sort((a, b) => 
-        new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
-      )
-    : [...(passengerCompleted || []), ...(passengerCanceled || [])].sort((a, b) => 
-        new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
-      );
+  // Filter out trips where departure time is in the past
+  const trulyActive = allActive.filter(ride => new Date(ride.start_time) >= now);
+  const autoArchived = allActive.filter(ride => new Date(ride.start_time) < now);
+  
+  const rawHistory = (rideType === "driver" 
+    ? [...(driverCompleted || []), ...(driverCanceled || [])]
+    : [...(passengerCompleted || []), ...(passengerCanceled || [])]) || [];
+
+  const activeRides = trulyActive;
+  const historyRides = [...rawHistory, ...autoArchived].sort((a, b) => 
+    new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
+  );
 
   useEffect(() => {
     if (user) {

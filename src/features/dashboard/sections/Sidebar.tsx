@@ -18,7 +18,7 @@ export function Sidebar({
   const { t } = useLanguageStore();
 
   return (
-    <div className="lg:col-span-1 space-y-3">
+    <div className="lg:col-span-1 space-y-2.5 bg-white p-2.5 lg:p-5 rounded-lg shadow-sm border border-border/50">
       <div className="flex items-center gap-3 px-1 mb-4">
         <div className="w-[25px] h-[25px] bg-primary text-white rounded-full flex items-center justify-center text-[10px] font-black shrink-0 overflow-hidden shadow-sm shadow-primary/20">
           {user?.image ? (

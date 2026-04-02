@@ -11,7 +11,6 @@ import AddCardModal from "./components/AddCardModal";
 import TopUpModal from "./components/TopUpModal";
 import AddVehicleModal from "./components/AddVehicleModal";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
-import { cn } from "@/src/lib/utils";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 
@@ -119,11 +118,11 @@ export default function DashboardFeature() {
   );
 
   return (
-    <div className="bg-light-bg min-h-screen py-4 lg:py-8 overflow-x-hidden">
+    <div className="bg-light-bg min-h-screen py-2.5 lg:py-5 overflow-x-hidden">
       <div className="max-w-7xl mx-auto px-2.5 lg:px-5 relative">
         {!isMobile ? (
           /* Desktop Layout - Totally Static */
-          <div className="grid grid-cols-4 gap-8">
+          <div className="grid grid-cols-4 gap-5">
             <div className="col-span-1">
               <Sidebar
                 user={user}
@@ -139,7 +138,11 @@ export default function DashboardFeature() {
           </div>
         ) : (
           /* Mobile Layout - Premium Framer Motion Transitions */
-          <AnimatePresence mode="popLayout" initial={false} custom={isSectionOpen}>
+          <AnimatePresence
+            mode="popLayout"
+            initial={false}
+            custom={isSectionOpen}
+          >
             {!isSectionOpen ? (
               <motion.div
                 key="sidebar"
@@ -176,7 +179,7 @@ export default function DashboardFeature() {
                 </button>
 
                 <DriverStatusBanner user={user} isDriver={isDriver} />
-                
+
                 <AnimatePresence mode="wait" initial={false} custom={direction}>
                   <motion.div
                     key={activeTab}

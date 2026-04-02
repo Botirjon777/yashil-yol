@@ -179,8 +179,10 @@ export const getClientBookingById = async (id: string | number): Promise<Booking
   return res.data?.data ?? res.data;
 };
 
-/** POST /driver/trips/delete-trip/:id — cancel trip (driver) */
+/** DELETE (via POST override) /driver/trips/cancel-trip/:id — cancel trip (driver) */
 export const cancelTrip = async (id: string | number): Promise<{ status: string; message: string }> => {
-  const res = await api.post<{ status: string; message: string }>(`driver/trips/delete-trip/${id}`);
+  const res = await api.post<{ status: string; message: string }>(`driver/trips/cancel-trip/${id}`, { 
+    _method: 'DELETE' 
+  });
   return res.data;
 };

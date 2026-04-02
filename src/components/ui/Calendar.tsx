@@ -12,6 +12,8 @@ interface CalendarProps {
   className?: string;
   error?: string;
   showTime?: boolean;
+  minDate?: Date;
+  maxDate?: Date;
 }
 
 const Calendar: React.FC<CalendarProps> = ({
@@ -22,6 +24,8 @@ const Calendar: React.FC<CalendarProps> = ({
   className,
   error,
   showTime = false,
+  minDate,
+  maxDate,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const [viewDate, setViewDate] = useState(() =>
@@ -154,13 +158,21 @@ const Calendar: React.FC<CalendarProps> = ({
         today.getMonth() === month &&
         today.getFullYear() === year;
 
-      const isPast = currentDayDate.getTime() < today.getTime();
+      const isTooPast = minDate 
+        ? currentDayDate.getTime() < new Date(minDate).setHours(0,0,0,0) 
+        : currentDayDate.getTime() < today.getTime();
+      
+      const isTooFuture = maxDate 
+        ? currentDayDate.getTime() > new Date(maxDate).setHours(23,59,59,999) 
+        : false;
+
+      const isDisabled = isTooPast || isTooFuture;
 
       days.push(
         <button
           key={d}
           type="button"
-          disabled={isPast}
+          disabled={isDisabled}
           onClick={() => handleDateClick(d)}
           className={cn(
             "h-10 w-10 rounded-xl flex items-center justify-center text-sm font-medium transition-all",
@@ -168,7 +180,7 @@ const Calendar: React.FC<CalendarProps> = ({
               ? "bg-primary text-white shadow-lg shadow-primary/30"
               : "hover:bg-primary/10 text-dark-text",
             isToday && !isSelected && "text-primary border border-primary/20",
-            isPast && "opacity-20 cursor-not-allowed hover:bg-transparent",
+            isDisabled && "opacity-20 cursor-not-allowed hover:bg-transparent",
           )}
         >
           {d}

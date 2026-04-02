@@ -1,10 +1,10 @@
-import { HiTruck, HiX } from "react-icons/hi";
+import { HiTruck, HiX, HiTrash, HiExclamation } from "react-icons/hi";
 import { formatCurrency, formatDate, cn } from "@/src/lib/utils";
 import Link from "next/link";
 import { Trip } from "@/src/features/rides/types";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { useLocationStore } from "@/src/providers/LocationStore";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   useRegions,
   useDistricts,
@@ -13,6 +13,7 @@ import {
 import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useCancelTrip } from "@/src/features/rides/hooks/useRides";
 import Button from "@/src/components/ui/Button";
+import Modal from "@/src/components/ui/Modal";
 
 interface RideCardProps {
   ride: Trip;
@@ -22,11 +23,26 @@ interface RideCardProps {
 export function RideCard({ ride, isHistory = false }: RideCardProps) {
   const { user } = useAuthStore();
   const { mutate: cancelTrip, isPending: isCanceling } = useCancelTrip();
+  const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
   
-  const isDriver = user?.id === ride.driver_id;
+  // Loose check for driver ownership to handle different API schemas
+  const isDriver = user?.id != null && (
+    String(user.id) === String(ride.driver_id) || 
+    String(user.id) === String((ride as any).user_id) ||
+    String(user.id) === String(ride.driver?.id)
+  );
   const departureDate = new Date(ride.start_time);
   const diffInMinutes = (departureDate.getTime() - Date.now()) / (1000 * 60);
-  const canCancel = !isHistory && isDriver && diffInMinutes > 30;
+  
+  const hasBookings = (ride.bookings?.length || 0) > 0;
+  const isTooLate = diffInMinutes < 120 && diffInMinutes > 0;
+  
+  const canCancel = !isHistory && isDriver && !hasBookings && !isTooLate;
+  const cannotCancelReason = hasBookings 
+    ? "Has Bookings" 
+    : isTooLate 
+      ? "Under 2 Hours" 
+      : null;
 
   const { language, t } = useLanguageStore();
   const {
@@ -108,8 +124,15 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
   const price = ride.price_per_seat || 0;
 
   return (
-    <Link href={`/rides/${ride.id}`}>
-      <div className="premium-card p-6 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 group hover:border-primary transition-all cursor-pointer active:scale-[0.99] bg-white overflow-hidden relative">
+    <div className="relative group">
+      {/* Absolute Overlay Link for the whole card area */}
+      <Link 
+        href={`/rides/${ride.id}`} 
+        className="absolute inset-0 z-10"
+        aria-label="View ride details"
+      />
+
+      <div className="premium-card p-6 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 group hover:border-primary transition-all bg-white overflow-hidden relative">
         {/* Status indicator line */}
         <div
           className={cn(
@@ -199,7 +222,8 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           </div>
         </div>
 
-        <div className="flex md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 md:border-l border-border pt-6 md:pt-0 md:pl-10 shrink-0 space-y-1 gap-4">
+        {/* Action Panel - Lifted to z-20 to override the overlay link */}
+        <div className="relative z-20 flex md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 md:border-l border-border pt-6 md:pt-0 md:pl-10 shrink-0 space-y-1 gap-4">
           <div className="text-center md:text-right">
             <div className="text-2xl font-black text-primary">
               {formatCurrency(Number(price))}
@@ -222,25 +246,81 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           >
             {t("status", ride.status) || ride.status}
           </div>
-          {canCancel && (
-            <Button
-              variant="danger"
-              size="sm"
-              onClick={(e) => {
-                e.preventDefault();
-                e.stopPropagation();
-                if (window.confirm("Are you sure you want to cancel this trip?")) {
-                  cancelTrip(ride.id);
-                }
-              }}
-              loading={isCanceling}
-              className="mt-1 shadow-md shadow-error/10"
-            >
-              Cancel Trip
-            </Button>
+          {isDriver && String(ride.status) === "active" && (
+            <div className="flex flex-col items-center">
+              <Button
+                variant={canCancel ? "danger" : "outline"}
+                size="sm"
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  if (canCancel) {
+                    setIsDeleteModalOpen(true);
+                  }
+                }}
+                disabled={!canCancel}
+                className={cn(
+                  "mt-1 shadow-md font-black uppercase text-[10px] tracking-widest min-w-[120px]",
+                  canCancel ? "shadow-error/10" : "opacity-60 cursor-not-allowed bg-gray-50 border-gray-200 text-gray-400"
+                )}
+                icon={canCancel ? <HiTrash className="w-3.5 h-3.5" /> : <HiExclamation className="w-3.5 h-3.5" />}
+              >
+                {cannotCancelReason || "Delete Ride"}
+              </Button>
+            </div>
           )}
         </div>
       </div>
-    </Link>
+
+      <Modal
+        isOpen={isDeleteModalOpen}
+        onClose={() => setIsDeleteModalOpen(false)}
+        title="Delete Ride"
+        size="md"
+      >
+        <div className="p-1 space-y-6">
+          <div className="flex items-center gap-4 p-4 bg-error/5 rounded-2xl border border-error/10">
+            <div className="w-12 h-12 rounded-full bg-error/10 flex items-center justify-center shrink-0">
+              <HiTrash className="w-6 h-6 text-error" />
+            </div>
+            <div>
+              <h3 className="font-black text-dark-text leading-tight">Are you absolutely sure?</h3>
+              <p className="text-sm text-gray-500 mt-1">This action cannot be undone. This trip will be removed from future searches.</p>
+            </div>
+          </div>
+
+          <div className="space-y-4">
+            <div className="p-4 bg-light-bg rounded-2xl border border-border/40">
+              <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">Ride Summary</div>
+              <div className="text-sm font-bold text-dark-text truncate">{fullFrom}</div>
+              <div className="text-[10px] text-gray-500 mt-1">Departure: {new Date(ride.start_time).toLocaleString()}</div>
+            </div>
+          </div>
+
+          <div className="flex gap-3 pt-2">
+            <Button
+              variant="outline"
+              className="flex-1"
+              onClick={() => setIsDeleteModalOpen(false)}
+            >
+              Cancel
+            </Button>
+            <Button
+              variant="danger"
+              className="flex-1"
+              loading={isCanceling}
+              onClick={() => {
+                cancelTrip(ride.id, {
+                  onSuccess: () => setIsDeleteModalOpen(false),
+                });
+              }}
+              icon={<HiTrash className="w-4 h-4" />}
+            >
+              Confirm Delete
+            </Button>
+          </div>
+        </div>
+      </Modal>
+    </div>
   );
 }
