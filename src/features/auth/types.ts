@@ -79,7 +79,11 @@ export interface AuthUser {
   has_passport?: boolean;
   language?: string;
   balance?: {
-    balance: string; // Backend decimal
+    balance: string; // decimal from backend
+    after_tax?: string | null;
+    tax?: string;
+    locked_balance?: string;
+    currency: string;
   };
   vehicles?: {
     id: number;

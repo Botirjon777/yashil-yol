@@ -18,8 +18,7 @@ import { cn, formatCurrency } from "@/src/lib/utils";
 import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { translations } from "@/src/lib/i18n/translations";
-import { useLogout } from "@/src/features/auth/hooks/useAuth";
-import { useBalance } from "@/src/features/payment/hooks/usePayment";
+import { useLogout, useMe } from "@/src/features/auth/hooks/useAuth";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
 
@@ -100,12 +99,14 @@ const itemVariants = {
 };
 
 const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
-  const { user, logout, _hasHydrated } = useAuthStore();
+  const { user: storedUser, token, logout, _hasHydrated } = useAuthStore();
   const { language, setLanguage, t } = useLanguageStore();
   const { mutate: logoutMutation } = useLogout();
   const [mounted, setMounted] = useState(false);
-  const { data: balanceData } = useBalance();
-  const balance = balanceData?.balance ? parseFloat(balanceData.balance) : 0;
+  
+  const { data: meData } = useMe(!!token);
+  const user = meData?.user || storedUser;
+  const balance = user?.balance?.balance ? parseFloat(user.balance.balance) : 0;
   const pathname = usePathname();
 
   useEffect(() => {

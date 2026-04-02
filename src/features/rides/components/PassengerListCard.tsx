@@ -17,27 +17,29 @@ export const PassengerListCard: React.FC<PassengerListCardProps> = ({ trip, rd, 
       </h3>
       {trip.bookings && trip.bookings.length > 0 ? (
         <div className="space-y-4">
-          {trip.bookings.map((booking: any) => (
+          {trip.bookings.flatMap((booking: any) => 
+            (booking.passengers || []).map((p: any) => ({ ...p, bookingId: booking.id }))
+          ).map((passenger: any, index: number) => (
             <div
-              key={booking.id}
+              key={`${passenger.bookingId}-${index}`}
               className="flex items-center justify-between p-4 bg-light-bg rounded-2xl border border-border group hover:border-primary transition-all"
             >
               <div className="flex items-center space-x-4">
                 <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-primary font-black border border-border">
-                  {booking.user?.first_name?.charAt(0) || "P"}
+                  {passenger.name?.charAt(0) || "P"}
                 </div>
                 <div>
                   <div className="font-black text-dark-text">
-                    {booking.user?.name || booking.user?.first_name || ""} {booking.user?.last_name || ""}
+                    {passenger.name}
                   </div>
                   <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                    {booking.seats_booked} {rd("seats")} · {booking.status}
+                    {passenger.phone}
                   </div>
                 </div>
               </div>
-              {isDriver && booking.user?.phone && (
+              {isDriver && passenger.phone && (
                 <a
-                  href={`tel:${booking.user.phone}`}
+                  href={`tel:${passenger.phone}`}
                   className="p-3 bg-white text-primary rounded-xl border border-border hover:bg-primary hover:text-white transition-all shadow-xs"
                 >
                   <HiPhone className="w-5 h-5" />

@@ -16,8 +16,7 @@ import {
 import { formatCurrency, cn } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import { useAuthStore } from "@/src/providers/AuthProvider";
-import { useLogout } from "@/src/features/auth/hooks/useAuth";
-import { useBalance } from "@/src/features/payment/hooks/usePayment";
+import { useLogout, useMe } from "@/src/features/auth/hooks/useAuth";
 import { toast } from "sonner";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { translations } from "@/src/lib/i18n/translations";
@@ -31,11 +30,13 @@ const languageConfig = {
 const Navbar = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [mounted, setMounted] = useState(false);
-  const { user, logout, _hasHydrated } = useAuthStore();
+  const { user: storedUser, token, logout, _hasHydrated } = useAuthStore();
   const { language, setLanguage, t } = useLanguageStore();
   const { mutate: logoutMutation } = useLogout();
-  const { data: balanceData } = useBalance();
-  const balance = balanceData?.balance ? parseFloat(balanceData.balance) : 0;
+  
+  const { data: meData } = useMe(!!token);
+  const user = meData?.user || storedUser;
+  const balance = user?.balance?.balance ? parseFloat(user.balance.balance) : 0;
 
   const safeT = (category: any, key: any) => {
     if (!mounted) {

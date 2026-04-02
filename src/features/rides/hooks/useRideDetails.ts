@@ -15,11 +15,15 @@ import {
 import {
   useTripById,
   useDriverTripById,
+  useClientBookingById,
   useBookTrip,
   useCancelTrip,
+  useCancelClientBooking,
+  handleError,
 } from "@/src/features/rides/hooks/useRides";
+import { useCarColors } from "@/src/features/rides/hooks/useVehicles";
 
-export function useRideDetails(tripId: string) {
+export function useRideDetails(id: string, mode?: "driver" | "public" | "passenger") {
   const router = useRouter();
   const { token, user: storedUser } = useAuthStore();
   const { language, t } = useLanguageStore();
@@ -50,24 +54,84 @@ export function useRideDetails(tripId: string) {
   const user = meData?.user || storedUser;
 
   // Data fetching
-  const { data: publicTrip, isLoading: isPublicLoading } = useTripById(tripId);
-  const isDriver = useMemo(() => {
+  const { data: publicTrip, isLoading: isPublicLoading } = useTripById(
+    mode === "public" ? id : null
+  );
+  
+  const isDriverFromPublic = useMemo(() => {
     if (!publicTrip || !user) return false;
     return Number(publicTrip.driver_id) === Number(user.id);
   }, [publicTrip, user]);
 
+  // If explicit mode is driver, or we're guessing it's a driver
+  const isDriver = mode === "driver" || (mode === "public" && isDriverFromPublic);
+
   const { data: driverTrip, isLoading: isDriverLoading } = useDriverTripById(
-    isDriver ? tripId : null,
+    isDriver ? id : null,
   );
 
-  const trip = isDriver ? driverTrip : publicTrip;
-  const isLoading = isPublicLoading || (isDriver && isDriverLoading);
+  const { data: bookingData, isLoading: isBookingLoading, error: bookingError } = useClientBookingById(
+    mode === "passenger" ? id : null
+  );
+
+  const trip = mode === "passenger" 
+    ? bookingData?.trip 
+    : (isDriver ? driverTrip : publicTrip);
+
+  const isLoading = isPublicLoading || (isDriver && isDriverLoading) || (mode === "passenger" && isBookingLoading);
+
+  useEffect(() => {
+    if (mode === "passenger") {
+      console.log("useRideDetails [passenger] debug:", {
+        id,
+        bookingData,
+        isBookingLoading,
+        bookingError,
+        tripExists: !!trip
+      });
+    }
+  }, [id, mode, bookingData, isBookingLoading, bookingError, trip]);
+
+
+  const { mutate: bookTrip, isPending: isBooking } = useBookTrip();
+  const { mutate: cancelTrip, isPending: isCanceling } = useCancelTrip();
+  const { mutate: cancelBooking, isPending: isCancelingBooking } = useCancelClientBooking();
 
   // States
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   const [numSeats, setNumSeats] = useState(1);
-  const { mutate: bookTrip, isPending: isBooking } = useBookTrip();
-  const { mutate: cancelTrip, isPending: isCanceling } = useCancelTrip();
+  const [passengers, setPassengers] = useState<{ name: string; phone: string }[]>([]);
+
+  // Sync passengers array with numSeats
+  useEffect(() => {
+    setPassengers((prev) => {
+      const next = [...prev];
+      if (next.length < numSeats) {
+        for (let i = next.length; i < numSeats; i++) {
+          // Prefill first passenger with user info if available
+          if (i === 0 && user) {
+            next.push({ 
+              name: `${user.first_name || ""} ${user.last_name || ""}`.trim() || "", 
+              phone: user.phone || "" 
+            });
+          } else {
+            next.push({ name: "", phone: "" });
+          }
+        }
+      } else if (next.length > numSeats) {
+        return next.slice(0, numSeats);
+      }
+      return next;
+    });
+  }, [numSeats, user]);
+
+  const updatePassenger = (index: number, field: "name" | "phone", value: string) => {
+    setPassengers((prev) => {
+      const next = [...prev];
+      next[index] = { ...next[index], [field]: value };
+      return next;
+    });
+  };
 
   // Computations
   const isPast = useMemo(() => {
@@ -76,10 +140,18 @@ export function useRideDetails(tripId: string) {
   }, [trip]);
 
   const canCancel = useMemo(() => {
-    if (!trip || !isDriver || isPast) return false;
+    if (!trip || isPast) return false;
+    
+    // For passengers, checking booking status is important
+    if (mode === "passenger") {
+      return bookingData?.status === "confirmed" || bookingData?.status === "pending" || bookingData?.status === "active";
+    }
+
+    if (!isDriver) return false;
+    
     const diffInMinutes = (new Date(trip.start_time).getTime() - Date.now()) / (1000 * 60);
-    return diffInMinutes > 30;
-  }, [trip, isDriver, isPast]);
+    return diffInMinutes > 240; // Example: 4 hours
+  }, [trip, isDriver, isPast, mode, bookingData]);
 
   const from = useMemo(() => {
     if (!trip) return "";
@@ -101,34 +173,76 @@ export function useRideDetails(tripId: string) {
     ? `${trip.driver.name || trip.driver.first_name || ""} ${trip.driver.last_name || ""}`.trim()
     : "Driver";
 
+  const { data: allColors } = useCarColors();
+
   const carColor = useMemo(() => {
     if (!trip?.vehicle) return "Classic";
     const color = trip.vehicle.color;
+    
+    // If it's just { id: 5 }
+    if (color && typeof color === "object" && color.id && !((color as any).title_uz || (color as any).name)) {
+      const found = allColors?.find(c => String(c.id) === String(color.id));
+      if (found) {
+        return found[`title_${language}` as keyof typeof found] || found.title_uz || found.name || "Classic";
+      }
+    }
+
     return typeof color === "object" && color !== null
       ? (color as any)[`title_${language}`] || (color as any).title_uz || (color as any).name
       : color || "Classic";
-  }, [trip, language]);
+  }, [trip, language, allColors]);
 
   // Handlers
   const handleCancel = () => {
-    if (window.confirm("Are you sure you want to cancel this trip?")) {
-      cancelTrip(tripId, {
-        onSuccess: () => router.push("/dashboard"),
-      });
+    const message = mode === "passenger" 
+      ? "Are you sure you want to cancel your booking? Your balance will be returned."
+      : "Are you sure you want to cancel this trip?";
+
+    if (window.confirm(message)) {
+      if (mode === "passenger") {
+        cancelBooking(id, {
+          onSuccess: () => {
+            toast.success("Booking cancelled successfully");
+            router.push("/dashboard");
+          },
+          onError: (err: any) => toast.error(handleError(err)),
+        });
+      } else {
+        cancelTrip(id, {
+          onSuccess: () => {
+            toast.success("Trip cancelled successfully");
+            router.push("/dashboard");
+          },
+          onError: (err: any) => toast.error(handleError(err)),
+        });
+      }
     }
   };
 
-  const handleBook = () => {
+  const handleBook = (paymentMethod: string = "balance") => {
     if (!token) {
       toast.error(rd("loginRequired") || "Please login to book a ride");
-      router.push(`/auth/login?returnTo=/rides/${tripId}`);
+      router.push(`/auth/login?returnTo=/rides/${id}`);
+      return;
+    }
+
+    if (isDriver) {
+      toast.error("Drivers cannot book their own rides");
       return;
     }
 
     if (!trip) return;
 
+    // Validate passengers
+    for (let i = 0; i < passengers.length; i++) {
+      if (!passengers[i].name.trim() || !passengers[i].phone.trim()) {
+        toast.error(`Please provide name and phone for passenger ${i + 1}`);
+        return;
+      }
+    }
+
     bookTrip(
-      { trip_id: trip.id, seats_booked: numSeats },
+      { trip_id: trip.id, passengers, payment_method: paymentMethod },
       {
         onSuccess: () => {
           toast.success(rd("bookingSuccess") || "Ride booked successfully!");
@@ -136,7 +250,7 @@ export function useRideDetails(tripId: string) {
           router.push("/dashboard");
         },
         onError: (err: any) => {
-          toast.error(err.response?.data?.message || "Failed to book ride");
+          toast.error(handleError(err));
         },
       },
     );
@@ -154,10 +268,16 @@ export function useRideDetails(tripId: string) {
     carColor,
     numSeats,
     setNumSeats,
+    passengers,
+    updatePassenger,
     isBookModalOpen,
     setIsBookModalOpen,
     isBooking,
-    isCanceling,
+    isCanceling: isCanceling || isCancelingBooking,
+    bookingStatus: bookingData?.status,
+    bookingPassengers: bookingData?.passengers || [],
+    totalPrice: bookingData?.total_price,
+    bookingId: id,
     handleBook,
     handleCancel,
     t,

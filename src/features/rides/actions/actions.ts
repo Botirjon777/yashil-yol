@@ -161,9 +161,9 @@ export const createTrip = async (data: any): Promise<{ status: string; message: 
   return res.data;
 };
 
-/** POST /client/bookings */
-export const bookTrip = async (data: { trip_id: number | string; seats_booked: number }): Promise<any> => {
-  const res = await api.post("client/bookings", data);
+/** POST /client/booking */
+export const bookTrip = async (data: { trip_id: number | string; seats_booked?: number; passengers?: { name: string; phone: string }[]; payment_method?: string }): Promise<any> => {
+  const res = await api.post("client/booking", data);
   return res.data;
 };
 
@@ -177,6 +177,24 @@ export const getClientBookings = async (): Promise<Booking[]> => {
 export const getClientBookingById = async (id: string | number): Promise<Booking> => {
   const res = await api.get<any>(`client/trips/booking/${id}`);
   return res.data?.data ?? res.data;
+};
+
+/** DELETE /client/booking/cancel/:id — cancel booking (client) */
+export const cancelClientBooking = async (id: string | number): Promise<{ status: string; message: string }> => {
+  const res = await api.delete<{ status: string; message: string }>(`client/booking/cancel/${id}`);
+  return res.data;
+};
+
+/** POST /client/booking/:id/add-passenger */
+export const addPassengerToBooking = async (bookingId: string | number, data: { name: string; phone: string }): Promise<any> => {
+  const res = await api.post(`client/booking/${bookingId}/add-passenger`, data);
+  return res.data;
+};
+
+/** POST /client/booking/:id/remove-passenger/:passengerId */
+export const removePassengerFromBooking = async (bookingId: string | number, passengerId: string | number): Promise<any> => {
+  const res = await api.post(`client/booking/${bookingId}/remove-passenger/${passengerId}`);
+  return res.data;
 };
 
 /** DELETE (via POST override) /driver/trips/cancel-trip/:id — cancel trip (driver) */

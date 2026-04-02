@@ -1,11 +1,11 @@
-import { HiUser, HiCreditCard, HiStar, HiIdentification } from "react-icons/hi";
+import { HiUser, HiCreditCard, HiStar, HiIdentification, HiOutlineDocumentText } from "react-icons/hi";
 import { DashboardNavItem } from "../components/DashboardNavItem";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 interface SidebarProps {
   user: any;
-  activeTab: "rides" | "balance" | "profile" | "driver";
-  handleTabChange: (tab: "rides" | "balance" | "profile" | "driver") => void;
+  activeTab: "rides" | "balance" | "transactions" | "profile" | "driver";
+  handleTabChange: (tab: "rides" | "balance" | "transactions" | "profile" | "driver") => void;
   isDriver: boolean;
 }
 
@@ -55,6 +55,12 @@ export function Sidebar({
           label={t("dashboard", "sidebar")?.balance}
           active={activeTab === "balance"}
           onClick={() => handleTabChange("balance")}
+        />
+        <DashboardNavItem
+          icon={<HiOutlineDocumentText />}
+          label={t("nav", "transactions") || "Transactions"}
+          active={activeTab === "transactions"}
+          onClick={() => handleTabChange("transactions")}
         />
         <DashboardNavItem
           icon={<HiUser />}

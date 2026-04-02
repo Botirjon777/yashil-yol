@@ -17,6 +17,9 @@ import {
   getClientBookings,
   getClientBookingById,
   cancelTrip,
+  cancelClientBooking,
+  addPassengerToBooking,
+  removePassengerFromBooking,
 } from "../actions/actions";
 import { Trip, TripSearchParams, CreateTripRequest, Booking } from "../types";
 import { PaginatedTrips } from "../actions/actions";
@@ -118,7 +121,7 @@ export const useCreateTrip = () => {
 export const useBookTrip = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (data: { trip_id: number | string; seats_booked: number }) => bookTrip(data),
+    mutationFn: (data: { trip_id: number | string; seats_booked?: number; passengers?: { name: string; phone: string }[]; payment_method?: string }) => bookTrip(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["client-trips"] });
       queryClient.invalidateQueries({ queryKey: ["trip"] });
@@ -142,7 +145,52 @@ export const useCancelTrip = () => {
       toast.success("Trip canceled successfully");
     },
     onError: (err: any) => {
-      toast.error(err.message || "Failed to cancel trip");
+      toast.error(handleError(err));
+    },
+  });
+};
+
+export const useCancelClientBooking = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string | number) => cancelClientBooking(id),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["client-trips"] });
+      queryClient.invalidateQueries({ queryKey: ["trip"] });
+      toast.success("Booking canceled successfully");
+    },
+    onError: (err: any) => {
+      toast.error(handleError(err));
+    },
+  });
+};
+
+export const useAddPassenger = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ bookingId, data }: { bookingId: string | number; data: { name: string; phone: string } }) =>
+      addPassengerToBooking(bookingId, data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["trip"] });
+      toast.success("Passenger added successfully");
+    },
+    onError: (err: any) => {
+      toast.error(handleError(err));
+    },
+  });
+};
+
+export const useRemovePassenger = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({ bookingId, passengerId }: { bookingId: string | number; passengerId: string | number }) =>
+      removePassengerFromBooking(bookingId, passengerId),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["trip"] });
+      toast.success("Passenger removed successfully");
+    },
+    onError: (err: any) => {
+      toast.error(handleError(err));
     },
   });
 };
@@ -153,3 +201,36 @@ export const useClientBookingById = (id: string | number | null) =>
     queryFn: () => getClientBookingById(id!),
     enabled: id !== null && id !== undefined,
   });
+
+/** Helper to handle messy API error responses (to prevent React object child error) */
+export const handleError = (err: any): string => {
+  const data = err.response?.data;
+  if (!data) return err.message || "An unexpected error occurred";
+
+  // Case 1: Simple message string
+  if (typeof data.message === "string") return data.message;
+
+  // Case 2: Validation errors nested in .errors
+  if (typeof data.errors === "object" && data.errors !== null) {
+    const firstError = Object.values(data.errors)[0];
+    if (Array.isArray(firstError)) return firstError[0];
+    if (typeof firstError === "string") return firstError;
+  }
+
+  // Case 3: Top-level dictionary of errors (like {"field": ["error"]})
+  if (typeof data === "object" && data !== null) {
+    const values = Object.values(data);
+    if (values.length > 0) {
+      const firstValue = values[0];
+      if (Array.isArray(firstValue)) return firstValue[0];
+      if (typeof firstValue === "string") return firstValue;
+    }
+  }
+
+  // Fallback to stringifying if it's still an object
+  if (typeof data.message === "object") {
+    return JSON.stringify(data.message);
+  }
+
+  return data.message || err.message || "An unexpected error occurred";
+};

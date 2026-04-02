@@ -91,9 +91,10 @@ export interface Booking {
   user_id: number;
   seats_booked: number;
   total_price: string;
-  status: "pending" | "confirmed" | "canceled" | string;
+  status: "pending" | "confirmed" | "canceled" | "active" | string;
   created_at: string;
   trip?: Trip;
+  passengers?: { name: string; phone: string; id?: number }[];
 }
 
 export interface TripSearchParams {
