@@ -15,7 +15,7 @@ import {
 import Loader from "@/src/components/ui/Loader";
 import Button from "@/src/components/ui/Button";
 
-const RideDetailsPage = () => {
+const DriverRideDetailsPage = () => {
   const params = useParams();
   const tripId = params.id as string;
   
@@ -40,14 +40,14 @@ const RideDetailsPage = () => {
     handleBook,
     handleCancel,
     rd,
-  } = useRideDetails(tripId, "public");
+  } = useRideDetails(tripId, "driver");
 
   if (isLoading) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center bg-light-bg">
         <Loader size="lg" />
         <p className="mt-4 text-gray-500 font-bold animate-pulse">
-          Fetching trip details...
+          Fetching your trip details...
         </p>
       </div>
     );
@@ -62,26 +62,28 @@ const RideDetailsPage = () => {
           </div>
           <h1 className="text-2xl font-black mb-2">Trip Not Found</h1>
           <p className="text-gray-500 font-medium mb-8">
-            This ride may have been cancelled or does not exist.
+            This trip could not be found in your records.
           </p>
-          <Link href="/rides" className="w-full">
-            <Button fullWidth>Back to Search</Button>
+          <Link href="/dashboard" className="w-full">
+            <Button fullWidth>Back to Dashboard</Button>
           </Link>
         </div>
       </div>
     );
   }
 
+  console.log("DriverRideDetailsPage - Trip Data:", trip);
+
   return (
     <div className="bg-light-bg min-h-screen py-8 md:py-12 pb-24">
       <div className="max-w-5xl mx-auto px-4">
         {/* Back Link */}
         <Link
-          href={isDriver ? "/dashboard" : "/rides"}
+          href="/dashboard"
           className="inline-flex items-center text-gray-500 font-bold hover:text-primary transition-colors mb-8"
         >
           <HiChevronLeft className="mr-1 w-5 h-5" />{" "}
-          {isDriver ? rd("backToDashboard") : rd("backToResults")}
+          {rd("backToDashboard")}
         </Link>
 
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
@@ -99,7 +101,7 @@ const RideDetailsPage = () => {
               rd={rd} 
             />
 
-            {/* Passengers Section - Visible to all participants */}
+            {/* Passengers Section */}
             {trip.bookings && trip.bookings.length > 0 && (
               <PassengerListCard trip={trip} rd={rd} isDriver={isDriver} />
             )}
@@ -123,23 +125,8 @@ const RideDetailsPage = () => {
           </div>
         </div>
       </div>
-
-      {/* Booking Modal */}
-      <BookingModal 
-        isOpen={isBookModalOpen}
-        onClose={() => setIsBookModalOpen(false)}
-        trip={trip}
-        from={from}
-        to={to}
-        numSeats={numSeats}
-        passengers={passengers}
-        updatePassenger={updatePassenger}
-        isBooking={isBooking}
-        handleBook={handleBook}
-        rd={rd}
-      />
     </div>
   );
 };
 
-export default RideDetailsPage;
+export default DriverRideDetailsPage;

@@ -13,7 +13,8 @@
     "becomeDriver": "Haydovchi bo'lish",
     "menu": "Menyu",
     "services": "Xizmatlar",
-    "language": "Til"
+    "language": "Til",
+    "transactions": "Tranzaksiyalar"
   },
   "hero": {
     "title": "Sayohatingiz uchun eng yaxshi hamroh",
@@ -199,6 +200,7 @@
       "myRides": "Mening safarlarim",
       "balance": "Balans va kartalar",
       "profile": "Profil sozlamalari",
+      "transactions": "Tranzaksiyalar tarixi",
       "driverProfile": "Haydovchi profili",
       "traveler": "Yo'lovchi",
       "driver": "Haydovchi"
@@ -223,6 +225,23 @@
       "addNew": "Yangi qo'shish",
       "noCards": "Hozircha kartalar ulanmagan.",
       "deleteCard": "Kartani o'chirish"
+    },
+    "transactions": {
+      "title": "Tranzaksiyalar tarixi",
+      "downloadFull": "To'liq hisobotni yuklash",
+      "date": "Sana",
+      "type": "Turi",
+      "description": "Tavsif",
+      "amount": "Summa",
+      "pdf": "PDF",
+      "income": "Kirim",
+      "outcome": "Chiqim",
+      "noTransactions": "Tranzaksiyalar topilmadi",
+      "startActivity": "Faoliyatni ko'rish uchun hisobingizdan foydalanishni boshlang",
+      "downloadSuccess": "Hisobot muvaffaqiyatli yuklab olindi",
+      "downloadError": "Hisobotni yuklab olishda xatolik yuz berdi",
+      "receiptSuccess": "Kvitansiya muvaffaqiyatli yuklab olindi",
+      "receiptError": "Kvitansiyani yuklab olishda xatolik yuz berdi"
     },
     "profile": {
       "title": "Hisob sozlamalari",

@@ -13,7 +13,8 @@
     "becomeDriver": "Become a Driver",
     "menu": "Menu",
     "services": "Services",
-    "language": "Language"
+    "language": "Language",
+    "transactions": "Transactions"
   },
   "hero": {
     "title": "Your best companion for your journey",
@@ -199,6 +200,7 @@
       "myRides": "My Rides",
       "balance": "Balance & Cards",
       "profile": "Profile Settings",
+      "transactions": "Transaction History",
       "driverProfile": "Driver Profile",
       "traveler": "Passenger",
       "driver": "Driver"
@@ -223,6 +225,23 @@
       "addNew": "Add New",
       "noCards": "No cards connected yet.",
       "deleteCard": "Delete card"
+    },
+    "transactions": {
+      "title": "Transaction History",
+      "downloadFull": "Download Full Report",
+      "date": "Date",
+      "type": "Type",
+      "description": "Description",
+      "amount": "Amount",
+      "pdf": "PDF",
+      "income": "Income",
+      "outcome": "Outcome",
+      "noTransactions": "No transactions found",
+      "startActivity": "Start using your account to see activity",
+      "downloadSuccess": "Report downloaded successfully",
+      "downloadError": "Failed to download report",
+      "receiptSuccess": "Receipt downloaded successfully",
+      "receiptError": "Failed to download receipt"
     },
     "profile": {
       "title": "Account Settings",

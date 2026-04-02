@@ -127,15 +127,23 @@ export const BookingSidebar: React.FC<BookingSidebarProps> = ({
       <Button
         fullWidth
         size="lg"
-        disabled={Number(trip.available_seats) === 0 || isPast}
+        disabled={Number(trip.available_seats) === 0 || isPast || isDriver}
         onClick={() => setIsBookModalOpen(true)}
       >
         {isPast
           ? rd("pastTrip") || "Past Trip"
-          : Number(trip.available_seats) === 0
-            ? rd("fullyBooked")
-            : rd("bookRide")}
+          : isDriver
+            ? rd("driverCannotBook") || "Cannot Book Own Ride"
+            : Number(trip.available_seats) === 0
+              ? rd("fullyBooked")
+              : rd("bookRide")}
       </Button>
+
+      {isDriver && !isPast && (
+        <p className="mt-3 text-[10px] text-center text-gray-400 font-bold uppercase tracking-widest px-4">
+          {rd("driverBookingWarning") || "Drivers cannot book their own rides"}
+        </p>
+      )}
 
       <div className="mt-8 pt-8 border-t border-border space-y-4">
         <div className="flex items-center text-sm font-bold text-gray-500">

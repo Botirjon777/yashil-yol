@@ -10,6 +10,7 @@ import {
   useDriverActiveTrips,
   useDriverCompletedTrips,
   useDriverCanceledTrips,
+  useClientBookings,
 } from "@/src/features/rides/hooks/useRides";
 import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { toast } from "sonner";
@@ -21,7 +22,7 @@ export function useDashboard() {
   const { data: userData, isLoading: isUserLoading } = useMe(!!_hasHydrated && !!token);
   const { data: balanceData } = useBalance();
 
-  const [activeTab, setActiveTab] = useState<"rides" | "balance" | "profile" | "driver">("rides");
+  const [activeTab, setActiveTab] = useState<"rides" | "balance" | "transactions" | "profile" | "driver">("rides");
   const [isSectionOpen, setIsSectionOpen] = useState(false);
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
@@ -33,7 +34,7 @@ export function useDashboard() {
     const savedTab = localStorage.getItem("dashboard_active_tab");
     const savedRideType = localStorage.getItem("dashboard_ride_type");
     
-    if (savedTab && ["rides", "balance", "profile", "driver"].includes(savedTab)) {
+    if (savedTab && ["rides", "balance", "transactions", "profile", "driver"].includes(savedTab)) {
       setActiveTab(savedTab as any);
     }
     if (savedRideType && ["passenger", "driver"].includes(savedRideType)) {
@@ -42,7 +43,7 @@ export function useDashboard() {
   }, []);
 
   // Update localStorage when tab or rideType changes
-  const handleTabChange = (tab: "rides" | "balance" | "profile" | "driver") => {
+  const handleTabChange = (tab: "rides" | "balance" | "transactions" | "profile" | "driver") => {
     setActiveTab(tab);
     setIsSectionOpen(true);
     localStorage.setItem("dashboard_active_tab", tab);
@@ -54,12 +55,13 @@ export function useDashboard() {
   };
 
   // Trips Hooks
-  const { data: passengerActive } = useClientInprogressTrips();
+  const { data: passengerInprogress } = useClientInprogressTrips();
   const { data: passengerCompleted } = useClientCompletedTrips();
   const { data: passengerCanceled } = useClientCanceledTrips();
   const { data: driverActive } = useDriverActiveTrips();
   const { data: driverCompleted } = useDriverCompletedTrips();
   const { data: driverCanceled } = useDriverCanceledTrips();
+  const { data: passengerBookings } = useClientBookings();
   const { data: vehiclesData } = useVehicles();
 
   // Profile Form State
@@ -81,20 +83,42 @@ export function useDashboard() {
   const isDriver = user?.role === "driver";
 
   const now = new Date();
-  const allActive = (rideType === "driver" ? driverActive : passengerActive) || [];
   
-  // Filter out trips where departure time is in the past
-  const trulyActive = allActive.filter(ride => new Date(ride.start_time) >= now);
-  const autoArchived = allActive.filter(ride => new Date(ride.start_time) < now);
+  // Transform Bookings to Trips with context for passengers
+  // This is the primary source since the user requested to see their bookings here.
+  const passengerTrips = (passengerBookings || []).map((b: any) => ({ 
+    ...b.trip, 
+    bookingId: b.id || b.booking_id, 
+    bookingStatus: b.status,
+    // Add fallback status from trip if booking status is unclear
+    status: b.trip?.status || b.status 
+  }));
+
+  const passengerActiveTrips = passengerTrips.filter((t: any) => 
+    (t.bookingStatus === "confirmed" || t.bookingStatus === "pending" || t.bookingStatus === "active") &&
+    t.status !== "completed" && t.status !== "canceled"
+  );
+
+  const passengerHistoryTrips = passengerTrips.filter((t: any) => 
+    t.bookingStatus === "completed" || t.bookingStatus === "canceled" || 
+    t.status === "completed" || t.status === "canceled"
+  );
+
+  const allActive = (rideType === "driver" ? driverActive : passengerActiveTrips) || [];
+  
+  // Filter out trips where departure time is in the past for current display
+  const trulyActive = allActive.filter((ride: any) => ride.start_time && new Date(ride.start_time) >= now);
+  const autoArchived = allActive.filter((ride: any) => ride.start_time && new Date(ride.start_time) < now);
   
   const rawHistory = rideType === "driver" 
     ? [...(driverCompleted || []), ...(driverCanceled || [])]
-    : [...(passengerCompleted || []), ...(passengerCanceled || [])];
+    : passengerHistoryTrips;
 
   const activeRides = trulyActive;
-  const historyRides = [...rawHistory, ...autoArchived].sort((a, b) => 
-    new Date(b.start_time).getTime() - new Date(a.start_time).getTime()
-  );
+  const historyRides = [...rawHistory, ...autoArchived].sort((a: any, b: any) => {
+    if (!a.start_time || !b.start_time) return 0;
+    return new Date(b.start_time).getTime() - new Date(a.start_time).getTime();
+  });
 
   useEffect(() => {
     if (user) {

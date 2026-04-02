@@ -7,6 +7,7 @@ import { RidesSection } from "./sections/RidesSection";
 import { BalanceSection } from "./sections/BalanceSection";
 import { ProfileSection } from "./sections/ProfileSection";
 import { DriverSection } from "./sections/DriverSection";
+import { TransactionsSection } from "./sections/TransactionsSection";
 import AddCardModal from "./components/AddCardModal";
 import TopUpModal from "./components/TopUpModal";
 import AddVehicleModal from "./components/AddVehicleModal";
@@ -18,7 +19,8 @@ const TAB_ORDER = {
   rides: 0,
   balance: 1,
   profile: 2,
-  driver: 3,
+  transactions: 3,
+  driver: 4,
 };
 
 export default function DashboardFeature() {
@@ -107,6 +109,7 @@ export default function DashboardFeature() {
           isUpdating={isUpdating}
         />
       )}
+      {activeTab === "transactions" && <TransactionsSection />}
       {activeTab === "driver" && (
         <DriverSection
           user={user}

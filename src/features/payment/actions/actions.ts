@@ -24,3 +24,19 @@ export const getTransactionHistory = async (): Promise<Transaction[]> => {
   const res = await api.get<{ data: Transaction[] }>("/user/balance-transactions");
   return res.data?.data || [];
 };
+
+/** GET /user/balance-transactions/pdf */
+export const getTransactionsPdf = async (): Promise<Blob> => {
+  const res = await api.get("/user/balance-transactions/pdf", {
+    responseType: "blob",
+  });
+  return res.data;
+};
+
+/** GET /user/balance-transactions/pdf/:id */
+export const getSingleTransactionPdf = async (id: number | string): Promise<Blob> => {
+  const res = await api.get(`/user/balance-transactions/pdf/${id}`, {
+    responseType: "blob",
+  });
+  return res.data;
+};
