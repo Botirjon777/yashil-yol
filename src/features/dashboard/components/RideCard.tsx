@@ -151,9 +151,9 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
       <Link
         href={
           bookingId
-            ? `/client/rides/${bookingId}`
+            ? `/rides/client/${bookingId}`
             : isDriver
-              ? `/driver/rides/${ride.id}`
+              ? `/rides/driver/${ride.id}`
               : `/rides/${ride.id}`
         }
         className="absolute inset-0 z-10"

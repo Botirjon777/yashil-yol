@@ -29,7 +29,7 @@ export default function RootLayout({
     <html lang="en" className={`${inter.variable} ${manrope.variable}`}>
       <body className="antialiased min-h-screen flex flex-col">
         <Providers>
-          <main className="grow pt-16 md:pt-0">{children}</main>
+          <main>{children}</main>
           <ScrollToTop />
         </Providers>
       </body>

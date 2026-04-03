@@ -12,7 +12,7 @@ export default function RootGroupLayout({
     <>
       <Navbar />
       <MobileNavbar />
-      {children}
+      <main className="grow pt-16 md:pt-0">{children}</main>
       <Footer />
       <MobileFooter />
     </>

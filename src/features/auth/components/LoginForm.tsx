@@ -3,14 +3,13 @@
 import React, { useState } from "react";
 import Link from "next/link";
 import { HiPhone, HiLockClosed } from "react-icons/hi";
-import { toast } from "sonner";
 import Button from "@/src/components/ui/Button";
 import Input from "@/src/components/ui/Input";
 import Checkbox from "@/src/components/ui/Checkbox";
+import FormError from "@/src/components/ui/FormError";
 import { useLogin } from "../hooks/useAuth";
 import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
-
 import { parseError, isValidPhone } from "@/src/lib/errorUtils";
 
 export const LoginForm = () => {
@@ -52,12 +51,8 @@ export const LoginForm = () => {
   const displayError = localError || (apiError ? parseError(apiError) : null);
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
-      {displayError && (
-        <div className="bg-error/10 text-error p-3 rounded-xl text-sm font-bold border border-error/20">
-          {displayError}
-        </div>
-      )}
+    <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
+      <FormError message={displayError} />
       <Input
         label={safeT("auth", "login", "phoneLabel")}
         name="phone"
@@ -93,18 +88,22 @@ export const LoginForm = () => {
           <Link
             href="/auth/forgot-password"
             title={safeT("auth", "login", "forgotPassword")}
-            className="text-sm font-bold text-primary hover:underline"
+            className="text-[10px] md:text-xs font-medium text-primary hover:underline uppercase tracking-widest"
           >
             {safeT("auth", "login", "forgotPassword")}
           </Link>
         </div>
       </div>
 
-      <Checkbox label={safeT("auth", "login", "rememberMe")} />
+      <div className="flex items-center">
+        <Checkbox label={safeT("auth", "login", "rememberMe")} />
+      </div>
 
-      <Button type="submit" fullWidth size="lg" loading={isPending}>
-        {safeT("auth", "login", "submitButton")}
-      </Button>
+      <div className="pt-1">
+        <Button type="submit" fullWidth size="lg" loading={isPending}>
+          {safeT("auth", "login", "submitButton")}
+        </Button>
+      </div>
     </form>
   );
 };

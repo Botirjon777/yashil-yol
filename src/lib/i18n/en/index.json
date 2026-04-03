@@ -87,7 +87,8 @@
     "cancel": "Cancel",
     "save": "Save",
     "loading": "Loading...",
-    "scrollToTop": "Back to Top"
+    "scrollToTop": "Back to Top",
+    "optional": "(optional)"
   },
   "footer": {
     "tagline": "We make ride-sharing easy, safe, and affordable for everyone in Uzbekistan.",
@@ -132,13 +133,13 @@
         "Easy balance-based payments"
       ],
       "firstNameLabel": "First Name",
-      "firstNamePlaceholder": "Alisher",
+      "firstNamePlaceholder": "e.g. Alisher",
       "lastNameLabel": "Last Name",
-      "lastNamePlaceholder": "Navoiy",
+      "lastNamePlaceholder": "e.g. Navoiy",
       "fatherNameLabel": "Father's Name",
-      "fatherNamePlaceholder": "Optional",
+      "fatherNamePlaceholder": "e.g. Abdurahmon's son",
       "emailLabel": "Email",
-      "emailPlaceholder": "name@example.com",
+      "emailPlaceholder": "alisher@gmail.com",
       "phoneLabel": "Phone Number",
       "phonePlaceholder": "+998 90 123 45 67",
       "passwordLabel": "Password",
@@ -155,9 +156,9 @@
     },
     "forgotPassword": {
       "title": "Forgot Password?",
-      "subtitle": "No worries! Enter your email address and we'll send you a link to reset your password.",
-      "emailLabel": "Email Address",
-      "emailPlaceholder": "name@example.com",
+      "subtitle": "No worries! Enter your phone number and we'll send you a code to reset your password.",
+      "emailLabel": "Phone Number",
+      "emailPlaceholder": "+998 90 123 45 67",
       "submitButton": "Send Reset Link",
       "successTitle": "Check your email",
       "successSubtitle": "We've sent a password reset link to:",

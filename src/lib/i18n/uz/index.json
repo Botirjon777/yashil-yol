@@ -87,7 +87,8 @@
     "cancel": "Bekor qilish",
     "save": "Saqlash",
     "loading": "Yuklanmoqda...",
-    "scrollToTop": "Tepaga qaytish"
+    "scrollToTop": "Tepaga qaytish",
+    "optional": "(ixtiyoriy)"
   },
   "footer": {
     "tagline": "Biz O'zbekistonda har bir kishi uchun hamroh topishni oson, xavfsiz va hamyonbop qilamiz.",
@@ -132,13 +133,13 @@
         "Balansga asoslangan oson to'lovlar"
       ],
       "firstNameLabel": "Ism",
-      "firstNamePlaceholder": "Alisher",
+      "firstNamePlaceholder": "Masalan: Alisher",
       "lastNameLabel": "Familiya",
-      "lastNamePlaceholder": "Navoiy",
+      "lastNamePlaceholder": "Masalan: Navoiy",
       "fatherNameLabel": "Otasining ismi",
-      "fatherNamePlaceholder": "Ixtiyoriy",
+      "fatherNamePlaceholder": "Masalan: Abdurahmon o'g'li",
       "emailLabel": "Elektron pochta",
-      "emailPlaceholder": "ism@example.com",
+      "emailPlaceholder": "alisher@gmail.com",
       "phoneLabel": "Telefon raqami",
       "phonePlaceholder": "+998 90 123 45 67",
       "passwordLabel": "Parol",
@@ -155,9 +156,9 @@
     },
     "forgotPassword": {
       "title": "Parolni unutdingizmi?",
-      "subtitle": "Xavotir olmang! Elektron pochta manzilingizni kiriting va biz sizga parolni tiklash havolasini yuboramiz.",
-      "emailLabel": "Elektron pochta manzili",
-      "emailPlaceholder": "ism@example.com",
+      "subtitle": "Xavotir olmang! Telefon raqamingizni kiriting va biz sizga parolni tiklash kodini yuboramiz.",
+      "emailLabel": "Telefon raqami",
+      "emailPlaceholder": "+998 90 123 45 67",
       "submitButton": "Tiklash havolasini yuborish",
       "successTitle": "Elektron pochtangizni tekshiring",
       "successSubtitle": "Biz parolni tiklash havolasini yubordik:",
