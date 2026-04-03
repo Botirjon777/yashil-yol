@@ -128,37 +128,20 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           </div>
         </div>
 
-        {/* Payment Method */}
-        <div className="pt-2">
-          <p className="text-sm font-black text-gray-400 uppercase tracking-widest mb-3">
-            {rd("paymentMethod") || "Payment Method"}
-          </p>
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
-            {PAYMENT_METHODS.map((method) => {
-              const Icon = method.icon;
-              const isSelected = paymentMethod === method.id;
-              return (
-                <button
-                  key={method.id}
-                  onClick={() => setPaymentMethod(method.id)}
-                  className={cn(
-                    "flex items-center gap-3 p-3 rounded-2xl border-2 transition-all",
-                    isSelected
-                      ? `${method.border} ${method.bg}`
-                      : "border-border bg-white hover:border-gray-300",
-                  )}
-                >
-                  <div className={cn("w-8 h-8 rounded-xl flex items-center justify-center", isSelected ? method.bg : "bg-light-bg")}>
-                    <Icon className={cn("w-4 h-4", isSelected ? method.color : "text-gray-400")} />
-                  </div>
-                  <div className="text-left">
-                    <div className={cn("font-black text-xs", isSelected ? "text-dark-text" : "text-gray-600")}>
-                      {method.label}
-                    </div>
-                  </div>
-                </button>
-              );
-            })}
+        {/* Payment Confirmation */}
+        <div className="pt-4 border-t border-border">
+          <div className="flex items-center gap-4 p-4 bg-primary/5 rounded-2xl border border-primary/20">
+            <div className="w-12 h-12 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <HiCash className="w-6 h-6 text-primary" />
+            </div>
+            <div>
+              <p className="text-sm font-black text-dark-text">
+                {rd("paymentMethod") || "Payment Method"}
+              </p>
+              <p className="text-xs font-bold text-gray-500">
+                {rd("paymentFromBalance") || "Payment will be deducted from your account balance."}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -166,7 +149,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           fullWidth
           size="lg"
           loading={isBooking}
-          onClick={() => handleBook(paymentMethod)}
+          onClick={() => handleBook("balance")}
         >
           {rd("confirmBooking") || "Confirm Booking"}
         </Button>

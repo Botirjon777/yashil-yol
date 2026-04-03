@@ -13,6 +13,7 @@ import {
   useClientBookings,
 } from "@/src/features/rides/hooks/useRides";
 import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
+import { parseError } from "@/src/lib/errorUtils";
 import { toast } from "sonner";
 
 export function useDashboard() {
@@ -68,8 +69,10 @@ export function useDashboard() {
   const [profileForm, setProfileForm] = useState({
     first_name: "",
     last_name: "",
+    father_name: "",
     email: "",
   });
+  const [isFatherNameModalOpen, setIsFatherNameModalOpen] = useState(false);
 
   const { mutate: updateProfile, isPending: isUpdating } = useUpdateProfile();
 
@@ -125,16 +128,41 @@ export function useDashboard() {
       setProfileForm({
         first_name: user.first_name || "",
         last_name: user.last_name || "",
+        father_name: user.father_name || "",
         email: user.email || "",
       });
     }
   }, [user]);
 
-  const handleProfileSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  // Check if father_name is missing when opening profile tab
+  useEffect(() => {
+    if (activeTab === "profile" && user && !user.father_name) {
+      setIsFatherNameModalOpen(true);
+    }
+  }, [activeTab, user]);
+
+  const isDirty = 
+    profileForm.first_name !== (user?.first_name || "") ||
+    profileForm.last_name !== (user?.last_name || "") ||
+    profileForm.father_name !== (user?.father_name || "") ||
+    profileForm.email !== (user?.email || "");
+
+  const handleProfileSubmit = (e?: React.FormEvent) => {
+    if (e) e.preventDefault();
+    if (!isDirty && !isFatherNameModalOpen) return;
+
+    // Validate father_name is present for update
+    if (!profileForm.father_name) {
+      toast.error(parseError({ response: { data: { message: "Otasining ismi kiritilishi shart" } } }));
+      return;
+    }
+
     updateProfile(profileForm, {
-      onSuccess: () => toast.success("Profile updated successfully"),
-      onError: (err: any) => toast.error(err.message || "Failed to update profile"),
+      onSuccess: () => {
+        toast.success("Profile updated successfully");
+        setIsFatherNameModalOpen(false);
+      },
+      onError: (err: any) => toast.error(parseError(err, "Failed to update profile")),
     });
   };
 
@@ -160,6 +188,9 @@ export function useDashboard() {
     setProfileForm,
     handleProfileSubmit,
     isUpdating,
+    isDirty,
+    isFatherNameModalOpen,
+    setIsFatherNameModalOpen,
     isDriver,
     balance: balanceData?.balance ? parseFloat(balanceData.balance) : 0,
     vehicles: vehiclesData || [],

@@ -8,11 +8,13 @@ interface ProfileSectionProps {
   profileForm: {
     first_name: string;
     last_name: string;
+    father_name: string;
     email: string;
   };
   setProfileForm: (form: any) => void;
   handleProfileSubmit: (e: React.FormEvent) => void;
   isUpdating: boolean;
+  isDirty: boolean;
 }
 
 export function ProfileSection({
@@ -21,6 +23,7 @@ export function ProfileSection({
   setProfileForm,
   handleProfileSubmit,
   isUpdating,
+  isDirty,
 }: ProfileSectionProps) {
   const { t } = useLanguageStore();
 
@@ -52,6 +55,15 @@ export function ProfileSection({
           />
         </div>
         <Input
+          label={t("dashboard", "profile")?.fatherName + " *"}
+          placeholder={t("dashboard", "profile")?.fatherNamePlaceholder}
+          value={profileForm.father_name}
+          onChange={(e) =>
+            setProfileForm({ ...profileForm, father_name: e.target.value })
+          }
+          required
+        />
+        <Input
           label={t("dashboard", "profile")?.email}
           type="email"
           value={profileForm.email}
@@ -70,6 +82,7 @@ export function ProfileSection({
             size="lg"
             className="px-12"
             loading={isUpdating}
+            disabled={!isDirty || isUpdating}
           >
             {t("dashboard", "profile")?.saveChanges}
           </Button>

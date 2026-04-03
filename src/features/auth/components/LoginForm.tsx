@@ -11,33 +11,45 @@ import { useLogin } from "../hooks/useAuth";
 import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
+import { parseError, isValidPhone } from "@/src/lib/errorUtils";
+
 export const LoginForm = () => {
   const [phone, setPhone] = useState("");
   const [password, setPassword] = useState("");
-  
+  const [localError, setLocalError] = useState<string | null>(null);
+
   const { mutate, isPending, error: apiError } = useLogin();
   const setAuth = useAuthStore((state: any) => state.setAuth);
   const { safeT } = useLanguageStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+    setLocalError(null);
+
+    // Validation: Check if input is a valid phone number
+    if (!isValidPhone(phone)) {
+      setLocalError(
+        safeT("auth", "login", "phoneInvalid") ||
+          "Iltimos, to'g'ri telefon raqami kiriting.",
+      );
+      return;
+    }
+
     mutate(
       { phone, password },
       {
         onSuccess: (data) => {
           setAuth(data.user, data.authorisation?.token);
-          toast.success(safeT("auth", "login", "welcomeBack"));
           window.location.href = "/dashboard";
         },
         onError: (err: any) => {
-          toast.error(err?.response?.data?.message || err.message || safeT("auth", "login", "loginFailed"));
-        }
-      }
+          parseError(err, safeT("auth", "login", "loginFailed"));
+        },
+      },
     );
   };
 
-  const displayError = (apiError as any)?.response?.data?.message || apiError?.message;
+  const displayError = localError || (apiError ? parseError(apiError) : null);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
@@ -48,14 +60,25 @@ export const LoginForm = () => {
       )}
       <Input
         label={safeT("auth", "login", "phoneLabel")}
+        name="phone"
+        autoComplete="tel"
         type="tel"
         placeholder={safeT("auth", "login", "phonePlaceholder")}
         iconLeft={<HiPhone className="w-5 h-5" />}
         required
         value={phone}
-        onChange={(e) => setPhone(e.target.value)}
+        onChange={(e) => {
+          setPhone(e.target.value);
+          if (localError) setLocalError(null);
+        }}
+        error={
+          phone && !isValidPhone(phone)
+            ? safeT("auth", "login", "phoneInvalid") ||
+              "Iltimos, to'g'ri telefon raqami kiriting."
+            : undefined
+        }
       />
-      
+
       <div className="space-y-2.5 md:space-y-5">
         <Input
           label={safeT("auth", "login", "passwordLabel")}
@@ -67,7 +90,11 @@ export const LoginForm = () => {
           onChange={(e) => setPassword(e.target.value)}
         />
         <div className="flex justify-end">
-          <Link href="/auth/forgot-password" title={safeT("auth", "login", "forgotPassword")} className="text-sm font-bold text-primary hover:underline">
+          <Link
+            href="/auth/forgot-password"
+            title={safeT("auth", "login", "forgotPassword")}
+            className="text-sm font-bold text-primary hover:underline"
+          >
             {safeT("auth", "login", "forgotPassword")}
           </Link>
         </div>

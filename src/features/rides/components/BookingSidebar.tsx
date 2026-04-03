@@ -49,15 +49,7 @@ export const BookingSidebar: React.FC<BookingSidebarProps> = ({
             )}
           </div>
         </div>
-        <div className="pt-6 border-t border-border">
-          <Button
-            fullWidth
-            variant="secondary"
-            onClick={() => router.push("/dashboard")}
-          >
-            {rd("editTrip")}
-          </Button>
-        </div>
+        <div className="pt-6 border-t border-border" />
         {canCancel && (
           <Button
             fullWidth

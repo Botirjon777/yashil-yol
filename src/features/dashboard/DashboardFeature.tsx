@@ -11,6 +11,7 @@ import { TransactionsSection } from "./sections/TransactionsSection";
 import AddCardModal from "./components/AddCardModal";
 import TopUpModal from "./components/TopUpModal";
 import AddVehicleModal from "./components/AddVehicleModal";
+import { FatherNameModal } from "./components/FatherNameModal";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -41,6 +42,9 @@ export default function DashboardFeature() {
     setProfileForm,
     handleProfileSubmit,
     isUpdating,
+    isDirty,
+    isFatherNameModalOpen,
+    setIsFatherNameModalOpen,
     isDriver,
     balance,
     vehicles,
@@ -107,6 +111,7 @@ export default function DashboardFeature() {
           setProfileForm={setProfileForm}
           handleProfileSubmit={handleProfileSubmit}
           isUpdating={isUpdating}
+          isDirty={isDirty}
         />
       )}
       {activeTab === "transactions" && <TransactionsSection />}
@@ -223,6 +228,14 @@ export default function DashboardFeature() {
       <AddVehicleModal
         isOpen={isAddVehicleOpen}
         onClose={() => setIsAddVehicleOpen(false)}
+      />
+      <FatherNameModal
+        isOpen={isFatherNameModalOpen}
+        onClose={() => setIsFatherNameModalOpen(false)}
+        value={profileForm.father_name}
+        onChange={(val) => setProfileForm({ ...profileForm, father_name: val })}
+        onSubmit={handleProfileSubmit}
+        isLoading={isUpdating}
       />
     </div>
   );
