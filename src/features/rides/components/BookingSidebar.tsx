@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { useRouter } from "next/navigation";
 import { HiCreditCard, HiChatAlt2 } from "react-icons/hi";
 import { formatCurrency } from "@/src/lib/utils";
@@ -20,7 +19,7 @@ interface BookingSidebarProps {
   rd: (key: string) => string;
 }
 
-export const BookingSidebar: React.FC<BookingSidebarProps> = ({
+export const BookingSidebar = ({
   trip,
   isDriver,
   isPast,
@@ -32,7 +31,7 @@ export const BookingSidebar: React.FC<BookingSidebarProps> = ({
   isCanceling,
   driverName,
   rd,
-}) => {
+}: BookingSidebarProps) => {
   const router = useRouter();
 
   if (isDriver) {
@@ -63,7 +62,8 @@ export const BookingSidebar: React.FC<BookingSidebarProps> = ({
         )}
         {!canCancel && !isPast && String(trip.status) === "active" && (
           <p className="text-[10px] text-center text-gray-400 font-bold uppercase tracking-widest px-4">
-            {rd("cancelBlocked") || "Cannot cancel trip less than 30 mins before departure"}
+            {rd("cancelBlocked") ||
+              "Cannot cancel trip less than 30 mins before departure"}
           </p>
         )}
       </div>

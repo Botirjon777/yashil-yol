@@ -1,4 +1,3 @@
-import React from "react";
 import { HiSearch } from "react-icons/hi";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { Trip } from "@/src/features/rides/types";
@@ -11,17 +10,20 @@ interface SearchResultsSectionProps {
   hasSearched: boolean;
 }
 
-const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({
+const SearchResultsSection = ({
   results,
   isSearching,
   hasSearched,
-}) => {
+}: SearchResultsSectionProps) => {
   const { t } = useLanguageStore();
 
   if (!hasSearched && !isSearching) return null;
 
   return (
-    <section id="search-results-section" className="py-16 bg-light-bg min-h-[400px]">
+    <section
+      id="search-results-section"
+      className="py-16 bg-light-bg min-h-[400px]"
+    >
       <div className="container-custom">
         <div className="flex items-center justify-between mb-8">
           <div>
@@ -29,8 +31,8 @@ const SearchResultsSection: React.FC<SearchResultsSectionProps> = ({
               {t("rides", "title")}
             </h2>
             <p className="text-gray-500 font-medium mt-1">
-              {isSearching 
-                ? t("rides", "searching") 
+              {isSearching
+                ? t("rides", "searching")
                 : `${results.length} ${t("rides", "found")}`}
             </p>
           </div>

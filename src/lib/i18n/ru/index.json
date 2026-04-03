@@ -87,7 +87,8 @@
     "cancel": "Отмена",
     "save": "Сохранить",
     "loading": "Загрузка...",
-    "scrollToTop": "Наверх"
+    "scrollToTop": "Наверх",
+    "optional": "(необязательно)"
   },
   "footer": {
     "tagline": "Мы делаем совместные поездки по Узбекистану простыми, безопасными и доступными для каждого.",
@@ -132,13 +133,13 @@
         "Простая оплата через баланс"
       ],
       "firstNameLabel": "Имя",
-      "firstNamePlaceholder": "Алишер",
+      "firstNamePlaceholder": "Напр: Алишер",
       "lastNameLabel": "Фамилия",
-      "lastNamePlaceholder": "Навои",
+      "lastNamePlaceholder": "Напр: Навои",
       "fatherNameLabel": "Отчество",
-      "fatherNamePlaceholder": "Необязательно",
+      "fatherNamePlaceholder": "Напр: Иванович",
       "emailLabel": "Электронная почта",
-      "emailPlaceholder": "name@example.com",
+      "emailPlaceholder": "alisher@gmail.com",
       "phoneLabel": "Номер телефона",
       "phonePlaceholder": "+998 90 123 45 67",
       "passwordLabel": "Пароль",
@@ -155,9 +156,9 @@
     },
     "forgotPassword": {
       "title": "Забыли пароль?",
-      "subtitle": "Не волнуйтесь! Введите свой адрес электронной почты, и мы отправим вам ссылку для сброса пароля.",
-      "emailLabel": "Адрес электронной почты",
-      "emailPlaceholder": "name@example.com",
+      "subtitle": "Не волнуйтесь! Введите свой номер телефона, и мы отправим вам код для сброса пароля.",
+      "emailLabel": "Номер телефона",
+      "emailPlaceholder": "+998 90 123 45 67",
       "submitButton": "Отправить ссылку для сброса",
       "successTitle": "Проверьте свою почту",
       "successSubtitle": "Мы отправили ссылку для сброса пароля на:",

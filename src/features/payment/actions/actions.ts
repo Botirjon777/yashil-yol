@@ -26,7 +26,9 @@ export const getBalance = async (): Promise<BalanceResponse> => {
 
 /** GET /user/balance-transactions */
 export const getTransactionHistory = async (): Promise<Transaction[]> => {
-  const res = await api.get<{ data: Transaction[] }>("/user/balance-transactions");
+  const res = await api.get<{ data: Transaction[] }>(
+    "/user/balance-transactions",
+  );
   console.log("getTransactionHistory - API Response:", res.data);
   return res.data?.data || [];
 };
@@ -40,7 +42,9 @@ export const getTransactionsPdf = async (): Promise<Blob> => {
 };
 
 /** GET /user/balance-transactions/pdf/:id */
-export const getSingleTransactionPdf = async (id: number | string): Promise<Blob> => {
+export const getSingleTransactionPdf = async (
+  id: number | string,
+): Promise<Blob> => {
   const res = await api.get(`/user/balance-transactions/pdf/${id}`, {
     responseType: "blob",
   });

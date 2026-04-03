@@ -16,20 +16,20 @@ const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(
             ref={ref}
             className={cn(
               "peer appearance-none w-5 h-5 border-2 border-border rounded-lg checked:bg-primary checked:border-primary transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20",
-              className
+              className,
             )}
             {...props}
           />
           <HiCheck className="absolute w-4 h-4 text-white scale-0 peer-checked:scale-100 transition-transform duration-200" />
         </div>
         {label && (
-          <span className="text-dark-text font-medium group-hover:text-primary transition-colors">
+          <span className="text-dark-text font-normal group-hover:text-primary transition-colors">
             {label}
           </span>
         )}
       </label>
     );
-  }
+  },
 );
 
 Checkbox.displayName = "Checkbox";

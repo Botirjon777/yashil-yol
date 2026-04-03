@@ -1,11 +1,9 @@
 "use client";
 
-import React, { useState } from "react";
-import { HiArrowRight, HiCheckCircle, HiCreditCard, HiCash } from "react-icons/hi";
+import { HiArrowRight, HiCash } from "react-icons/hi";
 import { formatCurrency, formatDate } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import Modal from "@/src/components/ui/Modal";
-import { cn } from "@/src/lib/utils";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -15,34 +13,17 @@ interface BookingModalProps {
   to: string;
   numSeats: number;
   passengers: { name: string; phone: string }[];
-  updatePassenger: (index: number, field: "name" | "phone", value: string) => void;
+  updatePassenger: (
+    index: number,
+    field: "name" | "phone",
+    value: string,
+  ) => void;
   isBooking: boolean;
   handleBook: (paymentMethod: string) => void;
   rd: (key: string) => string;
 }
 
-const PAYMENT_METHODS = [
-  {
-    id: "balance",
-    icon: HiCash,
-    label: "Balance",
-    description: "Pay from your account balance",
-    color: "text-primary",
-    bg: "bg-primary/10",
-    border: "border-primary",
-  },
-  {
-    id: "card",
-    icon: HiCreditCard,
-    label: "Bank Card",
-    description: "Pay with debit/credit card",
-    color: "text-secondary",
-    bg: "bg-secondary/10",
-    border: "border-secondary",
-  },
-];
-
-export const BookingModal: React.FC<BookingModalProps> = ({
+export const BookingModal = ({
   isOpen,
   onClose,
   trip,
@@ -54,9 +35,7 @@ export const BookingModal: React.FC<BookingModalProps> = ({
   isBooking,
   handleBook,
   rd,
-}) => {
-  const [paymentMethod, setPaymentMethod] = useState("balance");
-
+}: BookingModalProps) => {
   return (
     <Modal
       isOpen={isOpen}
@@ -67,17 +46,25 @@ export const BookingModal: React.FC<BookingModalProps> = ({
         {/* Trip Summary */}
         <div className="bg-light-bg p-4 rounded-3xl border border-border space-y-2">
           <div className="flex items-start justify-between text-xs">
-            <span className="text-gray-500 font-bold">{rd("route") || "Route"}</span>
+            <span className="text-gray-500 font-bold">
+              {rd("route") || "Route"}
+            </span>
             <span className="text-dark-text font-black flex items-center gap-2 text-right truncate ml-4">
               {from} <HiArrowRight /> {to}
             </span>
           </div>
           <div className="flex items-center justify-between text-xs">
-            <span className="text-gray-500 font-bold">{rd("date") || "Date"}</span>
-            <span className="text-dark-text font-black">{formatDate(trip.start_time)}</span>
+            <span className="text-gray-500 font-bold">
+              {rd("date") || "Date"}
+            </span>
+            <span className="text-dark-text font-black">
+              {formatDate(trip.start_time)}
+            </span>
           </div>
           <div className="flex items-center justify-between pt-2 border-t border-border">
-            <span className="text-gray-600 font-black text-sm">{rd("amountToPay") || "Total"}</span>
+            <span className="text-gray-600 font-black text-sm">
+              {rd("amountToPay") || "Total"}
+            </span>
             <span className="text-xl font-black text-primary">
               {formatCurrency(Number(trip.price_per_seat) * numSeats)}
             </span>
@@ -91,7 +78,10 @@ export const BookingModal: React.FC<BookingModalProps> = ({
           </p>
           <div className="space-y-4 max-h-[300px] overflow-y-auto pr-2 custom-scrollbar">
             {passengers.map((p, i) => (
-              <div key={i} className="p-4 bg-white border border-border rounded-2xl space-y-3">
+              <div
+                key={i}
+                className="p-4 bg-white border border-border rounded-2xl space-y-3"
+              >
                 <div className="flex items-center justify-between">
                   <span className="text-xs font-black text-primary">
                     {rd("passenger") || "Passenger"} {i + 1}
@@ -105,7 +95,9 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     <input
                       type="text"
                       value={p.name}
-                      onChange={(e) => updatePassenger(i, "name", e.target.value)}
+                      onChange={(e) =>
+                        updatePassenger(i, "name", e.target.value)
+                      }
                       className="w-full bg-light-bg border-none rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
                       placeholder="Enter name"
                     />
@@ -117,7 +109,9 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                     <input
                       type="text"
                       value={p.phone}
-                      onChange={(e) => updatePassenger(i, "phone", e.target.value)}
+                      onChange={(e) =>
+                        updatePassenger(i, "phone", e.target.value)
+                      }
                       className="w-full bg-light-bg border-none rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
                       placeholder="+998..."
                     />
@@ -139,7 +133,8 @@ export const BookingModal: React.FC<BookingModalProps> = ({
                 {rd("paymentMethod") || "Payment Method"}
               </p>
               <p className="text-xs font-bold text-gray-500">
-                {rd("paymentFromBalance") || "Payment will be deducted from your account balance."}
+                {rd("paymentFromBalance") ||
+                  "Payment will be deducted from your account balance."}
               </p>
             </div>
           </div>

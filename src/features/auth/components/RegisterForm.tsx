@@ -6,6 +6,7 @@ import { toast } from "sonner";
 import Button from "@/src/components/ui/Button";
 import Input from "@/src/components/ui/Input";
 import Checkbox from "@/src/components/ui/Checkbox";
+import FormError from "@/src/components/ui/FormError";
 import { useRegister } from "../hooks/useAuth";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
@@ -76,13 +77,10 @@ export const RegisterForm = () => {
       : apiError?.message;
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
-      {displayError && (
-        <div className="bg-error/10 text-error p-3 rounded-xl text-sm font-bold border border-error/20">
-          {displayError}
-        </div>
-      )}
-      <div className="grid grid-cols-2 gap-4">
+    <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
+      <FormError message={displayError} />
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
         <Input
           label={safeT("auth", "register", "firstNameLabel")}
           name="firstName"
@@ -90,7 +88,7 @@ export const RegisterForm = () => {
           required
           value={formData.firstName}
           onChange={handleChange}
-          iconLeft={<HiUser className="w-4 h-4" />}
+          iconLeft={<HiUser className="w-5 h-5" />}
         />
         <Input
           label={safeT("auth", "register", "lastNameLabel")}
@@ -101,63 +99,75 @@ export const RegisterForm = () => {
           onChange={handleChange}
         />
       </div>
-      <Input
-        label={safeT("auth", "register", "fatherNameLabel")}
-        name="fatherName"
-        placeholder={safeT("auth", "register", "fatherNamePlaceholder")}
-        value={formData.fatherName}
-        onChange={handleChange}
-      />
-      <Input
-        label={safeT("auth", "register", "emailLabel")}
-        name="email"
-        type="email"
-        placeholder={safeT("auth", "register", "emailPlaceholder")}
-        required
-        value={formData.email}
-        onChange={handleChange}
-        iconLeft={<HiMail className="w-4 h-4" />}
-      />
-      <Input
-        label={safeT("auth", "register", "phoneLabel")}
-        name="phone"
-        type="tel"
-        placeholder={safeT("auth", "register", "phonePlaceholder")}
-        required
-        value={formData.phone}
-        onChange={handleChange}
-        iconLeft={<HiPhone className="w-4 h-4" />}
-      />
-      <Input
-        label={safeT("auth", "register", "passwordLabel")}
-        name="password"
-        type="password"
-        placeholder={safeT("auth", "register", "passwordPlaceholder")}
-        required
-        value={formData.password}
-        onChange={handleChange}
-        iconLeft={<HiLockClosed className="w-4 h-4" />}
-      />
-      <Input
-        label={safeT("auth", "register", "confirmPasswordLabel")}
-        name="confirmPassword"
-        type="password"
-        placeholder={safeT("auth", "register", "confirmPasswordPlaceholder")}
-        required
-        value={formData.confirmPassword}
-        onChange={handleChange}
-      />
 
-      <div className="pt-2">
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+        <Input
+          label={safeT("auth", "register", "fatherNameLabel")}
+          name="fatherName"
+          placeholder={safeT("auth", "register", "fatherNamePlaceholder")}
+          value={formData.fatherName}
+          onChange={handleChange}
+        />
+        <Input
+          label={safeT("auth", "register", "emailLabel")}
+          name="email"
+          type="email"
+          placeholder={safeT("auth", "register", "emailPlaceholder")}
+          required
+          value={formData.email}
+          onChange={handleChange}
+          iconLeft={<HiMail className="w-5 h-5" />}
+        />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+        <Input
+          label={safeT("auth", "register", "phoneLabel")}
+          name="phone"
+          type="tel"
+          placeholder={safeT("auth", "register", "phonePlaceholder")}
+          required
+          value={formData.phone}
+          onChange={handleChange}
+          iconLeft={<HiPhone className="w-5 h-5" />}
+        />
+        <div className="hidden md:block" />
+      </div>
+
+      <div className="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-5">
+        <Input
+          label={safeT("auth", "register", "passwordLabel")}
+          name="password"
+          type="password"
+          placeholder={safeT("auth", "register", "passwordPlaceholder")}
+          required
+          value={formData.password}
+          onChange={handleChange}
+          iconLeft={<HiLockClosed className="w-5 h-5" />}
+        />
+        <Input
+          label={safeT("auth", "register", "confirmPasswordLabel")}
+          name="confirmPassword"
+          type="password"
+          placeholder={safeT("auth", "register", "confirmPasswordPlaceholder")}
+          required
+          value={formData.confirmPassword}
+          onChange={handleChange}
+        />
+      </div>
+
+      <div className="pt-1">
         <Checkbox
           label={safeT("auth", "register", "termsAgreement")}
           required
         />
       </div>
 
-      <Button type="submit" fullWidth size="lg" loading={isPending}>
-        {safeT("auth", "register", "submitButton")}
-      </Button>
+      <div className="pt-1">
+        <Button type="submit" fullWidth size="lg" loading={isPending}>
+          {safeT("auth", "register", "submitButton")}
+        </Button>
+      </div>
     </form>
   );
 };
