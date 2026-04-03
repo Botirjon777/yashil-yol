@@ -7,6 +7,7 @@ interface InputProps extends React.InputHTMLAttributes<HTMLInputElement> {
   error?: string;
   iconLeft?: React.ReactNode;
   iconRight?: React.ReactNode;
+  prefixText?: string;
   hideOptionalLabel?: boolean;
 }
 
@@ -18,6 +19,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
       error,
       iconLeft,
       iconRight,
+      prefixText,
       type,
       required,
       hideOptionalLabel,
@@ -47,12 +49,23 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
               {iconLeft}
             </div>
           )}
+          {prefixText && (
+            <div
+              className={cn(
+                "absolute top-1/2 -translate-y-1/2 text-dark-text font-bold text-sm select-none",
+                iconLeft ? "left-11" : "left-4"
+              )}
+            >
+              {prefixText}
+            </div>
+          )}
           <input
             ref={ref}
             type={type}
             className={cn(
               "w-full px-4 py-2.5 bg-light-bg border border-border rounded-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-medium text-sm",
               iconLeft && "pl-11",
+              prefixText && (iconLeft ? "pl-18" : "pl-14"),
               iconRight && "pr-11",
               error && "border-error focus:ring-error/20 focus:border-error",
               className,

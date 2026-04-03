@@ -45,7 +45,7 @@ export const RegisterForm = () => {
         last_name: formData.lastName,
         father_name: formData.fatherName,
         email: formData.email,
-        phone: formData.phone,
+        phone: `+998${formData.phone}`,
         password: formData.password,
         password_confirmation: formData.confirmPassword,
       },
@@ -54,7 +54,7 @@ export const RegisterForm = () => {
           toast.success(
             data.message || safeT("auth", "register", "accountCreated"),
           );
-          window.location.href = `/auth/verify?phone=${encodeURIComponent(formData.phone)}&code=${data.code}`;
+          window.location.href = `/auth/verify?phone=${encodeURIComponent(`+998${formData.phone}`)}&code=${data.code}`;
         },
         onError: (err: any) => {
           toast.error(
@@ -126,9 +126,16 @@ export const RegisterForm = () => {
           name="phone"
           type="tel"
           placeholder={safeT("auth", "register", "phonePlaceholder")}
+          prefixText="+998"
           required
           value={formData.phone}
-          onChange={handleChange}
+          className="ml-2.5"
+          onChange={(e) => {
+            const val = e.target.value.replace(/\D/g, ""); // Only digits
+            if (val.length <= 9) {
+              setFormData((prev) => ({ ...prev, phone: val }));
+            }
+          }}
           iconLeft={<HiPhone className="w-5 h-5" />}
         />
         <div className="hidden md:block" />
