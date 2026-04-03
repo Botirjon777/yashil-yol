@@ -32,7 +32,8 @@
     "searchPlaceholder": "Region, District, Village...",
     "destinationPlaceholder": "Region, District, Village...",
     "datePlaceholder": "Select date",
-    "searchButton": "Search"
+    "searchButton": "Search",
+    "seeAllRides": "See all rides"
   },
   "stats": {
     "users": "Happy Users",
@@ -119,7 +120,8 @@
       "noAccount": "Don't have an account?",
       "createAccount": "Create one now",
       "welcomeBack": "Welcome back!",
-      "loginFailed": "Login failed"
+      "loginFailed": "Login failed",
+      "phoneInvalid": "Please enter a valid phone number"
     },
     "register": {
       "title": "Create Account",
@@ -166,7 +168,7 @@
     },
     "verify": {
       "title": "Verify Identity",
-      "subtitle": "We've sent a 4-digit verification code to {phone}. Please enter it below.",
+      "subtitle": "We've sent a 6-digit verification code to {phone}. Please enter it below.",
       "button": "Verify & Log In",
       "resend": "Didn't receive code? Resend",
       "success": "Verified successfully!"
@@ -249,9 +251,18 @@
       "unverified": "Unverified",
       "firstName": "First Name",
       "lastName": "Last Name",
+      "fatherName": "Father's Name",
+      "fatherNamePlaceholder": "e.g. John's son",
       "email": "Email Address",
       "phone": "Phone Number",
       "saveChanges": "Save Changes"
+    },
+    "fatherNameModal": {
+      "title": "Complete Profile",
+      "subtitle": "Father's name is required to update your profile. Please fill this field to continue.",
+      "inputLabel": "Father's Name",
+      "save": "Save",
+      "later": "Later"
     },
     "driver": {
       "statusTitle": "Driver Application Status",
@@ -431,7 +442,13 @@
     "bookingSuccess": "Ride booked successfully!",
     "route": "Route",
     "date": "Date",
-    "perSeat": "per seat"
+    "perSeat": "per seat",
+    "passengerDetails": "Passenger Details",
+    "passenger": "Passenger",
+    "fullName": "Full Name",
+    "phone": "Phone Number",
+    "paymentMethod": "Payment Method",
+    "paymentFromBalance": "Payment will be deducted from your account balance."
   },
   "status": {
     "active": "Active",

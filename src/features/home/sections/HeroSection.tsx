@@ -6,6 +6,8 @@ import { cn } from "@/src/lib/utils";
 import Typewriter from "@/src/components/ui/Typewriter";
 import Autocomplete from "@/src/components/ui/Autocomplete";
 
+import Link from "next/link";
+
 interface HeroSectionProps {
   fromLocation: any;
   setFromLocation: (val: any) => void;
@@ -114,6 +116,16 @@ export default function HeroSection({
               {t("hero", "searchButton")}
             </Button>
           </div>
+        </div>
+        
+        <div className="mt-10 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
+          <Link 
+            href="/rides" 
+            className="group inline-flex items-center gap-2 text-primary hover:text-primary-dark font-black tracking-wide bg-white/80 backdrop-blur-sm px-8 py-4 rounded-2xl shadow-xl shadow-primary/5 border border-primary/10 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/15 active:scale-95"
+          >
+            <span className="text-base uppercase tracking-widest">{t("hero", "seeAllRides")}</span>
+            <span className="text-xl transition-transform group-hover:translate-x-1">→</span>
+          </Link>
         </div>
       </div>
     </section>

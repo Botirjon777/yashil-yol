@@ -1,24 +1,32 @@
 "use client";
 
-import React, { useState } from "react";
-import { HiChatAlt2, HiMail, HiPhone, HiLocationMarker } from "react-icons/hi";
+import React from "react";
+import { HiMail, HiPhone, HiLocationMarker } from "react-icons/hi";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import Button from "@/src/components/ui/Button";
 import Input from "@/src/components/ui/Input";
-import { toast } from "sonner";
+
+import { useSendSupportMessage } from "@/src/features/support/hooks/useSupport";
 
 const SupportPage = () => {
   const { t } = useLanguageStore();
-  const [loading, setLoading] = useState(false);
+  const { mutate: sendMessage, isPending: loading } = useSendSupportMessage();
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    setLoading(true);
-    setTimeout(() => {
-      setLoading(false);
-      toast.success(t("support", "success"));
-      (e.target as HTMLFormElement).reset();
-    }, 1500);
+    const formData = new FormData(e.currentTarget);
+    const name = formData.get("name") as string;
+    const email = formData.get("email") as string;
+    const message = formData.get("message") as string;
+
+    sendMessage(
+      { name, email, message },
+      {
+        onSuccess: () => {
+          (e.target as HTMLFormElement).reset();
+        },
+      },
+    );
   };
 
   return (
@@ -94,15 +102,20 @@ const SupportPage = () => {
                 {t("support", "formTitle")}
               </h3>
 
-              <form onSubmit={handleSubmit} className="space-y-2.5 md:space-y-5">
+              <form
+                onSubmit={handleSubmit}
+                className="space-y-2.5 md:space-y-5"
+              >
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                   <Input
                     required
+                    name="name"
                     label={t("support", "name")}
                     type="text"
                   />
                   <Input
                     required
+                    name="email"
                     label={t("support", "email")}
                     type="email"
                   />
@@ -114,6 +127,7 @@ const SupportPage = () => {
                   </label>
                   <textarea
                     required
+                    name="message"
                     rows={6}
                     className="w-full px-6 py-4 bg-light-bg border border-border rounded-lg focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-semibold resize-none text-base"
                   ></textarea>

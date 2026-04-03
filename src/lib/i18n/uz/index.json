@@ -32,7 +32,8 @@
     "searchPlaceholder": "Viloyat, Tuman, Mahalla...",
     "destinationPlaceholder": "Viloyat, Tuman, Mahalla...",
     "datePlaceholder": "Sanani tanlang",
-    "searchButton": "Qidirish"
+    "searchButton": "Qidirish",
+    "seeAllRides": "Barcha safarlarni ko'rish"
   },
   "stats": {
     "users": "Foydalanuvchilar",
@@ -119,7 +120,8 @@
       "noAccount": "Akkauntingiz yo'qmi?",
       "createAccount": "Hozir yarating",
       "welcomeBack": "Xush kelibsiz!",
-      "loginFailed": "Tizimga kirishda xatolik"
+      "loginFailed": "Tizimga kirishda xatolik",
+      "phoneInvalid": "Iltimos, to'g'ri telefon raqami kiriting"
     },
     "register": {
       "title": "Hisob yaratish",
@@ -166,7 +168,7 @@
     },
     "verify": {
       "title": "Shaxsni tasdiqlash",
-      "subtitle": "Biz {phone} raqamiga 4 xonali tasdiqlash kodini yubordik. Uni quyida kiriting.",
+      "subtitle": "Biz {phone} raqamiga 6 xonali tasdiqlash kodini yubordik. Uni quyida kiriting.",
       "button": "Tasdiqlash va kirish",
       "resend": "Kod kelmadimi? Qayta yuborish",
       "success": "Muvaffaqiyatli tasdiqlandi!"
@@ -249,9 +251,18 @@
       "unverified": "Tasdiqlanmagan",
       "firstName": "Ism",
       "lastName": "Familiya",
+      "fatherName": "Otasining ismi",
+      "fatherNamePlaceholder": "Masalan: Abdurahmon o'g'li",
       "email": "Elektron pochta",
       "phone": "Telefon raqami",
       "saveChanges": "O'zgarishlarni saqlash"
+    },
+    "fatherNameModal": {
+      "title": "Ma'lumotlarni to'ldirish",
+      "subtitle": "Profil ma'lumotlarini yangilash uchun otasining ismini kiritish talab etiladi. Iltimos, davom etishdan oldin ushbu maydonni to'ldiring.",
+      "inputLabel": "Otasining ismi",
+      "save": "Saqlash",
+      "later": "Keyinroq"
     },
     "driver": {
       "statusTitle": "Haydovchi arizasi holati",
@@ -433,7 +444,13 @@
     "date": "Sana",
     "perSeat": "har bir o'rin uchun",
     "departure": "Ketish",
-    "destination": "Borish"
+    "destination": "Borish",
+    "passengerDetails": "Yo'lovchi ma'lumotlari",
+    "passenger": "Yo'lovchi",
+    "fullName": "To'liq ism",
+    "phone": "Telefon raqami",
+    "paymentMethod": "To'lov usuli",
+    "paymentFromBalance": "To'lov sizning ichki balansingizdan yechib olinadi."
   },
   "status": {
     "active": "Faol",
