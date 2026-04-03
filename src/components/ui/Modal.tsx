@@ -15,6 +15,8 @@ interface ModalProps {
   fullMobile?: boolean;
 }
 
+let openModalsCount = 0;
+
 const Modal: React.FC<ModalProps> = ({
   isOpen,
   onClose,
@@ -30,14 +32,28 @@ const Modal: React.FC<ModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
+      
+      // Prevent shift by adding padding equal to scrollbar width
+      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      if (openModalsCount === 0 && scrollbarWidth > 0) {
+        document.body.style.paddingRight = `${scrollbarWidth}px`;
+      }
+      
       document.body.style.overflow = "hidden";
+      openModalsCount++;
+
       const timer = setTimeout(() => setAnimate(true), 10);
       return () => clearTimeout(timer);
     } else {
       setAnimate(false);
       const timer = setTimeout(() => {
         setShouldRender(false);
-        document.body.style.overflow = "unset";
+        
+        openModalsCount = Math.max(0, openModalsCount - 1);
+        if (openModalsCount === 0) {
+          document.body.style.overflow = "";
+          document.body.style.paddingRight = "";
+        }
       }, 400); // Wait for transition
       return () => clearTimeout(timer);
     }
@@ -45,9 +61,16 @@ const Modal: React.FC<ModalProps> = ({
 
   useEffect(() => {
     return () => {
-      document.body.style.overflow = "unset";
+      // Cleanup if component unmounts while modal is logically open
+      if (isOpen) {
+        openModalsCount = Math.max(0, openModalsCount - 1);
+        if (openModalsCount === 0) {
+          document.body.style.overflow = "";
+          document.body.style.paddingRight = "";
+        }
+      }
     };
-  }, []);
+  }, [isOpen]);
 
   if (!shouldRender) return null;
 

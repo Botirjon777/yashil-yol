@@ -220,7 +220,14 @@ export default function DashboardFeature() {
         )}
       </div>
 
-      <TopUpModal isOpen={isTopUpOpen} onClose={() => setIsTopUpOpen(false)} />
+      <TopUpModal 
+        isOpen={isTopUpOpen} 
+        onClose={() => setIsTopUpOpen(false)} 
+        onAddCardClick={() => {
+          setIsTopUpOpen(false);
+          setIsAddCardOpen(true);
+        }}
+      />
       <AddCardModal
         isOpen={isAddCardOpen}
         onClose={() => setIsAddCardOpen(false)}

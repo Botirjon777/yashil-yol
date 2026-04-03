@@ -10,9 +10,10 @@ import { formatCurrency } from "@/src/lib/utils";
 interface TopUpModalProps {
   isOpen: boolean;
   onClose: () => void;
+  onAddCardClick?: () => void;
 }
 
-const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose }) => {
+const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick }) => {
   const [step, setStep] = useState<"input" | "confirm">("input");
   const [paymentId, setPaymentId] = useState<number | null>(null);
   const { data: cards = [], isLoading: isLoadingCards } = useCards();
@@ -83,9 +84,20 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose }) => {
           />
 
           {cards.length === 0 && !isLoadingCards && (
-            <p className="text-xs text-error font-bold -mt-4 ml-1 italic">
-              You need to add a card first.
-            </p>
+            <div className="flex flex-col items-center justify-center p-6 bg-error/5 rounded-2xl border border-error/10 gap-3 -mt-4 mb-4">
+              <p className="text-sm text-error font-medium italic text-center">
+                You need to add a card first to top up.
+              </p>
+              <Button 
+                type="button" 
+                variant="primary" 
+                onClick={onAddCardClick}
+                className="font-black px-8 h-10"
+              >
+                <HiPlus className="w-5 h-5 mr-2" />
+                Add New Card
+              </Button>
+            </div>
           )}
 
           <div className="space-y-4">

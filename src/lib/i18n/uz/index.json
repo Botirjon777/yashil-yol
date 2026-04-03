@@ -32,7 +32,8 @@
     "searchPlaceholder": "Viloyat, Tuman, Mahalla...",
     "destinationPlaceholder": "Viloyat, Tuman, Mahalla...",
     "datePlaceholder": "Sanani tanlang",
-    "searchButton": "Qidirish"
+    "searchButton": "Qidirish",
+    "seeAllRides": "Barcha safarlarni ko'rish"
   },
   "stats": {
     "users": "Foydalanuvchilar",

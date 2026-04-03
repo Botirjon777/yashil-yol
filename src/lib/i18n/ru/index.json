@@ -32,7 +32,8 @@
     "searchPlaceholder": "Область, Район, Махалля...",
     "destinationPlaceholder": "Область, Район, Махалля...",
     "datePlaceholder": "Выберите дату",
-    "searchButton": "Найти"
+    "searchButton": "Найти",
+    "seeAllRides": "Посмотреть все поездки"
   },
   "stats": {
     "users": "Пользователей",

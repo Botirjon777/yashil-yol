@@ -32,7 +32,8 @@
     "searchPlaceholder": "Region, District, Village...",
     "destinationPlaceholder": "Region, District, Village...",
     "datePlaceholder": "Select date",
-    "searchButton": "Search"
+    "searchButton": "Search",
+    "seeAllRides": "See all rides"
   },
   "stats": {
     "users": "Happy Users",
