@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { FaTelegram, FaInstagram, FaFacebook } from "react-icons/fa";
 import { HiArrowUp } from "react-icons/hi";
@@ -48,27 +48,36 @@ const MobileFooter = () => {
 
           {/* Social */}
           <div className="flex flex-col items-center space-y-2.5 md:space-y-5">
-             <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest underline decoration-primary/30 underline-offset-4 decoration-2">
-                {safeT("footer", "connect")}
-             </p>
-             <div className="flex justify-center space-x-6">
-                <a href="#" className="w-12 h-12 bg-light-bg flex items-center justify-center rounded-2xl text-primary border border-border">
-                  <FaTelegram size={24} />
-                </a>
-                <a href="#" className="w-12 h-12 bg-light-bg flex items-center justify-center rounded-2xl text-primary border border-border">
-                  <FaInstagram size={24} />
-                </a>
-                <a href="#" className="w-12 h-12 bg-light-bg flex items-center justify-center rounded-2xl text-primary border border-border">
-                  <FaFacebook size={24} />
-                </a>
-             </div>
+            <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest underline decoration-primary/30 underline-offset-4 decoration-2">
+              {safeT("footer", "connect")}
+            </p>
+            <div className="flex justify-center space-x-6">
+              <a
+                href="#"
+                className="w-12 h-12 bg-light-bg flex items-center justify-center rounded-2xl text-primary border border-border"
+              >
+                <FaTelegram size={24} />
+              </a>
+              <a
+                href="#"
+                className="w-12 h-12 bg-light-bg flex items-center justify-center rounded-2xl text-primary border border-border"
+              >
+                <FaInstagram size={24} />
+              </a>
+              <a
+                href="#"
+                className="w-12 h-12 bg-light-bg flex items-center justify-center rounded-2xl text-primary border border-border"
+              >
+                <FaFacebook size={24} />
+              </a>
+            </div>
           </div>
 
           {/* Region Coverage */}
           <div className="p-2.5 bg-light-bg rounded-3xl border border-border text-center">
-             <p className="text-xs font-bold text-gray-600">
-                {safeT("footer", "coverage")}
-             </p>
+            <p className="text-xs font-bold text-gray-600">
+              {safeT("footer", "coverage")}
+            </p>
           </div>
 
           {/* Back to Top */}
@@ -90,7 +99,8 @@ const MobileFooter = () => {
               <Link href="/">{safeT("footer", "terms")}</Link>
             </div>
             <p className="text-gray-400 text-[10px] font-bold">
-              © {new Date().getFullYear()} Yashil Yo&apos;l. {safeT("footer", "rights")}
+              © {new Date().getFullYear()} Yashil Yo&apos;l.{" "}
+              {safeT("footer", "rights")}
             </p>
           </div>
         </div>

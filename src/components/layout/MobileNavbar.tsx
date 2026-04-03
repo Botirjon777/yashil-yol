@@ -21,14 +21,18 @@ const MobileNavbar = () => {
   return (
     <nav
       className={`md:hidden bg-white fixed top-0 left-0 right-0 z-50 h-16 transition-shadow duration-300 ${
-        scrolled ? "shadow-md border-b border-border/60" : "border-b border-border"
+        scrolled
+          ? "shadow-md border-b border-border/60"
+          : "border-b border-border"
       }`}
     >
       <div className="h-full flex items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
           <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center shadow-sm shadow-primary/25">
-            <span className="text-white font-black text-[10px] tracking-tight">YY</span>
+            <span className="text-white font-black text-[10px] tracking-tight">
+              YY
+            </span>
           </div>
           <span className="text-base font-black text-dark-text tracking-tight uppercase">
             Yashil <span className="text-primary">Yo'l</span>

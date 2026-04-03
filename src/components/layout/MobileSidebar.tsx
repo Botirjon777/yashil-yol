@@ -7,7 +7,6 @@ import {
   HiSearch,
   HiUsers,
   HiTicket,
-  HiUserCircle,
   HiLogout,
   HiChatAlt2,
   HiHome,
@@ -81,11 +80,21 @@ const panelVariants = {
   hidden: { x: "100%" },
   visible: {
     x: 0,
-    transition: { type: "spring" as const, stiffness: 320, damping: 32, mass: 0.9 },
+    transition: {
+      type: "spring" as const,
+      stiffness: 320,
+      damping: 32,
+      mass: 0.9,
+    },
   },
   exit: {
     x: "100%",
-    transition: { type: "spring" as const, stiffness: 380, damping: 40, mass: 0.8 },
+    transition: {
+      type: "spring" as const,
+      stiffness: 380,
+      damping: 40,
+      mass: 0.8,
+    },
   },
 };
 
@@ -94,7 +103,12 @@ const itemVariants = {
   visible: (i: number) => ({
     opacity: 1,
     x: 0,
-    transition: { delay: i * 0.045 + 0.1, type: "spring" as const, stiffness: 400, damping: 30 },
+    transition: {
+      delay: i * 0.045 + 0.1,
+      type: "spring" as const,
+      stiffness: 400,
+      damping: 30,
+    },
   }),
 };
 
@@ -103,7 +117,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
   const { language, setLanguage, t } = useLanguageStore();
   const { mutate: logoutMutation } = useLogout();
   const [mounted, setMounted] = useState(false);
-  
+
   const { data: meData } = useMe(!!token);
   const user = meData?.user || storedUser;
   const balance = user?.balance?.balance ? parseFloat(user.balance.balance) : 0;
@@ -183,7 +197,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
             <div className="px-5 py-4 flex items-center justify-between border-b border-border bg-linear-to-r from-primary/5 to-transparent">
               <div className="flex items-center gap-2.5">
                 <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-                  <span className="text-white font-black text-[10px] tracking-tight">YY</span>
+                  <span className="text-white font-black text-[10px] tracking-tight">
+                    YY
+                  </span>
                 </div>
                 <span className="text-sm font-black text-dark-text uppercase tracking-tight">
                   Yashil <span className="text-primary">Yo'l</span>
@@ -287,13 +303,23 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
                           "flex items-center gap-3.5 p-3 rounded-xl transition-all active:scale-[0.98]",
                           isActive
                             ? "bg-primary/8 border border-primary/15"
-                            : "hover:bg-light-bg border border-transparent"
+                            : "hover:bg-light-bg border border-transparent",
                         )}
                       >
-                        <div className={cn("w-9 h-9 rounded-xl flex items-center justify-center shrink-0", link.color)}>
+                        <div
+                          className={cn(
+                            "w-9 h-9 rounded-xl flex items-center justify-center shrink-0",
+                            link.color,
+                          )}
+                        >
                           <Icon className="w-4.5 h-4.5" />
                         </div>
-                        <span className={cn("font-bold text-sm", isActive ? "text-primary" : "text-dark-text")}>
+                        <span
+                          className={cn(
+                            "font-bold text-sm",
+                            isActive ? "text-primary" : "text-dark-text",
+                          )}
+                        >
                           {safeT("nav", link.label)}
                         </span>
                         {isActive && (
@@ -332,7 +358,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
                         "flex flex-col items-center p-2.5 rounded-xl border transition-all",
                         language === lang
                           ? "bg-primary text-white border-primary shadow-md shadow-primary/20"
-                          : "bg-white text-gray-500 border-border"
+                          : "bg-white text-gray-500 border-border",
                       )}
                     >
                       <img
@@ -340,7 +366,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
                         alt={lang}
                         className="w-7 h-[18px] object-cover rounded shadow-sm mb-1.5"
                       />
-                      <span className="text-[9px] font-black uppercase">{lang}</span>
+                      <span className="text-[9px] font-black uppercase">
+                        {lang}
+                      </span>
                     </motion.button>
                   ))}
                 </div>

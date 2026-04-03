@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { HiShieldCheck, HiStar } from "react-icons/hi";
 
 interface RideInfoCardProps {
@@ -11,13 +10,13 @@ interface RideInfoCardProps {
   rd: (key: string) => string;
 }
 
-export const RideInfoCard: React.FC<RideInfoCardProps> = ({
+export const RideInfoCard = ({
   trip,
   isDriver,
   driverName,
   carColor,
   rd,
-}) => {
+}: RideInfoCardProps) => {
   return (
     <div className="premium-card p-8 group">
       <h3 className="text-xl font-black text-dark-text mb-8 flex items-center">

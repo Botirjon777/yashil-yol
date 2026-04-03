@@ -1,6 +1,5 @@
 "use client";
 
-import React from "react";
 import { HiLocationMarker, HiClock } from "react-icons/hi";
 import { formatDate, cn } from "@/src/lib/utils";
 
@@ -11,7 +10,7 @@ interface RideRouteCardProps {
   rd: (key: string) => string;
 }
 
-export const RideRouteCard: React.FC<RideRouteCardProps> = ({ trip, from, to, rd }) => {
+export const RideRouteCard = ({ trip, from, to, rd }: RideRouteCardProps) => {
   return (
     <div className="premium-card p-8 md:p-10">
       <div className="flex items-center justify-between mb-10">
@@ -47,7 +46,8 @@ export const RideRouteCard: React.FC<RideRouteCardProps> = ({ trip, from, to, rd
               {new Date(trip.start_time).toLocaleDateString([], {
                 month: "short",
                 day: "numeric",
-              })},{" "}
+              })}
+              ,{" "}
               {new Date(trip.start_time).toLocaleTimeString([], {
                 hour: "2-digit",
                 minute: "2-digit",
@@ -72,7 +72,8 @@ export const RideRouteCard: React.FC<RideRouteCardProps> = ({ trip, from, to, rd
                   {new Date(trip.end_time).toLocaleDateString([], {
                     month: "short",
                     day: "numeric",
-                  })},{" "}
+                  })}
+                  ,{" "}
                   {new Date(trip.end_time).toLocaleTimeString([], {
                     hour: "2-digit",
                     minute: "2-digit",
