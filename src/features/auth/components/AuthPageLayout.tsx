@@ -10,6 +10,7 @@ interface AuthPageLayoutProps {
   imageSide?: "left" | "right";
   title?: string;
   subtitle?: string;
+  backgroundImage?: string;
 }
 
 export const AuthPageLayout = ({
@@ -17,6 +18,7 @@ export const AuthPageLayout = ({
   imageSide = "left",
   title,
   subtitle,
+  backgroundImage = "/assets/home/hero-bg.webp",
 }: AuthPageLayoutProps) => {
   return (
     <div className="min-h-screen flex flex-col md:flex-row bg-white overflow-hidden relative">
@@ -36,7 +38,7 @@ export const AuthPageLayout = ({
         )}
       >
         <img
-          src="/assets/home/hero-bg.webp"
+          src={backgroundImage}
           alt="Authentication Background"
           className="absolute inset-0 w-full h-full object-cover"
         />
