@@ -2,42 +2,54 @@ const sharp = require('sharp');
 const fs = require('fs');
 const path = require('path');
 
-const inputDir = path.join(__dirname, '../public/assets/home');
-const outputDir = inputDir;
+const baseDir = path.join(__dirname, '../public/assets');
 
-const files = [
-  { name: 'hero-bg.png', output: 'hero-bg.webp' },
-  { name: 'cto-bg.png', output: 'cto-bg.webp' }
-];
-
-async function compressImages() {
-  console.log('Starting image compression...');
-
-  for (const file of files) {
-    const inputPath = path.join(inputDir, file.name);
-    const outputPath = path.join(outputDir, file.output);
-
-    if (fs.existsSync(inputPath)) {
-      console.log(`Compressing ${file.name}...`);
-      try {
-        await sharp(inputPath)
-          .webp({ quality: 80 })
-          .toFile(outputPath);
-        
-        const oldSize = fs.statSync(inputPath).size / (1024 * 1024);
-        const newSize = fs.statSync(outputPath).size / (1024 * 1024);
-        
-        console.log(`Successfully compressed ${file.name}:`);
-        console.log(`  Original: ${oldSize.toFixed(2)} MB`);
-        console.log(`  Compressed (WebP): ${newSize.toFixed(2)} MB`);
-        console.log(`  Reduction: ${((1 - newSize / oldSize) * 100).toFixed(1)}%`);
-      } catch (error) {
-        console.error(`Error compressing ${file.name}:`, error);
-      }
+function getFiles(dir, files_) {
+  files_ = files_ || [];
+  const files = fs.readdirSync(dir);
+  for (const i in files) {
+    const name = path.join(dir, files[i]);
+    if (fs.statSync(name).isDirectory()) {
+      getFiles(name, files_);
     } else {
-      console.warn(`File not found: ${inputPath}`);
+      const ext = path.extname(name).toLowerCase();
+      if (['.png', '.jpg', '.jpeg'].includes(ext)) {
+        files_.push(name);
+      }
     }
   }
+  return files_;
+}
+
+async function compressImages() {
+  console.log('--- Starting automatic image compression ---');
+  
+  const allImages = getFiles(baseDir);
+  console.log(`Found ${allImages.length} images to process.\n`);
+
+  for (const inputPath of allImages) {
+    const ext = path.extname(inputPath);
+    const outputPath = inputPath.replace(ext, '.webp');
+
+    console.log(`Processing: ${path.relative(baseDir, inputPath)}...`);
+    
+    try {
+      const oldSize = fs.statSync(inputPath).size / (1024 * 1024);
+      
+      await sharp(inputPath)
+        .webp({ quality: 80 })
+        .toFile(outputPath);
+      
+      const newSize = fs.statSync(outputPath).size / (1024 * 1024);
+      const reduction = ((1 - newSize / oldSize) * 100).toFixed(1);
+      
+      console.log(`  Size: ${oldSize.toFixed(2)} MB -> ${newSize.toFixed(2)} MB (${reduction}% reduction)`);
+    } catch (error) {
+      console.error(`  Error processing ${path.basename(inputPath)}:`, error.message);
+    }
+  }
+  
+  console.log('\n--- Compression complete ---');
 }
 
 compressImages();

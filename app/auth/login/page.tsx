@@ -12,6 +12,7 @@ const LoginPage = () => {
   return (
     <AuthPageLayout
       imageSide="left"
+      backgroundImage="/assets/auth/login-bg.webp"
       title={safeT("auth", "login", "title")}
       subtitle={safeT("auth", "login", "subtitle")}
     >

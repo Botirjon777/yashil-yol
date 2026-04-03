@@ -13,6 +13,7 @@ const ForgotPasswordPage = () => {
   return (
     <AuthPageLayout
       imageSide="left"
+      backgroundImage="/assets/auth/forgot-bg.webp"
       title={safeT("auth", "forgotPassword", "title")}
       subtitle={safeT("auth", "forgotPassword", "subtitle")}
     >
