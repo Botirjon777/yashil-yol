@@ -8,8 +8,13 @@ export interface Transaction {
   id: number;
   user_id: number;
   amount: string;
-  type: "income" | "outcome";
-  description?: string;
+  type: "credit" | "debit";
+  reason?: string;
+  balance_before: string;
+  balance_after: string;
+  booking?: any;
+  trip?: any;
+  status: string;
   created_at: string;
 }
 
@@ -22,6 +27,7 @@ export const getBalance = async (): Promise<BalanceResponse> => {
 /** GET /user/balance-transactions */
 export const getTransactionHistory = async (): Promise<Transaction[]> => {
   const res = await api.get<{ data: Transaction[] }>("/user/balance-transactions");
+  console.log("getTransactionHistory - API Response:", res.data);
   return res.data?.data || [];
 };
 
