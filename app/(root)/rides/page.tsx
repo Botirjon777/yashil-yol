@@ -101,6 +101,10 @@ const RidesContent = () => {
   };
 
   const filteredRides = (rides || []).filter((ride) => {
+    // 1. Exclude past rides
+    const isPast = ride.start_time ? new Date(ride.start_time).getTime() < Date.now() : false;
+    if (isPast) return false;
+
     // For testing, disabled the self-exclusion filter so you can see your own trips
     // if (user && Number(ride.driver_id) === Number(user.id)) return false;
 

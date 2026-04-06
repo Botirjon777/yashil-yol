@@ -168,7 +168,14 @@ export const useHomeSearch = () => {
       };
 
       const results = await searchTrips(tripParams);
-      setSearchResults(results);
+      
+      // Filter out past trips
+      const now = Date.now();
+      const futureTrips = results.filter(ride => 
+        ride.start_time ? new Date(ride.start_time).getTime() > now : true
+      );
+
+      setSearchResults(futureTrips);
       
       // Scroll to results after a short delay to allow rendering
       setTimeout(() => {
