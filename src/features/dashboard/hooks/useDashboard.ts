@@ -15,6 +15,7 @@ import {
 import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { parseError } from "@/src/lib/errorUtils";
 import { toast } from "sonner";
+import { Card } from "../actions/payment";
 
 export function useDashboard() {
   const router = useRouter();
@@ -27,6 +28,7 @@ export function useDashboard() {
   const [isSectionOpen, setIsSectionOpen] = useState(false);
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
+  const [cardToVerify, setCardToVerify] = useState<Card | null>(null);
   const [isAddVehicleOpen, setIsAddVehicleOpen] = useState(false);
   const [rideType, setRideType] = useState<"passenger" | "driver">("passenger");
 
@@ -178,6 +180,8 @@ export function useDashboard() {
     setIsTopUpOpen,
     isAddCardOpen,
     setIsAddCardOpen,
+    cardToVerify,
+    setCardToVerify,
     rideType,
     handleRideTypeChange,
     isAddVehicleOpen,

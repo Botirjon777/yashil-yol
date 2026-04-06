@@ -2,11 +2,14 @@ import api from "@/src/lib/axios";
 
 export interface Card {
   id: number;
-  last4: string;
-  brand: string;
-  expiry_month: number;
-  expiry_year: number;
-  is_default: boolean;
+  card_id: string;
+  number: string; // Masked number like "5614 **** **** 0797"
+  label: string; // Card holder or label
+  expiry: string; // "MMYY" e.g. "0626"
+  status: "verified" | "not_verified";
+  is_default: number | boolean;
+  phone: string;
+  brand?: string; // Optional if backend doesn't provide it
 }
 
 export interface Transaction {
@@ -21,24 +24,24 @@ export interface Transaction {
 export interface AddCardRequest {
   number: string;
   expiry: string; // MMYY (4 characters)
-  cvv: string;
   holder_name: string;
   phone: string;
 }
 
 export interface VerifyCardRequest {
-  card_id: number;
-  code: string;
+  id: string | number;
+  card_key: string;
+  confirm_code: string;
 }
 
 export interface CreatePaymentRequest {
-  card_id: number;
-  amount: number;
+  card_id: string;
+  amount: string;
 }
 
 export interface ConfirmPaymentRequest {
-  payment_id: number;
-  code: string;
+  pay_id: string;
+  confirm_code: string;
 }
 
 export interface BalanceResponse {
@@ -58,8 +61,9 @@ export const getCards = async (): Promise<Card[]> => {
 };
 
 /** POST /bank/add-card */
-export const addCard = async (data: AddCardRequest): Promise<{ status: string; message: string; data: { card_id: number } }> => {
+export const addCard = async (data: AddCardRequest): Promise<{ status: string; message: string; data: { id: number; card_key: string } }> => {
   try {
+    console.log("addCard - Sending data to backend:", data);
     const res = await api.post("bank/add-card", data);
     console.log("addCard response:", res.data);
     return res.data;
@@ -72,6 +76,7 @@ export const addCard = async (data: AddCardRequest): Promise<{ status: string; m
 /** POST /bank/verify-card */
 export const verifyCard = async (data: VerifyCardRequest): Promise<{ status: string; message: string }> => {
   try {
+    console.log("verifyCard - Sending data to backend:", data);
     const res = await api.post("bank/verify-card", data);
     console.log("verifyCard response:", res.data);
     return res.data;
@@ -82,8 +87,9 @@ export const verifyCard = async (data: VerifyCardRequest): Promise<{ status: str
 };
 
 /** POST /bank/create-payment */
-export const createPayment = async (data: CreatePaymentRequest): Promise<{ status: string; message: string; data: { payment_id: number } }> => {
+export const createPayment = async (data: CreatePaymentRequest): Promise<{ status: string; message: string; data: { pay_id: string } }> => {
   try {
+    console.log("createPayment - Sending data to backend:", data);
     const res = await api.post("bank/create-payment", data);
     console.log("createPayment response:", res.data);
     return res.data;
@@ -96,6 +102,7 @@ export const createPayment = async (data: CreatePaymentRequest): Promise<{ statu
 /** POST /bank/confirm-payment */
 export const confirmPayment = async (data: ConfirmPaymentRequest): Promise<{ status: string; message: string }> => {
   try {
+    console.log("confirmPayment - Sending data to backend:", data);
     const res = await api.post("bank/confirm-payment", data);
     console.log("confirmPayment response:", res.data);
     return res.data;
@@ -130,7 +137,7 @@ export const getTransactionHistory = async (): Promise<Transaction[]> => {
 };
 
 /** DELETE /bank/delete-card/{id} */
-export const deleteCard = async (id: number): Promise<{ status: string; message: string }> => {
+export const deleteCard = async (id: number | string): Promise<{ status: string; message: string }> => {
   try {
     const res = await api.delete(`bank/delete-card/${id}`);
     console.log("deleteCard response:", res.data);

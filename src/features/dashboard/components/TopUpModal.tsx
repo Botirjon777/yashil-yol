@@ -3,7 +3,7 @@ import Modal from "@/src/components/ui/Modal";
 import Input from "@/src/components/ui/Input";
 import Button from "@/src/components/ui/Button";
 import Dropdown from "@/src/components/ui/Dropdown";
-import { HiPlus, HiCreditCard } from "react-icons/hi";
+import { HiPlus } from "react-icons/hi";
 import { useCards, useCreatePayment, useConfirmPayment } from "../hooks/useDashboardPayment";
 import { formatCurrency } from "@/src/lib/utils";
 
@@ -15,12 +15,12 @@ interface TopUpModalProps {
 
 const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick }) => {
   const [step, setStep] = useState<"input" | "confirm">("input");
-  const [paymentId, setPaymentId] = useState<number | null>(null);
+  const [paymentId, setPaymentId] = useState<string | null>(null);
   const { data: cards = [], isLoading: isLoadingCards } = useCards();
   const { mutate: createPayment, isPending: isCreating } = useCreatePayment();
   const { mutate: confirmPayment, isPending: isConfirming } = useConfirmPayment();
 
-  const [selectedCardId, setSelectedCardId] = useState<number | "">("");
+  const [selectedCardId, setSelectedCardId] = useState<string | "">("");
   const [amount, setAmount] = useState("");
   const [confirmationCode, setConfirmationCode] = useState("");
 
@@ -29,11 +29,11 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
     if (!selectedCardId || !amount) return;
 
     createPayment({
-      card_id: Number(selectedCardId),
-      amount: Number(amount),
+      card_id: String(selectedCardId), // Using numeric ID but as string (text)
+      amount: String(amount),
     }, {
       onSuccess: (response) => {
-        setPaymentId(response.data.payment_id);
+        setPaymentId(response.data.pay_id);
         setStep("confirm");
       },
     });
@@ -44,8 +44,8 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
     if (!paymentId || !confirmationCode) return;
 
     confirmPayment({
-      payment_id: paymentId,
-      code: confirmationCode,
+      pay_id: paymentId,
+      confirm_code: confirmationCode,
     }, {
       onSuccess: () => {
         setAmount("");
@@ -57,10 +57,12 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
     });
   };
 
-  const cardOptions = cards.map(card => ({
-    id: card.id,
-    name: `**** **** **** ${card.last4} (${card.brand})`
-  }));
+  const cardOptions = cards
+    .filter(card => card.status === "verified")
+    .map(card => ({
+      id: String(card.id), // Change back to numeric ID (as string)
+      name: `${card.number} (${card.brand || card.label || "Card"})`
+    }));
 
   const quickAmounts = [50000, 100000, 200000, 500000];
 
@@ -80,13 +82,15 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
             value={selectedCardId}
             onChange={setSelectedCardId}
             placeholder={isLoadingCards ? "Loading cards..." : "Choose a saved card"}
-            disabled={isLoadingCards || cards.length === 0}
+            disabled={isLoadingCards || cardOptions.length === 0}
           />
 
-          {cards.length === 0 && !isLoadingCards && (
+          {cardOptions.length === 0 && !isLoadingCards && (
             <div className="flex flex-col items-center justify-center p-6 bg-error/5 rounded-2xl border border-error/10 gap-3 -mt-4 mb-4">
               <p className="text-sm text-error font-medium italic text-center">
-                You need to add a card first to top up.
+                {cards.length > 0 
+                  ? "You need to verify your card before you can top up." 
+                  : "You need to add a card first to top up."}
               </p>
               <Button 
                 type="button" 
@@ -95,7 +99,7 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
                 className="font-black px-8 h-10"
               >
                 <HiPlus className="w-5 h-5 mr-2" />
-                Add New Card
+                {cards.length > 0 ? "Manage Cards" : "Add New Card"}
               </Button>
             </div>
           )}
@@ -164,6 +168,7 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
             value={confirmationCode}
             onChange={(e) => setConfirmationCode(e.target.value.replace(/\D/g, ""))}
             required
+            autoFocus
             className="text-center text-3xl tracking-[0.5em] font-black h-20 bg-light-bg/30 border-2"
           />
 

@@ -35,7 +35,7 @@ export const LoginForm = () => {
     }
 
     mutate(
-      { phone, password },
+      { phone: `+998${phone}`, password },
       {
         onSuccess: (data) => {
           setAuth(data.user, data.authorisation?.token);
@@ -59,15 +59,18 @@ export const LoginForm = () => {
         autoComplete="tel"
         type="tel"
         placeholder={safeT("auth", "login", "phonePlaceholder")}
+        prefixText="+998"
         iconLeft={<HiPhone className="w-5 h-5" />}
+        className="ml-2.5"
         required
         value={phone}
         onChange={(e) => {
-          setPhone(e.target.value);
+          const val = e.target.value.replace(/\D/g, ""); // Only digits
+          if (val.length <= 9) setPhone(val); // Limit to 9 digits for UZ
           if (localError) setLocalError(null);
         }}
         error={
-          phone && !isValidPhone(phone)
+          phone && phone.length < 9
             ? safeT("auth", "login", "phoneInvalid") ||
               "Iltimos, to'g'ri telefon raqami kiriting."
             : undefined

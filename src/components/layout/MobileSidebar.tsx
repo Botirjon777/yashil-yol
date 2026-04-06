@@ -261,18 +261,12 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
                     </div>
                   </div>
                 ) : (
-                  <div className="grid grid-cols-2 gap-2">
+                  <div className="grid grid-cols-1 gap-2">
                     <Link
                       href="/auth/login"
                       className="flex items-center justify-center p-3 bg-light-bg rounded-xl border border-border text-xs font-bold text-dark-text active:scale-95 transition-transform"
                     >
                       {safeT("nav", "login")}
-                    </Link>
-                    <Link
-                      href="/auth/register"
-                      className="flex items-center justify-center p-3 bg-primary rounded-xl text-xs font-bold text-white shadow-lg shadow-primary/20 active:scale-95 transition-transform"
-                    >
-                      {safeT("nav", "signup")}
                     </Link>
                   </div>
                 )}

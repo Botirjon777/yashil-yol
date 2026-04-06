@@ -2,43 +2,57 @@ import React, { useState, useEffect } from "react";
 import Modal from "@/src/components/ui/Modal";
 import Input from "@/src/components/ui/Input";
 import Button from "@/src/components/ui/Button";
-import { HiCreditCard, HiCalendar, HiLockClosed } from "react-icons/hi";
+import { HiLockClosed } from "react-icons/hi";
 import { useAddCard, useVerifyCard } from "../hooks/useDashboardPayment";
-import { useAuthStore } from "@/src/providers/AuthProvider";
+import { Card } from "../actions/payment";
 
 interface AddCardModalProps {
   isOpen: boolean;
   onClose: () => void;
+  initialCard?: Card | null;
 }
 
-const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose }) => {
+const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCard }) => {
   const [step, setStep] = useState<"input" | "verify">("input");
-  const [cardId, setCardId] = useState<number | null>(null);
+  const [cardId, setCardId] = useState<number | string | null>(null);
+  const [cardKey, setCardKey] = useState<string | null>(null);
   const [formData, setFormData] = useState({
     card_number: "",
     expiry: "",
-    cvv: "",
     holder_name: "",
     phone: "",
   });
   const [verificationCode, setVerificationCode] = useState("");
 
-  const user = useAuthStore(state => state.user);
-
   const { mutate: addCard, isPending: isAdding } = useAddCard();
   const { mutate: verifyCard, isPending: isVerifying } = useVerifyCard();
+
+  useEffect(() => {
+    if (initialCard && isOpen) {
+      setCardId(initialCard.id);
+      setCardKey(initialCard.card_id); // Using card_id as key for verification
+      setStep("verify");
+    } else if (!isOpen) {
+      // Reset when modal closes
+      setStep("input");
+      setCardId(null);
+      setCardKey(null);
+      setVerificationCode("");
+      setFormData({ card_number: "", expiry: "", holder_name: "", phone: "" });
+    }
+  }, [initialCard, isOpen]);
 
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     addCard({
       number: formData.card_number.replace(/\s/g, ""),
       expiry: formData.expiry.replace("/", ""),
-      cvv: formData.cvv,
       holder_name: formData.holder_name,
       phone: formData.phone,
     }, {
       onSuccess: (response) => {
-        setCardId(response.data.card_id);
+        setCardId(response.data.id);
+        setCardKey(response.data.card_key);
         setStep("verify");
       },
     });
@@ -46,12 +60,13 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose }) => {
 
   const handleVerifySubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (!cardId) return;
-    verifyCard({ card_id: cardId, code: verificationCode }, {
+    if (!cardId || !cardKey) return;
+    verifyCard({ 
+      id: cardId, 
+      card_key: cardKey, 
+      confirm_code: verificationCode 
+    }, {
       onSuccess: () => {
-        setFormData({ card_number: "", expiry: "", cvv: "", holder_name: "", phone: "" });
-        setVerificationCode("");
-        setStep("input");
         onClose();
       },
     });
@@ -103,34 +118,20 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose }) => {
               />
             </div>
             
-            <Input
-              label="Card Number"
-              placeholder="0000 0000 0000 0000"
-              value={formData.card_number}
-              onChange={handleCardNumberChange}
-              iconLeft={<HiCreditCard className="w-5 h-5" />}
-              className="py-4"
-              required
-            />
-            
-            <div className="grid grid-cols-2 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
+              <Input
+                label="Card Number"
+                placeholder="0000 0000 0000 0000"
+                value={formData.card_number}
+                onChange={handleCardNumberChange}
+                className="py-4"
+                required
+              />
               <Input
                 label="Expiry Date"
                 placeholder="MM/YY"
                 value={formData.expiry}
                 onChange={handleExpiryChange}
-                iconLeft={<HiCalendar className="w-5 h-5" />}
-                className="py-4"
-                required
-              />
-              <Input
-                label="CVV"
-                placeholder="***"
-                type="password"
-                maxLength={3}
-                value={formData.cvv}
-                onChange={(e) => setFormData({ ...formData, cvv: e.target.value.replace(/\D/g, "") })}
-                iconLeft={<HiLockClosed className="w-5 h-5" />}
                 className="py-4"
                 required
               />
@@ -174,12 +175,18 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose }) => {
             value={verificationCode}
             onChange={(e) => setVerificationCode(e.target.value.replace(/\D/g, ""))}
             required
+            autoFocus
             className="text-center text-3xl tracking-[0.5em] font-black h-20 bg-light-bg/30 border-2"
           />
 
           <div className="flex items-center justify-end gap-4 pt-4">
-            <Button variant="ghost" onClick={() => setStep("input")} type="button" className="text-gray-400 px-4">
-              Back
+            <Button 
+              variant="ghost" 
+              onClick={() => initialCard ? onClose() : setStep("input")} 
+              type="button" 
+              className="text-gray-400 px-4"
+            >
+              {initialCard ? "Cancel" : "Back"}
             </Button>
             <Button variant="primary" loading={isVerifying} type="submit" size="lg" className="px-12">
               Verify & Save Card

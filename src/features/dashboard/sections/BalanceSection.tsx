@@ -5,14 +5,16 @@ import { formatCurrency } from "@/src/lib/utils";
 import { useCards, useDeleteCard } from "../hooks/useDashboardPayment";
 import Loader from "@/src/components/ui/Loader";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import { Card } from "../actions/payment";
 
 interface BalanceSectionProps {
   balance: number;
   onTopUpClick: () => void;
   onAddCardClick: () => void;
+  onVerifyCardClick: (card: Card) => void;
 }
 
-export function BalanceSection({ balance, onTopUpClick, onAddCardClick }: BalanceSectionProps) {
+export function BalanceSection({ balance, onTopUpClick, onAddCardClick, onVerifyCardClick }: BalanceSectionProps) {
   const { data: cards = [], isLoading } = useCards();
   const { mutate: deleteCard, isPending: isDeleting } = useDeleteCard();
   const { t } = useLanguageStore();
@@ -60,10 +62,29 @@ export function BalanceSection({ balance, onTopUpClick, onAddCardClick }: Balanc
                     </div>
                     <div>
                       <div className="font-black text-dark-text text-sm group-hover/card:text-primary transition-colors">
-                        **** **** **** {card.last4}
+                        {card.number || `**** **** **** ${card.id}`}
                       </div>
-                      <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5">
-                        {card.brand} • {card.expiry_month > 9 ? card.expiry_month : `0${card.expiry_month}`}/{card.expiry_year.toString().slice(-2)}
+                      <div className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mt-0.5 flex items-center gap-2 flex-wrap">
+                        <span>{card.brand || card.label || "Card"}</span>
+                        <span>•</span>
+                        <span>
+                          {card.expiry?.length === 4 
+                            ? `${card.expiry.slice(0, 2)}/${card.expiry.slice(2, 4)}` 
+                            : "--/--"}
+                        </span>
+                        {card.status === "not_verified" && (
+                          <div className="flex items-center gap-2">
+                            <span className="bg-warning/10 text-warning px-1.5 py-0.5 rounded-md text-[8px]">
+                              {t("dashboard", "balance")?.notVerified || "NOT VERIFIED"}
+                            </span>
+                            <button 
+                              onClick={() => onVerifyCardClick(card)}
+                              className="text-primary hover:underline text-[8px] font-black uppercase tracking-wider"
+                            >
+                              {t("dashboard", "balance")?.verifyNow || "Verify Now"}
+                            </button>
+                          </div>
+                        )}
                       </div>
                     </div>
                   </div>

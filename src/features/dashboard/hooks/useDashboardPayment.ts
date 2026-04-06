@@ -30,7 +30,11 @@ export const useTransactions = () =>
 export const useCards = () =>
   useQuery({
     queryKey: ["cards"],
-    queryFn: getCards,
+    queryFn: async () => {
+      const data = await getCards();
+      console.log("getCards response - Full Data:", data);
+      return data;
+    },
   });
 
 export const useAddCard = () => {
@@ -83,7 +87,7 @@ export const useConfirmPayment = () => {
 export const useDeleteCard = () => {
   const queryClient = useQueryClient();
   return useMutation({
-    mutationFn: (id: number) => deleteCard(id),
+    mutationFn: (id: number | string) => deleteCard(id),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cards"] });
       toast.success("Card deleted successfully");

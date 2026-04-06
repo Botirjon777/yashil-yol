@@ -13,28 +13,33 @@ import { useLanguageStore } from "@/src/providers/LanguageProvider";
 export const ForgotPasswordForm = () => {
   const [phone, setPhone] = useState("");
   const [isSubmitted, setIsSubmitted] = useState(false);
-  
+
   const { mutate, isPending, error: apiError } = useSendResetCode();
   const { safeT } = useLanguageStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     mutate(
-      { phone },
+      { phone: `+998${phone}` },
       {
         onSuccess: () => {
           setIsSubmitted(true);
           toast.success(safeT("auth", "forgotPassword", "resetLinkSent"));
         },
         onError: (err: any) => {
-          toast.error(err?.response?.data?.message || err.message || safeT("auth", "forgotPassword", "resetFailed"));
-        }
-      }
+          toast.error(
+            err?.response?.data?.message ||
+              err.message ||
+              safeT("auth", "forgotPassword", "resetFailed"),
+          );
+        },
+      },
     );
   };
 
-  const displayError = (apiError as any)?.response?.data?.message || apiError?.message;
+  const displayError =
+    (apiError as any)?.response?.data?.message || apiError?.message;
 
   if (isSubmitted) {
     return (
@@ -47,12 +52,14 @@ export const ForgotPasswordForm = () => {
         </h2>
         <p className="text-gray-500 font-medium mb-6 text-sm md:text-base leading-relaxed text-balance">
           {safeT("auth", "forgotPassword", "successSubtitle")} <br />
-          <span className="text-dark-text font-black text-base md:text-lg">{phone}</span>
+          <span className="text-dark-text font-black text-base md:text-lg">
+            +998{phone}
+          </span>
         </p>
         <div className="space-y-2">
-          <Button 
-            variant="outline" 
-            fullWidth 
+          <Button
+            variant="outline"
+            fullWidth
             onClick={() => setIsSubmitted(false)}
             className="h-12 text-sm rounded-xl"
           >
@@ -74,18 +81,25 @@ export const ForgotPasswordForm = () => {
       <Input
         label={safeT("auth", "forgotPassword", "emailLabel")}
         type="tel"
-        placeholder="+998 xx xxx xx xx"
+        prefixText="+998"
+        placeholder={
+          safeT("auth", "forgotPassword", "emailPlaceholder") || "90 123 45 67"
+        }
         required
         value={phone}
-        onChange={(e) => setPhone(e.target.value)}
+        className="ml-2.5"
+        onChange={(e) => {
+          const val = e.target.value.replace(/\D/g, "");
+          if (val.length <= 9) setPhone(val);
+        }}
         iconLeft={<HiPhone className="w-5 h-5 text-gray-400" />}
       />
 
       <div className="pt-1">
-        <Button 
-          type="submit" 
-          fullWidth 
-          size="lg" 
+        <Button
+          type="submit"
+          fullWidth
+          size="lg"
           loading={isPending}
           className="h-12 md:h-14 shadow-lg shadow-primary/5"
         >
