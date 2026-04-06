@@ -34,6 +34,8 @@ export default function DashboardFeature() {
     setIsTopUpOpen,
     isAddCardOpen,
     setIsAddCardOpen,
+    cardToVerify,
+    setCardToVerify,
     rideType,
     handleRideTypeChange,
     activeRides,
@@ -101,7 +103,14 @@ export default function DashboardFeature() {
         <BalanceSection
           balance={balance}
           onTopUpClick={() => setIsTopUpOpen(true)}
-          onAddCardClick={() => setIsAddCardOpen(true)}
+          onAddCardClick={() => {
+            setCardToVerify(null);
+            setIsAddCardOpen(true);
+          }}
+          onVerifyCardClick={(card) => {
+            setCardToVerify(card);
+            setIsAddCardOpen(true);
+          }}
         />
       )}
       {activeTab === "profile" && (
@@ -230,7 +239,11 @@ export default function DashboardFeature() {
       />
       <AddCardModal
         isOpen={isAddCardOpen}
-        onClose={() => setIsAddCardOpen(false)}
+        onClose={() => {
+          setIsAddCardOpen(false);
+          setCardToVerify(null);
+        }}
+        initialCard={cardToVerify}
       />
       <AddVehicleModal
         isOpen={isAddVehicleOpen}
