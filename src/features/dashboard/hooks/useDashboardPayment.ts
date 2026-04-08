@@ -32,7 +32,6 @@ export const useCards = () =>
     queryKey: ["cards"],
     queryFn: async () => {
       const data = await getCards();
-      console.log("getCards response - Full Data:", data);
       return data;
     },
   });
@@ -52,6 +51,7 @@ export const useVerifyCard = () => {
     mutationFn: (data: VerifyCardRequest) => verifyCard(data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["cards"] });
+      queryClient.invalidateQueries({ queryKey: ["me"] });
       toast.success("Card verified and added successfully");
     },
     onError: (error: any) => {
@@ -64,7 +64,6 @@ export const useCreatePayment = () => {
   return useMutation({
     mutationFn: (data: CreatePaymentRequest) => createPayment(data),
     onError: (error: any) => {
-      console.error("useCreatePayment error:", error);
       const serverMessage = error.response?.data?.message;
       toast.error(serverMessage || "Payment failed. Please check your card balance and try again.");
     },
@@ -78,6 +77,7 @@ export const useConfirmPayment = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["balance"] });
       queryClient.invalidateQueries({ queryKey: ["transactions"] });
+      queryClient.invalidateQueries({ queryKey: ["me"] });
       toast.success("Balance topped up successfully");
     },
     onError: (error: any) => {

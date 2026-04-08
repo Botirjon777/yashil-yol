@@ -52,7 +52,6 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
       phone: formData.phone,
     }, {
       onSuccess: (res: any) => {
-        console.log("AddCardModal - Mutation Success Response:", res);
         // Robust extraction for flat or nested responses
         const card = res.card || res.data || (res.id ? res : null);
         if (card && (card.id || card.card_id || card.key)) {
@@ -60,7 +59,6 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
           setCardKey(card.key || card.card_key || card.card_id || card.id);
           setStep("verify");
         } else {
-          console.error("AddCardModal - Verification data missing in response:", res);
           // Fallback: search for anything that looks like an ID or key
           const fallbackId = res.id || res.card_id || res.pay_id;
           const fallbackKey = res.key || res.card_key || res.card_id || res.id;
@@ -74,7 +72,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
         }
       },
       onError: (err: any) => {
-        console.error("AddCardModal - Add Card error:", err);
+        // Error handling (removed log)
       }
     });
   };

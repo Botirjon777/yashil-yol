@@ -212,7 +212,7 @@ const Navbar = () => {
                       className="flex items-center space-x-3 px-3 py-2.5 text-xs md:text-sm font-semibold text-gray-600 hover:bg-light-bg hover:text-primary rounded-lg transition-all"
                     >
                       <HiChatAlt2 className="w-5 h-5 opacity-70" />
-                      <span>Support Center</span>
+                      <span>{safeT("nav", "support")}</span>
                     </Link>
                     <button
                       onClick={() => {

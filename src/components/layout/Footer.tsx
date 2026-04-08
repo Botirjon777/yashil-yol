@@ -76,7 +76,7 @@ const Footer = () => {
             <ul className="space-y-4">
               <li>
                 <Link
-                  href="/"
+                  href="/about-us"
                   className="text-gray-500 hover:text-primary font-medium transition-colors"
                 >
                   {safeT("footer", "about")}
@@ -84,7 +84,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/"
+                  href="/support"
                   className="text-gray-500 hover:text-primary font-medium transition-colors"
                 >
                   {safeT("footer", "contact")}
@@ -92,7 +92,7 @@ const Footer = () => {
               </li>
               <li>
                 <Link
-                  href="/"
+                  href="/terms"
                   className="text-gray-500 hover:text-primary font-medium transition-colors"
                 >
                   {safeT("footer", "terms")}
@@ -136,7 +136,7 @@ const Footer = () => {
             © {new Date().getFullYear()} Yashil Yo&apos;l.{" "}
             {safeT("footer", "rights")}
           </p>
-          <div className="flex space-x-6 text-sm text-gray-400 font-medium">
+          <div className="flex space-x-6 text-sm text-gray-400 font-medium" suppressHydrationWarning>
             <Link href="/" className="hover:text-primary transition-colors">
               {safeT("footer", "privacy")}
             </Link>

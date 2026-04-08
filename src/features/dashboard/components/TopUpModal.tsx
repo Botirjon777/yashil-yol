@@ -30,26 +30,22 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
     e.preventDefault();
     if (!selectedCardId || !amount) return;
 
-    console.log("TopUpModal - Creating Payment with:", { card_id: selectedCardId, amount });
-
     createPayment({
       card_id: String(selectedCardId),
       amount: String(amount),
     }, {
       onSuccess: (res: any) => {
-        console.log("TopUpModal - Create Payment success response:", res);
         // Robust extraction: backend might return it at root or inside data
         const id = res.pay_id || res.data?.pay_id || res.result?.pay_id;
         if (id) {
           setPaymentId(id);
           setStep("confirm");
         } else {
-          console.error("TopUpModal - Could not find pay_id in response:", res);
           toast.error("Failed to get Payment ID from server");
         }
       },
       onError: (err: any) => {
-        console.error("TopUpModal - Create Payment error:", err);
+        // Error handling (removed log)
       }
     });
   };
@@ -174,12 +170,6 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
             <p className="text-gray-500 font-medium max-w-sm mx-auto">
               Please enter the confirmation code sent to your phone.
             </p>
-            {paymentId && (
-              <div className="bg-light-bg p-3 rounded-xl border border-border inline-block mt-2">
-                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Payment ID</span>
-                <code className="text-sm font-black text-primary select-all">{paymentId}</code>
-              </div>
-            )}
             <p className="text-gray-500 text-xs font-medium mt-4">
               Payment amount: <strong>{formatCurrency(Number(amount))}</strong>
             </p>

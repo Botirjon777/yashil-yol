@@ -196,7 +196,7 @@ export function useDashboard() {
     isFatherNameModalOpen,
     setIsFatherNameModalOpen,
     isDriver,
-    balance: balanceData?.balance ? parseFloat(balanceData.balance) : 0,
+    balance: (balanceData?.balance || user?.balance?.balance) ? parseFloat(String(balanceData?.balance || user?.balance?.balance).replace(',', '.')) : 0,
     vehicles: vehiclesData || [],
   };
 }
