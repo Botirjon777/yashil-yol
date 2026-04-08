@@ -93,10 +93,10 @@ const MobileFooter = () => {
 
           {/* Copyright & Links */}
           <div className="space-y-2.5 md:space-y-5 pt-6 border-t border-border text-center">
-            <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm font-bold text-gray-400 uppercase tracking-tighter">
-              <Link href="/">{safeT("footer", "privacy")}</Link>
-              <Link href="/">{safeT("footer", "cookie")}</Link>
-              <Link href="/">{safeT("footer", "terms")}</Link>
+            <div className="flex flex-wrap justify-center gap-x-8 gap-y-3 text-sm font-bold text-gray-400 uppercase tracking-tighter" suppressHydrationWarning>
+              <Link href="/about-us">{safeT("footer", "about")}</Link>
+              <Link href="/support">{safeT("footer", "contact")}</Link>
+              <Link href="/terms">{safeT("footer", "terms")}</Link>
             </div>
             <p className="text-gray-400 text-[10px] font-bold">
               © {new Date().getFullYear()} Yashil Yo&apos;l.{" "}

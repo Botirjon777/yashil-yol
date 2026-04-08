@@ -457,5 +457,67 @@
     "canceled": "Canceled",
     "pending": "Pending",
     "confirmed": "Confirmed"
+  },
+  "terms": {
+    "title": "Terms & Conditions",
+    "subtitle": "Please read these terms carefully before using the Yashil Yo'l platform.",
+    "lastUpdated": "Last Updated",
+    "version": "Version",
+    "qTitle": "Have questions about our terms?",
+    "qSubtitle": "Our support team is always here to help you understand your rights and obligations.",
+    "contactSupport": "Contact Support",
+    "print": "Print Document",
+    "sections": {
+      "acceptance": {
+        "title": "1. Agreement to Terms",
+        "content": "By accessing or using the Yashil Yo'l platform, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you may not use our services. These terms apply to all users, including drivers, passengers, and bus booking customers."
+      },
+      "eligibility": {
+        "title": "2. Eligibility & Account Security",
+        "content": "Users must be at least 18 years old to create an account. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You must provide accurate and complete information during registration."
+      },
+      "services": {
+        "title": "3. Services Overview",
+        "content": "Yashil Yo'l provides a technology platform that connects passengers with independent drivers for carpool services and facilitates ticket bookings for professional bus operators. Yashil Yo'l does not provide transportation services directly and is not a transportation carrier."
+      },
+      "conduct": {
+        "title": "4. User Obligations & Conduct",
+        "content": "All users agree to behave respectfully and legally. Drivers must maintain valid licenses and vehicle documentation. Passengers must cooperate with safety rules. Any form of harassment, discrimination, or illegal activity will result in immediate termination of account access."
+      },
+      "payment": {
+        "title": "5. Booking & Payment Policies",
+        "content": "Payments are processed securely through our partners (e.g., Hamkorbank). Fees include the cost of the ride/ticket and any applicable platform service fees. By confirming a booking, you authorize us to charge your selected payment method."
+      },
+      "cancellation": {
+        "title": "6. Cancellations & Refunds",
+        "content": "Cancellation policies vary by service type. For carpool rides, cancellations made within a specific timeframe may incur a fee. Bus ticket refunds are subject to the operator's policy and platform processing fees. Detailed rules are available in the booking section."
+      },
+      "liability": {
+        "title": "7. Limitation of Liability",
+        "content": "Yashil Yo'l is not liable for any damages, personal injuries, or property loss resulting from rides arranged through the platform. We provide the technology to facilitate connections but do not guarantee the quality, safety, or legality of the transportation provided."
+      },
+      "governingLaw": {
+        "title": "8. Governing Law",
+        "content": "These terms are governed by and construed in accordance with the laws of the Republic of Uzbekistan. Any disputes arising from these terms shall be subject to the exclusive jurisdiction of the courts of Uzbekistan."
+      }
+    }
+  },
+  "about": {
+    "title": "About Us",
+    "subtitle": "The largest and safest ride-sharing platform in Uzbekistan.",
+    "mission": {
+      "title": "Our Mission",
+      "desc": "Our mission is to make traveling across Uzbekistan easy, safe, and affordable for everyone. We connect people through technology and reduce transportation costs."
+    },
+    "vision": {
+      "title": "Our Vision",
+      "desc": "In the future, we plan to become the most reliable and green transportation platform, connecting every city and village in Uzbekistan."
+    },
+    "values": {
+      "title": "Our Values",
+      "safety": "Safety First",
+      "community": "Trusted Community",
+      "innovation": "Constant Innovation"
+    }
   }
 }

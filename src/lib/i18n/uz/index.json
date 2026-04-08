@@ -460,5 +460,67 @@
     "cancelled": "Bekor qilingan",
     "pending": "Kutilmoqda",
     "confirmed": "Tasdiqlangan"
+  },
+  "terms": {
+    "title": "Xizmat ko'rsatish shartlari",
+    "subtitle": "Yashil Yo'l platformasidan foydalanishdan oldin ushbu shartlarni diqqat bilan o'qib chiqing.",
+    "lastUpdated": "Oxirgi yangilanish",
+    "version": "Versiya",
+    "qTitle": "Shartlarimiz haqidaga savollaringiz bormi?",
+    "qSubtitle": "Bizning yordam guruhimiz huquq va majburiyatlaringizni tushunishga har doim yordam berishga tayyor.",
+    "contactSupport": "Yordam guruhiga murojaat qilish",
+    "print": "Hujjatni chop etish",
+    "sections": {
+      "acceptance": {
+        "title": "1. Shartlar bilan kelishuv",
+        "content": "Yashil Yo'l platformasiga kirish yoki undan foydalanish orqali siz ushbu Foydalanish shartlariga rioya qilishga rozilik bildirasiz. Agar siz biron bir qismga rozi bo'lmasangiz, xizmatlarimizdan foydalana olmaysiz. Ushbu shartlar barcha foydalanuvchilarga, jumladan, haydovchilar, yo'lovchilar va avtobus chiptalarini band qiluvchi mijozlarga tegishli."
+      },
+      "eligibility": {
+        "title": "2. Huquqiylik va hisob xavfsizligi",
+        "content": "Hisob yaratish uchun foydalanuvchilar kamida 18 yoshda bo'lishi kerak. Siz hisob ma'lumotlaringizning maxfiyligini saqlash va hisobingiz ostida sodir bo'ladigan barcha harakatlar uchun javobgarsiz. Ro'yxatdan o'tish paytida aniq va to'liq ma'lumot berishingiz kerak."
+      },
+      "services": {
+        "title": "3. Xizmatlar tavsifi",
+        "content": "Yashil Yo'l - bu yo'lovchilarni karpul xizmatlari uchun mustaqil haydovchilar bilan bog'laydigan va professional avtobus tashuvchilari uchun chiptalarni band qilishga yordam beradigan texnologik platforma. Yashil Yo'l transport xizmatlarini bevosita ko'rsatmaydi va transport tashuvchisi emas."
+      },
+      "conduct": {
+        "title": "4. Foydalanuvchi majburiyatlari va xulq-atvori",
+        "content": "Barcha foydalanuvchilar o'zlarini hurmat bilan va qonuniy tutishga rozi bo'lishadi. Haydovchilar amaldagi haydovchilik guvohnomalari va transport vositalari hujjatlariga ega bo'lishlari shart. Yo'lovchilar xavfsizlik qoidalariga rioya qilishlari kerak. Har qanday haqorat, kamsitish yoki noqonuniy faoliyat hisobni darhol to'xtatishga olib keladi."
+      },
+      "payment": {
+        "title": "5. Band qilish va to'lov siyosati",
+        "content": "To'lovlar hamkorlarimiz (masalan, Hamkorbank) orqali xavfsiz amalga oshiriladi. To'lovlar safar/chipta narxini va platforma xizmat haqini o'z ichiga oladi. Band qilishni tasdiqlash orqali siz bizga tanlangan to'lov usulidan mablag' yechib olishga ruxsat berasiz."
+      },
+      "cancellation": {
+        "title": "6. Bekor qilish va qaytarish",
+        "content": "Bekor qilish siyosati xizmat turiga qarab farqlanadi. Karpul safarlari uchun belgilangan vaqt ichida qilingan bekor qilishlar jarimaga olib kelishi mumkin. Avtobus chiptalarini qaytarish tashuvchining siyosatiga va platforma xizmat haqiga bog'liq. Batafsil qoidalar band qilish bo'limida mavjud."
+      },
+      "liability": {
+        "title": "7. Mas'uliyatni cheklash",
+        "content": "Yashil Yo'l platforma orqali tashkil etilgan safarlar natijasida yuzaga keladigan har qanday zarar, shaxsiy jarohatlar yoki mulkiy yo'qotishlar uchun javobgar emas. Biz aloqalarni osonlashtirish uchun texnologiyani taqdim etamiz, ammo ko'rsatilayotgan transport sifati, xavfsizligi yoki qonuniyligiga kafolat bermaymiz."
+      },
+      "governingLaw": {
+        "title": "8. Tartibga soluvchi qonunchilik",
+        "content": "Ushbu shartlar O'zbekiston Respublikasi qonunchiligiga muvofiq tartibga solinadi va talqin qilinadi. Ushbu shartlardan kelib chiqadigan har qanday nizolar O'zbekiston sudlarining mutlaq yurisdiktsiyasiga bo'ysunadi."
+      }
+    }
+  },
+  "about": {
+    "title": "Biz haqimizda",
+    "subtitle": "O'zbekistondagi eng yirik va xavfsiz hamrohlik platformasi.",
+    "mission": {
+      "title": "Bizning maqsadimiz",
+      "desc": "Bizning maqsadimiz - O'zbekiston bo'ylab sayohat qilishni hamma uchun oson, xavfsiz va hamyonbop qilish. Biz texnologiya orqali odamlarni birlashtiramiz va transport xarajatlarini kamaytiramiz."
+    },
+    "vision": {
+      "title": "Bizning qarashimiz",
+      "desc": "Kelgusida biz O'zbekistondagi har bir shahar va qishloqni bog'laydigan, eng ishonchli va yashil transport platformasiga aylanishni rejalashtirganmiz."
+    },
+    "values": {
+      "title": "Bizning qadriyatlarimiz",
+      "safety": "Xavfsizlik birinchi o'rinda",
+      "community": "Ishonchli hamjamiyat",
+      "innovation": "Doimiy innovatsiya"
+    }
   }
 }
