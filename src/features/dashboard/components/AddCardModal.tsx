@@ -3,6 +3,7 @@ import Modal from "@/src/components/ui/Modal";
 import Input from "@/src/components/ui/Input";
 import Button from "@/src/components/ui/Button";
 import { HiLockClosed } from "react-icons/hi";
+import { toast } from "sonner";
 import { useAddCard, useVerifyCard } from "../hooks/useDashboardPayment";
 import { Card } from "../actions/payment";
 
@@ -50,11 +51,31 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
       holder_name: formData.holder_name,
       phone: formData.phone,
     }, {
-      onSuccess: (response) => {
-        setCardId(response.data.id);
-        setCardKey(response.data.card_key);
-        setStep("verify");
+      onSuccess: (res: any) => {
+        console.log("AddCardModal - Mutation Success Response:", res);
+        // Robust extraction for flat or nested responses
+        const card = res.card || res.data || (res.id ? res : null);
+        if (card && (card.id || card.card_id || card.key)) {
+          setCardId(card.id || card.card_id);
+          setCardKey(card.key || card.card_key || card.card_id || card.id);
+          setStep("verify");
+        } else {
+          console.error("AddCardModal - Verification data missing in response:", res);
+          // Fallback: search for anything that looks like an ID or key
+          const fallbackId = res.id || res.card_id || res.pay_id;
+          const fallbackKey = res.key || res.card_key || res.card_id || res.id;
+          if (fallbackId && fallbackKey) {
+             setCardId(fallbackId);
+             setCardKey(fallbackKey);
+             setStep("verify");
+          } else {
+             toast.error("Failed to get card information for verification");
+          }
+        }
       },
+      onError: (err: any) => {
+        console.error("AddCardModal - Add Card error:", err);
+      }
     });
   };
 

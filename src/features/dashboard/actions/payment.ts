@@ -61,7 +61,7 @@ export const getCards = async (): Promise<Card[]> => {
 };
 
 /** POST /bank/add-card */
-export const addCard = async (data: AddCardRequest): Promise<{ status: string; message: string; data: { id: number; card_key: string } }> => {
+export const addCard = async (data: AddCardRequest): Promise<{ status: string; message: string; card: { id: number; label: string; phone: string; key: string } }> => {
   try {
     console.log("addCard - Sending data to backend:", data);
     const res = await api.post("bank/add-card", data);
@@ -87,7 +87,7 @@ export const verifyCard = async (data: VerifyCardRequest): Promise<{ status: str
 };
 
 /** POST /bank/create-payment */
-export const createPayment = async (data: CreatePaymentRequest): Promise<{ status: string; message: string; data: { pay_id: string } }> => {
+export const createPayment = async (data: CreatePaymentRequest): Promise<{ status: string; message: string; pay_id: string; confirmation?: string }> => {
   try {
     console.log("createPayment - Sending data to backend:", data);
     const res = await api.post("bank/create-payment", data);

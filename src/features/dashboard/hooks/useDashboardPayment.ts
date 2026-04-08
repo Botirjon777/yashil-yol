@@ -64,7 +64,9 @@ export const useCreatePayment = () => {
   return useMutation({
     mutationFn: (data: CreatePaymentRequest) => createPayment(data),
     onError: (error: any) => {
-      toast.error(error.response?.data?.message || "Failed to initiate payment");
+      console.error("useCreatePayment error:", error);
+      const serverMessage = error.response?.data?.message;
+      toast.error(serverMessage || "Payment failed. Please check your card balance and try again.");
     },
   });
 };

@@ -6,6 +6,8 @@ import Dropdown from "@/src/components/ui/Dropdown";
 import { HiPlus } from "react-icons/hi";
 import { useCards, useCreatePayment, useConfirmPayment } from "../hooks/useDashboardPayment";
 import { formatCurrency } from "@/src/lib/utils";
+import { toast } from "sonner";
+import { CreatePaymentRequest } from "../actions/payment";
 
 interface TopUpModalProps {
   isOpen: boolean;
@@ -28,14 +30,27 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
     e.preventDefault();
     if (!selectedCardId || !amount) return;
 
+    console.log("TopUpModal - Creating Payment with:", { card_id: selectedCardId, amount });
+
     createPayment({
-      card_id: String(selectedCardId), // Using numeric ID but as string (text)
+      card_id: String(selectedCardId),
       amount: String(amount),
     }, {
-      onSuccess: (response) => {
-        setPaymentId(response.data.pay_id);
-        setStep("confirm");
+      onSuccess: (res: any) => {
+        console.log("TopUpModal - Create Payment success response:", res);
+        // Robust extraction: backend might return it at root or inside data
+        const id = res.pay_id || res.data?.pay_id || res.result?.pay_id;
+        if (id) {
+          setPaymentId(id);
+          setStep("confirm");
+        } else {
+          console.error("TopUpModal - Could not find pay_id in response:", res);
+          toast.error("Failed to get Payment ID from server");
+        }
       },
+      onError: (err: any) => {
+        console.error("TopUpModal - Create Payment error:", err);
+      }
     });
   };
 
@@ -70,7 +85,7 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
     <Modal 
       isOpen={isOpen} 
       onClose={onClose} 
-      title={step === "input" ? "Top up Balance" : "Confirm Payment"}
+      title={step === "input" ? "Top up Balance" : "Verify Payment"}
       size="md"
       className="max-w-xl"
     >
@@ -155,9 +170,18 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
             <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
               <HiPlus className="w-8 h-8" />
             </div>
-            <h4 className="text-lg font-black text-dark-text">Confirm Transaction</h4>
+            <h4 className="text-lg font-black text-dark-text">Verify Payment</h4>
             <p className="text-gray-500 font-medium max-w-sm mx-auto">
-              Please enter the confirmation code sent to your phone to complete the payment of <strong>{formatCurrency(Number(amount))}</strong>.
+              Please enter the confirmation code sent to your phone.
+            </p>
+            {paymentId && (
+              <div className="bg-light-bg p-3 rounded-xl border border-border inline-block mt-2">
+                <span className="text-[10px] font-bold text-gray-400 uppercase tracking-widest block mb-1">Payment ID</span>
+                <code className="text-sm font-black text-primary select-all">{paymentId}</code>
+              </div>
+            )}
+            <p className="text-gray-500 text-xs font-medium mt-4">
+              Payment amount: <strong>{formatCurrency(Number(amount))}</strong>
             </p>
           </div>
 
