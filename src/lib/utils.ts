@@ -13,22 +13,30 @@ export function formatCurrency(amount: number) {
   }).format(amount);
 }
 
-export function formatDate(date: string | Date) {
+export function formatDate(date: string | Date | undefined | null) {
+  if (!date) return '---';
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return '---';
+  
   return new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
-  }).format(new Date(date));
+  }).format(d);
 }
 
-export function formatDateTime(date: string | Date) {
+export function formatDateTime(date: string | Date | undefined | null) {
+  if (!date) return '---';
+  const d = new Date(date);
+  if (isNaN(d.getTime())) return '---';
+
   return new Intl.DateTimeFormat('en-GB', {
     day: '2-digit',
     month: '2-digit',
     year: 'numeric',
     hour: '2-digit',
     minute: '2-digit',
-  }).format(new Date(date));
+  }).format(d);
 }
 
 export function getVehicleColorHex(colorName: string): string {

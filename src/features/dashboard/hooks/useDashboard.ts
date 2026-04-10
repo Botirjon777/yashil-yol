@@ -67,6 +67,19 @@ export function useDashboard() {
   const { data: passengerBookings } = useClientBookings();
   const { data: vehiclesData } = useVehicles();
 
+  // Debug logs for canceled rides
+  useEffect(() => {
+    if (passengerCanceled) {
+      console.log("Dashboard [Passenger Canceled] Raw:", passengerCanceled);
+    }
+    if (passengerBookings) {
+      console.log("Dashboard [Passenger Bookings] Raw:", passengerBookings);
+    }
+    if (driverCanceled) {
+      console.log("Dashboard [Driver Canceled]:", driverCanceled);
+    }
+  }, [passengerCanceled, passengerBookings, driverCanceled]);
+
   // Profile Form State
   const [profileForm, setProfileForm] = useState({
     first_name: "",
@@ -88,23 +101,47 @@ export function useDashboard() {
   const isDriver = user?.role === "driver";
 
   const now = new Date();
+
+  // Helper to normalize passenger trips
+  const mapPassengerTrip = (b: any, forceStatus?: string) => {
+    if (!b) return b;
+
+    // 1. Start with everything in b (booking or trip)
+    const normalized = { ...b };
+    
+    // 2. Overlap with nested trip data if present (often in /bookings endpoint)
+    if (b.trip) {
+      Object.assign(normalized, b.trip);
+    }
+    
+    // Find my booking status
+    let bStatus = b.booking_status || b.status;
+    
+    // If we're looking at a trip object from a canceled list, but its root status is active
+    // search for a canceled booking in its bookings array
+    if (forceStatus === "canceled" || (bStatus === "active" && Array.isArray(b.bookings))) {
+       const myCancel = b.bookings?.find((bk: any) => bk.booking_status === "canceled" || bk.booking_status === "cancelled");
+       if (myCancel || forceStatus === "canceled") bStatus = "canceled";
+    }
+
+    return {
+      ...normalized,
+      bookingId: b.id || b.booking_id, // Store booking ID separately
+      bookingStatus: bStatus,
+      // Priority: individual booking status > overall trip status
+      status: (bStatus === "canceled" || bStatus === "cancelled") ? "canceled" : (normalized.status || bStatus)
+    };
+  };
   
   // Transform Bookings to Trips with context for passengers
-  // This is the primary source since the user requested to see their bookings here.
-  const passengerTrips = (passengerBookings || []).map((b: any) => ({ 
-    ...b.trip, 
-    bookingId: b.id || b.booking_id, 
-    bookingStatus: b.status,
-    // Add fallback status from trip if booking status is unclear
-    status: b.trip?.status || b.status 
-  }));
+  const mappedBookings = (passengerBookings || []).map(b => mapPassengerTrip(b));
 
-  const passengerActiveTrips = passengerTrips.filter((t: any) => 
+  const passengerActiveTrips = mappedBookings.filter((t: any) => 
     (t.bookingStatus === "confirmed" || t.bookingStatus === "pending" || t.bookingStatus === "active") &&
     t.status !== "completed" && t.status !== "canceled"
   );
 
-  const passengerHistoryTrips = passengerTrips.filter((t: any) => 
+  const passengerHistoryTrips = mappedBookings.filter((t: any) => 
     t.bookingStatus === "completed" || t.bookingStatus === "canceled" || 
     t.status === "completed" || t.status === "canceled"
   );
@@ -186,8 +223,12 @@ export function useDashboard() {
     handleRideTypeChange,
     isAddVehicleOpen,
     setIsAddVehicleOpen,
-    activeRides,
-    historyRides,
+    activeRides: activeRides || [],
+    historyRides: historyRides || [],
+    passengerInprogress: (passengerInprogress || []).map(b => mapPassengerTrip(b)),
+    passengerCompleted: (passengerCompleted || []).map(b => mapPassengerTrip(b)),
+    passengerCanceled: (passengerCanceled || []).map(b => mapPassengerTrip(b, "canceled")),
+    passengerBookings: mappedBookings,
     profileForm,
     setProfileForm,
     handleProfileSubmit,

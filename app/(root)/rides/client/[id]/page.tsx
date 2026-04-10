@@ -118,29 +118,7 @@ const ClientRideDetailsPage = () => {
               showDriverInfo={true}
             />
 
-            {/* My Passengers Section */}
-            <div className="premium-card p-6 lg:p-8">
-              <div className="flex items-center space-x-3 mb-6">
-                <div className="w-8 h-8 bg-primary/10 text-primary rounded-lg flex items-center justify-center">
-                  <HiOutlineUserGroup className="w-5 h-5" />
-                </div>
-                <h3 className="text-xl font-black text-dark-text">Registered Passengers</h3>
-              </div>
-              
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                {bookingPassengers?.map((passenger: any, idx: number) => (
-                  <div key={idx} className="p-4 bg-light-bg rounded-2xl border border-border flex items-center space-x-4">
-                    <div className="w-10 h-10 bg-white rounded-xl flex items-center justify-center text-gray-400 font-bold border border-border">
-                      {idx + 1}
-                    </div>
-                    <div>
-                      <div className="font-bold text-dark-text">{passenger.name}</div>
-                      <div className="text-xs text-secondary font-bold">{passenger.phone}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
-            </div>
+
           </div>
 
           {/* Sidebar Actions */}

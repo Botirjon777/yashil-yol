@@ -26,8 +26,11 @@ export const useLocationStore = create<LocationState>((set, get) => ({
   setDistricts: (districts) => set({ districts }),
   setQuarters: (quarters) => set({ quarters }),
   resolveLocationName: (obj, id, list, language) => {
-    // 1. Try nested object first
-    if (obj) {
+    // 0. If obj is already a string, return it
+    if (typeof obj === "string" && obj.length > 0) return obj;
+
+    // 1. Try nested object first (as defined in types)
+    if (obj && typeof obj === "object") {
       return obj[`name_${language}`] || obj.name_uz || obj.name || null;
     }
 

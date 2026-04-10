@@ -182,8 +182,8 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           </div>
 
           <div className="min-w-0 flex-1 space-y-4">
-            {/* Locations Timeline */}
             <div className="space-y-4">
+              {/* Departure */}
               <div className="min-w-0">
                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1 flex items-center">
                   {t("rideDetails", "departure")}
@@ -208,6 +208,28 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
                 </div>
               </div>
 
+              {/* Car Meta Info & Date (Moved here) */}
+              <div className="flex flex-wrap items-center gap-3 py-1">
+                {ride.vehicle && (
+                  <div className="flex items-center text-[10px] font-black text-gray-500 bg-light-bg/80 px-2.5 py-1.5 rounded-xl border border-border/40 shadow-xs">
+                    <HiTruck className="mr-2 text-secondary w-3.5 h-3.5" />
+                    <span className="break-all whitespace-normal">
+                      {ride.vehicle.brand && `${ride.vehicle.brand} `}
+                      {ride.vehicle.model}
+                    </span>
+                    {(ride.vehicle.plate_number || ride.vehicle.car_number) && (
+                      <span className="ml-2 px-1.5 py-0.5 bg-dark-text text-white text-[8px] rounded-md font-bold tracking-wider shrink-0">
+                        {ride.vehicle.plate_number || ride.vehicle.car_number}
+                      </span>
+                    )}
+                  </div>
+                )}
+                <div className="text-[10px] font-bold text-gray-400">
+                  {formatDate(ride.start_time)}
+                </div>
+              </div>
+
+              {/* Destination */}
               <div className="min-w-0">
                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-[0.2em] mb-1 flex items-center">
                   {t("rideDetails", "destination")}
@@ -236,27 +258,6 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
                 >
                   {fullTo}
                 </div>
-              </div>
-            </div>
-
-            {/* Car Meta Info & Date */}
-            <div className="flex flex-wrap items-center gap-3 pt-3 border-t border-light-bg">
-              {ride.vehicle && (
-                <div className="flex items-center text-[10px] font-black text-gray-500 bg-light-bg/80 px-2.5 py-1.5 rounded-xl border border-border/40 shadow-xs">
-                  <HiTruck className="mr-2 text-secondary w-3.5 h-3.5" />
-                  <span className="break-all whitespace-normal">
-                    {ride.vehicle.brand && `${ride.vehicle.brand} `}
-                    {ride.vehicle.model}
-                  </span>
-                  {(ride.vehicle.plate_number || ride.vehicle.car_number) && (
-                    <span className="ml-2 px-1.5 py-0.5 bg-dark-text text-white text-[8px] rounded-md font-bold tracking-wider shrink-0">
-                      {ride.vehicle.plate_number || ride.vehicle.car_number}
-                    </span>
-                  )}
-                </div>
-              )}
-              <div className="text-[10px] font-bold text-gray-400">
-                {formatDate(ride.start_time)}
               </div>
             </div>
           </div>

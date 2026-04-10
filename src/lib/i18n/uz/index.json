@@ -16,6 +16,7 @@
     "language": "Til",
     "transactions": "Tranzaksiyalar"
   },
+
   "hero": {
     "title": "Sayohatingiz uchun eng yaxshi hamroh",
     "titleOptions": [
@@ -213,12 +214,16 @@
       "asPassenger": "Yo'lovchi sifatida",
       "asDriver": "Haydovchi sifatida",
       "createTrip": "Safar yaratish",
-      "bannerTitle": "O'z yo'lingizni baham ko'ring",
-      "bannerDesc": "Bugun o'z safaringizni yarating va hamrohlar to'plang!",
+      "bannerTitle": "Yo'lingizni ulashing",
+      "bannerDesc": "Bugun safaringizni yarating va hamrohlaringizni toping!",
       "active": "Faol va kelgusi",
       "history": "Tarix",
       "noActive": "Faol safarlar topilmadi.",
-      "noHistory": "Safar tarixi topilmadi."
+      "noHistory": "Safar tarixi topilmadi.",
+      "inprogress": "Jarayonda",
+      "completed": "Yakunlangan",
+      "canceled": "Bekor qilingan",
+      "allBookings": "Barcha bandlar"
     },
       "balance": {
         "title": "To'lovlar va balans",

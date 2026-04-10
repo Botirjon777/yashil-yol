@@ -16,6 +16,7 @@
     "language": "Language",
     "transactions": "Transactions"
   },
+
   "hero": {
     "title": "Your best companion for your journey",
     "titleOptions": [
@@ -218,7 +219,11 @@
       "active": "Active & Upcoming",
       "history": "History",
       "noActive": "No active rides found.",
-      "noHistory": "No ride history found."
+      "noHistory": "No ride history found.",
+      "inprogress": "In Progress",
+      "completed": "Completed",
+      "canceled": "Canceled",
+      "allBookings": "All Bookings"
     },
       "balance": {
         "title": "Payment & Balance",
