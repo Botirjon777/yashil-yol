@@ -99,7 +99,7 @@ export const BookingModal = ({
                         updatePassenger(i, "name", e.target.value)
                       }
                       className="w-full bg-light-bg border-none rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
-                      placeholder="Enter name"
+                      placeholder={rd("enterName") || "Enter name"}
                     />
                   </div>
                   <div className="space-y-1">
@@ -113,7 +113,7 @@ export const BookingModal = ({
                         updatePassenger(i, "phone", e.target.value)
                       }
                       className="w-full bg-light-bg border-none rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
-                      placeholder="+998..."
+                      placeholder={rd("phonePlaceholder") || "+998..."}
                     />
                   </div>
                 </div>

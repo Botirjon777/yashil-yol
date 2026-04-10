@@ -7,9 +7,10 @@ import { useLocationStore } from "@/src/providers/LocationStore";
 
 interface RideResultCardProps {
   ride: any;
+  showDriverInfo?: boolean;
 }
 
-const RideResultCard = ({ ride }: RideResultCardProps) => {
+const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) => {
   const { language, t } = useLanguageStore();
   const { regions, districts, quarters, resolveLocationName } =
     useLocationStore();
@@ -81,10 +82,14 @@ const RideResultCard = ({ ride }: RideResultCardProps) => {
 
   const driverFirstName = ride.driver?.name || ride.driver?.first_name || "";
   const driverLastName = ride.driver?.last_name || "";
-  const driverName =
+  const actualDriverName =
     driverFirstName || driverLastName
       ? `${driverFirstName} ${driverLastName}`.trim()
       : "Driver";
+
+  const driverName = showDriverInfo 
+    ? actualDriverName 
+    : (t("rideDetails", "verifiedDriver") || "Driver");
 
   const isPast = new Date(ride.start_time).getTime() < Date.now();
 
@@ -103,7 +108,7 @@ const RideResultCard = ({ ride }: RideResultCardProps) => {
           className={cn(
             "premium-card p-5 md:p-6 transition-all duration-300 bg-white border-2",
             isPast
-              ? "border-gray-100 grayscale-[0.2]"
+               ? "border-gray-100 grayscale-[0.2]"
               : "hover:border-primary hover:shadow-2xl hover:shadow-primary/5 border-transparent",
           )}
         >
@@ -204,9 +209,11 @@ const RideResultCard = ({ ride }: RideResultCardProps) => {
                     {driverName.charAt(0)}
                   </div>
                   <div>
-                    <div className="text-xs font-black leading-tight text-dark-text">
-                      {driverName}
-                    </div>
+                    {showDriverInfo && (
+                      <div className="text-xs font-black leading-tight text-dark-text">
+                        {driverName}
+                      </div>
+                    )}
                     <div className="flex items-center text-[10px] font-black text-accent mt-0.5">
                       <HiStar className="mr-0.5 shadow-sm" />{" "}
                       {ride.driver?.rating || "4.8"}
@@ -220,7 +227,7 @@ const RideResultCard = ({ ride }: RideResultCardProps) => {
                     {ride.vehicle?.brand && `${ride.vehicle.brand} `}
                     {ride.vehicle?.model || "Standard"}
                   </span>
-                  {(ride.vehicle?.plate_number || ride.vehicle?.car_number) && (
+                  {showDriverInfo && (ride.vehicle?.plate_number || ride.vehicle?.car_number) && (
                     <span className="ml-2 px-1 py-0.5 bg-dark-text text-white text-[8px] rounded font-bold tracking-wider">
                       {ride.vehicle.plate_number || ride.vehicle.car_number}
                     </span>

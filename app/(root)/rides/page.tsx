@@ -1,17 +1,7 @@
 "use client";
 
 import { useState, Suspense, useEffect } from "react";
-import {
-  HiSearch,
-  HiAdjustments,
-  HiChevronRight,
-  HiStar,
-  HiClock,
-  HiUserGroup,
-  HiLocationMarker,
-  HiTruck,
-} from "react-icons/hi";
-import { formatCurrency, formatDate, cn } from "@/src/lib/utils";
+import { HiSearch, HiAdjustments } from "react-icons/hi";
 import Button from "@/src/components/ui/Button";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
@@ -48,8 +38,8 @@ const RidesContent = () => {
   };
 
   const hasFilters = Boolean(
-    (queryParams.start_region_id || queryParams.end_region_id) && 
-    queryParams.departure_date
+    (queryParams.start_region_id || queryParams.end_region_id) &&
+    queryParams.departure_date,
   );
 
   const { data: searchRides, isLoading: isSearchLoading } = useSearchTrips(
@@ -102,11 +92,13 @@ const RidesContent = () => {
 
   const filteredRides = (rides || []).filter((ride) => {
     // 1. Exclude past rides
-    const isPast = ride.start_time ? new Date(ride.start_time).getTime() < Date.now() : false;
+    const isPast = ride.start_time
+      ? new Date(ride.start_time).getTime() < Date.now()
+      : false;
     if (isPast) return false;
 
-    // For testing, disabled the self-exclusion filter so you can see your own trips
-    // if (user && Number(ride.driver_id) === Number(user.id)) return false;
+    // 2. Exclude own rides (Drivers cannot book their own trips)
+    if (user && Number(ride.driver_id) === Number(user.id)) return false;
 
     const price = Number(ride.price_per_seat || 0);
     const matchesPrice = price <= priceRange;
@@ -215,7 +207,13 @@ const RidesContent = () => {
             ) : filteredRides.length > 0 ? (
               <div className="space-y-5">
                 {filteredRides.map((ride) => (
-                  <RideResultCard key={ride.id} ride={ride} />
+                  <RideResultCard
+                    key={ride.id}
+                    ride={ride}
+                    showDriverInfo={
+                      user ? Number(ride.driver_id) === Number(user.id) : false
+                    }
+                  />
                 ))}
               </div>
             ) : (

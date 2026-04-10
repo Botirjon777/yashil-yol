@@ -220,15 +220,34 @@
       "noActive": "No active rides found.",
       "noHistory": "No ride history found."
     },
-    "balance": {
-      "title": "Payment & Balance",
-      "available": "Available Balance",
-      "topUp": "Top up Balance",
-      "savedCards": "Saved Cards",
-      "addNew": "Add New",
-      "noCards": "No cards connected yet.",
-      "deleteCard": "Delete card"
-    },
+      "balance": {
+        "title": "Payment & Balance",
+        "available": "Available Balance",
+        "topUp": "Top up Balance",
+        "savedCards": "Saved Cards",
+        "addNew": "Add New",
+        "noCards": "No cards connected yet.",
+        "deleteCard": "Delete card",
+        "addCardTitle": "Add New Card",
+        "verifyCardTitle": "Verify Your Card",
+        "cardholderName": "Cardholder Name",
+        "cardNumber": "Card Number",
+        "expiryDate": "Expiry Date",
+        "securityNotice": "Your card details are encrypted and securely stored. We never share your full card number with third parties.",
+        "safetyFirst": "Safety First!",
+        "verifyNotice": "We've sent a 6-digit verification code to your phone. Please enter it below to securely link your card.",
+        "verifyCode": "Verification Code",
+        "verifyAndSave": "Verify & Save Card",
+        "selectPaymentMethod": "Select Payment Method",
+        "chooseSavedCard": "Choose a saved card",
+        "verifyPayment": "Verify Payment",
+        "enterConfirmCode": "Please enter the confirmation code sent to your phone.",
+        "paymentAmount": "Payment amount",
+        "confirmAndPay": "Confirm & Pay",
+        "needVerifyCard": "You need to verify your card before you can top up.",
+        "needAddCard": "You need to add a card first to top up.",
+        "manageCards": "Manage Cards"
+      },
     "transactions": {
       "title": "Transaction History",
       "downloadFull": "Download Full Report",
@@ -449,7 +468,9 @@
     "fullName": "Full Name",
     "phone": "Phone Number",
     "paymentMethod": "Payment Method",
-    "paymentFromBalance": "Payment will be deducted from your account balance."
+    "paymentFromBalance": "Payment will be deducted from your account balance.",
+    "enterName": "Enter name",
+    "phonePlaceholder": "+998..."
   },
   "status": {
     "active": "Active",

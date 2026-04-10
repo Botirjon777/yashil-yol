@@ -220,15 +220,34 @@
       "noActive": "Faol safarlar topilmadi.",
       "noHistory": "Safar tarixi topilmadi."
     },
-    "balance": {
-      "title": "To'lovlar va balans",
-      "available": "Mavjud balans",
-      "topUp": "Balansni to'ldirish",
-      "savedCards": "Saqlangan kartalar",
-      "addNew": "Yangi qo'shish",
-      "noCards": "Hozircha kartalar ulanmagan.",
-      "deleteCard": "Kartani o'chirish"
-    },
+      "balance": {
+        "title": "To'lovlar va balans",
+        "available": "Mavjud balans",
+        "topUp": "Balansni to'ldirish",
+        "savedCards": "Saqlangan kartalar",
+        "addNew": "Yangi qo'shish",
+        "noCards": "Hozircha kartalar ulanmagan.",
+        "deleteCard": "Kartani o'chirish",
+        "addCardTitle": "Yangi karta qo'shish",
+        "verifyCardTitle": "Kartani tasdiqlash",
+        "cardholderName": "Karta egasining ismi",
+        "cardNumber": "Karta raqami",
+        "expiryDate": "Amal qilish muddati",
+        "securityNotice": "Sizning karta ma'lumotlaringiz shifrlangan va xavfsiz saqlanadi. Biz hech qachon to'liq karta raqamingizni uchinchi tomonlarga ulashmaymiz.",
+        "safetyFirst": "Xavfsizlik birinchi o'rinda!",
+        "verifyNotice": "Biz telefoningizga 6 xonali tasdiqlash kodini yubordik. Kartani xavfsiz ulash uchun uni quyida kiriting.",
+        "verifyCode": "Tasdiqlash kodi",
+        "verifyAndSave": "Kartani tasdiqlash va saqlash",
+        "selectPaymentMethod": "To'lov usulini tanlang",
+        "chooseSavedCard": "Saqlangan kartani tanlang",
+        "verifyPayment": "To'lovni tasdiqlash",
+        "enterConfirmCode": "Iltimos, telefoningizga yuborilgan tasdiqlash kodini kiriting.",
+        "paymentAmount": "To'lov miqdori",
+        "confirmAndPay": "Tasdiqlash va to'lash",
+        "needVerifyCard": "Balansni to'ldirishdan oldin kartangizni tasdiqlashingiz kerak.",
+        "needAddCard": "Balansni to'ldirish uchun avval karta qo'shishingiz kerak.",
+        "manageCards": "Kartalarni boshqarish"
+      },
     "transactions": {
       "title": "Tranzaksiyalar tarixi",
       "downloadFull": "To'liq hisobotni yuklash",
@@ -451,7 +470,9 @@
     "fullName": "To'liq ism",
     "phone": "Telefon raqami",
     "paymentMethod": "To'lov usuli",
-    "paymentFromBalance": "To'lov sizning ichki balansingizdan yechib olinadi."
+    "paymentFromBalance": "To'lov sizning ichki balansingizdan yechib olinadi.",
+    "enterName": "Ismni kiriting",
+    "phonePlaceholder": "+998..."
   },
   "status": {
     "active": "Faol",

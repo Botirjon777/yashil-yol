@@ -2,6 +2,7 @@ import React, { useState, useEffect } from "react";
 import Modal from "@/src/components/ui/Modal";
 import Input from "@/src/components/ui/Input";
 import Button from "@/src/components/ui/Button";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { HiLockClosed } from "react-icons/hi";
 import { toast } from "sonner";
 import { useAddCard, useVerifyCard } from "../hooks/useDashboardPayment";
@@ -14,6 +15,9 @@ interface AddCardModalProps {
 }
 
 const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCard }) => {
+  const { t } = useLanguageStore();
+  const bt = (key: string) => t("dashboard", `balance.${key}`);
+
   const [step, setStep] = useState<"input" | "verify">("input");
   const [cardId, setCardId] = useState<number | string | null>(null);
   const [cardKey, setCardKey] = useState<string | null>(null);
@@ -111,7 +115,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
     <Modal 
       isOpen={isOpen} 
       onClose={onClose} 
-      title={step === "input" ? "Add New Card" : "Verify Your Card"}
+      title={step === "input" ? bt("addCardTitle") : bt("verifyCardTitle")}
       size="md"
       className="max-w-xl"
     >
@@ -120,7 +124,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
           <div className="space-y-6">
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <Input
-                label="Cardholder Name"
+                label={bt("cardholderName")}
                 placeholder="JOHN DOE"
                 value={formData.holder_name}
                 onChange={(e) => setFormData({ ...formData, holder_name: e.target.value.toUpperCase() })}
@@ -128,7 +132,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
                 required
               />
               <Input
-                label="Phone Number"
+                label={t("auth", "register.phoneLabel")}
                 placeholder="+998 00 000 00 00"
                 value={formData.phone}
                 onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
@@ -139,7 +143,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
             
             <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
               <Input
-                label="Card Number"
+                label={bt("cardNumber")}
                 placeholder="0000 0000 0000 0000"
                 value={formData.card_number}
                 onChange={handleCardNumberChange}
@@ -147,7 +151,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
                 required
               />
               <Input
-                label="Expiry Date"
+                label={bt("expiryDate")}
                 placeholder="MM/YY"
                 value={formData.expiry}
                 onChange={handleExpiryChange}
@@ -162,16 +166,16 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
               <HiLockClosed className="w-5 h-5 text-success shrink-0" />
             </div>
             <p className="text-xs text-gray-500 font-medium leading-relaxed">
-              Your card details are encrypted and securely stored. We never share your full card number with third parties.
+              {bt("securityNotice")}
             </p>
           </div>
 
           <div className="flex items-center justify-end gap-4 pt-4">
             <Button variant="ghost" onClick={onClose} type="button" className="text-gray-400 hover:text-gray-600 px-4">
-              Cancel
+              {t("common", "cancel")}
             </Button>
             <Button variant="primary" loading={isAdding} type="submit" size="lg" className="px-12">
-              Continue
+              {t("auth", "forgotPassword.submitButton")}
             </Button>
           </div>
         </form>
@@ -181,14 +185,14 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
             <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
               <HiLockClosed className="w-8 h-8" />
             </div>
-            <h4 className="text-lg font-black text-dark-text">Safety First!</h4>
+            <h4 className="text-lg font-black text-dark-text">{bt("safetyFirst")}</h4>
             <p className="text-gray-500 font-medium max-w-sm mx-auto">
-              We've sent a 6-digit verification code to your phone. Please enter it below to securely link your card.
+              {bt("verifyNotice")}
             </p>
           </div>
 
           <Input
-            label="Verification Code"
+            label={bt("verifyCode")}
             placeholder="000000"
             maxLength={6}
             value={verificationCode}
@@ -205,10 +209,10 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
               type="button" 
               className="text-gray-400 px-4"
             >
-              {initialCard ? "Cancel" : "Back"}
+              {initialCard ? t("common", "cancel") : bt("back") || "Back"}
             </Button>
             <Button variant="primary" loading={isVerifying} type="submit" size="lg" className="px-12">
-              Verify & Save Card
+              {bt("verifyAndSave")}
             </Button>
           </div>
         </form>

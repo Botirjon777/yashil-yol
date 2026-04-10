@@ -6,12 +6,14 @@ interface PassengerListCardProps {
   trip: any;
   rd: (key: string) => string;
   isDriver?: boolean;
+  isPublic?: boolean;
 }
 
 export const PassengerListCard = ({
   trip,
   rd,
   isDriver = false,
+  isPublic = false,
 }: PassengerListCardProps) => {
   return (
     <div className="premium-card p-8">
@@ -35,15 +37,17 @@ export const PassengerListCard = ({
               >
                 <div className="flex items-center space-x-4">
                   <div className="w-12 h-12 bg-white rounded-xl flex items-center justify-center text-primary font-black border border-border">
-                    {passenger.name?.charAt(0) || "P"}
+                    {isPublic ? "P" : (passenger.name?.charAt(0) || "P")}
                   </div>
                   <div>
                     <div className="font-black text-dark-text">
-                      {passenger.name}
+                      {isPublic ? (rd("passenger") || "Passenger") : passenger.name}
                     </div>
-                    <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">
-                      {passenger.phone}
-                    </div>
+                    {!isPublic && (
+                      <div className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                        {passenger.phone}
+                      </div>
+                    )}
                   </div>
                 </div>
                 {isDriver && passenger.phone && (

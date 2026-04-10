@@ -97,11 +97,17 @@ const RideDetailsPage = () => {
               driverName={driverName} 
               carColor={carColor} 
               rd={rd} 
+              showDriverInfo={isDriver}
             />
 
             {/* Passengers Section - Visible to all participants */}
             {trip.bookings && trip.bookings.length > 0 && (
-              <PassengerListCard trip={trip} rd={rd} isDriver={isDriver} />
+              <PassengerListCard 
+                trip={trip} 
+                rd={rd} 
+                isDriver={isDriver} 
+                isPublic={!isDriver}
+              />
             )}
           </div>
 
@@ -119,6 +125,7 @@ const RideDetailsPage = () => {
               isCanceling={isCanceling}
               driverName={driverName}
               rd={rd}
+              showDriverInfo={isDriver}
             />
           </div>
         </div>

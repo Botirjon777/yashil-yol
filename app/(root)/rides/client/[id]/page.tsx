@@ -115,6 +115,7 @@ const ClientRideDetailsPage = () => {
               driverName={driverName} 
               carColor={carColor} 
               rd={rd} 
+              showDriverInfo={true}
             />
 
             {/* My Passengers Section */}

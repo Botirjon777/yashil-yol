@@ -17,6 +17,7 @@ interface BookingSidebarProps {
   isCanceling: boolean;
   driverName: string;
   rd: (key: string) => string;
+  showDriverInfo?: boolean;
 }
 
 export const BookingSidebar = ({
@@ -31,6 +32,7 @@ export const BookingSidebar = ({
   isCanceling,
   driverName,
   rd,
+  showDriverInfo = true,
 }: BookingSidebarProps) => {
   const router = useRouter();
 
@@ -144,7 +146,7 @@ export const BookingSidebar = ({
         </div>
         <div className="flex items-center text-sm font-bold text-gray-500">
           <HiChatAlt2 className="mr-3 text-primary w-5 h-5 shrink-0" />{" "}
-          {rd("chatWith")} {driverName}
+          {rd("chatWith")} {showDriverInfo ? driverName : rd("verifiedDriver")}
         </div>
       </div>
     </div>
