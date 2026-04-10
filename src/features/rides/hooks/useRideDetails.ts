@@ -74,9 +74,26 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     mode === "passenger" ? id : null
   );
 
-  const trip = mode === "passenger" 
-    ? bookingData?.trip 
-    : (isDriver ? driverTrip : publicTrip);
+  // Find my specific booking in the bookings array if bookingData is a trip
+  const myBooking = useMemo(() => {
+    if (mode !== "passenger" || !bookingData) return null;
+    
+    // Case 1: bookingData is already the correct Booking object (nested or flattened correctly)
+    if (String(bookingData.id) === String(id) && (bookingData.total_price || bookingData.passengers)) {
+      return bookingData;
+    }
+
+    // Case 2: bookingData is the Trip object, find the booking inside it
+    if (Array.isArray((bookingData as any).bookings)) {
+      return (bookingData as any).bookings.find((b: any) => String(b.id) === String(id));
+    }
+
+    return null;
+  }, [bookingData, id, mode]);
+
+  const trip = (mode === "passenger" 
+    ? (bookingData?.trip || (bookingData?.id ? bookingData : null))
+    : (isDriver ? driverTrip : publicTrip)) as any;
 
   const isLoading = isPublicLoading || (isDriver && isDriverLoading) || (mode === "passenger" && isBookingLoading);
 
@@ -84,13 +101,19 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     if (mode === "passenger") {
       console.log("useRideDetails [passenger] debug:", {
         id,
-        bookingData,
+        bookingIdFromData: bookingData?.id,
         isBookingLoading,
-        bookingError,
-        tripExists: !!trip
+        tripExists: !!trip,
+        hasBookingsArray: Array.isArray((bookingData as any)?.bookings),
+        bookingsCount: (bookingData as any)?.bookings?.length,
+        myBookingFound: !!myBooking,
+        myBookingId: myBooking?.id,
+        myBookingStatusField: myBooking?.booking_status,
+        myStatusField: myBooking?.status,
+        finalBookingStatus: myBooking?.booking_status || myBooking?.status || (mode === "passenger" ? undefined : trip?.status)
       });
     }
-  }, [id, mode, bookingData, isBookingLoading, bookingError, trip]);
+  }, [id, mode, bookingData, isBookingLoading, trip, myBooking]);
 
 
   const { mutate: bookTrip, isPending: isBooking } = useBookTrip();
@@ -144,14 +167,16 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     
     // For passengers, checking booking status is important
     if (mode === "passenger") {
-      return bookingData?.status === "confirmed" || bookingData?.status === "pending" || bookingData?.status === "active";
+      const st = (myBooking?.booking_status || myBooking?.status || "").toLowerCase();
+      // Only allow cancellation if confirmed, pending or active
+      return st === "confirmed" || st === "pending" || st === "active";
     }
 
     if (!isDriver) return false;
     
     const diffInMinutes = (new Date(trip.start_time).getTime() - Date.now()) / (1000 * 60);
     return diffInMinutes > 240; // Example: 4 hours
-  }, [trip, isDriver, isPast, mode, bookingData]);
+  }, [trip, isDriver, isPast, mode, myBooking]);
 
   const from = useMemo(() => {
     if (!trip) return "";
@@ -274,9 +299,9 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     setIsBookModalOpen,
     isBooking,
     isCanceling: isCanceling || isCancelingBooking,
-    bookingStatus: bookingData?.status,
-    bookingPassengers: bookingData?.passengers || [],
-    totalPrice: bookingData?.total_price,
+    bookingStatus: myBooking?.booking_status || myBooking?.status || (mode === "passenger" ? undefined : trip?.status),
+    bookingPassengers: myBooking?.passengers || [],
+    totalPrice: myBooking?.total_price || (trip?.price_per_seat ? Number(trip.price_per_seat) * (myBooking?.passengers?.length || 1) : null),
     bookingId: id,
     handleBook,
     handleCancel,

@@ -40,6 +40,10 @@ export default function DashboardFeature() {
     handleRideTypeChange,
     activeRides,
     historyRides,
+    passengerInprogress,
+    passengerCompleted,
+    passengerCanceled,
+    passengerBookings,
     profileForm,
     setProfileForm,
     handleProfileSubmit,
@@ -95,6 +99,10 @@ export default function DashboardFeature() {
           handleRideTypeChange={handleRideTypeChange}
           activeRides={activeRides || []}
           historyRides={historyRides || []}
+          passengerInprogress={passengerInprogress}
+          passengerCompleted={passengerCompleted}
+          passengerCanceled={passengerCanceled}
+          passengerBookings={passengerBookings}
           isDriver={isDriver}
           user={user}
         />

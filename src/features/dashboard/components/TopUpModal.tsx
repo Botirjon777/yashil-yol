@@ -3,6 +3,7 @@ import Modal from "@/src/components/ui/Modal";
 import Input from "@/src/components/ui/Input";
 import Button from "@/src/components/ui/Button";
 import Dropdown from "@/src/components/ui/Dropdown";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { HiPlus } from "react-icons/hi";
 import { useCards, useCreatePayment, useConfirmPayment } from "../hooks/useDashboardPayment";
 import { formatCurrency } from "@/src/lib/utils";
@@ -16,6 +17,9 @@ interface TopUpModalProps {
 }
 
 const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick }) => {
+  const { t } = useLanguageStore();
+  const bt = (key: string) => t("dashboard", `balance.${key}`);
+
   const [step, setStep] = useState<"input" | "confirm">("input");
   const [paymentId, setPaymentId] = useState<string | null>(null);
   const { data: cards = [], isLoading: isLoadingCards } = useCards();
@@ -81,18 +85,18 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
     <Modal 
       isOpen={isOpen} 
       onClose={onClose} 
-      title={step === "input" ? "Top up Balance" : "Verify Payment"}
+      title={step === "input" ? bt("topUp") : bt("verifyPayment")}
       size="md"
       className="max-w-xl"
     >
       {step === "input" ? (
         <form onSubmit={handleCreateSubmit} className="space-y-8 p-2">
           <Dropdown
-            label="Select Payment Method"
+            label={bt("selectPaymentMethod")}
             options={cardOptions}
             value={selectedCardId}
             onChange={setSelectedCardId}
-            placeholder={isLoadingCards ? "Loading cards..." : "Choose a saved card"}
+            placeholder={isLoadingCards ? t("common", "loading") : bt("chooseSavedCard")}
             disabled={isLoadingCards || cardOptions.length === 0}
           />
 
@@ -100,8 +104,8 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
             <div className="flex flex-col items-center justify-center p-6 bg-error/5 rounded-2xl border border-error/10 gap-3 -mt-4 mb-4">
               <p className="text-sm text-error font-medium italic text-center">
                 {cards.length > 0 
-                  ? "You need to verify your card before you can top up." 
-                  : "You need to add a card first to top up."}
+                  ? bt("needVerifyCard")
+                  : bt("needAddCard")}
               </p>
               <Button 
                 type="button" 
@@ -110,15 +114,15 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
                 className="font-black px-8 h-10"
               >
                 <HiPlus className="w-5 h-5 mr-2" />
-                {cards.length > 0 ? "Manage Cards" : "Add New Card"}
+                {cards.length > 0 ? bt("manageCards") : bt("addNew")}
               </Button>
             </div>
           )}
 
           <div className="space-y-4">
             <Input
-              label="Amount (UZS)"
-              placeholder="Enter amount"
+              label={bt("paymentAmount")}
+              placeholder={t("auth", "forgotPassword.emailPlaceholder")}
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
@@ -146,7 +150,7 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
 
           <div className="flex items-center justify-end gap-4 pt-6 border-t border-border">
             <Button variant="ghost" onClick={onClose} type="button" className="text-gray-400 hover:text-gray-600 px-4">
-              Cancel
+              {t("common", "cancel")}
             </Button>
             <Button 
               variant="primary" 
@@ -156,7 +160,7 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
               className="px-12"
               disabled={!selectedCardId || !amount || Number(amount) <= 0}
             >
-              Continue
+              {t("auth", "forgotPassword.submitButton")}
             </Button>
           </div>
         </form>
@@ -166,17 +170,17 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
             <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
               <HiPlus className="w-8 h-8" />
             </div>
-            <h4 className="text-lg font-black text-dark-text">Verify Payment</h4>
+            <h4 className="text-lg font-black text-dark-text">{bt("verifyPayment")}</h4>
             <p className="text-gray-500 font-medium max-w-sm mx-auto">
-              Please enter the confirmation code sent to your phone.
+              {bt("enterConfirmCode")}
             </p>
             <p className="text-gray-500 text-xs font-medium mt-4">
-              Payment amount: <strong>{formatCurrency(Number(amount))}</strong>
+              {bt("paymentAmount")}: <strong>{formatCurrency(Number(amount))}</strong>
             </p>
           </div>
 
           <Input
-            label="Confirmation Code"
+            label={bt("verifyCode")}
             placeholder="000000"
             maxLength={6}
             value={confirmationCode}
@@ -188,10 +192,10 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
 
           <div className="flex items-center justify-end gap-4 pt-4">
             <Button variant="ghost" onClick={() => setStep("input")} type="button" className="text-gray-400 px-4">
-              Back
+              {bt("back") || "Back"}
             </Button>
             <Button variant="primary" loading={isConfirming} type="submit" size="lg" className="px-12">
-              Confirm & Pay
+              {bt("confirmAndPay")}
             </Button>
           </div>
         </form>
