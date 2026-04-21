@@ -69,18 +69,7 @@ export function useDashboard() {
   const { data: passengerBookings } = useClientBookings();
   const { data: vehiclesData } = useVehicles();
 
-  // Debug logs for canceled rides
-  useEffect(() => {
-    if (passengerCanceled) {
-      console.log("Dashboard [Passenger Canceled] Raw:", passengerCanceled);
-    }
-    if (passengerBookings) {
-      console.log("Dashboard [Passenger Bookings] Raw:", passengerBookings);
-    }
-    if (driverCanceled) {
-      console.log("Dashboard [Driver Canceled]:", driverCanceled);
-    }
-  }, [passengerCanceled, passengerBookings, driverCanceled]);
+
 
   // Profile Form State
   const [profileForm, setProfileForm] = useState({

@@ -202,6 +202,18 @@
     "joinRide": "Safarga qo'shilish"
   },
   "dashboard": {
+    "deleteRide": "Safarni o'chirish",
+    "cancelBooking": "Bronni bekor qilish",
+    "deleteConfirmTitle": "Haqiqatan ham ishonchingiz komilmi?",
+    "deleteConfirmMsg": "Ushbu amalni bekor qilib bo'lmaydi. Ushbu safar kelgusi qidiruvlardan olib tashlanadi.",
+    "rideSummary": "Safar xulosasi",
+    "departure": "Ketish",
+    "confirmDelete": "O'chirishni tasdiqlash",
+    "confirmCancel": "Bekor qilishni tasdiqlash",
+    "cancel": "Bekor qilish",
+    "pastTrip": "O'tgan safar",
+    "under2Hours": "2 soatdan kam",
+    "hasBookings": "Bronlar bor",
     "sidebar": {
       "myRides": "Mening safarlarim",
       "balance": "Balans va kartalar",
@@ -441,6 +453,7 @@
       "processError": "Jarayon xatosi: Mashina ID raqami mavjud emas"
     }
   },
+
   "rideDetails": {
     "backToDashboard": "Boshqaruvga qaytish",
     "backToResults": "Natijalarga qaytish",
@@ -481,15 +494,33 @@
     "paymentMethod": "To'lov usuli",
     "paymentFromBalance": "To'lov sizning ichki balansingizdan yechib olinadi.",
     "enterName": "Ismni kiriting",
-    "phonePlaceholder": "+998..."
+    "phonePlaceholder": "+998...",
+    "addPassenger": "Yo'lovchi qo'shish",
+    "addNewCompanion": "Yangi hamroh qo'shish",
+    "companionInfoDesc": "Do'stingiz uchun ism va telefon raqamini kiriting.",
+    "addAnotherPassenger": "Yana yo'lovchi qo'shish",
+    "bookingStatusLabel": "Bron holati",
+    "totalPaidLabel": "Jami to'langan",
+    "bookingActions": "Bron harakatlari",
+    "cancelNotice": "Siz ushbu bronni bekor qilishingiz mumkin. Mablag'lar darhol hisobingizga qaytariladi.",
+    "cancelBooking": "Bronni bekor qilish",
+    "supportLabel": "Yordam",
+    "supportDesc": "Safaringizda muammolar bormi? Yordam uchun jamoamiz bilan bog'laning.",
+    "departedNotice": "Ushbu safar allaqachon jo'nab ketgan.",
+    "cancellationUnavailable": "Ushbu safar uchun bekor qilish imkoniyati mavjud emas.",
+    "confirmRemovalTitle": "Yo'lovchini o'chirish",
+    "confirmRemovalMsg": "Haqiqatan ham bu yo'lovchini broningizdan o'chirmoqchimisiz?",
+    "confirmCancelTitle": "Bronni bekor qilish",
+    "confirmCancelMsg": "Haqiqatan ham broningizni bekor qilmoqchimisiz? Mablag'lar darhol hisobingizga qaytariladi."
   },
   "status": {
     "active": "Faol",
-    "completed": "Tugallangan",
+    "completed": "Yakunlangan",
     "canceled": "Bekor qilingan",
     "cancelled": "Bekor qilingan",
     "pending": "Kutilmoqda",
-    "confirmed": "Tasdiqlangan"
+    "confirmed": "Tasdiqlangan",
+    "full": "To'lgan"
   },
   "terms": {
     "title": "Xizmat ko'rsatish shartlari",

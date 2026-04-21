@@ -12,6 +12,7 @@ import {
   PassengerListCard,
   AddPassengerModal,
   CancelChoiceModal,
+  ConfirmationModal,
 } from "@/src/features/rides/components";
 import Loader from "@/src/components/ui/Loader";
 import Button from "@/src/components/ui/Button";
@@ -23,7 +24,17 @@ const ClientRideDetailsPage = () => {
   const { user } = useAuthStore();
   
   const [isCancelChoiceModalOpen, setIsCancelChoiceModalOpen] = useState(false);
-  console.log("ClientRideDetailsPage - bookingId from params:", bookingId);
+  const [confirmState, setConfirmState] = useState<{
+    isOpen: boolean;
+    title: string;
+    message: string;
+    onConfirm: () => void;
+  }>({
+    isOpen: false,
+    title: "",
+    message: "",
+    onConfirm: () => {},
+  });
   const {
     trip,
     isLoading,
@@ -44,6 +55,7 @@ const ClientRideDetailsPage = () => {
     handleCancel,
     handleAddPassenger,
     handleRemovePassenger,
+    t,
     rd,
   } = useRideDetails(bookingId, "passenger");
 
@@ -100,16 +112,16 @@ const ClientRideDetailsPage = () => {
                 </div>
                 <div>
                   <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                    Booking Status
+                    {rd("bookingStatusLabel")}
                   </div>
                   <div className="text-lg font-black text-dark-text uppercase tracking-wider">
-                    {bookingStatus || "Confirmed"}
+                    {t("status", (bookingStatus || "confirmed").toLowerCase())}
                   </div>
                 </div>
               </div>
               <div className="text-right">
                 <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                  Total Paid
+                  {rd("totalPaidLabel")}
                 </div>
                 <div className="text-lg font-black text-primary">
                   {totalPrice ? formatCurrency(Number(totalPrice)) : "---"}
@@ -137,7 +149,17 @@ const ClientRideDetailsPage = () => {
               mode="passenger"
               myBookingId={bookingId}
               onAddPassenger={() => setIsAddPassengerModalOpen(true)}
-              onRemovePassenger={handleRemovePassenger}
+              onRemovePassenger={(passengerId) => {
+                setConfirmState({
+                  isOpen: true,
+                  title: rd("confirmRemovalTitle") || "Remove Passenger",
+                  message: rd("confirmRemovalMsg") || "Are you sure you want to remove this passenger from your booking?",
+                  onConfirm: () => {
+                    handleRemovePassenger(passengerId);
+                    setConfirmState(prev => ({ ...prev, isOpen: false }));
+                  }
+                });
+              }}
               isRemoving={isRemovingPassenger}
             />
           </div>
@@ -145,12 +167,12 @@ const ClientRideDetailsPage = () => {
           {/* Sidebar Actions */}
           <div className="lg:col-span-1">
             <div className="premium-card p-6 lg:p-8 space-y-6 sticky top-24">
-              <h3 className="font-black text-dark-text text-lg uppercase tracking-tight">Booking Actions</h3>
+              <h3 className="font-black text-dark-text text-lg uppercase tracking-tight">{rd("bookingActions")}</h3>
               
               {canCancel ? (
                 <div className="space-y-4">
                   <div className="p-4 bg-amber-50 text-amber-700 rounded-2xl text-xs font-bold border border-amber-100 leading-relaxed">
-                    You can cancel this booking. Your balance will be credited back to your account immediately.
+                    {rd("cancelNotice")}
                   </div>
                   <Button
                     variant="danger"
@@ -161,23 +183,31 @@ const ClientRideDetailsPage = () => {
                       if (bookingPassengers.length > 1) {
                         setIsCancelChoiceModalOpen(true);
                       } else {
-                        handleCancel();
+                        setConfirmState({
+                          isOpen: true,
+                          title: rd("confirmCancelTitle") || "Cancel Booking",
+                          message: rd("confirmCancelMsg") || "Are you sure you want to cancel your booking? Your balance will be credited back to your account immediately.",
+                          onConfirm: () => {
+                            handleCancel();
+                            setConfirmState(prev => ({ ...prev, isOpen: false }));
+                          }
+                        });
                       }
                     }}
                   >
-                    Cancel Booking
+                    {rd("cancelBooking")}
                   </Button>
                 </div>
               ) : (
                 <div className="p-4 bg-gray-50 text-gray-400 rounded-2xl text-xs font-bold border border-gray-100 leading-relaxed italic">
-                  {isPast ? "This trip has already departed." : "Cancellation is no longer available for this ride."}
+                  {isPast ? rd("departedNotice") : rd("cancellationUnavailable")}
                 </div>
               )}
 
               <div className="pt-6 border-t border-border">
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">Support</p>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{rd("supportLabel")}</p>
                 <p className="text-xs text-gray-500">
-                  Having issues with your ride? Contact our support team for assistance.
+                  {rd("supportDesc")}
                 </p>
               </div>
             </div>
@@ -215,6 +245,15 @@ const ClientRideDetailsPage = () => {
             handleRemovePassenger(selfPassenger.id);
           }
         }}
+      />
+      {/* Confirmation Modal */}
+      <ConfirmationModal
+        isOpen={confirmState.isOpen}
+        onClose={() => setConfirmState(prev => ({ ...prev, isOpen: false }))}
+        onConfirm={confirmState.onConfirm}
+        title={confirmState.title}
+        message={confirmState.message}
+        isLoading={isCanceling || isRemovingPassenger}
       />
     </div>
   );

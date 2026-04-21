@@ -6,3 +6,4 @@ export * from "./BookingModal";
 export * from "./AddPassengerModal";
 export * from "./CancelChoiceModal";
 export * from "./RideResultCard";
+export * from "./ConfirmationModal";

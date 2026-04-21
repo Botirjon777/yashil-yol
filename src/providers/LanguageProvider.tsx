@@ -11,15 +11,8 @@ import { useUpdateUserLanguage } from "@/src/features/auth/hooks/useAuth";
 interface LanguageState {
   language: Language;
   setLanguage: (lang: Language) => void;
-  t: (
-    category: any,
-    key: any
-  ) => any;
-  safeT: (
-    category: string,
-    section: string,
-    key: string
-  ) => string;
+  t: (category: any, key: any) => any;
+  safeT: (category: string, section: string, key: string) => string;
 }
 
 export const useLanguageStore = create<LanguageState>()(
@@ -31,24 +24,26 @@ export const useLanguageStore = create<LanguageState>()(
       },
       t: (category, key) => {
         const lang = get().language;
-        const value = (translations[lang] as any)?.[category]?.[key] || 
-                      (translations.en as any)?.[category]?.[key] || 
-                      String(key);
+        const value =
+          (translations[lang] as any)?.[category]?.[key] ||
+          (translations.en as any)?.[category]?.[key] ||
+          String(key);
         return value;
       },
       safeT: (category, section, key) => {
         const lang = get().language;
-        const value = (translations[lang] as any)?.[category]?.[section]?.[key] || 
-                      (translations.en as any)?.[category]?.[section]?.[key] || 
-                      String(key);
+        const value =
+          (translations[lang] as any)?.[category]?.[section]?.[key] ||
+          (translations.en as any)?.[category]?.[section]?.[key] ||
+          String(key);
         return value;
       },
     }),
     {
       name: "language-storage",
       storage: createJSONStorage(() => localStorage),
-    }
-  )
+    },
+  ),
 );
 
 /**
@@ -74,14 +69,17 @@ function LanguageSyncer() {
       return;
     }
 
-    console.log("Syncing language to backend:", language);
     mutate(language);
   }, [language, token, mutate]);
 
   return null;
 }
 
-export default function LanguageProvider({ children }: { children: React.ReactNode }) {
+export default function LanguageProvider({
+  children,
+}: {
+  children: React.ReactNode;
+}) {
   return (
     <>
       <LanguageSyncer />

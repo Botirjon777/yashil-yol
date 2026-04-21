@@ -1,7 +1,6 @@
-"use client";
-
 import { HiUserGroup, HiPhone, HiTrash, HiUserAdd } from "react-icons/hi";
 import { cn } from "@/src/lib/utils";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 interface PassengerListCardProps {
   trip: any;
@@ -26,6 +25,7 @@ export const PassengerListCard = ({
   onAddPassenger,
   isRemoving = false,
 }: PassengerListCardProps) => {
+  const { t } = useLanguageStore();
   const isPassengerMode = mode === "passenger";
   const hasAvailableSeats = Number(trip.available_seats) > 0;
 
@@ -57,6 +57,10 @@ export const PassengerListCard = ({
                   isMine: isPassengerMode && String(booking.id) === String(myBookingId),
                 })),
               )
+              .filter((passenger: any) => {
+                const st = (passenger.booking_status || "").toLowerCase();
+                return st !== "cancelled" && st !== "canceled";
+              })
               .map((passenger: any, index: number) => (
                 <div
                   key={`${passenger.bookingId}-${passenger.id || index}`}
@@ -91,11 +95,11 @@ export const PassengerListCard = ({
                             "text-[8px] font-bold px-1.5 py-0.5 rounded uppercase tracking-widest border",
                             passenger.booking_status === "confirmed" 
                               ? "bg-emerald-50 text-emerald-600 border-emerald-100" 
-                              : passenger.booking_status === "canceled"
+                              : (passenger.booking_status === "canceled" || passenger.booking_status === "cancelled")
                                 ? "bg-red-50 text-red-600 border-red-100"
                                 : "bg-gray-50 text-gray-400 border-gray-100"
                           )}>
-                            {passenger.booking_status}
+                            {t("status", passenger.booking_status.toLowerCase())}
                           </span>
                         )}
                       </div>

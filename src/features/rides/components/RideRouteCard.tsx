@@ -2,6 +2,7 @@
 
 import { HiLocationMarker, HiClock, HiArrowDown } from "react-icons/hi";
 import { formatDateTime, cn } from "@/src/lib/utils";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 interface RideRouteCardProps {
   trip: any;
@@ -27,9 +28,15 @@ const statusConfig: Record<string, { bg: string; text: string; dot: string }> =
       text: "text-red-600",
       dot: "bg-red-500",
     },
+    cancelled: {
+      bg: "bg-red-50 border border-red-200",
+      text: "text-red-600",
+      dot: "bg-red-500",
+    },
   };
 
 export const RideRouteCard = ({ trip, from, to, rd }: RideRouteCardProps) => {
+  const { t } = useLanguageStore();
   const status = String(trip.status || "active").toLowerCase();
   const sc = statusConfig[status] ?? statusConfig.active;
 
@@ -46,7 +53,7 @@ export const RideRouteCard = ({ trip, from, to, rd }: RideRouteCardProps) => {
               sc.text,
             )}
           >
-            {typeof trip.status === "string" ? trip.status : "Active"}
+            {t("status", status)}
           </span>
         </div>
         <div className="text-xs font-bold text-gray-400">
