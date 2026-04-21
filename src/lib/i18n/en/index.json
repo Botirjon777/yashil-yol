@@ -147,7 +147,9 @@
       "passwordPlaceholder": "Min. 8 characters",
       "confirmPasswordLabel": "Confirm Password",
       "confirmPasswordPlaceholder": "Confirm",
-      "termsAgreement": "I agree to the Terms and Conditions",
+      "termsAgreement": "I agree to the ",
+      "termsLink": "Terms and Conditions",
+      "termsAgreementSuffix": "",
       "submitButton": "Create Account",
       "hasAccount": "Already have an account?",
       "login": "Log in",
@@ -223,7 +225,9 @@
       "inprogress": "In Progress",
       "completed": "Completed",
       "canceled": "Canceled",
-      "allBookings": "All Bookings"
+      "allBookings": "All Bookings",
+      "allTrips": "All Trips",
+      "activeLabel": "Active"
     },
       "balance": {
         "title": "Payment & Balance",

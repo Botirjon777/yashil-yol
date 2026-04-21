@@ -147,7 +147,9 @@
       "passwordPlaceholder": "Мин. 8 символов",
       "confirmPasswordLabel": "Подтвердите пароль",
       "confirmPasswordPlaceholder": "Подтвердите",
-      "termsAgreement": "Я согласен с Условиями использования",
+      "termsAgreement": "Я согласен с ",
+      "termsLink": "Условиями использования",
+      "termsAgreementSuffix": "",
       "submitButton": "Создать аккаунт",
       "hasAccount": "Уже есть аккаунт?",
       "login": "Войти",
@@ -223,7 +225,9 @@
       "inprogress": "В процессе",
       "completed": "Завершено",
       "canceled": "Отменено",
-      "allBookings": "Все брони"
+      "allBookings": "Все брони",
+      "allTrips": "Все поездки",
+      "activeLabel": "Активные"
     },
       "balance": {
         "title": "Оплата и баланс",

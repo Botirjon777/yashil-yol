@@ -175,7 +175,9 @@ export const getClientBookings = async (): Promise<Booking[]> => {
 
 /** GET /client/trips/booking/:id — specific booking details */
 export const getClientBookingById = async (id: string | number): Promise<Booking> => {
+  console.log(`[API Request] Fetching client booking: /client/trips/booking/${id}`);
   const res = await api.get<any>(`client/trips/booking/${id}`);
+  console.log(`[API Response] Client booking ${id}:`, res.data);
   return res.data?.data ?? res.data;
 };
 

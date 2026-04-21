@@ -1,7 +1,12 @@
 "use client";
 
-import { useRouter } from "next/navigation";
-import { HiCreditCard, HiChatAlt2 } from "react-icons/hi";
+import {
+  HiCreditCard,
+  HiShieldCheck,
+  HiMinusSm,
+  HiPlusSm,
+  HiX,
+} from "react-icons/hi";
 import { formatCurrency } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 
@@ -34,67 +39,86 @@ export const BookingSidebar = ({
   rd,
   showDriverInfo = true,
 }: BookingSidebarProps) => {
-  const router = useRouter();
-
   if (isDriver) {
+    const earned =
+      (trip.total_seats - Number(trip.available_seats)) *
+      Number(trip.price_per_seat);
+    const bookedSeats = trip.total_seats - Number(trip.available_seats);
+
     return (
-      <div className="premium-card p-8 sticky top-28 space-y-6">
-        <div className="text-center">
-          <div className="text-sm font-black text-gray-400 uppercase tracking-widest mb-2">
+      <div className="premium-card overflow-hidden sticky top-28">
+        <div className="px-6 pt-6 pb-5 border-b border-border/60 bg-linear-to-r from-primary/5 to-transparent">
+          <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
             {rd("earningsEstim")}
           </div>
           <div className="text-4xl font-black text-primary">
-            {formatCurrency(
-              (trip.total_seats - Number(trip.available_seats)) *
-                Number(trip.price_per_seat),
-            )}
+            {formatCurrency(earned)}
+          </div>
+          <div className="text-xs font-bold text-gray-400 mt-1">
+            {bookedSeats} / {trip.total_seats} seats booked
           </div>
         </div>
-        <div className="pt-6 border-t border-border" />
-        {canCancel && (
-          <Button
-            fullWidth
-            variant="outline"
-            className="text-error border-error/20 hover:bg-error/5"
-            onClick={handleCancel}
-            loading={isCanceling}
-          >
-            {rd("cancelTrip")}
-          </Button>
-        )}
-        {!canCancel && !isPast && String(trip.status) === "active" && (
-          <p className="text-[10px] text-center text-gray-400 font-bold uppercase tracking-widest px-4">
-            {rd("cancelBlocked") ||
-              "Cannot cancel trip less than 30 mins before departure"}
-          </p>
-        )}
+        <div className="p-6 space-y-3">
+          {canCancel && (
+            <Button
+              fullWidth
+              variant="outline"
+              className="text-error border-error/30 hover:bg-error/5"
+              onClick={handleCancel}
+              loading={isCanceling}
+              icon={<HiX className="w-4 h-4" />}
+            >
+              {rd("cancelTrip")}
+            </Button>
+          )}
+          {!canCancel && !isPast && String(trip.status) === "active" && (
+            <p className="text-[10px] text-center text-gray-400 font-bold uppercase tracking-widest px-2">
+              {rd("cancelBlocked") ||
+                "Cannot cancel trip less than 4 hours before departure"}
+            </p>
+          )}
+        </div>
       </div>
     );
   }
 
+  const total = Number(trip.price_per_seat) * numSeats;
+  const isFullyBooked = Number(trip.available_seats) === 0;
+  const isDisabled = isFullyBooked || isPast || isDriver;
+
   return (
-    <div className="premium-card p-8 sticky top-28">
-      <div className="mb-8">
-        <div className="text-sm font-black text-gray-400 uppercase tracking-widest mb-2 text-center underline decoration-primary decoration-4 underline-offset-8">
+    <div className="premium-card overflow-hidden sticky top-28">
+      {/* Price header */}
+      <div className="px-6 pt-6 pb-5 border-b border-border/60 bg-linear-to-r from-primary/5 to-transparent">
+        <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
           {rd("pricePerSeat")}
         </div>
-        <div className="text-4xl font-black text-primary text-center">
+        <div className="text-4xl font-black text-primary">
           {formatCurrency(Number(trip.price_per_seat))}
+        </div>
+        <div className="text-xs font-bold text-gray-400 mt-1">
+          {trip.available_seats} {rd("seats")} {rd("of") || "of"}{" "}
+          {trip.total_seats} {rd("available") || "available"}
         </div>
       </div>
 
-      <div className="space-y-4 mb-8">
-        <div className="flex items-center justify-between p-4 bg-light-bg rounded-2xl border border-border">
-          <span className="text-gray-500 font-bold">{rd("seats")}</span>
-          <div className="flex items-center space-x-4">
+      <div className="p-6 space-y-4">
+        {/* Seat counter */}
+        <div className="bg-light-bg rounded-2xl border border-border/60 p-4 flex items-center justify-between">
+          <div>
+            <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+              {rd("seats")}
+            </div>
+          </div>
+          <div className="flex items-center gap-3">
             <button
               onClick={() => setNumSeats(Math.max(1, numSeats - 1))}
-              className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center font-bold text-primary hover:bg-primary hover:text-white transition-all shadow-sm disabled:opacity-30 disabled:cursor-not-allowed"
               disabled={numSeats <= 1}
+              className="w-8 h-8 rounded-full bg-white border-2 border-border flex items-center justify-center text-primary hover:bg-primary hover:text-white hover:border-primary transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
             >
-              -
+              <HiMinusSm className="w-4 h-4" />
             </button>
-            <span className="font-black text-dark-text min-w-[20px] text-center">
+            <span className="font-black text-dark-text text-lg min-w-[28px] text-center">
               {numSeats}
             </span>
             <button
@@ -103,50 +127,54 @@ export const BookingSidebar = ({
                   Math.min(Number(trip.available_seats), numSeats + 1),
                 )
               }
-              className="w-8 h-8 rounded-full bg-white border border-border flex items-center justify-center font-bold text-primary hover:bg-primary hover:text-white transition-all shadow-sm disabled:opacity-30 disabled:cursor-not-allowed"
               disabled={numSeats >= Number(trip.available_seats)}
+              className="w-8 h-8 rounded-full bg-white border-2 border-border flex items-center justify-center text-primary hover:bg-primary hover:text-white hover:border-primary transition-all disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
             >
-              +
+              <HiPlusSm className="w-4 h-4" />
             </button>
           </div>
         </div>
-        <div className="flex items-center justify-between p-4 bg-light-bg rounded-2xl border border-border">
-          <span className="text-gray-500 font-bold text-sm">{rd("total")}</span>
-          <span className="text-xl font-black text-dark-text">
-            {formatCurrency(Number(trip.price_per_seat) * numSeats)}
+
+        {/* Total */}
+        <div className="bg-dark-text/5 rounded-2xl p-4 flex items-center justify-between">
+          <span className="text-sm font-black text-gray-500 uppercase tracking-widest">
+            {rd("total")}
+          </span>
+          <span className="text-2xl font-black text-dark-text">
+            {formatCurrency(total)}
           </span>
         </div>
-      </div>
 
-      <Button
-        fullWidth
-        size="lg"
-        disabled={Number(trip.available_seats) === 0 || isPast || isDriver}
-        onClick={() => setIsBookModalOpen(true)}
-      >
-        {isPast
-          ? rd("pastTrip") || "Past Trip"
-          : isDriver
-            ? rd("driverCannotBook") || "Cannot Book Own Ride"
-            : Number(trip.available_seats) === 0
+        {/* Book button */}
+        <Button
+          fullWidth
+          size="lg"
+          disabled={isDisabled}
+          onClick={() => setIsBookModalOpen(true)}
+          className="shadow-xl shadow-primary/20"
+        >
+          {isPast
+            ? rd("pastTrip") || "Past Trip"
+            : isFullyBooked
               ? rd("fullyBooked")
               : rd("bookRide")}
-      </Button>
+        </Button>
 
-      {isDriver && !isPast && (
-        <p className="mt-3 text-[10px] text-center text-gray-400 font-bold uppercase tracking-widest px-4">
-          {rd("driverBookingWarning") || "Drivers cannot book their own rides"}
-        </p>
-      )}
-
-      <div className="mt-8 pt-8 border-t border-border space-y-4">
-        <div className="flex items-center text-sm font-bold text-gray-500">
-          <HiCreditCard className="mr-3 text-primary w-5 h-5 shrink-0" />{" "}
-          {rd("payBalance")}
-        </div>
-        <div className="flex items-center text-sm font-bold text-gray-500">
-          <HiChatAlt2 className="mr-3 text-primary w-5 h-5 shrink-0" />{" "}
-          {rd("chatWith")} {showDriverInfo ? driverName : rd("verifiedDriver")}
+        {/* Trust badges */}
+        <div className="pt-2 space-y-2.5 border-t border-border/60 mt-2">
+          <div className="flex items-center gap-2.5 text-xs font-bold text-gray-500">
+            <div className="w-7 h-7 rounded-xl bg-primary/10 flex items-center justify-center shrink-0">
+              <HiCreditCard className="w-3.5 h-3.5 text-primary" />
+            </div>
+            {rd("payBalance")}
+          </div>
+          <div className="flex items-center gap-2.5 text-xs font-bold text-gray-500">
+            <div className="w-7 h-7 rounded-xl bg-emerald-50 flex items-center justify-center shrink-0">
+              <HiShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
+            </div>
+            {rd("chatWith")}{" "}
+            {showDriverInfo ? driverName : rd("verifiedDriver")}
+          </div>
         </div>
       </div>
     </div>

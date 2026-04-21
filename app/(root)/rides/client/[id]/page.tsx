@@ -1,14 +1,17 @@
 "use client";
 
-import React from "react";
+import React, { useState } from "react";
 import { useParams } from "next/navigation";
 import { HiChevronLeft, HiShieldCheck, HiOutlineUserGroup, HiOutlineTicket } from "react-icons/hi";
 import Link from "next/link";
+import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useRideDetails } from "@/src/features/rides/hooks/useRideDetails";
 import {
   RideRouteCard,
   RideInfoCard,
   PassengerListCard,
+  AddPassengerModal,
+  CancelChoiceModal,
 } from "@/src/features/rides/components";
 import Loader from "@/src/components/ui/Loader";
 import Button from "@/src/components/ui/Button";
@@ -17,7 +20,10 @@ import { formatCurrency } from "@/src/lib/utils";
 const ClientRideDetailsPage = () => {
   const params = useParams();
   const bookingId = params.id as string;
+  const { user } = useAuthStore();
   
+  const [isCancelChoiceModalOpen, setIsCancelChoiceModalOpen] = useState(false);
+  console.log("ClientRideDetailsPage - bookingId from params:", bookingId);
   const {
     trip,
     isLoading,
@@ -31,7 +37,13 @@ const ClientRideDetailsPage = () => {
     bookingPassengers,
     totalPrice,
     isCanceling,
+    isAddingPassenger,
+    isRemovingPassenger,
+    isAddPassengerModalOpen,
+    setIsAddPassengerModalOpen,
     handleCancel,
+    handleAddPassenger,
+    handleRemovePassenger,
     rd,
   } = useRideDetails(bookingId, "passenger");
 
@@ -118,7 +130,16 @@ const ClientRideDetailsPage = () => {
               showDriverInfo={true}
             />
 
-
+            {/* My Passengers Section */}
+            <PassengerListCard 
+              trip={{ ...trip, bookings: [{ id: bookingId, passengers: bookingPassengers }] }} 
+              rd={rd}
+              mode="passenger"
+              myBookingId={bookingId}
+              onAddPassenger={() => setIsAddPassengerModalOpen(true)}
+              onRemovePassenger={handleRemovePassenger}
+              isRemoving={isRemovingPassenger}
+            />
           </div>
 
           {/* Sidebar Actions */}
@@ -136,7 +157,13 @@ const ClientRideDetailsPage = () => {
                     fullWidth
                     size="lg"
                     loading={isCanceling}
-                    onClick={handleCancel}
+                    onClick={() => {
+                      if (bookingPassengers.length > 1) {
+                        setIsCancelChoiceModalOpen(true);
+                      } else {
+                        handleCancel();
+                      }
+                    }}
                   >
                     Cancel Booking
                   </Button>
@@ -157,6 +184,38 @@ const ClientRideDetailsPage = () => {
           </div>
         </div>
       </div>
+      {/* Add Passenger Modal */}
+      <AddPassengerModal
+        isOpen={isAddPassengerModalOpen}
+        onClose={() => setIsAddPassengerModalOpen(false)}
+        onAdd={handleAddPassenger}
+        loading={isAddingPassenger}
+        rd={rd}
+      />
+
+      {/* Cancellation Choice Modal */}
+      <CancelChoiceModal
+        isOpen={isCancelChoiceModalOpen}
+        onClose={() => setIsCancelChoiceModalOpen(false)}
+        rd={rd}
+        isLoading={isCanceling || isRemovingPassenger}
+        onCancelAll={() => {
+          setIsCancelChoiceModalOpen(false);
+          handleCancel();
+        }}
+        onRemoveSelf={() => {
+          // Identify self by phone number or fallback to first passenger
+          const userPhone = user?.phone?.replace(/\D/g, "");
+          const selfPassenger = bookingPassengers.find((p: any) => 
+            p.phone?.replace(/\D/g, "") === userPhone
+          ) || bookingPassengers[0];
+
+          if (selfPassenger) {
+            setIsCancelChoiceModalOpen(false);
+            handleRemovePassenger(selfPassenger.id);
+          }
+        }}
+      />
     </div>
   );
 };

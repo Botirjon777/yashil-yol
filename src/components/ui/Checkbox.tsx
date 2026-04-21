@@ -3,7 +3,7 @@ import { cn } from "@/src/lib/utils";
 import { HiCheck } from "react-icons/hi";
 
 interface CheckboxProps extends React.InputHTMLAttributes<HTMLInputElement> {
-  label?: string;
+  label?: React.ReactNode;
 }
 
 const Checkbox = React.forwardRef<HTMLInputElement, CheckboxProps>(

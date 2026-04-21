@@ -87,7 +87,6 @@ export const ForgotPasswordForm = () => {
         }
         required
         value={phone}
-        className="ml-2.5"
         onChange={(e) => {
           const val = e.target.value.replace(/\D/g, "");
           if (val.length <= 9) setPhone(val);

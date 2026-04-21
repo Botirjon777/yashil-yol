@@ -147,7 +147,9 @@
       "passwordPlaceholder": "Kamida 8 ta belgi",
       "confirmPasswordLabel": "Parolni tasdiqlash",
       "confirmPasswordPlaceholder": "Tasdiqlang",
-      "termsAgreement": "Men Foydalanish shartlariga roziman",
+      "termsAgreement": "Men ",
+      "termsLink": "Foydalanish shartlariga",
+      "termsAgreementSuffix": " roziman",
       "submitButton": "Hisob yaratish",
       "hasAccount": "Akkauntingiz bormi?",
       "login": "Kirish",
@@ -223,7 +225,9 @@
       "inprogress": "Jarayonda",
       "completed": "Yakunlangan",
       "canceled": "Bekor qilingan",
-      "allBookings": "Barcha bandlar"
+      "allBookings": "Barcha bandlar",
+      "allTrips": "Barcha safarlar",
+      "activeLabel": "Faol"
     },
       "balance": {
         "title": "To'lovlar va balans",

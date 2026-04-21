@@ -3,4 +3,6 @@ export * from "./RideInfoCard";
 export * from "./PassengerListCard";
 export * from "./BookingSidebar";
 export * from "./BookingModal";
+export * from "./AddPassengerModal";
+export * from "./CancelChoiceModal";
 export * from "./RideResultCard";

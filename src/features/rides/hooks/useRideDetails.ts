@@ -19,6 +19,8 @@ import {
   useBookTrip,
   useCancelTrip,
   useCancelClientBooking,
+  useAddPassenger,
+  useRemovePassenger,
   handleError,
 } from "@/src/features/rides/hooks/useRides";
 import { useCarColors } from "@/src/features/rides/hooks/useVehicles";
@@ -78,22 +80,57 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
   const myBooking = useMemo(() => {
     if (mode !== "passenger" || !bookingData) return null;
     
-    // Case 1: bookingData is already the correct Booking object (nested or flattened correctly)
-    if (String(bookingData.id) === String(id) && (bookingData.total_price || bookingData.passengers)) {
+    // Case 1: bookingData has a 'ride' prop which IS the booking (common in some endpoints)
+    const ride = (bookingData as any).ride;
+    if (ride && (String(ride.id) === String(id) || String(ride.bookingId) === String(id))) {
+      return ride;
+    }
+
+    // Case 2: bookingData is already the correct Booking object
+    if (String(bookingData.id) === String(id) && (bookingData.passengers || bookingData.total_price)) {
       return bookingData;
     }
 
-    // Case 2: bookingData is the Trip object, find the booking inside it
-    if (Array.isArray((bookingData as any).bookings)) {
-      return (bookingData as any).bookings.find((b: any) => String(b.id) === String(id));
+    // Case 3: bookingData is the Trip object, find the booking inside it
+    // We look for a booking that matches the ID OR belongs to the current user
+    const bookings = (bookingData as any).bookings || ride?.bookings;
+    if (Array.isArray(bookings)) {
+      // First try matching by ID
+      let found = bookings.find((b: any) => String(b.id) === String(id));
+      
+      // If not found by ID, maybe 'id' from URL was the Trip ID. 
+      // Try finding a booking owned by current user.
+      if (!found && user) {
+        found = bookings.find((b: any) => 
+          Number(b.user_id || b.booked_by_user?.id) === Number(user.id)
+        );
+      }
+      
+      // Fallback to first booking if still not found and we're in passenger mode
+      if (!found && bookings.length > 0) {
+        found = bookings[0];
+      }
+      
+      return found;
     }
 
     return null;
-  }, [bookingData, id, mode]);
+  }, [bookingData, id, mode, user]);
 
-  const trip = (mode === "passenger" 
-    ? (bookingData?.trip || (bookingData?.id ? bookingData : null))
-    : (isDriver ? driverTrip : publicTrip)) as any;
+  const trip = useMemo(() => {
+    if (!bookingData) return isDriver ? driverTrip : publicTrip;
+    if (mode !== "passenger") return isDriver ? driverTrip : publicTrip;
+
+    // In passenger mode, bookingData is often the Trip or has a 'ride'/trip prop
+    return (
+      bookingData.trip || 
+      (bookingData as any).ride?.trip || 
+      (bookingData as any).ride || 
+      ((bookingData as any).start_time ? bookingData : null) ||
+      myBooking?.trip ||
+      myBooking
+    );
+  }, [bookingData, mode, isDriver, driverTrip, publicTrip, myBooking]);
 
   const isLoading = isPublicLoading || (isDriver && isDriverLoading) || (mode === "passenger" && isBookingLoading);
 
@@ -101,16 +138,18 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     if (mode === "passenger") {
       console.log("useRideDetails [passenger] debug:", {
         id,
-        bookingIdFromData: bookingData?.id,
+        rawBookingData: bookingData,
+        bookingIdFromData: bookingData?.id || (bookingData as any)?.ride?.id,
         isBookingLoading,
         tripExists: !!trip,
         hasBookingsArray: Array.isArray((bookingData as any)?.bookings),
         bookingsCount: (bookingData as any)?.bookings?.length,
         myBookingFound: !!myBooking,
-        myBookingId: myBooking?.id,
-        myBookingStatusField: myBooking?.booking_status,
+        myBookingId: myBooking?.id || myBooking?.bookingId,
+        myBookingStatusField: myBooking?.booking_status || myBooking?.bookingStatus,
         myStatusField: myBooking?.status,
-        finalBookingStatus: myBooking?.booking_status || myBooking?.status || (mode === "passenger" ? undefined : trip?.status)
+        finalBookingStatus: myBooking?.booking_status || myBooking?.bookingStatus || myBooking?.status || (mode === "passenger" ? undefined : trip?.status),
+        canCancel: !!canCancel
       });
     }
   }, [id, mode, bookingData, isBookingLoading, trip, myBooking]);
@@ -119,9 +158,12 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
   const { mutate: bookTrip, isPending: isBooking } = useBookTrip();
   const { mutate: cancelTrip, isPending: isCanceling } = useCancelTrip();
   const { mutate: cancelBooking, isPending: isCancelingBooking } = useCancelClientBooking();
+  const { mutate: addPassenger, isPending: isAddingPassenger } = useAddPassenger();
+  const { mutate: removePassenger, isPending: isRemovingPassenger } = useRemovePassenger();
 
   // States
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
+  const [isAddPassengerModalOpen, setIsAddPassengerModalOpen] = useState(false);
   const [numSeats, setNumSeats] = useState(1);
   const [passengers, setPassengers] = useState<{ name: string; phone: string }[]>([]);
 
@@ -167,9 +209,9 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     
     // For passengers, checking booking status is important
     if (mode === "passenger") {
-      const st = (myBooking?.booking_status || myBooking?.status || "").toLowerCase();
-      // Only allow cancellation if confirmed, pending or active
-      return st === "confirmed" || st === "pending" || st === "active";
+      const st = (myBooking?.booking_status || myBooking?.bookingStatus || myBooking?.status || "").toLowerCase();
+      // Allow cancellation if confirmed, pending, active, or any other non-cancelled status if the trip is active
+      return st !== "" && st !== "canceled" && st !== "cancelled" && st !== "completed";
     }
 
     if (!isDriver) return false;
@@ -225,7 +267,8 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
 
     if (window.confirm(message)) {
       if (mode === "passenger") {
-        cancelBooking(id, {
+        const targetId = myBooking?.id || id;
+        cancelBooking(targetId, {
           onSuccess: () => {
             toast.success("Booking cancelled successfully");
             router.push("/dashboard");
@@ -281,6 +324,41 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     );
   };
 
+  const handleAddPassengerToBooking = (data: { name: string; phone: string }) => {
+    if (!token || mode !== "passenger") return;
+    
+    const targetId = myBooking?.id || id;
+    
+    addPassenger(
+      { bookingId: targetId, data },
+      {
+        onSuccess: () => {
+          setIsAddPassengerModalOpen(false);
+          toast.success("Passenger added successfully");
+        },
+        onError: (err: any) => toast.error(handleError(err))
+      }
+    );
+  };
+
+  const handleRemovePassengerFromBooking = (passengerId: string | number) => {
+    if (!token || mode !== "passenger") return;
+
+    const targetId = myBooking?.id || id;
+
+    if (window.confirm("Are you sure you want to remove this passenger?")) {
+      removePassenger(
+        { bookingId: targetId, passengerId },
+        {
+          onSuccess: () => {
+            toast.success("Passenger removed successfully");
+          },
+          onError: (err: any) => toast.error(handleError(err))
+        }
+      );
+    }
+  };
+
   return {
     trip,
     isLoading,
@@ -299,12 +377,18 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     setIsBookModalOpen,
     isBooking,
     isCanceling: isCanceling || isCancelingBooking,
-    bookingStatus: myBooking?.booking_status || myBooking?.status || (mode === "passenger" ? undefined : trip?.status),
+    isAddingPassenger,
+    isRemovingPassenger,
+    isAddPassengerModalOpen,
+    setIsAddPassengerModalOpen,
+    bookingStatus: myBooking?.booking_status || myBooking?.bookingStatus || myBooking?.status || (mode === "passenger" ? undefined : trip?.status),
     bookingPassengers: myBooking?.passengers || [],
     totalPrice: myBooking?.total_price || (trip?.price_per_seat ? Number(trip.price_per_seat) * (myBooking?.passengers?.length || 1) : null),
     bookingId: id,
     handleBook,
     handleCancel,
+    handleAddPassenger: handleAddPassengerToBooking,
+    handleRemovePassenger: handleRemovePassengerFromBooking,
     t,
     rd,
   };
