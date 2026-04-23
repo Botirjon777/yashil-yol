@@ -38,8 +38,6 @@ export default function DashboardFeature() {
     setCardToVerify,
     rideType,
     handleRideTypeChange,
-    activeRides,
-    historyRides,
     driverActive,
     driverCompleted,
     driverCanceled,
@@ -101,7 +99,6 @@ export default function DashboardFeature() {
         <RidesSection
           rideType={rideType}
           handleRideTypeChange={handleRideTypeChange}
-          historyRides={historyRides || []}
           driverActive={driverActive || []}
           driverCompleted={driverCompleted || []}
           driverCanceled={driverCanceled || []}

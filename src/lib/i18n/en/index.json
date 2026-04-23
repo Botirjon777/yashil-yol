@@ -43,7 +43,7 @@
     "safe": "Safe & Verified"
   },
   "features": {
-    "why": "Why Yashil Yo'l?",
+    "why": "Why Ketamiz?",
     "driverTitle": "Verified Drivers",
     "driverDesc": "Every driver on our platform is personally verified. Safety is our #1 priority.",
     "priceTitle": "Best Prices",
@@ -364,7 +364,7 @@
     }
   },
   "becomeDriver": {
-    "title": "Become a Qadam Driver",
+    "title": "Become a Ketamiz Driver",
     "subtitle": "Complete these 4 steps to start earning with us.",
     "steps": {
       "license": "License",
@@ -522,7 +522,7 @@
   },
   "terms": {
     "title": "Terms & Conditions",
-    "subtitle": "Please read these terms carefully before using the Yashil Yo'l platform.",
+    "subtitle": "Please read these terms carefully before using the Ketamiz platform.",
     "lastUpdated": "Last Updated",
     "version": "Version",
     "qTitle": "Have questions about our terms?",
@@ -532,7 +532,7 @@
     "sections": {
       "acceptance": {
         "title": "1. Agreement to Terms",
-        "content": "By accessing or using the Yashil Yo'l platform, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you may not use our services. These terms apply to all users, including drivers, passengers, and bus booking customers."
+        "content": "By accessing or using the Ketamiz platform, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you may not use our services. These terms apply to all users, including drivers, passengers, and bus booking customers."
       },
       "eligibility": {
         "title": "2. Eligibility & Account Security",
@@ -540,7 +540,7 @@
       },
       "services": {
         "title": "3. Services Overview",
-        "content": "Yashil Yo'l provides a technology platform that connects passengers with independent drivers for carpool services and facilitates ticket bookings for professional bus operators. Yashil Yo'l does not provide transportation services directly and is not a transportation carrier."
+        "content": "Ketamiz provides a technology platform that connects passengers with independent drivers for carpool services and facilitates ticket bookings for professional bus operators. Ketamiz does not provide transportation services directly and is not a transportation carrier."
       },
       "conduct": {
         "title": "4. User Obligations & Conduct",
@@ -556,7 +556,7 @@
       },
       "liability": {
         "title": "7. Limitation of Liability",
-        "content": "Yashil Yo'l is not liable for any damages, personal injuries, or property loss resulting from rides arranged through the platform. We provide the technology to facilitate connections but do not guarantee the quality, safety, or legality of the transportation provided."
+        "content": "Ketamiz is not liable for any damages, personal injuries, or property loss resulting from rides arranged through the platform. We provide the technology to facilitate connections but do not guarantee the quality, safety, or legality of the transportation provided."
       },
       "governingLaw": {
         "title": "8. Governing Law",

@@ -29,14 +29,7 @@ const MobileNavbar = () => {
       <div className="h-full flex items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center shadow-sm shadow-primary/25">
-            <span className="text-white font-black text-[10px] tracking-tight">
-              YY
-            </span>
-          </div>
-          <span className="text-base font-black text-dark-text tracking-tight uppercase">
-            Yashil <span className="text-primary">Yo'l</span>
-          </span>
+          <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-7 w-auto" />
         </Link>
 
         {/* Current route indicator — subtle breadcrumb feel */}

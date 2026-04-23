@@ -43,7 +43,7 @@
     "safe": "Xavfsiz va tekshirilgan"
   },
   "features": {
-    "why": "Nima uchun Yashil Yo'l?",
+    "why": "Nima uchun Ketamiz?",
     "driverTitle": "Tasdiqlangan haydovchilar",
     "driverDesc": "Platformamizdagi har bir haydovchi shaxsan tekshiriladi. Xavfsizlik bizning asosiy vazifamiz.",
     "priceTitle": "Eng yaxshi narxlar",
@@ -53,7 +53,7 @@
   },
   "cta": {
     "title": "Birinchi sayohatingizni boshlashga tayyormisiz?",
-    "subtitle": "Bugun minglab sayohatchilarga qo'shiling va O'zbekistondagi eng yaxshi transport xizmatidan bahramand bo'ling.",
+    "subtitle": "Bugun minglab sayohatchilarga qo'shiling va O'zbekistondagi eng yaxshi Ketamiz transport xizmatidan bahramand bo'ling.",
     "button": "Hisob yaratish",
     "howItWorks": "Bu qanday ishlaydi"
   },
@@ -364,7 +364,7 @@
     }
   },
   "becomeDriver": {
-    "title": "Qadam haydovchisi bo'ling",
+    "title": "Ketamiz haydovchisi bo'ling",
     "subtitle": "Biz bilan daromad olishni boshlash uchun quyidagi 4 bosqichni bajaring.",
     "steps": {
       "license": "Haydovchilik guvohnomasi",
@@ -524,7 +524,7 @@
   },
   "terms": {
     "title": "Xizmat ko'rsatish shartlari",
-    "subtitle": "Yashil Yo'l platformasidan foydalanishdan oldin ushbu shartlarni diqqat bilan o'qib chiqing.",
+    "subtitle": "Ketamiz platformasidan foydalanishdan oldin ushbu shartlarni diqqat bilan o'qib chiqing.",
     "lastUpdated": "Oxirgi yangilanish",
     "version": "Versiya",
     "qTitle": "Shartlarimiz haqidaga savollaringiz bormi?",
@@ -534,7 +534,7 @@
     "sections": {
       "acceptance": {
         "title": "1. Shartlar bilan kelishuv",
-        "content": "Yashil Yo'l platformasiga kirish yoki undan foydalanish orqali siz ushbu Foydalanish shartlariga rioya qilishga rozilik bildirasiz. Agar siz biron bir qismga rozi bo'lmasangiz, xizmatlarimizdan foydalana olmaysiz. Ushbu shartlar barcha foydalanuvchilarga, jumladan, haydovchilar, yo'lovchilar va avtobus chiptalarini band qiluvchi mijozlarga tegishli."
+        "content": "Ketamiz platformasiga kirish yoki undan foydalanish orqali siz ushbu Foydalanish shartlariga rioya qilishga rozilik bildirasiz. Agar siz biron bir qismga rozi bo'lmasangiz, xizmatlarimizdan foydalana olmaysiz. Ushbu shartlar barcha foydalanuvchilarga, jumladan, haydovchilar, yo'lovchilar va avtobus chiptalarini band qiluvchi mijozlarga tegishli."
       },
       "eligibility": {
         "title": "2. Huquqiylik va hisob xavfsizligi",
@@ -542,7 +542,7 @@
       },
       "services": {
         "title": "3. Xizmatlar tavsifi",
-        "content": "Yashil Yo'l - bu yo'lovchilarni karpul xizmatlari uchun mustaqil haydovchilar bilan bog'laydigan va professional avtobus tashuvchilari uchun chiptalarni band qilishga yordam beradigan texnologik platforma. Yashil Yo'l transport xizmatlarini bevosita ko'rsatmaydi va transport tashuvchisi emas."
+        "content": "Ketamiz - bu yo'lovchilarni karpul xizmatlari uchun mustaqil haydovchilar bilan bog'laydigan va professional avtobus tashuvchilari uchun chiptalarni band qilishga yordam beradigan texnologik platforma. Ketamiz transport xizmatlarini bevosita ko'rsatmaydi va transport tashuvchisi emas."
       },
       "conduct": {
         "title": "4. Foydalanuvchi majburiyatlari va xulq-atvori",
@@ -558,7 +558,7 @@
       },
       "liability": {
         "title": "7. Mas'uliyatni cheklash",
-        "content": "Yashil Yo'l platforma orqali tashkil etilgan safarlar natijasida yuzaga keladigan har qanday zarar, shaxsiy jarohatlar yoki mulkiy yo'qotishlar uchun javobgar emas. Biz aloqalarni osonlashtirish uchun texnologiyani taqdim etamiz, ammo ko'rsatilayotgan transport sifati, xavfsizligi yoki qonuniyligiga kafolat bermaymiz."
+        "content": "Ketamiz platforma orqali tashkil etilgan safarlar natijasida yuzaga keladigan har qanday zarar, shaxsiy jarohatlar yoki mulkiy yo'qotishlar uchun javobgar emas. Biz aloqalarni osonlashtirish uchun texnologiyani taqdim etamiz, ammo ko'rsatilayotgan transport sifati, xavfsizligi yoki qonuniyligiga kafolat bermaymiz."
       },
       "governingLaw": {
         "title": "8. Tartibga soluvchi qonunchilik",

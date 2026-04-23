@@ -38,7 +38,7 @@ const MobileFooter = () => {
           <div className="text-center">
             <Link href="/" className="inline-block mb-4">
               <span className="text-2xl font-black text-dark-text tracking-tight uppercase">
-                Yashil <span className="text-primary">Yo&apos;l</span>
+                Ketamiz
               </span>
             </Link>
             <p className="text-gray-500 font-medium text-sm leading-relaxed max-w-xs mx-auto">
@@ -99,7 +99,7 @@ const MobileFooter = () => {
               <Link href="/terms">{safeT("footer", "terms")}</Link>
             </div>
             <p className="text-gray-400 text-[10px] font-bold">
-              © {new Date().getFullYear()} Yashil Yo&apos;l.{" "}
+              © {new Date().getFullYear()} Ketamiz.{" "}
               {safeT("footer", "rights")}
             </p>
           </div>
