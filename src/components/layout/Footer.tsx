@@ -29,7 +29,7 @@ const Footer = () => {
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="flex items-center mb-6">
               <span className="text-xl md:text-2xl font-black text-dark-text tracking-tight uppercase">
-                Yashil <span className="text-primary">Yo&apos;l</span>
+                Ketamiz
               </span>
             </Link>
             <p className="text-gray-500 leading-relaxed font-medium">
@@ -133,7 +133,7 @@ const Footer = () => {
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
           <p className="text-gray-400 text-sm font-medium mb-4 md:mb-0">
-            © {new Date().getFullYear()} Yashil Yo&apos;l.{" "}
+            © {new Date().getFullYear()} Ketamiz.{" "}
             {safeT("footer", "rights")}
           </p>
           <div className="flex space-x-6 text-sm text-gray-400 font-medium" suppressHydrationWarning>

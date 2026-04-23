@@ -195,16 +195,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
           >
             {/* Header */}
             <div className="px-5 py-4 flex items-center justify-between border-b border-border bg-linear-to-r from-primary/5 to-transparent">
-              <div className="flex items-center gap-2.5">
-                <div className="w-7 h-7 rounded-lg bg-primary flex items-center justify-center">
-                  <span className="text-white font-black text-[10px] tracking-tight">
-                    YY
-                  </span>
-                </div>
-                <span className="text-sm font-black text-dark-text uppercase tracking-tight">
-                  Yashil <span className="text-primary">Yo'l</span>
-                </span>
-              </div>
+            <div className="flex items-center gap-2.5">
+              <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-7 w-auto" />
+            </div>
               <motion.button
                 whileTap={{ scale: 0.88, rotate: 90 }}
                 onClick={onClose}

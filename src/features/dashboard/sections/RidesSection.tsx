@@ -9,8 +9,6 @@ import { useLanguageStore } from "@/src/providers/LanguageProvider";
 interface RidesSectionProps {
   rideType: "passenger" | "driver";
   handleRideTypeChange: (type: "passenger" | "driver") => void;
-  activeRides: any[];
-  historyRides: any[];
   passengerInprogress?: any[];
   passengerCompleted?: any[];
   passengerCanceled?: any[];
@@ -26,8 +24,6 @@ interface RidesSectionProps {
 export function RidesSection({
   rideType,
   handleRideTypeChange,
-  activeRides,
-  historyRides,
   passengerInprogress = [],
   passengerCompleted = [],
   passengerCanceled = [],

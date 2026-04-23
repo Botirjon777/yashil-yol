@@ -78,10 +78,8 @@ const Navbar = () => {
       <div className="container-custom h-full flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
-          <Link href="/" className="flex items-center">
-            <span className="text-xl md:text-2xl font-black text-dark-text tracking-tight uppercase">
-              Yashil <span className="text-primary">Yo&apos;l</span>
-            </span>
+          <Link href="/" className="flex items-center gap-2">
+            <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-10 w-auto" />
           </Link>
         </div>
 
