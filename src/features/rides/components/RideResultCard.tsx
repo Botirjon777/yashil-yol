@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { HiStar, HiTruck, HiUserGroup } from "react-icons/hi";
-import { formatCurrency, formatDate, cn } from "@/src/lib/utils";
+import { formatCurrency, formatDate, formatDateTime, cn } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { useLocationStore } from "@/src/providers/LocationStore";
@@ -150,15 +150,7 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
                           isPast ? "text-gray-500" : "text-primary",
                         )}
                       >
-                        {new Date(ride.start_time).toLocaleDateString([], {
-                          month: "short",
-                          day: "numeric",
-                        })}
-                        ,{" "}
-                        {new Date(ride.start_time).toLocaleTimeString([], {
-                          hour: "2-digit",
-                          minute: "2-digit",
-                        })}
+                        {formatDateTime(ride.start_time)}
                       </span>
                     </div>
                     <div className="text-sm md:text-base font-black text-dark-text leading-tight wrap-break-word">
@@ -172,21 +164,7 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
                       {t("rideDetails", "destination")}
                       <span className="mx-1.5 w-0.5 h-0.5 rounded-full bg-gray-300"></span>
                       <span className="normal-case tracking-normal text-secondary/70">
-                        {ride.end_time ? (
-                          <>
-                            {new Date(ride.end_time).toLocaleDateString([], {
-                              month: "short",
-                              day: "numeric",
-                            })}
-                            ,{" "}
-                            {new Date(ride.end_time).toLocaleTimeString([], {
-                              hour: "2-digit",
-                              minute: "2-digit",
-                            })}
-                          </>
-                        ) : (
-                          "---"
-                        )}
+                        {ride.end_time ? formatDateTime(ride.end_time) : "---"}
                       </span>
                     </div>
                     <div className="text-sm md:text-base font-black text-dark-text leading-tight wrap-break-word">

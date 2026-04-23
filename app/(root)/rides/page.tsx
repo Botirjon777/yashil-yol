@@ -1,13 +1,13 @@
 "use client";
 
 import { useState, Suspense, useEffect } from "react";
-import { HiSearch, HiAdjustments } from "react-icons/hi";
+import { HiSearch, HiAdjustments, HiChevronLeft, HiChevronRight } from "react-icons/hi";
 import Button from "@/src/components/ui/Button";
 import Link from "next/link";
 import { useSearchParams } from "next/navigation";
 import {
   useSearchTrips,
-  useAllPublicTrips,
+  usePublicTrips,
 } from "@/src/features/rides/hooks/useRides";
 import RideResultCard from "@/src/features/rides/components/RideResultCard";
 import Loader from "@/src/components/ui/Loader";
@@ -42,12 +42,17 @@ const RidesContent = () => {
     queryParams.departure_date,
   );
 
+  const [page, setPage] = useState(1);
+
   const { data: searchRides, isLoading: isSearchLoading } = useSearchTrips(
     queryParams,
     hasFilters,
   );
-  const { data: allRides, isLoading: isAllLoading } =
-    useAllPublicTrips(!hasFilters);
+  const { data: paginatedData, isLoading: isAllLoading } =
+    usePublicTrips(page);
+
+  const allRides = paginatedData?.data ?? [];
+  const meta = paginatedData?.meta;
 
   // Location Data for Store
   const { data: regionsData } = useRegions();
@@ -70,12 +75,6 @@ const RidesContent = () => {
   const rides = hasFilters ? searchRides : allRides;
   const isLoading = hasFilters ? isSearchLoading : isAllLoading;
 
-  useEffect(() => {
-    if (rides) {
-      console.log("DEBUG: Search results from API:", rides);
-    }
-  }, [rides]);
-
   const [priceRange, setPriceRange] = useState(500000);
   const [timeSlots, setTimeSlots] = useState<string[]>([]);
   const [mounted, setMounted] = useState(false);
@@ -91,13 +90,7 @@ const RidesContent = () => {
   };
 
   const filteredRides = (rides || []).filter((ride) => {
-    // 1. Exclude past rides
-    const isPast = ride.start_time
-      ? new Date(ride.start_time).getTime() < Date.now()
-      : false;
-    if (isPast) return false;
-
-    // 2. Exclude own rides (Drivers cannot book their own trips)
+    // Exclude own rides (Drivers cannot book their own trips)
     if (user && Number(ride.driver_id) === Number(user.id)) return false;
 
     const price = Number(ride.price_per_seat || 0);
@@ -215,6 +208,29 @@ const RidesContent = () => {
                     }
                   />
                 ))}
+
+                {/* Pagination — only shown when not filtering by search */}
+                {!hasFilters && meta && meta.last_page > 1 && (
+                  <div className="flex items-center justify-center gap-3 pt-4">
+                    <button
+                      onClick={() => setPage((p) => Math.max(1, p - 1))}
+                      disabled={page <= 1}
+                      className="p-2 rounded-xl border border-border disabled:opacity-40 hover:bg-gray-50 transition-all"
+                    >
+                      <HiChevronLeft className="w-5 h-5" />
+                    </button>
+                    <span className="text-sm font-bold text-gray-500">
+                      {page} / {meta.last_page}
+                    </span>
+                    <button
+                      onClick={() => setPage((p) => Math.min(meta.last_page, p + 1))}
+                      disabled={page >= meta.last_page}
+                      className="p-2 rounded-xl border border-border disabled:opacity-40 hover:bg-gray-50 transition-all"
+                    >
+                      <HiChevronRight className="w-5 h-5" />
+                    </button>
+                  </div>
+                )}
               </div>
             ) : (
               <div className="premium-card p-10 text-center">

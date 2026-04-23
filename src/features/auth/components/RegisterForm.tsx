@@ -9,6 +9,7 @@ import Checkbox from "@/src/components/ui/Checkbox";
 import FormError from "@/src/components/ui/FormError";
 import { useRegister } from "../hooks/useAuth";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import Link from "next/link";
 
 export const RegisterForm = () => {
   const [formData, setFormData] = useState({
@@ -129,7 +130,6 @@ export const RegisterForm = () => {
           prefixText="+998"
           required
           value={formData.phone}
-          className="ml-2.5"
           onChange={(e) => {
             const val = e.target.value.replace(/\D/g, ""); // Only digits
             if (val.length <= 9) {
@@ -165,7 +165,20 @@ export const RegisterForm = () => {
 
       <div className="pt-1">
         <Checkbox
-          label={safeT("auth", "register", "termsAgreement")}
+          label={
+            <>
+              {safeT("auth", "register", "termsAgreement")}
+              <Link
+                href="/terms"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="text-primary hover:underline tracking-tight"
+              >
+                {safeT("auth", "register", "termsLink")}
+              </Link>
+              {safeT("auth", "register", "termsAgreementSuffix")}
+            </>
+          }
           required
         />
       </div>

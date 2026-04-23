@@ -15,6 +15,10 @@ interface RidesSectionProps {
   passengerCompleted?: any[];
   passengerCanceled?: any[];
   passengerBookings?: any[];
+  driverActive?: any[];
+  driverCompleted?: any[];
+  driverCanceled?: any[];
+  driverAll?: any[];
   isDriver: boolean;
   user: AuthUser | null;
 }
@@ -28,11 +32,16 @@ export function RidesSection({
   passengerCompleted = [],
   passengerCanceled = [],
   passengerBookings = [],
+  driverActive = [],
+  driverCompleted = [],
+  driverCanceled = [],
+  driverAll = [],
   isDriver,
   user,
 }: RidesSectionProps) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [passengerTab, setPassengerTab] = useState<"inprogress" | "completed" | "canceled" | "bookings">("inprogress");
+  const [driverTab, setDriverTab] = useState<"all" | "active" | "completed" | "canceled">("all");
   
   const isApproved = user?.driving_verification_status === "approved";
   const { t } = useLanguageStore();
@@ -75,6 +84,46 @@ export function RidesSection({
         key={`${passengerTab}-${ride.bookingId || "nb"}-${ride.id || index}`} 
         ride={ride} 
         isHistory={passengerTab === "completed" || passengerTab === "canceled"} 
+      />
+    ));
+  };
+
+  const renderDriverList = () => {
+    let currentList = [];
+    let emptyMessage = "";
+
+    switch (driverTab) {
+      case "all":
+        currentList = [...driverAll].sort((a, b) => b.id - a.id);
+        emptyMessage = ridesTranslations?.noHistory;
+        break;
+      case "active":
+        currentList = [...driverActive].sort((a, b) => b.id - a.id);
+        emptyMessage = ridesTranslations?.noActive;
+        break;
+      case "completed":
+        currentList = [...driverCompleted].sort((a, b) => b.id - a.id);
+        emptyMessage = ridesTranslations?.noHistory;
+        break;
+      case "canceled":
+        currentList = [...driverCanceled].sort((a, b) => b.id - a.id);
+        emptyMessage = ridesTranslations?.noHistory;
+        break;
+    }
+
+    if (currentList.length === 0) {
+      return (
+        <div className="premium-card p-6 lg:p-12 text-center text-gray-500 font-medium">
+          {emptyMessage}
+        </div>
+      );
+    }
+
+    return currentList.map((ride: any, index: number) => (
+      <RideCard 
+        key={`driver-${driverTab}-${ride.id || index}`} 
+        ride={ride} 
+        isHistory={driverTab === "completed" || driverTab === "canceled"} 
       />
     ));
   };
@@ -137,6 +186,29 @@ export function RidesSection({
         </div>
       )}
 
+      {rideType === "driver" && (
+        <div className="flex flex-wrap gap-2 mb-6">
+          {[
+            { id: "all", label: ridesTranslations?.allTrips || "All Trips" },
+            { id: "active", label: ridesTranslations?.activeLabel || ridesTranslations?.active || "Active" },
+            { id: "completed", label: ridesTranslations?.completed },
+            { id: "canceled", label: ridesTranslations?.canceled }
+          ].map((tab) => (
+            <button
+              key={tab.id}
+              onClick={() => setDriverTab(tab.id as any)}
+              className={`px-5 py-2 rounded-full text-xs font-black uppercase tracking-widest transition-all border ${
+                driverTab === tab.id
+                  ? "bg-dark-text text-white border-dark-text shadow-lg shadow-dark-text/10"
+                  : "bg-white text-gray-500 border-border hover:border-gray-400"
+              }`}
+            >
+              {tab.label || tab.id}
+            </button>
+          ))}
+        </div>
+      )}
+
       {/* Animated Create Trip Banner for Drivers */}
       {isDriver && isApproved && rideType === "driver" && (
         <div className="animate-in-bottom transition-all duration-500">
@@ -173,35 +245,7 @@ export function RidesSection({
       />
 
       <div className="space-y-4">
-        {rideType === "driver" ? (
-          <>
-            <h2 className="text-lg font-black text-gray-400 uppercase tracking-widest">
-              {ridesTranslations?.active}
-            </h2>
-            {activeRides?.length === 0 ? (
-              <div className="premium-card p-6 lg:p-12 text-center text-gray-500 font-medium">
-                {ridesTranslations?.noActive}
-              </div>
-            ) : (
-              activeRides?.map((ride) => <RideCard key={`active-${ride.id}`} ride={ride} />)
-            )}
-
-            <h2 className="text-lg font-black text-gray-400 uppercase tracking-widest pt-8">
-              {ridesTranslations?.history}
-            </h2>
-            {historyRides?.length === 0 ? (
-              <div className="premium-card p-6 lg:p-12 text-center text-gray-500 font-medium">
-                {ridesTranslations?.noHistory}
-              </div>
-            ) : (
-              historyRides?.map((ride) => (
-                <RideCard key={`history-${ride.id}`} ride={ride} isHistory />
-              ))
-            )}
-          </>
-        ) : (
-          renderPassengerList()
-        )}
+        {rideType === "driver" ? renderDriverList() : renderPassengerList()}
       </div>
     </div>
   );

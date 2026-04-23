@@ -61,7 +61,6 @@ export const LoginForm = () => {
         placeholder={safeT("auth", "login", "phonePlaceholder")}
         prefixText="+998"
         iconLeft={<HiPhone className="w-5 h-5" />}
-        className="ml-2.5"
         required
         value={phone}
         onChange={(e) => {

@@ -147,7 +147,9 @@
       "passwordPlaceholder": "Мин. 8 символов",
       "confirmPasswordLabel": "Подтвердите пароль",
       "confirmPasswordPlaceholder": "Подтвердите",
-      "termsAgreement": "Я согласен с Условиями использования",
+      "termsAgreement": "Я согласен с ",
+      "termsLink": "Условиями использования",
+      "termsAgreementSuffix": "",
       "submitButton": "Создать аккаунт",
       "hasAccount": "Уже есть аккаунт?",
       "login": "Войти",
@@ -200,6 +202,18 @@
     "joinRide": "Забронировать"
   },
   "dashboard": {
+    "deleteRide": "Удалить поездку",
+    "cancelBooking": "Отменить бронирование",
+    "deleteConfirmTitle": "Вы абсолютно уверены?",
+    "deleteConfirmMsg": "Это действие нельзя отменить. Эта поездка будет удалена из будущих поисков.",
+    "rideSummary": "Сводка поездки",
+    "departure": "Вылет",
+    "confirmDelete": "Подтвердить удаление",
+    "confirmCancel": "Подтвердить отмену",
+    "cancel": "Отмена",
+    "pastTrip": "Прошедшая поездка",
+    "under2Hours": "Менее 2 часов",
+    "hasBookings": "Есть бронирования",
     "sidebar": {
       "myRides": "Мои поездки",
       "balance": "Баланс и карты",
@@ -223,7 +237,9 @@
       "inprogress": "В процессе",
       "completed": "Завершено",
       "canceled": "Отменено",
-      "allBookings": "Все брони"
+      "allBookings": "Все брони",
+      "allTrips": "Все поездки",
+      "activeLabel": "Активные"
     },
       "balance": {
         "title": "Оплата и баланс",
@@ -437,6 +453,7 @@
       "processError": "Ошибка процесса: ID автомобиля не существует"
     }
   },
+
   "rideDetails": {
     "backToDashboard": "Вернуться в панель",
     "backToResults": "Вернуться к результатам",
@@ -477,14 +494,33 @@
     "paymentMethod": "Способ оплаты",
     "paymentFromBalance": "Оплата будет списана с вашего внутреннего баланса.",
     "enterName": "Введите имя",
-    "phonePlaceholder": "+998..."
+    "phonePlaceholder": "+998...",
+    "addPassenger": "Добавить пассажира",
+    "addNewCompanion": "Добавить нового попутчика",
+    "companionInfoDesc": "Укажите имя и номер телефона вашего друга.",
+    "addAnotherPassenger": "Добавить еще пассажира",
+    "bookingStatusLabel": "Статус бронирования",
+    "totalPaidLabel": "Итого оплачено",
+    "bookingActions": "Действия по бронированию",
+    "cancelNotice": "Вы можете отменить это бронирование. Средства будут немедленно возвращены на ваш баланс.",
+    "cancelBooking": "Отменить бронирование",
+    "supportLabel": "Поддержка",
+    "supportDesc": "Возникли проблемы с поездкой? Свяжитесь с нашей службой поддержки для помощи.",
+    "departedNotice": "Эта поездка уже отправилась.",
+    "cancellationUnavailable": "Отмена больше не доступна для этой поездки.",
+    "confirmRemovalTitle": "Удалить пассажира",
+    "confirmRemovalMsg": "Вы уверены, что хотите удалить этого пассажира из вашего бронирования?",
+    "confirmCancelTitle": "Отменить бронирование",
+    "confirmCancelMsg": "Вы уверены, что хотите отменить бронирование? Средства будут немедленно возвращены на ваш баланс."
   },
   "status": {
     "active": "Активен",
     "completed": "Завершен",
     "canceled": "Отменен",
+    "cancelled": "Отменен",
     "pending": "В ожидании",
-    "confirmed": "Подтверждено"
+    "confirmed": "Подтверждено",
+    "full": "Заполнен"
   },
   "terms": {
     "title": "Условия и положения",

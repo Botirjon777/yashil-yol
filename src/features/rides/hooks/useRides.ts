@@ -172,6 +172,8 @@ export const useAddPassenger = () => {
       addPassengerToBooking(bookingId, data),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["trip"] });
+      queryClient.invalidateQueries({ queryKey: ["client-bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
       toast.success("Passenger added successfully");
     },
     onError: (err: any) => {
@@ -187,6 +189,8 @@ export const useRemovePassenger = () => {
       removePassengerFromBooking(bookingId, passengerId),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["trip"] });
+      queryClient.invalidateQueries({ queryKey: ["client-bookings"] });
+      queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
       toast.success("Passenger removed successfully");
     },
     onError: (err: any) => {

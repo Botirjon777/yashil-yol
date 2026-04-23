@@ -28,6 +28,17 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
   const { mutate: cancelTrip, isPending: isCanceling } = useCancelTrip();
   const { mutate: cancelBooking, isPending: isCancelingBooking } =
     useCancelClientBooking();
+  const { language, t } = useLanguageStore();
+  const {
+    regions,
+    districts,
+    quarters,
+    resolveLocationName,
+    setRegions,
+    setDistricts,
+    setQuarters,
+  } = useLocationStore();
+
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
 
   // Loose check for driver ownership to handle different API schemas
@@ -52,20 +63,11 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
     (isDriver ? !hasBookings : true);
 
   let cannotCancelReason = null;
-  if (isHistory) cannotCancelReason = "Past Trip";
-  else if (isTooLate) cannotCancelReason = "Under 2 Hours";
-  else if (isDriver && hasBookings) cannotCancelReason = "Has Bookings";
+  if (isHistory) cannotCancelReason = t("dashboard", "pastTrip");
+  else if (isTooLate) cannotCancelReason = t("dashboard", "under2Hours");
+  else if (isDriver && hasBookings) cannotCancelReason = t("dashboard", "hasBookings");
 
-  const { language, t } = useLanguageStore();
-  const {
-    regions,
-    districts,
-    quarters,
-    resolveLocationName,
-    setRegions,
-    setDistricts,
-    setQuarters,
-  } = useLocationStore();
+
 
   const { data: regionsData } = useRegions();
   const { data: districtsData } = useDistricts();
@@ -134,16 +136,6 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
   const fullTo = [toRegion, toDistrict, toQuarter].filter(Boolean).join(", ");
 
   const price = ride.price_per_seat || 0;
-
-  useEffect(() => {
-    if (bookingId) {
-      console.log("RideCard Booking Data:", {
-        tripId: ride.id,
-        bookingId,
-        ride
-      });
-    }
-  }, [bookingId, ride]);
 
   return (
     <div className="relative group">
@@ -315,7 +307,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
                 }
               >
                 {cannotCancelReason ||
-                  (isDriver ? "Delete Ride" : "Cancel Booking")}
+                  (isDriver ? t("dashboard", "deleteRide") : t("dashboard", "cancelBooking"))}
               </Button>
             </div>
           )}
@@ -325,7 +317,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
       <Modal
         isOpen={isDeleteModalOpen}
         onClose={() => setIsDeleteModalOpen(false)}
-        title="Delete Ride"
+        title={isDriver ? t("dashboard", "deleteRide") : t("dashboard", "cancelBooking")}
         size="md"
       >
         <div className="p-1 space-y-6">
@@ -335,11 +327,10 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
             </div>
             <div>
               <h3 className="font-black text-dark-text leading-tight">
-                Are you absolutely sure?
+                {t("dashboard", "deleteConfirmTitle")}
               </h3>
               <p className="text-sm text-gray-500 mt-1">
-                This action cannot be undone. This trip will be removed from
-                future searches.
+                {t("dashboard", "deleteConfirmMsg")}
               </p>
             </div>
           </div>
@@ -347,13 +338,13 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           <div className="space-y-4">
             <div className="p-4 bg-light-bg rounded-2xl border border-border/40">
               <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-2">
-                Ride Summary
+                {t("dashboard", "rideSummary")}
               </div>
               <div className="text-sm font-bold text-dark-text truncate">
                 {fullFrom}
               </div>
               <div className="text-[10px] text-gray-500 mt-1">
-                Departure: {new Date(ride.start_time).toLocaleString()}
+                {t("dashboard", "departure")}: {new Date(ride.start_time).toLocaleString()}
               </div>
             </div>
           </div>
@@ -364,7 +355,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
               className="flex-1"
               onClick={() => setIsDeleteModalOpen(false)}
             >
-              Cancel
+              {t("dashboard", "cancel")}
             </Button>
             <Button
               variant="danger"
@@ -383,7 +374,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
               }}
               icon={<HiTrash className="w-4 h-4" />}
             >
-              {isDriver ? "Confirm Delete" : "Confirm Cancel"}
+              {isDriver ? t("dashboard", "confirmDelete") : t("dashboard", "confirmCancel")}
             </Button>
           </div>
         </div>

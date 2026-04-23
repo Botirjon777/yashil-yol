@@ -11,6 +11,7 @@ import {
   useDriverCompletedTrips,
   useDriverCanceledTrips,
   useClientBookings,
+  useDriverAllTrips,
 } from "@/src/features/rides/hooks/useRides";
 import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { parseError } from "@/src/lib/errorUtils";
@@ -64,21 +65,11 @@ export function useDashboard() {
   const { data: driverActive } = useDriverActiveTrips();
   const { data: driverCompleted } = useDriverCompletedTrips();
   const { data: driverCanceled } = useDriverCanceledTrips();
+  const { data: driverAll } = useDriverAllTrips();
   const { data: passengerBookings } = useClientBookings();
   const { data: vehiclesData } = useVehicles();
 
-  // Debug logs for canceled rides
-  useEffect(() => {
-    if (passengerCanceled) {
-      console.log("Dashboard [Passenger Canceled] Raw:", passengerCanceled);
-    }
-    if (passengerBookings) {
-      console.log("Dashboard [Passenger Bookings] Raw:", passengerBookings);
-    }
-    if (driverCanceled) {
-      console.log("Dashboard [Driver Canceled]:", driverCanceled);
-    }
-  }, [passengerCanceled, passengerBookings, driverCanceled]);
+
 
   // Profile Form State
   const [profileForm, setProfileForm] = useState({
@@ -225,6 +216,10 @@ export function useDashboard() {
     setIsAddVehicleOpen,
     activeRides: activeRides || [],
     historyRides: historyRides || [],
+    driverActive: driverActive || [],
+    driverCompleted: driverCompleted || [],
+    driverCanceled: driverCanceled || [],
+    driverAll: driverAll || [],
     passengerInprogress: (passengerInprogress || []).map(b => mapPassengerTrip(b)),
     passengerCompleted: (passengerCompleted || []).map(b => mapPassengerTrip(b)),
     passengerCanceled: (passengerCanceled || []).map(b => mapPassengerTrip(b, "canceled")),

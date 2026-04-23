@@ -11,6 +11,7 @@ import {
   PassengerListCard,
   BookingSidebar,
   BookingModal,
+  ConfirmationModal,
 } from "@/src/features/rides/components";
 import Loader from "@/src/components/ui/Loader";
 import Button from "@/src/components/ui/Button";
@@ -19,6 +20,7 @@ const DriverRideDetailsPage = () => {
   const params = useParams();
   const tripId = params.id as string;
   
+  const [isConfirmModalOpen, setIsConfirmModalOpen] = React.useState(false);
   const {
     trip,
     isLoading,
@@ -72,7 +74,7 @@ const DriverRideDetailsPage = () => {
     );
   }
 
-  console.log("DriverRideDetailsPage - Trip Data:", trip);
+
 
   return (
     <div className="bg-light-bg min-h-screen py-8 md:py-12 pb-24">
@@ -116,7 +118,7 @@ const DriverRideDetailsPage = () => {
               canCancel={canCancel}
               numSeats={numSeats}
               setNumSeats={setNumSeats}
-              handleCancel={handleCancel}
+              handleCancel={() => setIsConfirmModalOpen(true)}
               setIsBookModalOpen={setIsBookModalOpen}
               isCanceling={isCanceling}
               driverName={driverName}
@@ -125,6 +127,17 @@ const DriverRideDetailsPage = () => {
           </div>
         </div>
       </div>
+      <ConfirmationModal
+        isOpen={isConfirmModalOpen}
+        onClose={() => setIsConfirmModalOpen(false)}
+        onConfirm={() => {
+          handleCancel();
+          setIsConfirmModalOpen(false);
+        }}
+        title={rd("confirmCancelTitle") || "Cancel Trip"}
+        message={rd("confirmCancelMsg") || "Are you sure you want to cancel this trip?"}
+        isLoading={isCanceling}
+      />
     </div>
   );
 };

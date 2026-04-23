@@ -40,6 +40,10 @@ export default function DashboardFeature() {
     handleRideTypeChange,
     activeRides,
     historyRides,
+    driverActive,
+    driverCompleted,
+    driverCanceled,
+    driverAll,
     passengerInprogress,
     passengerCompleted,
     passengerCanceled,
@@ -97,8 +101,11 @@ export default function DashboardFeature() {
         <RidesSection
           rideType={rideType}
           handleRideTypeChange={handleRideTypeChange}
-          activeRides={activeRides || []}
           historyRides={historyRides || []}
+          driverActive={driverActive || []}
+          driverCompleted={driverCompleted || []}
+          driverCanceled={driverCanceled || []}
+          driverAll={driverAll || []}
           passengerInprogress={passengerInprogress}
           passengerCompleted={passengerCompleted}
           passengerCanceled={passengerCanceled}

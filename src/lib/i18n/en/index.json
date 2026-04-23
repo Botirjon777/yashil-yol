@@ -147,7 +147,9 @@
       "passwordPlaceholder": "Min. 8 characters",
       "confirmPasswordLabel": "Confirm Password",
       "confirmPasswordPlaceholder": "Confirm",
-      "termsAgreement": "I agree to the Terms and Conditions",
+      "termsAgreement": "I agree to the ",
+      "termsLink": "Terms and Conditions",
+      "termsAgreementSuffix": "",
       "submitButton": "Create Account",
       "hasAccount": "Already have an account?",
       "login": "Log in",
@@ -200,6 +202,18 @@
     "joinRide": "Join Ride"
   },
   "dashboard": {
+    "deleteRide": "Delete Ride",
+    "cancelBooking": "Cancel Booking",
+    "deleteConfirmTitle": "Are you absolutely sure?",
+    "deleteConfirmMsg": "This action cannot be undone. This trip will be removed from future searches.",
+    "rideSummary": "Ride Summary",
+    "departure": "Departure",
+    "confirmDelete": "Confirm Delete",
+    "confirmCancel": "Confirm Cancel",
+    "cancel": "Cancel",
+    "pastTrip": "Past Trip",
+    "under2Hours": "Under 2 Hours",
+    "hasBookings": "Has Bookings",
     "sidebar": {
       "myRides": "My Rides",
       "balance": "Balance & Cards",
@@ -223,7 +237,9 @@
       "inprogress": "In Progress",
       "completed": "Completed",
       "canceled": "Canceled",
-      "allBookings": "All Bookings"
+      "allBookings": "All Bookings",
+      "allTrips": "All Trips",
+      "activeLabel": "Active"
     },
       "balance": {
         "title": "Payment & Balance",
@@ -437,6 +453,7 @@
       "processError": "Process error: Vehicle ID does not exist"
     }
   },
+
   "rideDetails": {
     "backToDashboard": "Back to Dashboard",
     "backToResults": "Back to results",
@@ -475,14 +492,33 @@
     "paymentMethod": "Payment Method",
     "paymentFromBalance": "Payment will be deducted from your account balance.",
     "enterName": "Enter name",
-    "phonePlaceholder": "+998..."
+    "phonePlaceholder": "+998...",
+    "addPassenger": "Add Passenger",
+    "addNewCompanion": "Add New Companion",
+    "companionInfoDesc": "Provide name and phone number for your friend.",
+    "addAnotherPassenger": "Add Another Passenger",
+    "bookingStatusLabel": "Booking Status",
+    "totalPaidLabel": "Total Paid",
+    "bookingActions": "Booking Actions",
+    "cancelNotice": "You can cancel this booking. Your balance will be credited back to your account immediately.",
+    "cancelBooking": "Cancel Booking",
+    "supportLabel": "Support",
+    "supportDesc": "Having issues with your ride? Contact our support team for assistance.",
+    "departedNotice": "This trip has already departed.",
+    "cancellationUnavailable": "Cancellation is no longer available for this ride.",
+    "confirmRemovalTitle": "Remove Passenger",
+    "confirmRemovalMsg": "Are you sure you want to remove this passenger from your booking?",
+    "confirmCancelTitle": "Cancel Booking",
+    "confirmCancelMsg": "Are you sure you want to cancel your booking? Your balance will be credited back to your account immediately."
   },
   "status": {
     "active": "Active",
     "completed": "Completed",
     "canceled": "Canceled",
+    "cancelled": "Cancelled",
     "pending": "Pending",
-    "confirmed": "Confirmed"
+    "confirmed": "Confirmed",
+    "full": "Full"
   },
   "terms": {
     "title": "Terms & Conditions",
