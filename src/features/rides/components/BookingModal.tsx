@@ -4,6 +4,9 @@ import { HiArrowRight, HiCash } from "react-icons/hi";
 import { formatCurrency, formatDate } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import Modal from "@/src/components/ui/Modal";
+import MapPicker from "@/src/components/ui/MapPicker";
+import { useState } from "react";
+import { HiMap } from "react-icons/hi";
 
 interface BookingModalProps {
   isOpen: boolean;
@@ -45,6 +48,30 @@ export const BookingModal = ({
   handleBook,
   rd,
 }: BookingModalProps) => {
+  const [activePickerIndex, setActivePickerIndex] = useState<number | null>(null);
+
+  if (activePickerIndex !== null) {
+    return (
+      <Modal
+        isOpen={isOpen}
+        onClose={() => setActivePickerIndex(null)}
+        title={rd("selectLocation") || "Select Location"}
+      >
+        <MapPicker
+          initialLat={passengers[activePickerIndex].latitude}
+          initialLng={passengers[activePickerIndex].longitude}
+          onCancel={() => setActivePickerIndex(null)}
+          rd={rd}
+          onSelect={(lat, lng) => {
+            updatePassenger(activePickerIndex, "latitude", lat);
+            updatePassenger(activePickerIndex, "longitude", lng);
+            setActivePickerIndex(null);
+          }}
+        />
+      </Modal>
+    );
+  }
+
   return (
     <Modal
       isOpen={isOpen}
@@ -149,39 +176,37 @@ export const BookingModal = ({
 
                   {showLocation && (
                     <div className="pt-2 space-y-3 border-t border-dashed border-border">
-                      <label className="text-[10px] font-black text-primary uppercase tracking-widest">
-                        {rd("pickupLocation") || "Pick-up Location"}
-                      </label>
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                        <div className="space-y-1">
-                          <label className="text-[9px] font-black text-gray-400 uppercase">
-                            {rd("latitude") || "Latitude"}
-                          </label>
-                          <input
-                            type="text"
-                            value={p.latitude}
-                            onChange={(e) =>
-                              updatePassenger(i, "latitude", e.target.value)
-                            }
-                            className="w-full bg-light-bg border-none rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
-                            placeholder="e.g. 41.2995"
-                          />
-                        </div>
-                        <div className="space-y-1">
-                          <label className="text-[9px] font-black text-gray-400 uppercase">
-                            {rd("longitude") || "Longitude"}
-                          </label>
-                          <input
-                            type="text"
-                            value={p.longitude}
-                            onChange={(e) =>
-                              updatePassenger(i, "longitude", e.target.value)
-                            }
-                            className="w-full bg-light-bg border-none rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
-                            placeholder="e.g. 69.2401"
-                          />
-                        </div>
+                      <div className="flex items-center justify-between">
+                        <label className="text-[10px] font-black text-primary uppercase tracking-widest">
+                          {rd("pickupLocation") || "Pick-up Location"}
+                        </label>
+                        <button
+                          onClick={() => setActivePickerIndex(i)}
+                          className="flex items-center gap-1.5 text-[10px] font-black text-primary hover:text-primary-dark transition-colors bg-primary/5 px-2 py-1 rounded-lg border border-primary/10"
+                        >
+                          <HiMap className="w-3 h-3" />
+                          {rd("pickOnMap") || "Pick on Map"}
+                        </button>
                       </div>
+                      
+                      {p.latitude && p.longitude ? (
+                        <div className="grid grid-cols-2 gap-3 p-3 bg-light-bg rounded-xl border border-border/50">
+                          <div className="space-y-0.5">
+                            <span className="text-[8px] font-black text-gray-400 uppercase">Lat</span>
+                            <p className="text-xs font-bold text-dark-text">{p.latitude}</p>
+                          </div>
+                          <div className="space-y-0.5">
+                            <span className="text-[8px] font-black text-gray-400 uppercase">Lng</span>
+                            <p className="text-xs font-bold text-dark-text">{p.longitude}</p>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="py-2 text-center border-2 border-dashed border-border rounded-xl">
+                          <p className="text-[10px] font-bold text-gray-400">
+                            {rd("noLocationSelected") || "No location selected"}
+                          </p>
+                        </div>
+                      )}
                     </div>
                   )}
                 </div>
