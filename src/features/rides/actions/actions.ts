@@ -193,7 +193,12 @@ export const createTrip = async (
 export const bookTrip = async (data: {
   trip_id: number | string;
   seats_booked?: number;
-  passengers?: { name: string; phone: string }[];
+  passengers?: {
+    name: string;
+    phone: string;
+    latitude?: string;
+    longitude?: string;
+  }[];
   payment_method?: string;
 }): Promise<any> => {
   const res = await api.post("client/booking", data);
