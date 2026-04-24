@@ -4,7 +4,10 @@ import { HiArrowRight, HiCash } from "react-icons/hi";
 import { formatCurrency, formatDate } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import Modal from "@/src/components/ui/Modal";
-import MapPicker from "@/src/components/ui/MapPicker";
+import dynamic from "next/dynamic";
+const MapPicker = dynamic(() => import("@/src/components/ui/MapPicker"), {
+  ssr: false,
+});
 import { useState } from "react";
 import { HiMap } from "react-icons/hi";
 

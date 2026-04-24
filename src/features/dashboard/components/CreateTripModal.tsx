@@ -15,7 +15,10 @@ import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { toast } from "sonner";
 import Calendar from "@/src/components/ui/Calendar";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
-import MapPicker from "@/src/components/ui/MapPicker";
+import dynamic from "next/dynamic";
+const MapPicker = dynamic(() => import("@/src/components/ui/MapPicker"), {
+  ssr: false,
+});
 import { HiMap, HiLocationMarker } from "react-icons/hi";
 
 interface CreateTripModalProps {

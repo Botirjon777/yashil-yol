@@ -4,7 +4,10 @@ import { useState } from "react";
 import { HiUserAdd, HiMap } from "react-icons/hi";
 import Button from "@/src/components/ui/Button";
 import Modal from "@/src/components/ui/Modal";
-import MapPicker from "@/src/components/ui/MapPicker";
+import dynamic from "next/dynamic";
+const MapPicker = dynamic(() => import("@/src/components/ui/MapPicker"), {
+  ssr: false,
+});
 
 interface AddPassengerModalProps {
   isOpen: boolean;
