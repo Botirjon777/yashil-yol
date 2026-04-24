@@ -181,10 +181,11 @@ export const BookingModal = ({
                           {rd("pickupLocation") || "Pick-up Location"}
                         </label>
                         <button
+                          type="button"
                           onClick={() => setActivePickerIndex(i)}
-                          className="flex items-center gap-1.5 text-[10px] font-black text-primary hover:text-primary-dark transition-colors bg-primary/5 px-2 py-1 rounded-lg border border-primary/10"
+                          className="flex items-center gap-1.5 text-[10px] font-black text-primary hover:text-primary-dark transition-colors bg-primary/5 px-3 py-1.5 rounded-xl border border-primary/10"
                         >
-                          <HiMap className="w-3 h-3" />
+                          <HiMap className="w-3.5 h-3.5" />
                           {rd("pickOnMap") || "Pick on Map"}
                         </button>
                       </div>

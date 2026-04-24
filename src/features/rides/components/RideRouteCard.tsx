@@ -1,6 +1,6 @@
 "use client";
 
-import { HiLocationMarker, HiClock, HiArrowDown } from "react-icons/hi";
+import { HiLocationMarker, HiClock, HiArrowDown, HiMap } from "react-icons/hi";
 import { formatDateTime, cn } from "@/src/lib/utils";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
@@ -140,21 +140,20 @@ export const RideRouteCard = ({ trip, from, to, rd }: RideRouteCardProps) => {
         </div>
       </div>
 
-      {/* Map Integration */}
+      {/* Map Link */}
       {((trip.start_lat && trip.start_long) || (trip.starting_point?.lat && trip.starting_point?.long)) && (
         <div className="px-6 pb-6">
-          <div className="w-full h-48 md:h-64 rounded-[32px] overflow-hidden border border-border/60 relative group/map">
-            <iframe
-              width="100%"
-              height="100%"
-              style={{ border: 0 }}
-              loading="lazy"
-              allowFullScreen
-              referrerPolicy="no-referrer-when-downgrade"
-              src={`https://www.google.com/maps/embed/v1/directions?key=${process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY}&origin=${trip.start_lat || trip.starting_point?.lat},${trip.start_long || trip.starting_point?.long}&destination=${trip.end_lat || trip.ending_point?.lat},${trip.end_long || trip.ending_point?.long}&mode=driving`}
-            ></iframe>
-            <div className="absolute inset-0 ring-1 ring-inset ring-black/5 pointer-events-none rounded-[32px]" />
-          </div>
+          <a
+            href={`https://www.google.com/maps/dir/?api=1&origin=${trip.start_lat || trip.starting_point?.lat},${trip.start_long || trip.starting_point?.long}&destination=${trip.end_lat || trip.ending_point?.lat},${trip.end_long || trip.ending_point?.long}&mode=driving`}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center gap-3 w-full py-4 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-2xl transition-all font-black uppercase text-xs tracking-widest shadow-xs group/btn active:scale-[0.98]"
+          >
+            <div className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center shadow-md shadow-primary/20 group-hover/btn:scale-110 transition-transform">
+              <HiMap className="w-4 h-4" />
+            </div>
+            {rd("openInGoogleMaps") || "Open in Google Maps"}
+          </a>
         </div>
       )}
     </div>
