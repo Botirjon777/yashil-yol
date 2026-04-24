@@ -6,7 +6,6 @@ import {
   HiX,
   HiSearch,
   HiUsers,
-  HiTicket,
   HiLogout,
   HiChatAlt2,
   HiHome,
@@ -44,18 +43,6 @@ const navLinks = [
     label: "findRide",
     icon: HiSearch,
     color: "bg-primary/10 text-primary",
-  },
-  {
-    href: "/carpool",
-    label: "carpool",
-    icon: HiUsers,
-    color: "bg-accent/10 text-accent",
-  },
-  {
-    href: "/bus",
-    label: "bus",
-    icon: HiTicket,
-    color: "bg-secondary/10 text-secondary",
   },
   {
     href: "/become-a-driver",
@@ -195,9 +182,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
           >
             {/* Header */}
             <div className="px-5 py-4 flex items-center justify-between border-b border-border bg-linear-to-r from-primary/5 to-transparent">
-            <div className="flex items-center gap-2.5">
-              <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-7 w-auto" />
-            </div>
+              <div className="flex items-center gap-2.5">
+                <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-7 w-auto" />
+              </div>
               <motion.button
                 whileTap={{ scale: 0.88, rotate: 90 }}
                 onClick={onClose}

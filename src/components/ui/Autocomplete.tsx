@@ -93,7 +93,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
           placeholder={placeholder}
           className={cn(
             "w-full bg-white border border-border text-dark-text rounded-xl pl-12 pr-10 py-3 text-left transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-base",
-            isOpen && "rounded-b-none border-primary"
+            isOpen && "border-primary"
           )}
         />
         {localValue && (
@@ -110,7 +110,7 @@ const Autocomplete: React.FC<AutocompleteProps> = ({
       </div>
 
       {isOpen && (suggestions.length > 0 || isLoading) && (
-        <ul className="absolute z-50 w-full bg-white border border-t-0 border-primary rounded-b-xl shadow-2xl max-h-72 overflow-auto py-2 animate-in slide-in-from-top-1 duration-200">
+        <ul className="absolute z-50 w-full bg-white border border-primary rounded-xl shadow-2xl max-h-72 overflow-auto py-2 animate-in slide-in-from-top-1 duration-200 mt-2">
           {isLoading ? (
             <div className="px-4 py-3 flex items-center justify-center space-x-2">
               <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />

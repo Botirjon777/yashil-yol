@@ -31,15 +31,13 @@ const MobileFooter = () => {
   };
 
   return (
-    <footer className="md:hidden bg-white border-t border-border pt-12 pb-8">
+    <footer className="md:hidden bg-navbar-bg border-t border-border pt-12 pb-8">
       <div className="container-custom px-2.5">
         <div className="space-y-2.5 md:space-y-5">
           {/* Brand */}
           <div className="text-center">
             <Link href="/" className="inline-block mb-4">
-              <span className="text-2xl font-black text-dark-text tracking-tight uppercase">
-                Ketamiz
-              </span>
+              <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-18 w-auto mx-auto" />
             </Link>
             <p className="text-gray-500 font-medium text-sm leading-relaxed max-w-xs mx-auto">
               {safeT("footer", "tagline")}

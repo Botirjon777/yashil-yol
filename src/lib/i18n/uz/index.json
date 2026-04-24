@@ -14,7 +14,9 @@
     "menu": "Menyu",
     "services": "Xizmatlar",
     "language": "Til",
-    "transactions": "Tranzaksiyalar"
+    "transactions": "Tranzaksiyalar",
+    "welcome": "Ketamizga xush kelibsiz",
+    "signinDesc": "Sayohatni boshlash uchun tizimga kiring"
   },
 
   "hero": {
@@ -267,7 +269,10 @@
         "confirmAndPay": "Tasdiqlash va to'lash",
         "needVerifyCard": "Balansni to'ldirishdan oldin kartangizni tasdiqlashingiz kerak.",
         "needAddCard": "Balansni to'ldirish uchun avval karta qo'shishingiz kerak.",
-        "manageCards": "Kartalarni boshqarish"
+        "manageCards": "Kartalarni boshqarish",
+        "back": "Orqaga",
+        "amountPlaceholder": "Miqdorni kiriting (masalan: 50 000)",
+        "continue": "Davom etish"
       },
     "transactions": {
       "title": "Tranzaksiyalar tarixi",

@@ -67,7 +67,7 @@ export default function HeroSection({
       </div>
 
       <div className="container-custom text-center">
-        <h1 className="text-4xl md:text-7xl font-black text-dark-text mb-6 tracking-tight animate-in fade-in slide-in-from-bottom-6 duration-700 font-heading flex items-center justify-center">
+        <h1 className="text-4xl md:text-7xl font-black text-dark-text mb-6 tracking-normal animate-in fade-in slide-in-from-bottom-6 duration-700 font-heading flex items-center justify-center">
           <Typewriter phrases={finalTitleOptions} pauseDuration={3000} />
         </h1>
         <p className="text-gray-500 text-xl md:text-2xl font-medium mb-12 max-w-2xl mx-auto animate-in fade-in slide-in-from-bottom-8 duration-700 delay-150">
@@ -108,8 +108,8 @@ export default function HeroSection({
             </div>
             <Button
               onClick={handleSearch}
-              size="lg"
-              className="w-full md:w-64 h-14 text-lg"
+              size="sm"
+              className="w-full md:w-40 text-lg"
               loading={loading}
               disabled={!fromLocation || !toLocation || !date}
             >
@@ -117,11 +117,11 @@ export default function HeroSection({
             </Button>
           </div>
         </div>
-        
+
         <div className="mt-10 animate-in fade-in slide-in-from-bottom-10 duration-700 delay-500">
-          <Link 
-            href="/rides" 
-            className="group inline-flex items-center gap-2 text-primary hover:text-primary-dark font-black tracking-wide bg-white/80 backdrop-blur-sm px-8 py-4 rounded-2xl shadow-xl shadow-primary/5 border border-primary/10 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/15 active:scale-95"
+          <Link
+            href="/rides"
+            className="group inline-flex items-center gap-2 text-primary hover:text-primary-dark font-medium tracking-wide bg-white/80 backdrop-blur-sm px-5 py-2.5 rounded-sm shadow-sm shadow-primary/5 border border-primary/10 transition-all hover:-translate-y-1 hover:shadow-2xl hover:shadow-primary/15 active:scale-95"
           >
             <span className="text-base uppercase tracking-widest">{t("hero", "seeAllRides")}</span>
             <span className="text-xl transition-transform group-hover:translate-x-1">→</span>

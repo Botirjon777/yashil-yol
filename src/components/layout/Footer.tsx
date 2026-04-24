@@ -23,14 +23,12 @@ const Footer = () => {
   };
 
   return (
-    <footer className="hidden md:block bg-white border-t border-border pt-10 pb-8">
+    <footer className="hidden md:block bg-navbar-bg border-t border-border pt-10 pb-8">
       <div className="container-custom">
         <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="flex items-center mb-6">
-              <span className="text-xl md:text-2xl font-black text-dark-text tracking-tight uppercase">
-                Ketamiz
-              </span>
+              <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-18 w-auto" />
             </Link>
             <p className="text-gray-500 leading-relaxed font-medium">
               {safeT("footer", "tagline")}
