@@ -8,7 +8,12 @@ import Modal from "@/src/components/ui/Modal";
 interface AddPassengerModalProps {
   isOpen: boolean;
   onClose: () => void;
-  onAdd: (data: { name: string; phone: string }) => void;
+  onAdd: (data: {
+    name: string;
+    phone: string;
+    latitude: string;
+    longitude: string;
+  }) => void;
   loading?: boolean;
   rd: (key: string) => string;
 }
@@ -22,10 +27,13 @@ export const AddPassengerModal = ({
 }: AddPassengerModalProps) => {
   const [name, setName] = useState("");
   const [phone, setPhone] = useState("");
+  const [latitude, setLatitude] = useState("");
+  const [longitude, setLongitude] = useState("");
 
   const handleSubmit = () => {
-    if (!name.trim() || !phone.trim()) return;
-    onAdd({ name, phone });
+    if (!name.trim() || !phone.trim() || !latitude.trim() || !longitude.trim())
+      return;
+    onAdd({ name, phone, latitude, longitude });
   };
 
   return (
@@ -74,6 +82,33 @@ export const AddPassengerModal = ({
               placeholder="+998..."
             />
           </div>
+
+          <div className="pt-2 grid grid-cols-2 gap-4">
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
+                {rd("latitude") || "Latitude"}
+              </label>
+              <input
+                type="text"
+                value={latitude}
+                onChange={(e) => setLatitude(e.target.value)}
+                className="w-full bg-light-bg border border-border/60 rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                placeholder="e.g. 41.2995"
+              />
+            </div>
+            <div className="space-y-1.5">
+              <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
+                {rd("longitude") || "Longitude"}
+              </label>
+              <input
+                type="text"
+                value={longitude}
+                onChange={(e) => setLongitude(e.target.value)}
+                className="w-full bg-light-bg border border-border/60 rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all outline-none"
+                placeholder="e.g. 69.2401"
+              />
+            </div>
+          </div>
         </div>
 
         <Button
@@ -81,7 +116,9 @@ export const AddPassengerModal = ({
           size="lg"
           loading={loading}
           onClick={handleSubmit}
-          disabled={!name.trim() || !phone.trim()}
+          disabled={
+            !name.trim() || !phone.trim() || !latitude.trim() || !longitude.trim()
+          }
         >
           {rd("addPassenger") || "Add Passenger"}
         </Button>

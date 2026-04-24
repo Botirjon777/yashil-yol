@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import { HiMenu } from "react-icons/hi";
 import { motion } from "framer-motion";
@@ -20,11 +20,10 @@ const MobileNavbar = () => {
 
   return (
     <nav
-      className={`md:hidden bg-white fixed top-0 left-0 right-0 z-50 h-16 transition-shadow duration-300 ${
-        scrolled
+      className={`md:hidden bg-navbar-bg fixed top-0 left-0 right-0 z-50 h-16 transition-shadow duration-300 ${scrolled
           ? "shadow-md border-b border-border/60"
           : "border-b border-border"
-      }`}
+        }`}
     >
       <div className="h-full flex items-center justify-between px-4">
         {/* Logo */}

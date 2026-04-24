@@ -74,34 +74,17 @@ const Navbar = () => {
   };
 
   return (
-    <nav className="hidden md:block bg-white border-b border-border sticky top-0 z-50 h-20">
+    <nav className="hidden md:block bg-navbar-bg border-b border-border sticky top-0 z-50 h-20">
       <div className="container-custom h-full flex items-center justify-between">
         {/* Logo */}
         <div className="flex items-center">
           <Link href="/" className="flex items-center gap-2">
-            <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-10 w-auto" />
+            <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-18 w-auto" />
           </Link>
         </div>
 
         {/* Desktop Menu */}
         <div className="hidden md:flex items-center space-x-6 lg:space-x-8">
-          {/* Service Group: Carpool | Bus */}
-          <div className="flex items-center bg-light-bg border border-border rounded-full px-1 py-1">
-            <Link
-              href="/carpool"
-              className="px-4 py-1.5 text-sm font-bold text-dark-text hover:text-primary transition-colors rounded-full hover:bg-white"
-            >
-              {safeT("nav", "carpool")}
-            </Link>
-            <span className="text-gray-300 mx-1">|</span>
-            <Link
-              href="/bus"
-              className="px-4 py-1.5 text-sm font-bold text-dark-text hover:text-primary transition-colors rounded-full hover:bg-white"
-            >
-              {safeT("nav", "bus")}
-            </Link>
-          </div>
-
           {/* Language Switcher */}
           <div className="relative" ref={langRef}>
             <button
@@ -228,10 +211,20 @@ const Navbar = () => {
                 <div className="p-2">
                   <div className="px-3 py-3 mb-2">
                     <p className="text-xs md:text-sm font-bold text-dark-text">
-                      Welcome to Yashil Yo&apos;l
+                      {safeT("nav", "welcome")
+                        .split(/(Ketamiz)/g)
+                        .map((part: string, i: number) =>
+                          part === "Ketamiz" ? (
+                            <span key={i} className="text-primary">
+                              {part}
+                            </span>
+                          ) : (
+                            part
+                          ),
+                        )}
                     </p>
                     <p className="text-[10px] md:text-xs text-gray-500 mt-1">
-                      Sign in to start your journey
+                      {safeT("nav", "signinDesc")}
                     </p>
                   </div>
                   <Link

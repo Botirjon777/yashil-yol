@@ -147,7 +147,10 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
   const [isAddPassengerModalOpen, setIsAddPassengerModalOpen] = useState(false);
   const [numSeats, setNumSeats] = useState(1);
-  const [passengers, setPassengers] = useState<{ name: string; phone: string }[]>([]);
+  const [passengers, setPassengers] = useState<
+    { name: string; phone: string; latitude: string; longitude: string }[]
+  >([]);
+  const [sameLocation, setSameLocation] = useState(true);
 
   // Sync passengers array with numSeats
   useEffect(() => {
@@ -157,12 +160,19 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
         for (let i = next.length; i < numSeats; i++) {
           // Prefill first passenger with user info if available
           if (i === 0 && user) {
-            next.push({ 
-              name: `${user.first_name || ""} ${user.last_name || ""}`.trim() || "", 
-              phone: user.phone || "" 
+            next.push({
+              name: `${user.first_name || ""} ${user.last_name || ""}`.trim() || "",
+              phone: user.phone || "",
+              latitude: prev[0]?.latitude || "",
+              longitude: prev[0]?.longitude || "",
             });
           } else {
-            next.push({ name: "", phone: "" });
+            next.push({
+              name: "",
+              phone: "",
+              latitude: sameLocation ? prev[0]?.latitude || "" : "",
+              longitude: sameLocation ? prev[0]?.longitude || "" : "",
+            });
           }
         }
       } else if (next.length > numSeats) {
@@ -170,11 +180,21 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
       }
       return next;
     });
-  }, [numSeats, user]);
+  }, [numSeats, user, sameLocation]);
 
-  const updatePassenger = (index: number, field: "name" | "phone", value: string) => {
+  const updatePassenger = (
+    index: number,
+    field: "name" | "phone" | "latitude" | "longitude",
+    value: string,
+  ) => {
     setPassengers((prev) => {
       const next = [...prev];
+      
+      if (sameLocation && (field === "latitude" || field === "longitude")) {
+        // Apply to all if sameLocation is true
+        return next.map(p => ({ ...p, [field]: value }));
+      }
+      
       next[index] = { ...next[index], [field]: value };
       return next;
     });
@@ -293,6 +313,10 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
         toast.error(`Please provide name and phone for passenger ${i + 1}`);
         return;
       }
+      if (!passengers[i].latitude.trim() || !passengers[i].longitude.trim()) {
+        toast.error(rd("locationRequired") || `Location is required for passenger ${i + 1}`);
+        return;
+      }
     }
 
     bookTrip(
@@ -310,7 +334,12 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     );
   };
 
-  const handleAddPassengerToBooking = (data: { name: string; phone: string }) => {
+  const handleAddPassengerToBooking = (data: {
+    name: string;
+    phone: string;
+    latitude: string;
+    longitude: string;
+  }) => {
     if (!token || mode !== "passenger") return;
     
     const targetId = myBooking?.id || id;
@@ -355,6 +384,8 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     setNumSeats,
     passengers,
     updatePassenger,
+    sameLocation,
+    setSameLocation,
     isBookModalOpen,
     setIsBookModalOpen,
     isBooking,

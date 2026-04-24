@@ -33,6 +33,8 @@ const RideDetailsPage = () => {
     setNumSeats,
     passengers,
     updatePassenger,
+    sameLocation,
+    setSameLocation,
     isBookModalOpen,
     setIsBookModalOpen,
     isBooking,
@@ -141,6 +143,8 @@ const RideDetailsPage = () => {
         numSeats={numSeats}
         passengers={passengers}
         updatePassenger={updatePassenger}
+        sameLocation={sameLocation}
+        setSameLocation={setSameLocation}
         isBooking={isBooking}
         handleBook={handleBook}
         rd={rd}

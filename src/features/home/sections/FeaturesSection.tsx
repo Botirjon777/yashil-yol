@@ -22,7 +22,7 @@ export default function FeaturesSection() {
     >
       <div className="container-custom">
         <div className="text-center mb-16 px-4">
-          <h2 className="text-2xl md:text-5xl font-black text-dark-text mb-4 font-heading uppercase tracking-tighter">
+          <h2 className="text-2xl md:text-5xl font-black text-dark-text mb-4 font-heading uppercase tracking-normal">
             {t("features", "why")}
           </h2>
           <div className="h-1.5 w-16 md:w-24 bg-primary mx-auto rounded-full" />

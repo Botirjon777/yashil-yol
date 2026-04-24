@@ -18,7 +18,8 @@ interface TopUpModalProps {
 
 const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick }) => {
   const { t } = useLanguageStore();
-  const bt = (key: string) => t("dashboard", `balance.${key}`);
+  const balanceTranslations = t("dashboard", "balance");
+  const bt = (key: string) => balanceTranslations?.[key] || key;
 
   const [step, setStep] = useState<"input" | "confirm">("input");
   const [paymentId, setPaymentId] = useState<string | null>(null);
@@ -122,7 +123,7 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
           <div className="space-y-4">
             <Input
               label={bt("paymentAmount")}
-              placeholder={t("auth", "forgotPassword.emailPlaceholder")}
+              placeholder={bt("amountPlaceholder")}
               type="number"
               value={amount}
               onChange={(e) => setAmount(e.target.value)}
@@ -160,7 +161,7 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
               className="px-12"
               disabled={!selectedCardId || !amount || Number(amount) <= 0}
             >
-              {t("auth", "forgotPassword.submitButton")}
+              {bt("continue")}
             </Button>
           </div>
         </form>
@@ -192,7 +193,7 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
 
           <div className="flex items-center justify-end gap-4 pt-4">
             <Button variant="ghost" onClick={() => setStep("input")} type="button" className="text-gray-400 px-4">
-              {bt("back") || "Back"}
+              {bt("back")}
             </Button>
             <Button variant="primary" loading={isConfirming} type="submit" size="lg" className="px-12">
               {bt("confirmAndPay")}

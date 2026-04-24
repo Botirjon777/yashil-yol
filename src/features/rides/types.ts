@@ -94,7 +94,13 @@ export interface Booking {
   status: "pending" | "confirmed" | "canceled" | "active" | string;
   created_at: string;
   trip?: Trip;
-  passengers?: { name: string; phone: string; id?: number }[];
+  passengers?: {
+    name: string;
+    phone: string;
+    id?: number;
+    latitude?: string;
+    longitude?: string;
+  }[];
 }
 
 export interface TripSearchParams {

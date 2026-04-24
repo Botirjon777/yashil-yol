@@ -14,7 +14,9 @@
     "menu": "Menu",
     "services": "Services",
     "language": "Language",
-    "transactions": "Transactions"
+    "transactions": "Transactions",
+    "welcome": "Welcome to Ketamiz",
+    "signinDesc": "Sign in to start your journey"
   },
 
   "hero": {
@@ -267,7 +269,10 @@
         "confirmAndPay": "Confirm & Pay",
         "needVerifyCard": "You need to verify your card before you can top up.",
         "needAddCard": "You need to add a card first to top up.",
-        "manageCards": "Manage Cards"
+        "manageCards": "Manage Cards",
+        "back": "Back",
+        "amountPlaceholder": "Enter amount (e.g. 50 000)",
+        "continue": "Continue"
       },
     "transactions": {
       "title": "Transaction History",
@@ -482,6 +487,11 @@
     "confirmBooking": "Confirm Booking",
     "amountToPay": "Amount to pay",
     "bookingSuccess": "Ride booked successfully!",
+    "pickupLocation": "Pick-up Location",
+    "sameLocationForAll": "Same pick-up location for all passengers",
+    "latitude": "Latitude",
+    "longitude": "Longitude",
+    "locationRequired": "Location is required for all passengers",
     "route": "Route",
     "date": "Date",
     "perSeat": "per seat",
