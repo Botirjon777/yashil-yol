@@ -6,4 +6,7 @@ export * from "./BookingModal";
 export * from "./AddPassengerModal";
 export * from "./CancelChoiceModal";
 export * from "./RideResultCard";
+export { default as RideResultCard } from "./RideResultCard";
 export * from "./ConfirmationModal";
+export * from "./FilterSidebar";
+export * from "./RoutesSwiper";

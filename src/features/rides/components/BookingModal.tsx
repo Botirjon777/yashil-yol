@@ -4,7 +4,10 @@ import { HiArrowRight, HiCash } from "react-icons/hi";
 import { formatCurrency, formatDate } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import Modal from "@/src/components/ui/Modal";
-import MapPicker from "@/src/components/ui/MapPicker";
+import dynamic from "next/dynamic";
+const MapPicker = dynamic(() => import("@/src/components/ui/MapPicker"), {
+  ssr: false,
+});
 import { useState } from "react";
 import { HiMap } from "react-icons/hi";
 
@@ -181,10 +184,11 @@ export const BookingModal = ({
                           {rd("pickupLocation") || "Pick-up Location"}
                         </label>
                         <button
+                          type="button"
                           onClick={() => setActivePickerIndex(i)}
-                          className="flex items-center gap-1.5 text-[10px] font-black text-primary hover:text-primary-dark transition-colors bg-primary/5 px-2 py-1 rounded-lg border border-primary/10"
+                          className="flex items-center gap-1.5 text-[10px] font-black text-primary hover:text-primary-dark transition-colors bg-primary/5 px-3 py-1.5 rounded-xl border border-primary/10"
                         >
-                          <HiMap className="w-3 h-3" />
+                          <HiMap className="w-3.5 h-3.5" />
                           {rd("pickOnMap") || "Pick on Map"}
                         </button>
                       </div>

@@ -105,7 +105,12 @@ const DriverRideDetailsPage = () => {
 
             {/* Passengers Section */}
             {trip.bookings && trip.bookings.length > 0 && (
-              <PassengerListCard trip={trip} rd={rd} isDriver={isDriver} />
+              <PassengerListCard 
+                trip={trip} 
+                rd={rd} 
+                isDriver={isDriver} 
+                disabled={trip.status?.toLowerCase() === "canceled" || trip.status?.toLowerCase() === "cancelled" || isPast}
+              />
             )}
           </div>
 

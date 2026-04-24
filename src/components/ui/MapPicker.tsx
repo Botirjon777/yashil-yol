@@ -1,7 +1,13 @@
 "use client";
 
 import React, { useState, useCallback, useEffect, useRef } from "react";
-import { MapContainer, TileLayer, Marker, useMap, useMapEvents } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  useMap,
+  useMapEvents,
+} from "react-leaflet";
 import L from "leaflet";
 import { HiSearch, HiLocationMarker, HiCheck, HiX } from "react-icons/hi";
 import Button from "./Button";
@@ -11,7 +17,8 @@ import { cn } from "@/src/lib/utils";
 const DefaultIcon = L.icon({
   iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
   shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-  iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+  iconRetinaUrl:
+    "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
   iconSize: [25, 41],
   iconAnchor: [12, 41],
 });
@@ -35,7 +42,11 @@ const ChangeView = ({ center }: { center: [number, number] }) => {
   return null;
 };
 
-const MapEvents = ({ onClick }: { onClick: (pos: [number, number]) => void }) => {
+const MapEvents = ({
+  onClick,
+}: {
+  onClick: (pos: [number, number]) => void;
+}) => {
   useMapEvents({
     click(e) {
       onClick([e.latlng.lat, e.latlng.lng]);
@@ -52,7 +63,9 @@ const MapPicker: React.FC<MapPickerProps> = ({
   rd,
 }) => {
   const [position, setPosition] = useState<[number, number] | null>(
-    initialLat && initialLng ? [parseFloat(initialLat), parseFloat(initialLng)] : null
+    initialLat && initialLng
+      ? [parseFloat(initialLat), parseFloat(initialLng)]
+      : null,
   );
   const [address, setAddress] = useState("");
   const [searchQuery, setSearchQuery] = useState("");
@@ -62,10 +75,30 @@ const MapPicker: React.FC<MapPickerProps> = ({
 
   const defaultCenter: [number, number] = [41.2995, 69.2401]; // Tashkent
 
+  useEffect(() => {
+    // If no initial position and permission is available, try to get current location
+    if (!initialLat && !initialLng && navigator.geolocation) {
+      navigator.geolocation.getCurrentPosition(
+        (pos) => {
+          const newPos: [number, number] = [
+            pos.coords.latitude,
+            pos.coords.longitude,
+          ];
+          setPosition(newPos);
+          fetchAddress(newPos[0], newPos[1]);
+        },
+        (error) => {
+          console.error("Geolocation error:", error);
+        },
+        { enableHighAccuracy: true },
+      );
+    }
+  }, [initialLat, initialLng]);
+
   const fetchAddress = async (lat: number, lng: number) => {
     try {
       const res = await fetch(
-        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=uz,ru,en`
+        `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=uz,ru,en`,
       );
       const data = await res.json();
       setAddress(data.display_name || "");
@@ -88,8 +121,8 @@ const MapPicker: React.FC<MapPickerProps> = ({
     try {
       const res = await fetch(
         `https://nominatim.openstreetmap.org/search?format=json&q=${encodeURIComponent(
-          searchQuery
-        )}&countrycodes=uz&limit=5&accept-language=uz,ru,en`
+          searchQuery,
+        )}&countrycodes=uz&limit=5&accept-language=uz,ru,en`,
       );
       const data = await res.json();
       setSearchResults(data);
@@ -101,7 +134,10 @@ const MapPicker: React.FC<MapPickerProps> = ({
   };
 
   const selectSearchResult = (result: any) => {
-    const pos: [number, number] = [parseFloat(result.lat), parseFloat(result.lon)];
+    const pos: [number, number] = [
+      parseFloat(result.lat),
+      parseFloat(result.lon),
+    ];
     setPosition(pos);
     setAddress(result.display_name);
     setShowResults(false);
@@ -139,11 +175,13 @@ const MapPicker: React.FC<MapPickerProps> = ({
 
         {/* Search Results Dropdown */}
         {showResults && (searchResults.length > 0 || isSearching) && (
-          <div className="absolute z-[1000] w-full mt-2 bg-white border border-border rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-top-2 duration-200">
+          <div className="absolute z-1000 w-full mt-2 bg-white border border-border rounded-2xl shadow-2xl overflow-hidden animate-in slide-in-from-top-2 duration-200">
             {isSearching ? (
               <div className="p-4 flex items-center justify-center space-x-2">
                 <div className="w-4 h-4 border-2 border-primary border-t-transparent rounded-full animate-spin" />
-                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">Searching...</span>
+                <span className="text-xs font-bold text-gray-400 uppercase tracking-widest">
+                  Searching...
+                </span>
               </div>
             ) : (
               <ul className="max-h-60 overflow-y-auto custom-scrollbar">
@@ -154,7 +192,9 @@ const MapPicker: React.FC<MapPickerProps> = ({
                     className="p-3 hover:bg-primary/5 cursor-pointer border-b border-gray-50 last:border-0 transition-colors flex items-start gap-3"
                   >
                     <HiLocationMarker className="w-4 h-4 text-primary shrink-0 mt-0.5" />
-                    <span className="text-xs font-bold text-dark-text leading-tight">{result.display_name}</span>
+                    <span className="text-xs font-bold text-dark-text leading-tight">
+                      {result.display_name}
+                    </span>
                   </li>
                 ))}
               </ul>
@@ -179,9 +219,9 @@ const MapPicker: React.FC<MapPickerProps> = ({
           {position && <Marker position={position} />}
           {position && <ChangeView center={position} />}
         </MapContainer>
-        
+
         {!position && (
-          <div className="absolute inset-0 bg-dark-text/40 backdrop-blur-[2px] flex items-center justify-center p-6 text-center z-[500]">
+          <div className="absolute inset-0 bg-dark-text/40 backdrop-blur-[2px] flex items-center justify-center p-6 text-center z-500">
             <div className="bg-white/90 backdrop-blur p-4 rounded-2xl shadow-2xl max-w-xs scale-in">
               <HiLocationMarker className="w-8 h-8 text-primary mx-auto mb-2 animate-bounce" />
               <p className="text-xs font-black text-dark-text uppercase tracking-tight">
@@ -211,11 +251,7 @@ const MapPicker: React.FC<MapPickerProps> = ({
 
       {/* Actions */}
       <div className="flex gap-3">
-        <Button
-          variant="outline"
-          className="flex-1"
-          onClick={onCancel}
-        >
+        <Button variant="outline" className="flex-1" onClick={onCancel}>
           {rd("cancel") || "Cancel"}
         </Button>
         <Button
@@ -223,11 +259,7 @@ const MapPicker: React.FC<MapPickerProps> = ({
           disabled={!position}
           onClick={() => {
             if (position) {
-              onSelect(
-                position[0].toFixed(6),
-                position[1].toFixed(6),
-                address
-              );
+              onSelect(position[0].toFixed(6), position[1].toFixed(6), address);
             }
           }}
         >

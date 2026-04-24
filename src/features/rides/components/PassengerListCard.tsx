@@ -1,4 +1,4 @@
-import { HiUserGroup, HiPhone, HiTrash, HiUserAdd } from "react-icons/hi";
+import { HiUserGroup, HiPhone, HiTrash, HiUserAdd, HiMap } from "react-icons/hi";
 import { cn } from "@/src/lib/utils";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
@@ -12,6 +12,7 @@ interface PassengerListCardProps {
   onRemovePassenger?: (passengerId: string | number) => void;
   onAddPassenger?: () => void;
   isRemoving?: boolean;
+  disabled?: boolean;
 }
 
 export const PassengerListCard = ({
@@ -24,6 +25,7 @@ export const PassengerListCard = ({
   onRemovePassenger,
   onAddPassenger,
   isRemoving = false,
+  disabled = false,
 }: PassengerListCardProps) => {
   const { t } = useLanguageStore();
   const isPassengerMode = mode === "passenger";
@@ -113,6 +115,17 @@ export const PassengerListCard = ({
                   </div>
 
                   <div className="flex items-center gap-2">
+                    {isDriver && passenger.latitude && passenger.longitude && (
+                      <a
+                        href={`https://www.google.com/maps/search/?api=1&query=${passenger.latitude},${passenger.longitude}`}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="p-2.5 bg-white text-emerald-600 rounded-xl border border-border hover:bg-emerald-50 transition-all shadow-sm"
+                        title={rd("viewOnMap") || "View on Map"}
+                      >
+                        <HiMap className="w-4 h-4" />
+                      </a>
+                    )}
                     {isDriver && passenger.phone && (
                       <a
                         href={`tel:${passenger.phone}`}
@@ -122,7 +135,7 @@ export const PassengerListCard = ({
                       </a>
                     )}
                     
-                    {passenger.isMine && onRemovePassenger && (
+                    {passenger.isMine && onRemovePassenger && !disabled && (
                       <button
                         disabled={isRemoving}
                         onClick={() => onRemovePassenger(passenger.id)}
@@ -144,7 +157,7 @@ export const PassengerListCard = ({
         )}
 
         {/* Add Passenger Button for Owner */}
-        {isPassengerMode && hasAvailableSeats && onAddPassenger && (
+        {isPassengerMode && hasAvailableSeats && onAddPassenger && !disabled && (
           <button
             onClick={onAddPassenger}
             className="w-full flex items-center justify-center gap-2 p-4 bg-white border-2 border-dashed border-primary/20 rounded-[28px] text-primary font-black text-sm hover:bg-primary/5 hover:border-primary/40 transition-all group"

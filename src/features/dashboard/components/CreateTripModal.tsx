@@ -15,6 +15,11 @@ import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { toast } from "sonner";
 import Calendar from "@/src/components/ui/Calendar";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import dynamic from "next/dynamic";
+const MapPicker = dynamic(() => import("@/src/components/ui/MapPicker"), {
+  ssr: false,
+});
+import { HiMap, HiLocationMarker } from "react-icons/hi";
 
 interface CreateTripModalProps {
   isOpen: boolean;
@@ -27,7 +32,12 @@ export default function CreateTripModal({
 }: CreateTripModalProps) {
   const { t, language } = useLanguageStore();
   const ct = t("dashboard", "createTrip");
+  const rd = (key: string) => t("rides", key);
   const { data: regions } = useRegions();
+
+  const [activePicker, setActivePicker] = useState<"start" | "end" | null>(null);
+  const [startAddress, setStartAddress] = useState("");
+  const [endAddress, setEndAddress] = useState("");
 
   const [formData, setFormData] = useState({
     start_time: "",
@@ -40,10 +50,10 @@ export default function CreateTripModal({
     end_district_id: "",
     start_quarter_id: "",
     end_quarter_id: "",
-    start_lat: "41.3111", // Default to Tashkent for demo if not using map
-    start_long: "69.2797",
-    end_lat: "40.7128",
-    end_long: "-74.0060",
+    start_lat: "",
+    start_long: "",
+    end_lat: "",
+    end_long: "",
     vehicle_id: "",
   });
 
@@ -90,11 +100,13 @@ export default function CreateTripModal({
       !formData.price_per_seat ||
       !formData.start_region_id ||
       !formData.end_region_id ||
-      !formData.vehicle_id
+      !formData.vehicle_id ||
+      !formData.start_lat ||
+      !formData.end_lat
     ) {
       toast.error(
         ct?.errors?.fillAll ||
-          "Please fill in all required fields including a vehicle",
+          "Please fill in all required fields and select locations on the map",
       );
       return;
     }
@@ -159,12 +171,14 @@ export default function CreateTripModal({
           end_district_id: "",
           start_quarter_id: "",
           end_quarter_id: "",
-          start_lat: "41.3111",
-          start_long: "69.2797",
-          end_lat: "40.7128",
-          end_long: "-74.0060",
+          start_lat: "",
+          start_long: "",
+          end_lat: "",
+          end_long: "",
           vehicle_id: "",
         });
+        setStartAddress("");
+        setEndAddress("");
       },
       onError: (err: any) => {
         toast.error(
@@ -187,11 +201,29 @@ export default function CreateTripModal({
     <Modal
       isOpen={isOpen}
       onClose={onClose}
-      title={ct?.title}
-      size="lg"
+      title={activePicker ? (activePicker === "start" ? rd("selectStartLocation") || "Select Departure Point" : rd("selectEndLocation") || "Select Arrival Point") : ct?.title}
+      size={activePicker ? "lg" : "lg"}
       fullMobile
     >
-      <form onSubmit={handleSubmit} className="space-y-5">
+      {activePicker ? (
+        <MapPicker
+          initialLat={activePicker === "start" ? formData.start_lat : formData.end_lat}
+          initialLng={activePicker === "start" ? formData.start_long : formData.end_long}
+          onCancel={() => setActivePicker(null)}
+          rd={rd}
+          onSelect={(lat, lng, address) => {
+            if (activePicker === "start") {
+              setFormData(prev => ({ ...prev, start_lat: lat, start_long: lng }));
+              setStartAddress(address || "");
+            } else {
+              setFormData(prev => ({ ...prev, end_lat: lat, end_long: lng }));
+              setEndAddress(address || "");
+            }
+            setActivePicker(null);
+          }}
+        />
+      ) : (
+        <form onSubmit={handleSubmit} className="space-y-5">
         <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
           <Calendar
             label={ct?.departureTime}
@@ -249,7 +281,30 @@ export default function CreateTripModal({
         />
 
         <div className="space-y-4">
-          <h4 className="font-bold text-gray-700">{ct?.from}</h4>
+          <div className="flex items-center justify-between">
+            <h4 className="font-black text-xs uppercase tracking-widest text-gray-400">{ct?.from}</h4>
+            <button
+              type="button"
+              onClick={() => setActivePicker("start")}
+              className="flex items-center gap-1.5 text-[10px] font-black text-primary hover:text-primary-dark transition-colors bg-primary/5 px-3 py-1.5 rounded-xl border border-primary/10"
+            >
+              <HiMap className="w-3.5 h-3.5" />
+              {rd("pickOnMap") || "Pick on Map"}
+            </button>
+          </div>
+
+          {formData.start_lat && (
+            <div className="p-3 bg-primary/5 rounded-2xl border border-primary/10 flex items-start gap-3">
+              <HiLocationMarker className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest leading-none">Selected Point</p>
+                <p className="text-[11px] font-bold text-dark-text mt-1 leading-tight">
+                  {startAddress || `${formData.start_lat}, ${formData.start_long}`}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <Dropdown
               label={ct?.region}
@@ -293,7 +348,30 @@ export default function CreateTripModal({
         </div>
 
         <div className="space-y-4">
-          <h4 className="font-bold text-gray-700">{ct?.to}</h4>
+          <div className="flex items-center justify-between">
+            <h4 className="font-black text-xs uppercase tracking-widest text-gray-400">{ct?.to}</h4>
+            <button
+              type="button"
+              onClick={() => setActivePicker("end")}
+              className="flex items-center gap-1.5 text-[10px] font-black text-primary hover:text-primary-dark transition-colors bg-primary/5 px-3 py-1.5 rounded-xl border border-primary/10"
+            >
+              <HiMap className="w-3.5 h-3.5" />
+              {rd("pickOnMap") || "Pick on Map"}
+            </button>
+          </div>
+
+          {formData.end_lat && (
+            <div className="p-3 bg-primary/5 rounded-2xl border border-primary/10 flex items-start gap-3">
+              <HiLocationMarker className="w-4 h-4 text-primary shrink-0 mt-0.5" />
+              <div className="flex-1">
+                <p className="text-[8px] font-black text-gray-400 uppercase tracking-widest leading-none">Selected Point</p>
+                <p className="text-[11px] font-bold text-dark-text mt-1 leading-tight">
+                  {endAddress || `${formData.end_lat}, ${formData.end_long}`}
+                </p>
+              </div>
+            </div>
+          )}
+
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <Dropdown
               label={ct?.region}
@@ -350,7 +428,8 @@ export default function CreateTripModal({
             {ct?.submit}
           </Button>
         </div>
-      </form>
+        </form>
+      )}
     </Modal>
   );
 }
