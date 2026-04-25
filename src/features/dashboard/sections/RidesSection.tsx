@@ -5,6 +5,7 @@ import Button from "@/src/components/ui/Button";
 import { HiPlus } from "react-icons/hi";
 import { AuthUser } from "../../auth/types";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import Dropdown from "@/src/components/ui/Dropdown";
 
 interface RidesSectionProps {
   rideType: "passenger" | "driver";
@@ -131,7 +132,7 @@ export function RidesSection({
           {ridesTranslations?.title}
         </h1>
 
-        <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 lg:gap-4">
+        <div className="hidden lg:flex flex-col sm:flex-row items-stretch sm:items-center gap-2.5 lg:gap-4">
           {isDriver && (
             <div className="flex bg-white p-1 rounded-xl border border-border shadow-sm">
               <button
@@ -159,8 +160,43 @@ export function RidesSection({
         </div>
       </div>
 
+      {/* Mobile Dropdowns */}
+      <div className="flex lg:hidden items-center gap-2 mb-4">
+        {isDriver && (
+          <Dropdown
+            options={[
+              { id: "passenger", name: ridesTranslations?.asPassenger },
+              { id: "driver", name: ridesTranslations?.asDriver }
+            ]}
+            value={rideType}
+            onChange={(val) => handleRideTypeChange(val)}
+            className="flex-1"
+          />
+        )}
+        <Dropdown
+          options={
+            rideType === "driver"
+              ? [
+                  { id: "all", name: ridesTranslations?.allTrips || "All Trips" },
+                  { id: "active", name: ridesTranslations?.activeLabel || ridesTranslations?.active || "Active" },
+                  { id: "completed", name: ridesTranslations?.completed },
+                  { id: "canceled", name: ridesTranslations?.canceled }
+                ]
+              : [
+                  { id: "inprogress", name: ridesTranslations?.inprogress },
+                  { id: "completed", name: ridesTranslations?.completed },
+                  { id: "canceled", name: ridesTranslations?.canceled },
+                  { id: "bookings", name: ridesTranslations?.allBookings }
+                ]
+          }
+          value={rideType === "driver" ? driverTab : passengerTab}
+          onChange={(val) => (rideType === "driver" ? setDriverTab(val) : setPassengerTab(val))}
+          className="flex-1"
+        />
+      </div>
+
       {rideType === "passenger" && (
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="hidden lg:flex flex-wrap gap-2 mb-6">
           {[
             { id: "inprogress", label: ridesTranslations?.inprogress },
             { id: "completed", label: ridesTranslations?.completed },
@@ -183,7 +219,7 @@ export function RidesSection({
       )}
 
       {rideType === "driver" && (
-        <div className="flex flex-wrap gap-2 mb-6">
+        <div className="hidden lg:flex flex-wrap gap-2 mb-6">
           {[
             { id: "all", label: ridesTranslations?.allTrips || "All Trips" },
             { id: "active", label: ridesTranslations?.activeLabel || ridesTranslations?.active || "Active" },
@@ -205,29 +241,18 @@ export function RidesSection({
         </div>
       )}
 
-      {/* Animated Create Trip Banner for Drivers */}
+      {/* Simple Create Trip Banner for Drivers */}
       {isDriver && isApproved && rideType === "driver" && (
         <div className="animate-in-bottom transition-all duration-500">
-          <div className="premium-card p-5 lg:p-8 bg-linear-to-r from-primary/10 to-secondary/10 border-primary/20 flex flex-col md:flex-row items-center justify-between gap-6 relative overflow-hidden group">
-            <div className="absolute -right-12 -top-12 w-64 h-64 bg-primary/5 rounded-full blur-3xl group-hover:bg-primary/10 transition-all duration-700" />
-            <div className="flex items-center space-x-6 relative z-10">
-              <div className="w-16 h-16 bg-white rounded-2xl flex items-center justify-center text-3xl text-primary shadow-soft group-hover:scale-110 transition-transform duration-300">
-                <HiPlus />
-              </div>
-              <div>
-                <h3 className="text-xl font-black text-dark-text">
-                  {ridesTranslations?.bannerTitle}
-                </h3>
-                <p className="text-gray-500 font-medium max-w-md">
-                  {ridesTranslations?.bannerDesc}
-                </p>
-              </div>
+          <div className="premium-card p-5 lg:p-6 bg-linear-to-r from-primary/5 to-secondary/5 border-primary/10 flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden">
+            <div className="relative z-10">
+              <h3 className="text-xl font-black text-dark-text">
+                {ridesTranslations?.bannerTitle}
+              </h3>
             </div>
             <Button
               onClick={() => setIsCreateModalOpen(true)}
-              size="lg"
-              className="px-8 shadow-xl shadow-primary/20 relative z-10"
-              icon={<HiPlus className="w-5 h-5" />}
+              className="px-8 shadow-lg relative z-10"
             >
               {ridesTranslations?.createTrip}
             </Button>

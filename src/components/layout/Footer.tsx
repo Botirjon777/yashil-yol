@@ -5,14 +5,18 @@ import Link from "next/link";
 import { FaTelegram, FaInstagram, FaFacebook } from "react-icons/fa";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { translations } from "@/src/lib/i18n/translations";
+import { usePathname } from "next/navigation";
 
 const Footer = () => {
   const [mounted, setMounted] = useState(false);
   const { t } = useLanguageStore();
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  if (pathname?.startsWith("/dashboard")) return null;
 
   const safeT = (category: any, key: any) => {
     if (!mounted) {
@@ -23,9 +27,9 @@ const Footer = () => {
   };
 
   return (
-    <footer className="hidden md:block bg-navbar-bg border-t border-border pt-10 pb-8">
+    <footer className="hidden md:block bg-navbar-bg border-t border-border py-5">
       <div className="container-custom">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-5">
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="flex items-center mb-6">
               <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-18 w-auto" />

@@ -12,6 +12,7 @@ import AddCardModal from "./components/AddCardModal";
 import TopUpModal from "./components/TopUpModal";
 import AddVehicleModal from "./components/AddVehicleModal";
 import { FatherNameModal } from "./components/FatherNameModal";
+import { DashboardMobileFooter } from "./components/DashboardMobileFooter";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { useEffect, useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
@@ -166,78 +167,27 @@ export default function DashboardFeature() {
             </div>
           </div>
         ) : (
-          /* Mobile Layout - Premium Framer Motion Transitions */
-          <AnimatePresence
-            mode="popLayout"
-            initial={false}
-            custom={isSectionOpen}
-          >
-            {!isSectionOpen ? (
+          /* Mobile Layout - Simplified with Fixed Footer */
+          <div className="space-y-5 pb-20">
+            <DriverStatusBanner user={user} isDriver={isDriver} />
+            <AnimatePresence mode="wait">
               <motion.div
-                key="sidebar"
-                custom={isSectionOpen}
-                initial={{ x: "-100%", opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: "-100%", opacity: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="absolute left-2.5 right-2.5 lg:relative lg:left-0 lg:right-0 lg:w-full"
+                key={activeTab}
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                exit={{ opacity: 0 }}
+                transition={{ duration: 0.2, ease: "easeIn" }}
               >
-                <Sidebar
-                  user={user}
-                  activeTab={activeTab}
-                  handleTabChange={handleTabChange}
-                  isDriver={isDriver}
-                />
+                {currentSection}
               </motion.div>
-            ) : (
-              <motion.div
-                key="content"
-                custom={isSectionOpen}
-                initial={{ x: "100%", opacity: 0 }}
-                animate={{ x: 0, opacity: 1 }}
-                exit={{ x: "100%", opacity: 0 }}
-                transition={{ type: "spring", stiffness: 300, damping: 30 }}
-                className="absolute left-2.5 right-2.5 lg:relative lg:left-0 lg:right-0 lg:w-full space-y-5"
-              >
-                <button
-                  onClick={() => setIsSectionOpen(false)}
-                  className="flex items-center text-primary font-black uppercase text-xs tracking-widest hover:text-secondary mb-6 bg-white py-3 px-5 rounded-md shadow-sm border border-border/50 active:scale-95 transition-transform"
-                >
-                  <span className="mr-2 text-lg">←</span>{" "}
-                  {t("common", "back") || "Back to Menu"}
-                </button>
-
-                <DriverStatusBanner user={user} isDriver={isDriver} />
-
-                <AnimatePresence mode="wait" initial={false} custom={direction}>
-                  <motion.div
-                    key={activeTab}
-                    custom={direction}
-                    variants={{
-                      enter: (dir: number) => ({
-                        x: dir > 0 ? "20%" : "-20%",
-                        opacity: 0,
-                      }),
-                      center: { x: 0, opacity: 1 },
-                      exit: (dir: number) => ({
-                        x: dir < 0 ? "20%" : "-20%",
-                        opacity: 0,
-                      }),
-                    }}
-                    initial="enter"
-                    animate="center"
-                    exit="exit"
-                    transition={{
-                      x: { type: "spring", stiffness: 300, damping: 30 },
-                      opacity: { duration: 0.2 },
-                    }}
-                  >
-                    {currentSection}
-                  </motion.div>
-                </AnimatePresence>
-              </motion.div>
-            )}
-          </AnimatePresence>
+            </AnimatePresence>
+            
+            <DashboardMobileFooter 
+              activeTab={activeTab} 
+              handleTabChange={handleTabChange}
+              isDriver={isDriver}
+            />
+          </div>
         )}
       </div>
 
