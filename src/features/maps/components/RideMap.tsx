@@ -4,7 +4,6 @@ import React, { useEffect } from "react";
 import { MapContainer, TileLayer, useMap } from "react-leaflet";
 import L from "leaflet";
 import "leaflet-routing-machine";
-import "leaflet/dist/leaflet.css";
 
 // Fix for default marker icon in Leaflet
 const DefaultIcon = L.icon({

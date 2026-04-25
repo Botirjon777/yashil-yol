@@ -21,14 +21,14 @@ const MobileNavbar = () => {
   return (
     <nav
       className={`md:hidden bg-navbar-bg fixed top-0 left-0 right-0 z-50 h-16 transition-shadow duration-300 ${scrolled
-          ? "shadow-md border-b border-border/60"
-          : "border-b border-border"
+        ? "shadow-md border-b border-border/60"
+        : "border-b border-border"
         }`}
     >
       <div className="h-full flex items-center justify-between px-4">
         {/* Logo */}
         <Link href="/" className="flex items-center gap-2">
-          <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-7 w-auto" />
+          <img src="/assets/logo/ketamiz-logo-small.webp" alt="Ketamiz" className="h-10 w-auto" />
         </Link>
 
         {/* Current route indicator — subtle breadcrumb feel */}

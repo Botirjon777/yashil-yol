@@ -43,7 +43,7 @@ const HomeContent = () => {
     <div className="flex flex-col min-h-screen bg-light-bg text-dark-text">
       {/* ── Hero Header + Swiper ── */}
       <div className="bg-white border-b border-border">
-        <div className="max-w-7xl mx-auto px-4 pt-12 pb-6 md:pt-16 md:pb-8">
+        <div className="max-w-7xl mx-auto px-4 py-3 md:py-8">
           <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
             <div className="max-w-2xl">
               <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-tight mb-4">
@@ -64,8 +64,8 @@ const HomeContent = () => {
                 {isLoading
                   ? "Sayohatlar qidirilmoqda..."
                   : activeRoute
-                  ? `${activeRoute.label} yo'nalishi bo'yicha ${filteredRides.length} ta sayohat topildi`
-                  : "O'zbekiston bo'ylab eng yaxshi hamrohlar va haydovchilar bilan birga sayohat qiling."}
+                    ? `${activeRoute.label} yo'nalishi bo'yicha ${filteredRides.length} ta sayohat topildi`
+                    : "O'zbekiston bo'ylab eng yaxshi hamrohlar va haydovchilar bilan birga sayohat qiling."}
               </p>
             </div>
             {activeRoute && (
