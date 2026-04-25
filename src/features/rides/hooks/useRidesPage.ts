@@ -37,6 +37,12 @@ export function useRidesPage() {
   // Active route chip
   const [activeRoute, setActiveRoute] = useState<PopularRoute | null>(null);
 
+  // Manual search state
+  const [manualSearch, setManualSearch] = useState<{
+    from?: { regionId: string; regionName: string; districtId?: string; districtName?: string; quarterId?: string; quarterName?: string };
+    to?: { regionId: string; regionName: string; districtId?: string; districtName?: string; quarterId?: string; quarterName?: string };
+  } | null>(null);
+
   // Pagination (only used in "all" mode)
   const [page, setPage] = useState(1);
 
@@ -45,15 +51,31 @@ export function useRidesPage() {
 
   // Data fetching
   const searchParams = activeRoute
-    ? { start_region_id: activeRoute.from_id, end_region_id: activeRoute.to_id, departure_date: "", passengers: filters.minSeats }
-    : { start_region_id: "", end_region_id: "", departure_date: "", passengers: 1 };
+    ? { 
+        start_region_id: activeRoute.from_id, 
+        end_region_id: activeRoute.to_id, 
+        departure_date: "", 
+        passengers: filters.minSeats 
+      }
+    : manualSearch
+      ? {
+          start_region_id: manualSearch.from?.regionId || "",
+          start_district_id: manualSearch.from?.districtId || "",
+          start_quarter_id: manualSearch.from?.quarterId || "",
+          end_region_id: manualSearch.to?.regionId || "",
+          end_district_id: manualSearch.to?.districtId || "",
+          end_quarter_id: manualSearch.to?.quarterId || "",
+          departure_date: "",
+          passengers: filters.minSeats
+        }
+      : { start_region_id: "", end_region_id: "", departure_date: "", passengers: 1 };
 
-  const { data: searchRides, isLoading: isSearchLoading } = useSearchTrips(searchParams, !!activeRoute);
+  const { data: searchRides, isLoading: isSearchLoading } = useSearchTrips(searchParams, !!activeRoute || !!manualSearch);
   const { data: paginatedData, isLoading: isAllLoading } = usePublicTrips(page);
 
-  const rawRides: Trip[] = activeRoute ? (searchRides ?? []) : (paginatedData?.data ?? []);
+  const rawRides: Trip[] = (activeRoute || manualSearch) ? (searchRides ?? []) : (paginatedData?.data ?? []);
   const meta = paginatedData?.meta;
-  const isLoading = activeRoute ? isSearchLoading : isAllLoading;
+  const isLoading = (activeRoute || manualSearch) ? isSearchLoading : isAllLoading;
 
   // Client-side filtering
   const filteredRides = rawRides.filter((ride) => {
@@ -81,10 +103,15 @@ export function useRidesPage() {
 
   const handleRouteClick = (route: PopularRoute) => {
     setActiveRoute((prev) => (prev?.label === route.label ? null : route));
+    setManualSearch(null); // Clear manual search if popular route is clicked
     setPage(1);
   };
 
-  const clearFilters = () => setFilters(DEFAULT_FILTERS);
+  const clearFilters = () => {
+    setFilters(DEFAULT_FILTERS);
+    setActiveRoute(null);
+    setManualSearch(null);
+  };
 
   const updateFilter = <K extends keyof RidesPageFilters>(key: K, value: RidesPageFilters[K]) =>
     setFilters((prev) => ({ ...prev, [key]: value }));
@@ -103,6 +130,9 @@ export function useRidesPage() {
     // Route swiper
     activeRoute,
     handleRouteClick,
+    // Manual Search
+    manualSearch,
+    setManualSearch,
     // Filters
     filters,
     updateFilter,

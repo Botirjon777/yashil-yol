@@ -6,14 +6,18 @@ import { FaTelegram, FaInstagram, FaFacebook } from "react-icons/fa";
 import { HiArrowUp } from "react-icons/hi";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { translations } from "@/src/lib/i18n/translations";
+import { usePathname } from "next/navigation";
 
 const MobileFooter = () => {
   const [mounted, setMounted] = useState(false);
   const { t } = useLanguageStore();
+  const pathname = usePathname();
 
   useEffect(() => {
     setMounted(true);
   }, []);
+
+  if (pathname?.startsWith("/dashboard")) return null;
 
   const safeT = (category: any, key: any) => {
     if (!mounted) {

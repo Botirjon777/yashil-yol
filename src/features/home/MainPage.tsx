@@ -19,6 +19,9 @@ import {
 import Loader from "@/src/components/ui/Loader";
 import StatsSection from "./sections/StatsSection";
 import FeaturesSection from "./sections/FeaturesSection";
+import { LocationSearchModal } from "./components/LocationSearchModal";
+import { HiLocationMarker } from "react-icons/hi";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 const HomeContent = () => {
   const {
@@ -35,9 +38,13 @@ const HomeContent = () => {
     page,
     setPage,
     meta,
+    manualSearch,
+    setManualSearch,
   } = useRidesPage();
 
+  const { t } = useLanguageStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
+  const [modalType, setModalType] = useState<"from" | "to" | null>(null);
 
   return (
     <div className="flex flex-col min-h-screen bg-light-bg text-dark-text">
@@ -52,6 +59,12 @@ const HomeContent = () => {
                     <span className="text-primary">{activeRoute.from}</span>
                     <HiArrowRight className="w-6 h-6 md:w-8 md:h-8 text-gray-300 shrink-0" />
                     <span className="text-secondary">{activeRoute.to}</span>
+                  </span>
+                ) : manualSearch ? (
+                  <span className="flex items-center gap-3 flex-wrap">
+                    <span className="text-primary">{manualSearch.from?.regionName || "---"}</span>
+                    <HiArrowRight className="w-6 h-6 md:w-8 md:h-8 text-gray-300 shrink-0" />
+                    <span className="text-secondary">{manualSearch.to?.regionName || "---"}</span>
                   </span>
                 ) : (
                   <>
@@ -76,6 +89,43 @@ const HomeContent = () => {
                 <HiX className="w-4 h-4" /> Yo'nalishni tozalash
               </button>
             )}
+            {manualSearch && (
+              <button
+                onClick={() => setManualSearch(null)}
+                className="flex items-center gap-2 text-sm font-black text-gray-400 hover:text-error transition-all bg-gray-50 px-4 py-2 rounded-2xl border border-border self-start md:mb-2"
+              >
+                <HiX className="w-4 h-4" /> Qidiruvni tozalash
+              </button>
+            )}
+          </div>
+
+          {/* Search Section */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+            <button
+              onClick={() => setModalType("from")}
+              className="flex flex-col items-start gap-1 p-5 bg-light-bg/50 rounded-[24px] border-2 border-border hover:border-primary/30 transition-all text-left group"
+            >
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase text-gray-400 tracking-widest group-hover:text-primary transition-colors">
+                <HiLocationMarker className="w-3.5 h-3.5" />
+                {t("home", "from")}
+              </div>
+              <div className="text-lg font-black text-dark-text">
+                {manualSearch?.from?.quarterName || manualSearch?.from?.districtName || manualSearch?.from?.regionName || t("home", "selectCity")}
+              </div>
+            </button>
+
+            <button
+              onClick={() => setModalType("to")}
+              className="flex flex-col items-start gap-1 p-5 bg-light-bg/50 rounded-[24px] border-2 border-border hover:border-secondary/30 transition-all text-left group"
+            >
+              <div className="flex items-center gap-2 text-[10px] font-black uppercase text-gray-400 tracking-widest group-hover:text-secondary transition-colors">
+                <HiLocationMarker className="w-3.5 h-3.5" />
+                {t("home", "to")}
+              </div>
+              <div className="text-lg font-black text-dark-text">
+                {manualSearch?.to?.quarterName || manualSearch?.to?.districtName || manualSearch?.to?.regionName || t("home", "selectCity")}
+              </div>
+            </button>
           </div>
 
           <div className="max-w-7xl">
@@ -251,6 +301,18 @@ const HomeContent = () => {
 
       <StatsSection />
       <FeaturesSection />
+
+      <LocationSearchModal
+        isOpen={!!modalType}
+        onClose={() => setModalType(null)}
+        title={modalType === "from" ? t("home", "from") : t("home", "to")}
+        onConfirm={(loc) => {
+          setManualSearch((prev) => ({
+            ...prev,
+            [modalType as "from" | "to"]: loc,
+          }));
+        }}
+      />
     </div>
   );
 };

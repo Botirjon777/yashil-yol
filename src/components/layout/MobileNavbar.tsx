@@ -6,13 +6,34 @@ import { HiMenu } from "react-icons/hi";
 import { motion } from "framer-motion";
 import MobileSidebar from "./MobileSidebar";
 import { usePathname } from "next/navigation";
+import { useAuthStore } from "@/src/providers/AuthProvider";
+import { useMe } from "@/src/features/auth/hooks/useAuth";
+import { formatCurrency } from "@/src/lib/utils";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import { translations } from "@/src/lib/i18n/translations";
 
 const MobileNavbar = () => {
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [mounted, setMounted] = useState(false);
   const pathname = usePathname();
 
+  const { user: storedUser, token, _hasHydrated } = useAuthStore();
+  const { language, t } = useLanguageStore();
+  const { data: meData } = useMe(!!token);
+  const user = meData?.user || storedUser;
+  const balance = user?.balance?.balance ? parseFloat(user.balance.balance) : 0;
+
+  const safeT = (category: any, key: any) => {
+    if (!mounted) {
+      // @ts-ignore
+      return translations.uz?.[category]?.[key] || String(key);
+    }
+    return t(category, key);
+  };
+
   useEffect(() => {
+    setMounted(true);
     const handleScroll = () => setScrolled(window.scrollY > 8);
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
@@ -33,6 +54,20 @@ const MobileNavbar = () => {
 
         {/* Current route indicator — subtle breadcrumb feel */}
         <div className="flex items-center gap-3">
+          {mounted && _hasHydrated && user && (
+            <Link 
+              href="/dashboard"
+              className="flex flex-col items-end px-3 py-1 bg-primary/5 border border-primary/10 rounded-xl active:scale-95 transition-transform"
+            >
+              <span className="text-[8px] font-black uppercase text-gray-400 leading-none mb-0.5 tracking-tighter">
+                {safeT("nav", "balance")}
+              </span>
+              <span className="text-xs font-black text-primary leading-none">
+                {formatCurrency(balance)}
+              </span>
+            </Link>
+          )}
+
           {/* Hamburger */}
           <motion.button
             whileTap={{ scale: 0.88 }}

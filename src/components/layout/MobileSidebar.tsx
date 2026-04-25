@@ -10,6 +10,7 @@ import {
   HiChatAlt2,
   HiHome,
   HiTruck,
+  HiChevronDown,
 } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import { cn, formatCurrency } from "@/src/lib/utils";
@@ -19,6 +20,7 @@ import { translations } from "@/src/lib/i18n/translations";
 import { useLogout, useMe } from "@/src/features/auth/hooks/useAuth";
 import { toast } from "sonner";
 import { usePathname } from "next/navigation";
+import Dropdown from "../ui/Dropdown";
 
 interface MobileSidebarProps {
   isOpen: boolean;
@@ -55,6 +57,13 @@ const navLinks = [
     label: "support",
     icon: HiChatAlt2,
     color: "bg-gray-100 text-gray-500",
+  },
+  {
+    href: "/dashboard",
+    label: "dashboard",
+    icon: HiUsers,
+    color: "bg-primary/10 text-primary",
+    protected: true,
   },
 ];
 
@@ -205,39 +214,17 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
                 className="p-4"
               >
                 {mounted && _hasHydrated && user ? (
-                  <div className="p-4 bg-linear-to-br from-primary/8 to-secondary/5 rounded-2xl border border-primary/10">
-                    <div className="flex items-center gap-3 mb-4">
-                      <div className="w-11 h-11 rounded-xl bg-white border-2 border-primary/20 flex items-center justify-center text-primary font-black shadow-sm">
-                        {user.first_name?.charAt(0) || "U"}
-                      </div>
-                      <div className="flex-1 min-w-0">
-                        <p className="font-black text-dark-text text-sm truncate">
-                          {user.first_name} {user.last_name}
-                        </p>
-                        <p className="text-[10px] text-gray-400 font-bold uppercase tracking-wider truncate">
-                          {user.role === "driver" ? "Driver" : "Passenger"}
-                        </p>
-                      </div>
+                  <div className="flex items-center gap-4 px-2 py-1">
+                    <div className="w-12 h-12 rounded-full bg-primary/10 border border-primary/20 flex items-center justify-center text-primary font-black shadow-sm overflow-hidden">
+                      {user.first_name?.charAt(0) || "U"}
                     </div>
-
-                    <div className="grid grid-cols-2 gap-2">
-                      <div className="bg-white/70 p-3 rounded-xl border border-primary/5">
-                        <p className="text-[9px] font-black uppercase text-gray-400 tracking-wider mb-1">
-                          {safeT("nav", "balance")}
-                        </p>
-                        <p className="text-sm font-black text-primary">
-                          {formatCurrency(balance)}
-                        </p>
-                      </div>
-                      <Link
-                        href="/dashboard"
-                        className="bg-primary text-white p-3 rounded-xl flex flex-col justify-center items-center hover:bg-primary/90 transition-colors active:scale-95"
-                      >
-                        <HiUsers className="w-4 h-4 mb-1" />
-                        <span className="text-[9px] font-black uppercase tracking-tight">
-                          {t("nav", "dashboard")}
-                        </span>
-                      </Link>
+                    <div className="flex-1 min-w-0">
+                      <p className="font-black text-dark-text text-base truncate">
+                        {user.first_name} {user.last_name}
+                      </p>
+                      <p className="text-[10px] text-gray-400 font-bold uppercase tracking-widest truncate">
+                        {user.role === "driver" ? safeT("dashboard", "sidebar")?.driver : safeT("dashboard", "sidebar")?.traveler}
+                      </p>
                     </div>
                   </div>
                 ) : (
@@ -261,6 +248,7 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
                   {safeT("nav", "services")}
                 </p>
                 {navLinks.map((link, i) => {
+                  if (link.protected && !user) return null;
                   const Icon = link.icon;
                   const isActive = pathname === link.href;
                   return (
@@ -319,33 +307,18 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
                 <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest px-1">
                   {safeT("nav", "language")}
                 </p>
-                <div className="grid grid-cols-3 gap-2">
-                  {(["uz", "ru", "en"] as const).map((lang) => (
-                    <motion.button
-                      key={lang}
-                      whileTap={{ scale: 0.93 }}
-                      onClick={() => {
-                        setLanguage(lang);
-                        onClose();
-                      }}
-                      className={cn(
-                        "flex flex-col items-center p-2.5 rounded-xl border transition-all",
-                        language === lang
-                          ? "bg-primary text-white border-primary shadow-md shadow-primary/20"
-                          : "bg-white text-gray-500 border-border",
-                      )}
-                    >
-                      <img
-                        src={languageConfig[lang].flag}
-                        alt={lang}
-                        className="w-7 h-[18px] object-cover rounded shadow-sm mb-1.5"
-                      />
-                      <span className="text-[9px] font-black uppercase">
-                        {lang}
-                      </span>
-                    </motion.button>
-                  ))}
-                </div>
+                <Dropdown
+                  options={[
+                    { id: "uz", name: "O'zbekcha" },
+                    { id: "ru", name: "Русский" },
+                    { id: "en", name: "English" },
+                  ]}
+                  value={language}
+                  onChange={(val) => {
+                    setLanguage(val);
+                    onClose();
+                  }}
+                />
               </motion.div>
             </div>
 
