@@ -171,7 +171,7 @@ export const useHomeSearch = () => {
       
       // Filter out past trips
       const now = Date.now();
-      const futureTrips = results.filter(ride => 
+      const futureTrips = (results.data || []).filter(ride => 
         ride.start_time ? new Date(ride.start_time).getTime() > now : true
       );
 
