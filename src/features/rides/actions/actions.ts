@@ -44,9 +44,9 @@ export const getCarColors = async (): Promise<CarColor[]> => {
 };
 
 /** GET /public/trips — paginated list with less info */
-export const getPublicTrips = async (page = 1): Promise<PaginatedTrips> => {
+export const getPublicTrips = async (page = 1, per_page = 20): Promise<PaginatedTrips> => {
   const res = await api.get<any>("public/trips", {
-    params: { page },
+    params: { page, per_page },
   });
 
   // Handle the case where the API returns { data: [...], meta: {...} }
@@ -75,7 +75,7 @@ export const getAllPublicTrips = async (): Promise<Trip[]> => {
 /** GET /public/trips/search/available-trips */
 export const searchTrips = async (
   params: TripSearchParams,
-): Promise<Trip[]> => {
+): Promise<PaginatedTrips> => {
   // We build the object explicitly to ensure parameter order (important for some backends)
   const formattedParams: any = {};
 
@@ -92,6 +92,8 @@ export const searchTrips = async (
   if (params.end_quarter_id)
     formattedParams.end_quarter_id = params.end_quarter_id;
   if (params.passengers) formattedParams.passengers = params.passengers;
+  if (params.page) formattedParams.page = params.page;
+  if (params.per_page) formattedParams.per_page = params.per_page;
 
   if (params.departure_date) {
     const d = String(params.departure_date);
@@ -121,7 +123,50 @@ export const searchTrips = async (
     res.data?.data ??
     res.data;
 
-  return Array.isArray(data) ? data : [];
+  const meta = res.data?.meta || {
+    current_page: 1,
+    last_page: 1,
+    total: Array.isArray(data) ? data.length : 0,
+  };
+
+  return {
+    data: Array.isArray(data) ? data : [],
+    meta,
+  };
+};
+
+/** POST /public/trips/search/trip-by-region-to-region */
+export const searchTripsByRegion = async (
+  start_region_id: string,
+  end_region_id: string,
+  page = 1,
+  per_page = 20,
+): Promise<PaginatedTrips> => {
+  const res = await api.post<any>("public/trips/search/trip-by-region-to-region", {
+    start_region_id,
+    end_region_id,
+    page,
+    per_page,
+  });
+
+  console.log("Raw Response from Region Search API:", res.data);
+
+  const data =
+    res.data?.data?.data ??
+    res.data?.data ??
+    res.data?.trips ??
+    res.data;
+
+  const meta = res.data?.meta || {
+    current_page: 1,
+    last_page: 1,
+    total: Array.isArray(data) ? data.length : 0,
+  };
+
+  return {
+    data: Array.isArray(data) ? data : [],
+    meta,
+  };
 };
 
 /** GET /public/trips/view/:id */

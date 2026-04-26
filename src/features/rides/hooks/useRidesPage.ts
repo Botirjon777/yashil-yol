@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { useSearchTrips, usePublicTrips } from "./useRides";
+import { useSearchTrips, usePublicTrips, useSearchTripsByRegion } from "./useRides";
 import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useLocationStore } from "@/src/providers/LocationStore";
 import { useRegions, useDistricts, useQuarters } from "@/src/features/location/hooks/useLocation";
@@ -50,32 +50,42 @@ export function useRidesPage() {
   const [filters, setFilters] = useState<RidesPageFilters>(DEFAULT_FILTERS);
 
   // Data fetching
-  const searchParams = activeRoute
-    ? { 
-        start_region_id: activeRoute.from_id, 
-        end_region_id: activeRoute.to_id, 
-        departure_date: "", 
-        passengers: filters.minSeats 
-      }
-    : manualSearch
-      ? {
-          start_region_id: manualSearch.from?.regionId || "",
-          start_district_id: manualSearch.from?.districtId || "",
-          start_quarter_id: manualSearch.from?.quarterId || "",
-          end_region_id: manualSearch.to?.regionId || "",
-          end_district_id: manualSearch.to?.districtId || "",
-          end_quarter_id: manualSearch.to?.quarterId || "",
-          departure_date: "",
-          passengers: filters.minSeats
-        }
-      : { start_region_id: "", end_region_id: "", departure_date: "", passengers: 1 };
+  const searchParams = {
+    start_region_id: activeRoute ? activeRoute.from_id : (manualSearch?.from?.regionId || ""),
+    start_district_id: manualSearch?.from?.districtId || "",
+    start_quarter_id: manualSearch?.from?.quarterId || "",
+    end_region_id: activeRoute ? activeRoute.to_id : (manualSearch?.to?.regionId || ""),
+    end_district_id: manualSearch?.to?.districtId || "",
+    end_quarter_id: manualSearch?.to?.quarterId || "",
+    departure_date: "",
+    passengers: filters.minSeats,
+    page,
+    per_page: 5
+  };
 
-  const { data: searchRides, isLoading: isSearchLoading } = useSearchTrips(searchParams, !!activeRoute || !!manualSearch);
-  const { data: paginatedData, isLoading: isAllLoading } = usePublicTrips(page);
+  const { data: searchRidesData, isLoading: isSearchLoading, error: searchError } = useSearchTrips(searchParams, !!manualSearch);
+  const { data: regionRidesData, isLoading: isRegionLoading, error: regionError } = useSearchTripsByRegion(
+    activeRoute?.from_id || "",
+    activeRoute?.to_id || "",
+    page,
+    5,
+    !!activeRoute
+  );
+  const { data: paginatedData, isLoading: isAllLoading } = usePublicTrips(page, 5);
 
-  const rawRides: Trip[] = (activeRoute || manualSearch) ? (searchRides ?? []) : (paginatedData?.data ?? []);
-  const meta = paginatedData?.meta;
-  const isLoading = (activeRoute || manualSearch) ? isSearchLoading : isAllLoading;
+  const rawRides: Trip[] = activeRoute 
+    ? (regionRidesData?.data ?? [])
+    : manualSearch 
+      ? (searchRidesData?.data ?? []) 
+      : (paginatedData?.data ?? []);
+  
+  const meta = activeRoute 
+    ? regionRidesData?.meta 
+    : manualSearch 
+      ? searchRidesData?.meta 
+      : paginatedData?.meta;
+
+  const isLoading = activeRoute ? isRegionLoading : manualSearch ? isSearchLoading : isAllLoading;
 
   // Client-side filtering
   const filteredRides = rawRides.filter((ride) => {
@@ -95,6 +105,23 @@ export function useRidesPage() {
     }
     return true;
   });
+
+  // Debugging logs
+  useEffect(() => {
+    if (activeRoute) {
+      console.log("Popular Route Active:", activeRoute.label);
+      console.log("Region IDs:", activeRoute.from_id, "->", activeRoute.to_id);
+      console.log("Region Rides Data:", regionRidesData);
+      if (regionError) console.error("Region Search Error:", regionError);
+    }
+    if (manualSearch) {
+      console.log("Manual Search Active:", manualSearch);
+      console.log("Search Rides Data:", searchRidesData);
+      if (searchError) console.error("Search Error:", searchError);
+    }
+    console.log("Raw Rides:", rawRides.length);
+    console.log("Filtered Rides:", filteredRides.length);
+  }, [activeRoute, manualSearch, regionRidesData, searchRidesData, rawRides, filteredRides, regionError, searchError]);
 
   const activeFilterCount =
     (filters.timeSlots.length > 0 ? 1 : 0) +

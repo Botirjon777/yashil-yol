@@ -31,6 +31,7 @@ interface MapPickerProps {
   initialLng?: string;
   onCancel: () => void;
   rd: (key: string) => string;
+  showActions?: boolean;
 }
 
 // Helper component to update map view
@@ -61,6 +62,7 @@ const MapPicker: React.FC<MapPickerProps> = ({
   initialLng,
   onCancel,
   rd,
+  showActions = true,
 }) => {
   const [position, setPosition] = useState<[number, number] | null>(
     initialLat && initialLng
@@ -76,7 +78,6 @@ const MapPicker: React.FC<MapPickerProps> = ({
   const defaultCenter: [number, number] = [41.2995, 69.2401]; // Tashkent
 
   useEffect(() => {
-    // If no initial position and permission is available, try to get current location
     if (!initialLat && !initialLng && navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
         (pos) => {
@@ -101,7 +102,13 @@ const MapPicker: React.FC<MapPickerProps> = ({
         `https://nominatim.openstreetmap.org/reverse?format=json&lat=${lat}&lon=${lng}&accept-language=uz,ru,en`,
       );
       const data = await res.json();
-      setAddress(data.display_name || "");
+      const addr = data.display_name || "";
+      setAddress(addr);
+      
+      // If we are in embedded mode, update parent immediately
+      if (!showActions) {
+        onSelect(lat.toFixed(6), lng.toFixed(6), addr);
+      }
     } catch (error) {
       console.error("Geocoding error:", error);
     }
@@ -134,14 +141,17 @@ const MapPicker: React.FC<MapPickerProps> = ({
   };
 
   const selectSearchResult = (result: any) => {
-    const pos: [number, number] = [
-      parseFloat(result.lat),
-      parseFloat(result.lon),
-    ];
+    const lat = parseFloat(result.lat);
+    const lon = parseFloat(result.lon);
+    const pos: [number, number] = [lat, lon];
     setPosition(pos);
     setAddress(result.display_name);
     setShowResults(false);
     setSearchQuery(result.display_name);
+    
+    if (!showActions) {
+      onSelect(lat.toFixed(6), lon.toFixed(6), result.display_name);
+    }
   };
 
   return (
@@ -250,23 +260,25 @@ const MapPicker: React.FC<MapPickerProps> = ({
       )}
 
       {/* Actions */}
-      <div className="flex gap-3">
-        <Button variant="outline" className="flex-1" onClick={onCancel}>
-          {rd("cancel") || "Cancel"}
-        </Button>
-        <Button
-          className="flex-1 gap-2"
-          disabled={!position}
-          onClick={() => {
-            if (position) {
-              onSelect(position[0].toFixed(6), position[1].toFixed(6), address);
-            }
-          }}
-        >
-          <HiCheck className="w-4 h-4" />
-          {rd("confirmLocation") || "Confirm Location"}
-        </Button>
-      </div>
+      {showActions && (
+        <div className="flex gap-3">
+          <Button variant="outline" className="flex-1" onClick={onCancel}>
+            {rd("cancel") || "Cancel"}
+          </Button>
+          <Button
+            className="flex-1 gap-2"
+            disabled={!position}
+            onClick={() => {
+              if (position) {
+                onSelect(position[0].toFixed(6), position[1].toFixed(6), address);
+              }
+            }}
+          >
+            <HiCheck className="w-4 h-4" />
+            {rd("confirmLocation") || "Confirm Location"}
+          </Button>
+        </div>
+      )}
     </div>
   );
 };

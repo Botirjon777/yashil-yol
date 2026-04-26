@@ -1,9 +1,14 @@
 "use client";
 
-import { useRef, useEffect, useState } from "react";
+import { useRef } from "react";
 import { HiChevronLeft, HiChevronRight, HiLocationMarker } from "react-icons/hi";
 import { cn } from "@/src/lib/utils";
 import { POPULAR_ROUTES, PopularRoute } from "../constants/routes";
+import { Swiper, SwiperSlide } from "swiper/react";
+import { Navigation, Autoplay } from "swiper/modules";
+
+// Import Swiper styles
+import "swiper/css";
 
 interface RoutesSwiperProps {
   activeRoute: PopularRoute | null;
@@ -11,93 +16,84 @@ interface RoutesSwiperProps {
 }
 
 export function RoutesSwiper({ activeRoute, onRouteClick }: RoutesSwiperProps) {
-  const swiperRef = useRef<HTMLDivElement>(null);
-  const [isPaused, setIsPaused] = useState(false);
-
-  const scroll = (dir: "left" | "right") => {
-    if (!swiperRef.current) return;
-    const scrollAmount = 280;
-    const currentScroll = swiperRef.current.scrollLeft;
-    const maxScroll = swiperRef.current.scrollWidth - swiperRef.current.clientWidth;
-
-    if (dir === "right") {
-      if (currentScroll >= maxScroll - 10) {
-        swiperRef.current.scrollTo({ left: 0, behavior: "smooth" });
-      } else {
-        swiperRef.current.scrollBy({ left: scrollAmount, behavior: "smooth" });
-      }
-    } else {
-      swiperRef.current.scrollBy({ left: -scrollAmount, behavior: "smooth" });
-    }
-  };
-
-  useEffect(() => {
-    if (isPaused) return;
-
-    const interval = setInterval(() => {
-      scroll("right");
-    }, 4000);
-
-    return () => clearInterval(interval);
-  }, [isPaused]);
+  const prevRef = useRef<HTMLButtonElement>(null);
+  const nextRef = useRef<HTMLButtonElement>(null);
 
   return (
-    <div
-      className="relative group"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
-      {/* Desktop arrows */}
-      <button
-        onClick={() => scroll("left")}
-        aria-label="Scroll left"
-        className="absolute left-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white border border-border rounded-full shadow-lg items-center justify-center hover:border-primary hover:text-primary transition-all hidden md:flex -ml-5 opacity-0 group-hover:opacity-100"
-      >
-        <HiChevronLeft className="w-5 h-5" />
-      </button>
-
-      <div
-        ref={swiperRef}
-        className="flex gap-3 overflow-x-auto scroll-smooth px-0 md:px-2 py-4"
-        style={{ scrollbarWidth: "none", msOverflowStyle: "none" }}
-      >
-        {POPULAR_ROUTES.map((route) => {
-          const isActive = activeRoute?.label === route.label;
-          return (
-            <button
-              key={route.label}
-              onClick={() => onRouteClick(route)}
-              className={cn(
-                "flex items-center gap-2.5 whitespace-nowrap px-5 py-3 rounded-2xl border text-sm font-black transition-all shrink-0",
-                isActive
-                  ? "bg-primary text-white border-primary shadow-xl shadow-primary/20 scale-105"
-                  : "bg-white text-dark-text border-border hover:border-primary hover:text-primary hover:shadow-md",
-              )}
-            >
-              <div className={cn(
-                "w-7 h-7 rounded-lg flex items-center justify-center",
-                isActive ? "bg-white/20" : "bg-primary/5"
-              )}>
-                <HiLocationMarker
+    <div className="relative w-full overflow-hidden">
+      {/* Swiper List on top */}
+      <div className="py-4">
+        <Swiper
+          modules={[Navigation, Autoplay]}
+          spaceBetween={12}
+          slidesPerView="auto"
+          navigation={{
+            prevEl: prevRef.current,
+            nextEl: nextRef.current,
+          }}
+          onBeforeInit={(swiper) => {
+            // @ts-ignore
+            swiper.params.navigation.prevEl = prevRef.current;
+            // @ts-ignore
+            swiper.params.navigation.nextEl = nextRef.current;
+          }}
+          autoplay={{
+            delay: 4000,
+            disableOnInteraction: false,
+            pauseOnMouseEnter: true,
+          }}
+          loop={true}
+          className="my-swiper"
+        >
+          {POPULAR_ROUTES.map((route) => {
+            const isActive = activeRoute?.label === route.label;
+            return (
+              <SwiperSlide key={route.label} className="!w-auto">
+                <button
+                  onClick={() => onRouteClick(route)}
                   className={cn(
-                    "w-4 h-4 shrink-0",
-                    isActive ? "text-white" : "text-primary",
+                    "flex items-center gap-2.5 whitespace-nowrap px-5 py-3 rounded-2xl border text-sm font-black transition-all shrink-0",
+                    isActive
+                      ? "bg-primary text-white border-primary shadow-xl shadow-primary/20 scale-105"
+                      : "bg-white text-dark-text border-border hover:border-primary hover:text-primary hover:shadow-md",
                   )}
-                />
-              </div>
-              {route.label}
-            </button>
-          );
-        })}
+                >
+                  <div className={cn(
+                    "w-7 h-7 rounded-lg flex items-center justify-center",
+                    isActive ? "bg-white/20" : "bg-primary/5"
+                  )}>
+                    <HiLocationMarker
+                      className={cn(
+                        "w-4 h-4 shrink-0",
+                        isActive ? "text-white" : "text-primary",
+                      )}
+                    />
+                  </div>
+                  {route.label}
+                </button>
+              </SwiperSlide>
+            );
+          })}
+        </Swiper>
       </div>
 
-      <button
-        onClick={() => scroll("right")}
-        aria-label="Scroll right"
-        className="absolute right-0 top-1/2 -translate-y-1/2 z-10 w-10 h-10 bg-white border border-border rounded-full shadow-lg items-center justify-center hover:border-primary hover:text-primary transition-all hidden md:flex -mr-5 opacity-0 group-hover:opacity-100"
-      >
-        <HiChevronRight className="w-5 h-5" />
-      </button>
+      {/* Navigation Buttons on bottom-left */}
+      <div className="flex items-center gap-3">
+        <button
+          ref={prevRef}
+          aria-label="Scroll left"
+          className="w-10 h-10 bg-white border-2 border-border rounded-full flex items-center justify-center text-dark-text hover:border-primary hover:text-primary hover:bg-primary/5 transition-all active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
+        >
+          <HiChevronLeft className="w-4 h-4" />
+        </button>
+        <button
+          ref={nextRef}
+          aria-label="Scroll right"
+          className="w-10 h-10 bg-white border-2 border-border rounded-full flex items-center justify-center text-dark-text hover:border-primary hover:text-primary hover:bg-primary/5 transition-all active:scale-95 disabled:opacity-30 disabled:cursor-not-allowed shadow-sm"
+        >
+          <HiChevronRight className="w-4 h-4" />
+        </button>
+      </div>
     </div>
   );
 }

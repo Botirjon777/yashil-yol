@@ -22,6 +22,7 @@ import FeaturesSection from "./sections/FeaturesSection";
 import { LocationSearchModal } from "./components/LocationSearchModal";
 import { HiLocationMarker } from "react-icons/hi";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import { Pagination } from "@/src/components/ui/Pagination";
 
 const HomeContent = () => {
   const {
@@ -51,9 +52,9 @@ const HomeContent = () => {
       {/* ── Hero Header + Swiper ── */}
       <div className="bg-white border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-3 md:py-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-8">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-5">
             <div className="max-w-2xl">
-              <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-tight mb-4">
+              <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-tight mb-5">
                 {activeRoute ? (
                   <span className="flex items-center gap-3 flex-wrap">
                     <span className="text-primary">{activeRoute.from}</span>
@@ -100,29 +101,33 @@ const HomeContent = () => {
           </div>
 
           {/* Search Section */}
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-10">
+          <div className="flex flex-row items-center gap-2 md:gap-4 mb-3">
             <button
               onClick={() => setModalType("from")}
-              className="flex flex-col items-start gap-1 p-5 bg-light-bg/50 rounded-[24px] border-2 border-border hover:border-primary/30 transition-all text-left group"
+              className="flex-1 flex flex-col items-start gap-0.5 p-3 md:p-4 bg-light-bg/50 rounded-2xl border-2 border-border hover:border-primary/30 transition-all text-left group"
             >
-              <div className="flex items-center gap-2 text-[10px] font-black uppercase text-gray-400 tracking-widest group-hover:text-primary transition-colors">
-                <HiLocationMarker className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-1.5 text-[9px] font-black uppercase text-gray-400 tracking-widest group-hover:text-primary transition-colors">
+                <HiLocationMarker className="w-3 h-3" />
                 {t("home", "from")}
               </div>
-              <div className="text-lg font-black text-dark-text">
+              <div className="text-sm md:text-base font-black text-dark-text truncate w-full">
                 {manualSearch?.from?.quarterName || manualSearch?.from?.districtName || manualSearch?.from?.regionName || t("home", "selectCity")}
               </div>
             </button>
 
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-300 shrink-0">
+              <HiArrowRight className="w-4 h-4" />
+            </div>
+
             <button
               onClick={() => setModalType("to")}
-              className="flex flex-col items-start gap-1 p-5 bg-light-bg/50 rounded-[24px] border-2 border-border hover:border-secondary/30 transition-all text-left group"
+              className="flex-1 flex flex-col items-start gap-0.5 p-3 md:p-4 bg-light-bg/50 rounded-2xl border-2 border-border hover:border-secondary/30 transition-all text-left group"
             >
-              <div className="flex items-center gap-2 text-[10px] font-black uppercase text-gray-400 tracking-widest group-hover:text-secondary transition-colors">
-                <HiLocationMarker className="w-3.5 h-3.5" />
+              <div className="flex items-center gap-1.5 text-[9px] font-black uppercase text-gray-400 tracking-widest group-hover:text-secondary transition-colors">
+                <HiLocationMarker className="w-3 h-3" />
                 {t("home", "to")}
               </div>
-              <div className="text-lg font-black text-dark-text">
+              <div className="text-sm md:text-base font-black text-dark-text truncate w-full">
                 {manualSearch?.to?.quarterName || manualSearch?.to?.districtName || manualSearch?.to?.regionName || t("home", "selectCity")}
               </div>
             </button>
@@ -244,28 +249,14 @@ const HomeContent = () => {
                   />
                 ))}
 
-                {/* Pagination (only in default mode) */}
-                {!activeRoute && meta && meta.last_page > 1 && (
-                  <div className="flex items-center justify-center gap-4 pt-10">
-                    <button
-                      onClick={() => setPage((p) => Math.max(1, p - 1))}
-                      disabled={page <= 1}
-                      className="w-12 h-12 flex items-center justify-center rounded-2xl border border-border bg-white disabled:opacity-40 hover:bg-primary/5 hover:border-primary/30 transition-all shadow-sm"
-                    >
-                      <HiChevronLeft className="w-6 h-6" />
-                    </button>
-                    <div className="bg-white border border-border px-6 py-3 rounded-2xl font-black text-sm text-gray-500 shadow-sm">
-                      {page} / {meta.last_page}
-                    </div>
-                    <button
-                      onClick={() =>
-                        setPage((p) => Math.min(meta.last_page, p + 1))
-                      }
-                      disabled={page >= meta.last_page}
-                      className="w-12 h-12 flex items-center justify-center rounded-2xl border border-border bg-white disabled:opacity-40 hover:bg-primary/5 hover:border-primary/30 transition-all shadow-sm"
-                    >
-                      <HiChevronRight className="w-6 h-6" />
-                    </button>
+                {/* Pagination */}
+                {meta && meta.last_page > 1 && (
+                  <div className="pt-10">
+                    <Pagination
+                      currentPage={page}
+                      totalPages={meta.last_page}
+                      onPageChange={setPage}
+                    />
                   </div>
                 )}
               </div>

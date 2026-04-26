@@ -20,16 +20,17 @@ import {
   cancelClientBooking,
   addPassengerToBooking,
   removePassengerFromBooking,
+  searchTripsByRegion,
 } from "../actions/actions";
 import { Trip, TripSearchParams, CreateTripRequest, Booking } from "../types";
 import { PaginatedTrips } from "../actions/actions";
 import { toast } from "sonner";
 
 /** Paginated list of public trips */
-export const usePublicTrips = (page = 1) =>
+export const usePublicTrips = (page = 1, perPage = 20) =>
   useQuery<PaginatedTrips, Error>({
-    queryKey: ["public-trips", page],
-    queryFn: () => getPublicTrips(page),
+    queryKey: ["public-trips", page, perPage],
+    queryFn: () => getPublicTrips(page, perPage),
   });
 
 export const useAllPublicTrips = (enabled = true) =>
@@ -41,10 +42,17 @@ export const useAllPublicTrips = (enabled = true) =>
 
 /** Search available trips with filters */
 export const useSearchTrips = (params: TripSearchParams, enabled = true) =>
-  useQuery<Trip[], Error>({
+  useQuery<PaginatedTrips, Error>({
     queryKey: ["search-trips", params],
     queryFn: () => searchTrips(params),
     enabled,
+  });
+
+export const useSearchTripsByRegion = (start_id: string, end_id: string, page = 1, perPage = 20, enabled = true) =>
+  useQuery<PaginatedTrips, Error>({
+    queryKey: ["search-trips-region", start_id, end_id, page, perPage],
+    queryFn: () => searchTripsByRegion(start_id, end_id, page, perPage),
+    enabled: enabled && !!start_id && !!end_id,
   });
 
 /** Single trip by id */
