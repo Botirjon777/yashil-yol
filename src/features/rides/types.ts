@@ -112,6 +112,8 @@ export interface TripSearchParams {
   end_quarter_id?: string | number;
   departure_date?: string; // YYYY-MM-DD
   passengers?: number;
+  page?: number;
+  per_page?: number;
 }
 
 export interface CreateTripRequest {

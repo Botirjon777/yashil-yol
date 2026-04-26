@@ -96,7 +96,9 @@
     "save": "Save",
     "loading": "Loading...",
     "scrollToTop": "Back to Top",
-    "optional": "(optional)"
+    "optional": "(optional)",
+    "confirm": "Confirm",
+    "notSelected": "Not Selected"
   },
   "footer": {
     "tagline": "We make ride-sharing easy, safe, and affordable for everyone in Uzbekistan.",

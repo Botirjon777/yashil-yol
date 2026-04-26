@@ -96,7 +96,9 @@
     "save": "Saqlash",
     "loading": "Yuklanmoqda...",
     "scrollToTop": "Tepaga qaytish",
-    "optional": "(ixtiyoriy)"
+    "optional": "(ixtiyoriy)",
+    "confirm": "Tasdiqlash",
+    "notSelected": "Tanlanmagan"
   },
   "footer": {
     "tagline": "Biz O'zbekistonda har bir kishi uchun hamroh topishni oson, xavfsiz va hamyonbop qilamiz.",
