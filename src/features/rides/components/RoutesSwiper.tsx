@@ -2,6 +2,7 @@
 
 import { useRef } from "react";
 import { HiChevronLeft, HiChevronRight, HiLocationMarker } from "react-icons/hi";
+import { GoArrowSwitch } from "react-icons/go";
 import { cn } from "@/src/lib/utils";
 import { POPULAR_ROUTES, PopularRoute } from "../constants/routes";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -46,9 +47,9 @@ export function RoutesSwiper({ activeRoute, onRouteClick }: RoutesSwiperProps) {
           className="my-swiper"
         >
           {POPULAR_ROUTES.map((route) => {
-            const isActive = activeRoute?.label === route.label;
+            const isActive = activeRoute?.from_id === route.from_id && activeRoute?.to_id === route.to_id;
             return (
-              <SwiperSlide key={route.label} className="!w-auto">
+              <SwiperSlide key={`${route.from_id}-${route.to_id}`} className="!w-auto">
                 <button
                   onClick={() => onRouteClick(route)}
                   className={cn(
@@ -69,7 +70,11 @@ export function RoutesSwiper({ activeRoute, onRouteClick }: RoutesSwiperProps) {
                       )}
                     />
                   </div>
-                  {route.label}
+                  <div className="flex items-center gap-2">
+                    <span className="text-inherit">{route.from}</span>
+                    <GoArrowSwitch className={cn("w-3.5 h-3.5", isActive ? "text-white/70" : "text-gray-400")} />
+                    <span className="text-inherit">{route.to}</span>
+                  </div>
                 </button>
               </SwiperSlide>
             );

@@ -3,14 +3,14 @@
 import { useState, Suspense } from "react";
 import {
   HiArrowRight,
-  HiChevronLeft,
-  HiChevronRight,
   HiFilter,
   HiSearch,
   HiStar,
   HiX,
 } from "react-icons/hi";
 import { useRidesPage } from "@/src/features/rides/hooks/useRidesPage";
+import { GoArrowSwitch } from "react-icons/go";
+
 import {
   FilterSidebar,
   RoutesSwiper,
@@ -58,13 +58,13 @@ const HomeContent = () => {
                 {activeRoute ? (
                   <span className="flex items-center gap-3 flex-wrap">
                     <span className="text-primary">{activeRoute.from}</span>
-                    <HiArrowRight className="w-6 h-6 md:w-8 md:h-8 text-gray-300 shrink-0" />
+                    <GoArrowSwitch className="w-6 h-6 md:w-8 md:h-8 text-gray-300 shrink-0" />
                     <span className="text-secondary">{activeRoute.to}</span>
                   </span>
                 ) : manualSearch ? (
                   <span className="flex items-center gap-3 flex-wrap">
                     <span className="text-primary">{manualSearch.from?.regionName || "---"}</span>
-                    <HiArrowRight className="w-6 h-6 md:w-8 md:h-8 text-gray-300 shrink-0" />
+                    <GoArrowSwitch className="w-6 h-6 md:w-8 md:h-8 text-gray-300 shrink-0" />
                     <span className="text-secondary">{manualSearch.to?.regionName || "---"}</span>
                   </span>
                 ) : (
@@ -78,7 +78,7 @@ const HomeContent = () => {
                 {isLoading
                   ? "Sayohatlar qidirilmoqda..."
                   : activeRoute
-                    ? `${activeRoute.label} yo'nalishi bo'yicha ${filteredRides.length} ta sayohat topildi`
+                    ? `${activeRoute.from} — ${activeRoute.to} yo'nalishi bo'yicha ${filteredRides.length} ta sayohat topildi`
                     : "O'zbekiston bo'ylab eng yaxshi hamrohlar va haydovchilar bilan birga sayohat qiling."}
               </p>
             </div>
@@ -219,10 +219,16 @@ const HomeContent = () => {
                 ) : (
                   <HiStar className="w-5 h-5 text-amber-400" />
                 )}
-                <h2 className="text-sm font-black text-dark-text uppercase tracking-widest">
-                  {activeRoute
-                    ? `${activeRoute.from} → ${activeRoute.to}`
-                    : "Yangi qo'shilgan sayohatlar"}
+                <h2 className="text-sm font-black text-dark-text uppercase tracking-widest flex items-center gap-2">
+                  {activeRoute ? (
+                    <>
+                      {activeRoute.from}
+                      <GoArrowSwitch className="w-4 h-4 text-primary/40 shrink-0" />
+                      {activeRoute.to}
+                    </>
+                  ) : (
+                    "Yangi qo'shilgan sayohatlar"
+                  )}
                 </h2>
               </div>
               <span className="hidden md:block text-xs font-bold text-gray-400">
@@ -270,7 +276,7 @@ const HomeContent = () => {
                 </h3>
                 <p className="text-gray-400 font-medium text-base mb-8 max-w-sm mx-auto">
                   {activeRoute
-                    ? `${activeRoute.label} yo'nalishi bo'yicha hozircha bo'sh o'rinlar yo'q. Boshqa yo'nalishni tanlab ko'ring.`
+                    ? `${activeRoute.from} — ${activeRoute.to} yo'nalishi bo'yicha hozircha bo'sh o'rinlar yo'q. Boshqa yo'nalishni tanlab ko'ring.`
                     : "Hozircha sayohatlar mavjud emas. Filtrlarni tozalab ko'ring."}
                 </p>
                 {(activeRoute || activeFilterCount > 0) && (
