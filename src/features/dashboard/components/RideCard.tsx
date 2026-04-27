@@ -54,7 +54,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
   const diffInMinutes = (departureDate.getTime() - Date.now()) / (1000 * 60);
 
   const hasBookings = (ride.bookings?.length || 0) > 0;
-  const isTooLate = diffInMinutes < 120 && diffInMinutes > 0;
+  const isTooLate = diffInMinutes < 30 && diffInMinutes > 0;
 
   const canCancel =
     !isHistory &&
@@ -64,7 +64,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
 
   let cannotCancelReason = null;
   if (isHistory) cannotCancelReason = t("dashboard", "pastTrip");
-  else if (isTooLate) cannotCancelReason = t("dashboard", "under2Hours");
+  else if (isTooLate) cannotCancelReason = t("dashboard", "under30Mins");
   else if (isDriver && hasBookings) cannotCancelReason = t("dashboard", "hasBookings");
 
 
@@ -165,6 +165,22 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           )}
         ></div>
 
+        {/* Status Badge - Top Right */}
+        <div
+          className={cn(
+            "absolute top-3 right-3 z-20 px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full shadow-sm",
+            isHistory
+              ? "bg-gray-100 text-gray-400"
+              : String(ride.status) === "active"
+                ? "bg-success/10 text-success"
+                : String(ride.status) === "completed"
+                  ? "bg-primary/10 text-primary"
+                  : "bg-error/10 text-error",
+          )}
+        >
+          {t("status", ride.status) || ride.status}
+        </div>
+
         <div className="flex items-start md:items-center space-x-5 flex-1 min-w-0 pl-2">
           {/* Vertical Route Indicator - now reactive to height */}
           <div className="flex flex-col items-center self-stretch py-2 shrink-0">
@@ -264,20 +280,6 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
             <div className="text-[10px] font-black uppercase tracking-[0.2em] text-gray-400">
               {t("rideDetails", "perSeat")}
             </div>
-          </div>
-          <div
-            className={cn(
-              "px-4 py-1.5 text-[10px] font-black uppercase tracking-widest rounded-full",
-              isHistory
-                ? "bg-gray-100 text-gray-400"
-                : String(ride.status) === "active"
-                  ? "bg-success/10 text-success"
-                  : String(ride.status) === "completed"
-                    ? "bg-primary/10 text-primary"
-                    : "bg-error/10 text-error",
-            )}
-          >
-            {t("status", ride.status) || ride.status}
           </div>
           {(isDriver || isPassenger) && String(ride.status) === "active" && (
             <div className="flex flex-col items-center">

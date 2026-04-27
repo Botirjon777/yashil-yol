@@ -89,9 +89,11 @@ const MapPicker: React.FC<MapPickerProps> = ({
           fetchAddress(newPos[0], newPos[1]);
         },
         (error) => {
-          console.error("Geolocation error:", error);
+          console.warn("Geolocation error:", error.message || error);
+          // If the user denied or it failed, we just stay at default center (Toshkent)
+          // No need to show a blocking alert, but we could toast if we had toast here
         },
-        { enableHighAccuracy: true },
+        { enableHighAccuracy: false, timeout: 5000, maximumAge: Infinity },
       );
     }
   }, [initialLat, initialLng]);

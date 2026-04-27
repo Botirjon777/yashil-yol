@@ -92,7 +92,7 @@ const DriverRideDetailsPage = () => {
           {/* Main Info */}
           <div className="lg:col-span-2 space-y-5 md:space-y-8">
             {/* Route Card */}
-            <RideRouteCard trip={trip} from={from} to={to} rd={rd} />
+            <RideRouteCard trip={trip} from={from} to={to} rd={rd} isDriver={true} />
 
             {/* Driver & Car Info */}
             <RideInfoCard 

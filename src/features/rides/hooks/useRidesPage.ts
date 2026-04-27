@@ -71,10 +71,22 @@ export function useRidesPage() {
     5,
     !!activeRoute
   );
+
+  const { data: reverseRegionRidesData, isLoading: isReverseLoading } = useSearchTripsByRegion(
+    activeRoute?.to_id || "",
+    activeRoute?.from_id || "",
+    page,
+    5,
+    !!activeRoute
+  );
   const { data: paginatedData, isLoading: isAllLoading } = usePublicTrips(page, 5);
 
   const rawRides: Trip[] = activeRoute 
-    ? (regionRidesData?.data ?? [])
+    ? Array.from(
+        new Map(
+          [...(regionRidesData?.data ?? []), ...(reverseRegionRidesData?.data ?? [])].map((trip) => [trip.id, trip])
+        ).values()
+      )
     : manualSearch 
       ? (searchRidesData?.data ?? []) 
       : (paginatedData?.data ?? []);
@@ -85,7 +97,7 @@ export function useRidesPage() {
       ? searchRidesData?.meta 
       : paginatedData?.meta;
 
-  const isLoading = activeRoute ? isRegionLoading : manualSearch ? isSearchLoading : isAllLoading;
+  const isLoading = activeRoute ? (isRegionLoading || isReverseLoading) : manualSearch ? isSearchLoading : isAllLoading;
 
   // Client-side filtering
   const filteredRides = rawRides.filter((ride) => {
@@ -109,7 +121,7 @@ export function useRidesPage() {
   // Debugging logs
   useEffect(() => {
     if (activeRoute) {
-      console.log("Popular Route Active:", activeRoute.label);
+      console.log("Popular Route Active:", `${activeRoute.from} - ${activeRoute.to}`);
       console.log("Region IDs:", activeRoute.from_id, "->", activeRoute.to_id);
       console.log("Region Rides Data:", regionRidesData);
       if (regionError) console.error("Region Search Error:", regionError);
@@ -129,7 +141,9 @@ export function useRidesPage() {
     (filters.minSeats > 1 ? 1 : 0);
 
   const handleRouteClick = (route: PopularRoute) => {
-    setActiveRoute((prev) => (prev?.label === route.label ? null : route));
+    setActiveRoute((prev) => 
+      (prev?.from_id === route.from_id && prev?.to_id === route.to_id) ? null : route
+    );
     setManualSearch(null); // Clear manual search if popular route is clicked
     setPage(1);
   };

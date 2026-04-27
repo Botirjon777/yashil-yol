@@ -209,6 +209,8 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
   const canCancel = useMemo(() => {
     if (!trip || isPast) return false;
     
+    const diffInMinutes = (new Date(trip.start_time).getTime() - Date.now()) / (1000 * 60);
+
     // For passengers, checking booking status is important
     if (mode === "passenger") {
       const st = (
@@ -219,13 +221,13 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
         ""
       ).toLowerCase();
       // Allow cancellation if confirmed, pending, active, or any other non-cancelled status if the trip is active
-      return st !== "" && st !== "canceled" && st !== "cancelled" && st !== "completed";
+      // AND it's more than 30 minutes before departure
+      return st !== "" && st !== "canceled" && st !== "cancelled" && st !== "completed" && diffInMinutes > 30;
     }
 
     if (!isDriver) return false;
     
-    const diffInMinutes = (new Date(trip.start_time).getTime() - Date.now()) / (1000 * 60);
-    return diffInMinutes > 240; // Example: 4 hours
+    return diffInMinutes > 30;
   }, [trip, isDriver, isPast, mode, myBooking]);
 
   const from = useMemo(() => {
@@ -270,8 +272,8 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
   // Handlers
   const handleCancel = () => {
     const message = mode === "passenger" 
-      ? "Are you sure you want to cancel your booking? Your balance will be returned."
-      : "Are you sure you want to cancel this trip?";
+      ? "Are you sure you want to cancel your booking? A 6% fee will be charged."
+      : "Are you sure you want to cancel this trip? A 6% fee will be charged.";
 
     if (window.confirm(message)) {
       if (mode === "passenger") {
