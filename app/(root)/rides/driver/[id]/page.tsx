@@ -39,6 +39,7 @@ const DriverRideDetailsPage = () => {
     setIsBookModalOpen,
     isBooking,
     isCanceling,
+    bookingStatus,
     handleBook,
     handleCancel,
     rd,
@@ -109,7 +110,7 @@ const DriverRideDetailsPage = () => {
                 trip={trip} 
                 rd={rd} 
                 isDriver={isDriver} 
-                disabled={trip.status?.toLowerCase() === "canceled" || trip.status?.toLowerCase() === "cancelled" || isPast}
+                disabled={bookingStatus === "canceled" || bookingStatus === "cancelled" || isPast}
               />
             )}
           </div>

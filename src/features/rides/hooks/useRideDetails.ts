@@ -211,6 +211,11 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     
     const diffInMinutes = (new Date(trip.start_time).getTime() - Date.now()) / (1000 * 60);
 
+    const tripStatus = (trip.status || "").toLowerCase();
+    if (tripStatus === "canceled" || tripStatus === "cancelled" || tripStatus === "completed") {
+      return false;
+    }
+
     // For passengers, checking booking status is important
     if (mode === "passenger") {
       const st = (
@@ -396,11 +401,11 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     isRemovingPassenger,
     isAddPassengerModalOpen,
     setIsAddPassengerModalOpen,
-    bookingStatus: myBooking?.booking_status || 
+    bookingStatus: (myBooking?.booking_status || 
                    myBooking?.bookingStatus || 
                    myBooking?.status || 
                    myBooking?.booked_by_user?.booking_status || 
-                   (mode === "passenger" ? undefined : trip?.status),
+                   (mode === "passenger" ? undefined : trip?.status) || "")?.toLowerCase(),
     bookingPassengers: myBooking?.passengers || [],
     totalPrice: myBooking?.total_price || (trip?.price_per_seat ? Number(trip.price_per_seat) * (myBooking?.passengers?.length || 1) : null),
     bookingId: id,

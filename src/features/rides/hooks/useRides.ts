@@ -4,24 +4,28 @@ import {
   getAllPublicTrips,
   searchTrips,
   getTripById,
+  createTrip,
+  bookTrip,
+  addPassengerToBooking,
+  removePassengerFromBooking,
+  searchTripsByRegion,
+} from "../actions/actions";
+import {
   getClientInprogressTrips,
   getClientCompletedTrips,
   getClientCanceledTrips,
+  getClientBookings,
+  getClientBookingById,
+  cancelClientBooking,
+} from "../../dashboard/actions/clientTrips";
+import {
   getDriverActiveTrips,
   getDriverCompletedTrips,
   getDriverCanceledTrips,
   getDriverAllTrips,
   getDriverTripById,
-  createTrip,
-  bookTrip,
-  getClientBookings,
-  getClientBookingById,
   cancelTrip,
-  cancelClientBooking,
-  addPassengerToBooking,
-  removePassengerFromBooking,
-  searchTripsByRegion,
-} from "../actions/actions";
+} from "../../dashboard/actions/driverTrips";
 import { Trip, TripSearchParams, CreateTripRequest, Booking } from "../types";
 import { PaginatedTrips } from "../actions/actions";
 import { toast } from "sonner";

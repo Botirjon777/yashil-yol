@@ -549,7 +549,8 @@
     "back": "Orqaga",
     "available": "mavjud",
     "pastTrip": "O'tgan safar",
-    "seatsBooked": "o'rin band qilindi"
+    "seatsBooked": "o'rin band qilindi",
+    "smsNotice": "Safarni band qiling va sms tarzda hamma malumtlar sizni telefon raqmizga qo'shimcha yuboriladi"
   },
   "status": {
     "active": "Faol",

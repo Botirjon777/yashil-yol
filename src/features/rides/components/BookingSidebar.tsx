@@ -188,6 +188,9 @@ export const BookingSidebar = ({
               ? rd("fullyBooked")
               : rd("bookRide")}
         </Button>
+        <p className="text-[10px] text-gray-400 font-medium text-center leading-relaxed px-1">
+          {rd("smsNotice")}
+        </p>
 
         {/* Trust badges */}
         <div className="pt-2 space-y-2.5 border-t border-border/60 mt-2">
