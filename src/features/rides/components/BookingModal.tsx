@@ -239,41 +239,60 @@ export const BookingModal = ({
 
                   {showLocation && (
                     <div className="pt-2 space-y-3 border-t border-dashed border-border">
-                      <div className="flex items-center justify-between">
-                        <label className="text-[10px] font-black text-primary uppercase tracking-widest">
-                          {rd("pickupLocation") || "Pick-up Location"}
-                        </label>
+                      <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 block">
+                        {rd("pickupLocation") || "Pick-up Location"}
+                      </label>
+                      
+                      {p.latitude && p.longitude ? (
+                        <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-2xl border border-emerald-100 shadow-sm animate-in fade-in slide-in-from-top-1 duration-300">
+                          <div className="flex items-center gap-3">
+                            <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+                              <HiMap className="w-5 h-5" />
+                            </div>
+                            <div>
+                              <p className="text-xs font-black text-emerald-700 uppercase tracking-tight leading-none">
+                                {rd("selectedLocation") || "Location Selected"}
+                              </p>
+                              <p className="text-[10px] font-bold text-emerald-600/70 mt-1">
+                                {rd("readyToBook") || "Ready to proceed"}
+                              </p>
+                            </div>
+                          </div>
+                          <button
+                            type="button"
+                            onClick={() => setActivePickerIndex(i)}
+                            className="px-4 py-2 bg-white text-[10px] font-black text-emerald-600 rounded-xl border border-emerald-200 hover:bg-emerald-100 transition-colors shadow-sm"
+                          >
+                            {rd("change") || "Change"}
+                          </button>
+                        </div>
+                      ) : (
                         <button
                           type="button"
                           onClick={() => setActivePickerIndex(i)}
-                          className="flex items-center gap-1.5 text-[10px] font-black text-primary hover:text-primary-dark transition-colors bg-primary/5 px-3 py-1.5 rounded-xl border border-primary/10"
+                          className={cn(
+                            "w-full py-6 flex flex-col items-center justify-center gap-3 border-2 border-dashed rounded-3xl transition-all group",
+                            errors[`location_${i}`] 
+                              ? "border-error/40 bg-error/5 text-error" 
+                              : "bg-primary/5 border-primary/20 text-primary hover:bg-primary/10 hover:border-primary/40"
+                          )}
                         >
-                          <HiMap className="w-3.5 h-3.5" />
-                          {rd("pickOnMap") || "Pick on Map"}
-                        </button>
-                      </div>
-                      
-                      {p.latitude && p.longitude ? (
-                        <div className="flex items-center gap-2 p-3 bg-emerald-50 rounded-xl border border-emerald-100">
-                          <div className="w-6 h-6 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
-                            <HiShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
-                          </div>
-                          <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">
-                            {rd("locationSelected") || "Location Selected"}
-                          </p>
-                        </div>
-                      ) : (
-                        <div className={cn(
-                          "py-3 text-center border-2 border-dashed rounded-xl transition-colors",
-                          errors[`location_${i}`] ? "border-error/50 bg-error/5" : "border-border"
-                        )}>
-                          <p className={cn(
-                            "text-[10px] font-black uppercase tracking-widest",
-                            errors[`location_${i}`] ? "text-error" : "text-gray-400"
+                          <div className={cn(
+                            "w-12 h-12 rounded-full flex items-center justify-center shadow-md group-hover:scale-110 transition-transform",
+                            errors[`location_${i}`] ? "bg-white" : "bg-white"
                           )}>
-                            {errors[`location_${i}`] || rd("noLocationSelected") || "Pick location on map"}
+                            <HiMap className={cn("w-6 h-6", errors[`location_${i}`] ? "text-error" : "text-primary")} />
+                          </div>
+                          <span className="text-xs font-black uppercase tracking-widest">
+                            {rd("pickOnMap") || "Pick on Map"}
+                          </span>
+                          <p className={cn(
+                            "text-[9px] font-bold max-w-[200px] text-center",
+                            errors[`location_${i}`] ? "text-error/80" : "text-gray-400"
+                          )}>
+                            {errors[`location_${i}`] || rd("locationRequiredDesc") || "Click to open map and set pick-up point"}
                           </p>
-                        </div>
+                        </button>
                       )}
                     </div>
                   )}

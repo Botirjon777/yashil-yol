@@ -7,6 +7,7 @@ import {
   HiColorSwatch,
   HiIdentification,
   HiUserGroup,
+  HiPhone,
 } from "react-icons/hi";
 import { getVehicleColorHex } from "@/src/lib/utils";
 
@@ -65,6 +66,16 @@ export const RideInfoCard = ({
       label: rd("seats"),
       value: `${trip.available_seats} / ${trip.total_seats}`,
     },
+    ...(showDriverInfo && trip.driver?.phone
+      ? [
+          {
+            icon: <HiPhone className="w-4 h-4" />,
+            label: rd("phone") || "Phone",
+            value: trip.driver.phone,
+            isPhone: true,
+          },
+        ]
+      : []),
   ];
 
   return (
@@ -112,9 +123,19 @@ export const RideInfoCard = ({
               key={i}
               className="bg-light-bg rounded-2xl p-4 flex flex-col gap-1.5 border border-border/40"
             >
-              <div className="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
-                <span className="text-primary">{s.icon}</span>
-                {s.label}
+              <div className="flex items-center justify-between w-full">
+                <div className="flex items-center gap-1.5 text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                  <span className="text-primary">{s.icon}</span>
+                  {s.label}
+                </div>
+                {s.isPhone && (
+                  <a
+                    href={`tel:${s.value}`}
+                    className="p-1.5 bg-primary/10 text-primary rounded-lg hover:bg-primary hover:text-white transition-all shadow-sm"
+                  >
+                    <HiPhone className="w-3 h-3" />
+                  </a>
+                )}
               </div>
               <div className="flex items-center gap-2">
                 {s.dot && (
@@ -124,7 +145,7 @@ export const RideInfoCard = ({
                   />
                 )}
                 <span
-                  className={`font-black text-dark-text text-sm leading-tight ${s.mono ? "font-mono tracking-widest" : ""}`}
+                  className={`font-black text-dark-text text-sm leading-tight ${s.mono || s.isPhone ? "font-mono tracking-widest" : ""}`}
                 >
                   {s.value}
                 </span>

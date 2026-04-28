@@ -10,6 +10,7 @@ interface RideRouteCardProps {
   to: string;
   rd: (key: string) => string;
   isDriver?: boolean;
+  isBooked?: boolean;
 }
 
 const statusConfig: Record<string, { bg: string; text: string; dot: string }> =
@@ -36,7 +37,7 @@ const statusConfig: Record<string, { bg: string; text: string; dot: string }> =
     },
   };
 
-export const RideRouteCard = ({ trip, from, to, rd, isDriver = false }: RideRouteCardProps) => {
+export const RideRouteCard = ({ trip, from, to, rd, isDriver = false, isBooked = false }: RideRouteCardProps) => {
   const { t } = useLanguageStore();
   const status = String(trip.status || "active").toLowerCase();
   const sc = statusConfig[status] ?? statusConfig.active;
@@ -141,8 +142,8 @@ export const RideRouteCard = ({ trip, from, to, rd, isDriver = false }: RideRout
         </div>
       </div>
 
-      {/* Map Link - Only visible to driver */}
-      {isDriver && ((trip.start_lat && trip.start_long) || (trip.starting_point?.lat && trip.starting_point?.long)) && (
+      {/* Map Link - Visible to driver or booked passenger */}
+      {(isDriver || isBooked) && ((trip.start_lat && trip.start_long) || (trip.starting_point?.lat && trip.starting_point?.long)) && (
         <div className="px-6 pb-6">
           <a
             href={`https://www.google.com/maps/dir/?api=1&origin=${trip.start_lat || trip.starting_point?.lat},${trip.start_long || trip.starting_point?.long}&destination=${trip.end_lat || trip.ending_point?.lat},${trip.end_long || trip.ending_point?.long}&mode=driving`}
