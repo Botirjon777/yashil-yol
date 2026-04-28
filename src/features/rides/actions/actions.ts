@@ -218,6 +218,7 @@ export const removePassengerFromBooking = async (
 ): Promise<any> => {
   const res = await api.post(
     `client/booking/${bookingId}/remove-passenger/${passengerId}`,
+    {},
   );
   return res.data;
 };

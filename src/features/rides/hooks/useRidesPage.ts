@@ -103,7 +103,8 @@ export function useRidesPage() {
   const filteredRides = rawRides.filter((ride) => {
     if (user && Number(ride.driver_id) === Number(user.id)) return false;
     if (Number(ride.price_per_seat ?? 0) > filters.priceRange) return false;
-    if (Number(ride.available_seats ?? 0) < filters.minSeats) return false;
+    // Allow showing full trips (0 seats) when minSeats is 1 (default)
+    if (filters.minSeats > 1 && Number(ride.available_seats ?? 0) < filters.minSeats) return false;
 
     if (filters.timeSlots.length > 0 && ride.start_time) {
       const h = new Date(ride.start_time).getHours();

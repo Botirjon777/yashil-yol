@@ -548,7 +548,7 @@
     "available": "available",
     "pastTrip": "Past Trip",
     "seatsBooked": "seats booked",
-    "smsNotice": "Book the trip and all information will be additionally sent to your phone number via SMS"
+    "smsNotice": "After a successful booking, full trip details (from and to), driver information, and contact number will be sent to you via SMS."
   },
   "status": {
     "active": "Active",

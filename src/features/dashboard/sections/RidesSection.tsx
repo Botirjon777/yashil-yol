@@ -37,7 +37,7 @@ export function RidesSection({
   user,
 }: RidesSectionProps) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [passengerTab, setPassengerTab] = useState<"inprogress" | "completed" | "canceled" | "bookings">("bookings");
+  const [passengerTab, setPassengerTab] = useState<"inprogress" | "completed" | "canceled" | "all">("all");
   const [driverTab, setDriverTab] = useState<"all" | "active" | "completed" | "canceled">("all");
   
   const isApproved = user?.driving_verification_status === "approved";
@@ -62,7 +62,7 @@ export function RidesSection({
         currentList = [...passengerCanceled].sort((a, b) => b.id - a.id);
         emptyMessage = ridesTranslations?.noHistory;
         break;
-      case "bookings":
+      case "all":
         currentList = [...passengerBookings].sort((a, b) => (b.bookingId || 0) - (a.bookingId || 0));
         emptyMessage = ridesTranslations?.noHistory;
         break;
@@ -183,7 +183,7 @@ export function RidesSection({
                   { id: "canceled", name: ridesTranslations?.canceled }
                 ]
               : [
-                  { id: "bookings", name: ridesTranslations?.allBookings || "All Bookings" },
+                  { id: "all", name: ridesTranslations?.allTrips || "All Trips" },
                   { id: "inprogress", name: ridesTranslations?.inprogress },
                   { id: "completed", name: ridesTranslations?.completed },
                   { id: "canceled", name: ridesTranslations?.canceled }
@@ -198,7 +198,7 @@ export function RidesSection({
       {rideType === "passenger" && (
         <div className="hidden lg:flex flex-wrap gap-2 mb-6">
           {[
-            { id: "bookings", label: ridesTranslations?.allBookings || "All Bookings" },
+            { id: "all", label: ridesTranslations?.allTrips || "All Trips" },
             { id: "inprogress", label: ridesTranslations?.inprogress },
             { id: "completed", label: ridesTranslations?.completed },
             { id: "canceled", label: ridesTranslations?.canceled }

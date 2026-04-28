@@ -199,14 +199,67 @@ export const useRemovePassenger = () => {
   return useMutation({
     mutationFn: ({ bookingId, passengerId }: { bookingId: string | number; passengerId: string | number }) =>
       removePassengerFromBooking(bookingId, passengerId),
-    onSuccess: () => {
+    onMutate: async ({ bookingId, passengerId }) => {
+      // Cancel any outgoing refetches (so they don't overwrite our optimistic update)
+      await queryClient.cancelQueries({ queryKey: ["client-bookings"] });
+      await queryClient.cancelQueries({ queryKey: ["trip"] });
+
+      // Snapshot the previous value
+      const previousBooking = queryClient.getQueryData(["client-bookings", "detail", bookingId]);
+      const previousTrip = queryClient.getQueryData(["trip"]);
+
+      // Optimistically update to the new value
+      if (previousBooking) {
+        queryClient.setQueryData(["client-bookings", "detail", bookingId], (old: any) => {
+          if (!old) return old;
+          return {
+            ...old,
+            passengers: (old.passengers || []).filter((p: any) => String(p.id) !== String(passengerId)),
+          };
+        });
+      }
+
+      // Also update the trip if it has the booking inside it
+      if (previousTrip) {
+        queryClient.setQueryData(["trip"], (old: any) => {
+          if (!old || !old.bookings) return old;
+          return {
+            ...old,
+            bookings: old.bookings.map((b: any) => {
+              if (String(b.id) === String(bookingId)) {
+                return {
+                  ...b,
+                  passengers: (b.passengers || []).filter((p: any) => String(p.id) !== String(passengerId)),
+                };
+              }
+              return b;
+            }),
+            available_seats: Number(old.available_seats || 0) + 1,
+          };
+        });
+      }
+
+      return { previousBooking, previousTrip };
+    },
+    onError: (err: any, variables, context) => {
+      // Rollback on error
+      if (context?.previousBooking) {
+        queryClient.setQueryData(["client-bookings", "detail", variables.bookingId], context.previousBooking);
+      }
+      if (context?.previousTrip) {
+        queryClient.setQueryData(["trip"], context.previousTrip);
+      }
+      toast.error(handleError(err));
+    },
+    onSettled: (data, error, variables) => {
+      // Always refetch after error or success to keep server in sync
+      queryClient.invalidateQueries({ queryKey: ["client-bookings", "detail", variables.bookingId] });
       queryClient.invalidateQueries({ queryKey: ["trip"] });
       queryClient.invalidateQueries({ queryKey: ["client-bookings"] });
       queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
-      toast.success("Passenger removed successfully");
     },
-    onError: (err: any) => {
-      toast.error(handleError(err));
+    onSuccess: () => {
+      toast.success("Passenger removed successfully");
     },
   });
 };
