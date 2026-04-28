@@ -130,7 +130,13 @@ const ClientRideDetailsPage = () => {
             </div>
 
             {/* Route Card */}
-            <RideRouteCard trip={trip} from={from} to={to} rd={rd} />
+            <RideRouteCard 
+              trip={trip} 
+              from={from} 
+              to={to} 
+              rd={rd} 
+              isBooked={bookingStatus === "confirmed" || bookingStatus === "active"} 
+            />
 
             {/* Driver & Car Info */}
             <RideInfoCard 
@@ -207,9 +213,16 @@ const ClientRideDetailsPage = () => {
 
               <div className="pt-6 border-t border-border">
                 <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{rd("supportLabel")}</p>
-                <p className="text-xs text-gray-500">
-                  {rd("supportDesc")}
-                </p>
+                <div className="space-y-3">
+                  <p className="text-xs text-gray-500 leading-relaxed">
+                    {rd("supportDesc")}
+                  </p>
+                  <Link href="/support" className="block">
+                    <Button variant="outline" fullWidth size="sm">
+                      {rd("contactSupport") || "Get Help"}
+                    </Button>
+                  </Link>
+                </div>
               </div>
             </div>
           </div>

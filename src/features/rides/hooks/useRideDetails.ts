@@ -252,8 +252,8 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
   }, [trip, regions, districts, quarters, resolveLocationName, language]);
 
   const driverName = trip?.driver
-    ? `${trip.driver.name || trip.driver.first_name || ""} ${trip.driver.last_name || ""}`.trim()
-    : "Driver";
+    ? `${trip.driver.first_name || ""} ${trip.driver.last_name || ""} ${trip.driver.father_name || ""}`.trim()
+    : trip?.driver_name || "Driver";
 
   const { data: allColors } = useCarColors();
 

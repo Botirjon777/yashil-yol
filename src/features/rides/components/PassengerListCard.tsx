@@ -115,7 +115,7 @@ export const PassengerListCard = ({
                   </div>
 
                   <div className="flex items-center gap-2">
-                    {isDriver && passenger.latitude && passenger.longitude && (
+                    {(isDriver || passenger.isMine) && passenger.latitude && passenger.longitude && (
                       <a
                         href={`https://www.google.com/maps/search/?api=1&query=${passenger.latitude},${passenger.longitude}`}
                         target="_blank"
