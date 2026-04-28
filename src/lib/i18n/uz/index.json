@@ -550,7 +550,7 @@
     "available": "mavjud",
     "pastTrip": "O'tgan safar",
     "seatsBooked": "o'rin band qilindi",
-    "smsNotice": "Safarni band qiling va sms tarzda hamma malumtlar sizni telefon raqmizga qo'shimcha yuboriladi"
+    "smsNotice": "Safarni band qilganingizdan so'ng, yo'nalish (qayerdan-qayerga), haydovchi malumotlari va uning telefon raqami sms tarzda telefoningizga yuboriladi."
   },
   "status": {
     "active": "Faol",

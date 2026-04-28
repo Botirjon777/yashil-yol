@@ -92,6 +92,8 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
     : (t("rideDetails", "verifiedDriver") || "Driver");
 
   const isPast = new Date(ride.start_time).getTime() < Date.now();
+  const isFull = Number(ride.available_seats || 0) === 0;
+  const isClickable = !isPast && !isFull;
 
   return (
     <div
@@ -101,8 +103,8 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
       )}
     >
       <Link
-        href={isPast ? "#" : `/rides/${ride.id}`}
-        className={cn("block", isPast && "cursor-default pointer-events-none")}
+        href={isClickable ? `/rides/${ride.id}` : "#"}
+        className={cn("block", !isClickable && "cursor-default pointer-events-none")}
       >
         <div
           className={cn(
@@ -112,11 +114,15 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
               : "hover:border-primary hover:shadow-2xl hover:shadow-primary/5 border-transparent",
           )}
         >
-          {isPast && (
+          {isPast ? (
             <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-gray-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
               {t("status", "past") || "PAST"}
             </div>
-          )}
+          ) : isFull ? (
+            <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
+              {t("status", "full") || "FULL"}
+            </div>
+          ) : null}
 
           <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
             <div className="grow min-w-0">
@@ -233,9 +239,9 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
                 </div>
               </div>
               <Button
-                variant={isPast ? "outline" : "primary"}
+                variant={isPast || isFull ? "outline" : "primary"}
                 size="md"
-                disabled={isPast}
+                disabled={!isClickable}
                 className={cn(
                   "shadow-lg transition-all px-6",
                   !isPast && "shadow-primary/10 group-hover:scale-[1.02]",
@@ -243,7 +249,9 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
               >
                 {isPast
                   ? t("status", "past") || "PAST"
-                  : t("rides", "joinRide")}
+                  : isFull
+                    ? t("status", "full") || "FULL"
+                    : t("rides", "joinRide")}
               </Button>
             </div>
           </div>

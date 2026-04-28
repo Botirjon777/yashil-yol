@@ -103,36 +103,47 @@ export const AddPassengerModal = ({
               </div>
 
               <div className="pt-2 space-y-3 border-t border-dashed border-border">
-                <div className="flex items-center justify-between">
-                  <label className="text-[10px] font-black text-primary uppercase tracking-widest">
-                    {rd("pickupLocation") || "Pick-up Location"}
-                  </label>
-                  <button
-                    onClick={() => setShowMap(true)}
-                    className="flex items-center gap-1.5 text-[10px] font-black text-primary hover:text-primary-dark transition-colors bg-primary/5 px-2 py-1 rounded-lg border border-primary/10"
-                  >
-                    <HiMap className="w-3 h-3" />
-                    {rd("pickOnMap") || "Pick on Map"}
-                  </button>
-                </div>
+                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 block mb-2">
+                  {rd("pickupLocation") || "Pick-up Location"}
+                </label>
 
                 {latitude && longitude ? (
-                  <div className="grid grid-cols-2 gap-3 p-3 bg-light-bg rounded-xl border border-border/50">
-                    <div className="space-y-0.5">
-                      <span className="text-[8px] font-black text-gray-400 uppercase">Lat</span>
-                      <p className="text-xs font-bold text-dark-text">{latitude}</p>
+                  <div className="flex items-center justify-between p-4 bg-emerald-50 rounded-2xl border border-emerald-100 shadow-sm animate-in fade-in slide-in-from-top-1 duration-300">
+                    <div className="flex items-center gap-3">
+                      <div className="w-10 h-10 rounded-xl bg-emerald-500/10 flex items-center justify-center text-emerald-600">
+                        <HiMap className="w-5 h-5" />
+                      </div>
+                      <div>
+                        <p className="text-xs font-black text-emerald-700 uppercase tracking-tight">
+                          {rd("selectedLocation") || "Location Selected"}
+                        </p>
+                        <p className="text-[10px] font-bold text-emerald-600/70">
+                          {rd("readyToBook") || "Ready to proceed"}
+                        </p>
+                      </div>
                     </div>
-                    <div className="space-y-0.5">
-                      <span className="text-[8px] font-black text-gray-400 uppercase">Lng</span>
-                      <p className="text-xs font-bold text-dark-text">{longitude}</p>
-                    </div>
+                    <button
+                      onClick={() => setShowMap(true)}
+                      className="px-4 py-2 bg-white text-[10px] font-black text-emerald-600 rounded-xl border border-emerald-200 hover:bg-emerald-100 transition-colors shadow-sm"
+                    >
+                      {rd("change") || "Change"}
+                    </button>
                   </div>
                 ) : (
-                  <div className="py-2 text-center border-2 border-dashed border-border rounded-xl">
-                    <p className="text-[10px] font-bold text-gray-400">
-                      {rd("noLocationSelected") || "No location selected"}
+                  <button
+                    onClick={() => setShowMap(true)}
+                    className="w-full py-6 flex flex-col items-center justify-center gap-3 bg-primary/5 border-2 border-dashed border-primary/20 rounded-3xl text-primary hover:bg-primary/10 hover:border-primary/40 transition-all group"
+                  >
+                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shadow-md group-hover:scale-110 transition-transform">
+                      <HiMap className="w-6 h-6" />
+                    </div>
+                    <span className="text-xs font-black uppercase tracking-widest">
+                      {rd("pickOnMap") || "Pick on Map"}
+                    </span>
+                    <p className="text-[9px] font-bold text-gray-400 max-w-[200px] text-center">
+                      {rd("locationRequiredDesc") || "Click to open map and set pick-up point"}
                     </p>
-                  </div>
+                  </button>
                 )}
               </div>
             </div>
