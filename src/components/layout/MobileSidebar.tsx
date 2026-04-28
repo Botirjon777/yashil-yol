@@ -203,8 +203,45 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
               </motion.button>
             </div>
 
+            {/* Language Switcher - NOW FIXED ON TOP */}
+            <motion.div
+              initial={{ opacity: 0, y: -10 }}
+              animate={{ opacity: 1, y: 0 }}
+              className="px-5 py-4 border-b border-border/50 bg-light-bg/30 relative z-30"
+            >
+              <div className="flex items-center justify-between mb-2 px-1">
+                <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest">
+                  {safeT("nav", "language")}
+                </p>
+                <div className="flex gap-1.5">
+                  {Object.entries(languageConfig).map(([code, config]) => (
+                    <button
+                      key={code}
+                      onClick={() => setLanguage(code as any)}
+                      className={cn(
+                        "w-6 h-4 rounded-sm overflow-hidden border transition-all",
+                        language === code ? "border-primary ring-1 ring-primary/30" : "border-border/40 grayscale opacity-50"
+                      )}
+                    >
+                      <img src={config.flag} alt={config.name} className="w-full h-full object-cover" />
+                    </button>
+                  ))}
+                </div>
+              </div>
+              <Dropdown
+                options={[
+                  { id: "uz", name: "O'zbekcha" },
+                  { id: "ru", name: "Русский" },
+                  { id: "en", name: "English" },
+                ]}
+                value={language}
+                onChange={(val) => setLanguage(val)}
+                className="bg-white"
+              />
+            </motion.div>
+
             {/* Scrollable Content */}
-            <div className="flex-1 overflow-y-auto overscroll-contain">
+            <div className="flex-1 overflow-y-auto overscroll-contain z-10">
               {/* User Section */}
               <motion.div
                 custom={0}
@@ -292,34 +329,6 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
                   );
                 })}
               </div>
-
-              {/* Divider */}
-              <div className="mx-4 border-t border-border/60" />
-
-              {/* Language Switcher */}
-              <motion.div
-                custom={navLinks.length + 2}
-                variants={itemVariants}
-                initial="hidden"
-                animate="visible"
-                className="p-4 space-y-3"
-              >
-                <p className="text-[10px] font-black uppercase text-gray-400 tracking-widest px-1">
-                  {safeT("nav", "language")}
-                </p>
-                <Dropdown
-                  options={[
-                    { id: "uz", name: "O'zbekcha" },
-                    { id: "ru", name: "Русский" },
-                    { id: "en", name: "English" },
-                  ]}
-                  value={language}
-                  onChange={(val) => {
-                    setLanguage(val);
-                    onClose();
-                  }}
-                />
-              </motion.div>
             </div>
 
             {/* Footer Actions */}

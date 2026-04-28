@@ -161,7 +161,7 @@ const ClientRideDetailsPage = () => {
                 });
               }}
               isRemoving={isRemovingPassenger}
-              disabled={bookingStatus?.toLowerCase() === "canceled" || bookingStatus?.toLowerCase() === "cancelled" || isPast}
+              disabled={bookingStatus === "canceled" || bookingStatus === "cancelled" || isPast}
             />
           </div>
 

@@ -175,54 +175,6 @@ export const getTripById = async (id: string | number): Promise<Trip> => {
   return res.data?.data ?? res.data;
 };
 
-/** GET /client/trips/get-inprogress-trips */
-export const getClientInprogressTrips = async (): Promise<Trip[]> => {
-  const res = await api.get<any>("client/trips/get-inprogress-trips");
-  return res.data?.data?.data ?? res.data?.data ?? res.data?.trips ?? [];
-};
-
-/** GET /client/trips/get-completed-trips */
-export const getClientCompletedTrips = async (): Promise<Trip[]> => {
-  const res = await api.get<any>("client/trips/get-completed-trips");
-  return res.data?.data?.data ?? res.data?.data ?? res.data?.trips ?? [];
-};
-
-/** GET /client/trips/get-canceled-trips */
-export const getClientCanceledTrips = async (): Promise<Trip[]> => {
-  const res = await api.get<any>("client/trips/get-canceled-trips");
-  return res.data?.data?.data ?? res.data?.data ?? [];
-};
-
-/** GET /driver/trips/get-active-trips/driver */
-export const getDriverActiveTrips = async (): Promise<Trip[]> => {
-  const res = await api.get<any>("driver/trips/get-active-trips/driver");
-  return res.data?.data?.data ?? res.data?.data ?? [];
-};
-
-/** GET /driver/trips/get-completed-trips/driver */
-export const getDriverCompletedTrips = async (): Promise<Trip[]> => {
-  const res = await api.get<any>("driver/trips/get-completed-trips/driver");
-  return res.data?.data?.data ?? res.data?.data ?? [];
-};
-
-/** GET /driver/trips/get-canceled-trips/driver */
-export const getDriverCanceledTrips = async (): Promise<Trip[]> => {
-  const res = await api.get<any>("driver/trips/get-canceled-trips/driver");
-  return res.data?.data?.data ?? res.data?.data ?? [];
-};
-
-/** GET /driver/trips — all trips for driver */
-export const getDriverAllTrips = async (): Promise<Trip[]> => {
-  const res = await api.get<any>("driver/trips");
-  return res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
-};
-
-/** GET /driver/trips/:id — single trip for driver */
-export const getDriverTripById = async (id: string | number): Promise<Trip> => {
-  const res = await api.get<any>(`driver/trips/${id}`);
-  return res.data?.data ?? res.data;
-};
-
 /** POST /driver/trips */
 export const createTrip = async (
   data: any,
@@ -250,30 +202,6 @@ export const bookTrip = async (data: {
   return res.data;
 };
 
-/** GET /client/booking — all bookings for client */
-export const getClientBookings = async (): Promise<Booking[]> => {
-  const res = await api.get<any>("client/booking");
-  return res.data?.data?.data ?? res.data?.data ?? res.data ?? [];
-};
-
-/** GET /client/trips/booking/:id — specific booking details */
-export const getClientBookingById = async (
-  id: string | number,
-): Promise<Booking> => {
-  const res = await api.get<any>(`client/trips/booking/${id}`);
-  return res.data?.data ?? res.data;
-};
-
-/** DELETE /client/booking/cancel/:id — cancel booking (client) */
-export const cancelClientBooking = async (
-  id: string | number,
-): Promise<{ status: string; message: string }> => {
-  const res = await api.delete<{ status: string; message: string }>(
-    `client/booking/cancel/${id}`,
-  );
-  return res.data;
-};
-
 /** POST /client/booking/:id/add-passenger */
 export const addPassengerToBooking = async (
   bookingId: string | number,
@@ -290,19 +218,6 @@ export const removePassengerFromBooking = async (
 ): Promise<any> => {
   const res = await api.post(
     `client/booking/${bookingId}/remove-passenger/${passengerId}`,
-  );
-  return res.data;
-};
-
-/** DELETE (via POST override) /driver/trips/cancel-trip/:id — cancel trip (driver) */
-export const cancelTrip = async (
-  id: string | number,
-): Promise<{ status: string; message: string }> => {
-  const res = await api.post<{ status: string; message: string }>(
-    `driver/trips/cancel-trip/${id}`,
-    {
-      _method: "DELETE",
-    },
   );
   return res.data;
 };

@@ -1,7 +1,7 @@
 "use client";
 
-import { HiArrowRight, HiCash } from "react-icons/hi";
-import { formatCurrency, formatDate } from "@/src/lib/utils";
+import { HiArrowRight, HiCash, HiShieldCheck } from "react-icons/hi";
+import { formatCurrency, formatDate, cn } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import Modal from "@/src/components/ui/Modal";
 import dynamic from "next/dynamic";
@@ -52,6 +52,24 @@ export const BookingModal = ({
   rd,
 }: BookingModalProps) => {
   const [activePickerIndex, setActivePickerIndex] = useState<number | null>(null);
+  const [errors, setErrors] = useState<Record<string, string>>({});
+
+  const validate = () => {
+    const newErrors: Record<string, string> = {};
+    passengers.forEach((p, i) => {
+      if (!p.name.trim()) newErrors[`name_${i}`] = rd("nameRequired") || "Name is required";
+      if (!p.phone.trim()) newErrors[`phone_${i}`] = rd("phoneRequired") || "Phone is required";
+      if (!p.latitude || !p.longitude) newErrors[`location_${i}`] = rd("locationRequired") || "Location is required";
+    });
+    setErrors(newErrors);
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const onConfirm = () => {
+    if (validate()) {
+      handleBook("balance");
+    }
+  };
 
   if (activePickerIndex !== null) {
     return (
@@ -83,30 +101,54 @@ export const BookingModal = ({
     >
       <div className="space-y-6">
         {/* Trip Summary */}
-        <div className="bg-light-bg p-4 rounded-3xl border border-border space-y-2">
-          <div className="flex items-start justify-between text-xs">
-            <span className="text-gray-500 font-bold">
-              {rd("route") || "Route"}
-            </span>
-            <span className="text-dark-text font-black flex items-center gap-2 text-right truncate ml-4">
-              {from} <HiArrowRight /> {to}
-            </span>
+        <div className="bg-light-bg p-5 rounded-3xl border border-border space-y-4">
+          <div className="space-y-3">
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                <div className="w-2 h-2 rounded-full bg-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">
+                  {rd("departure") || "Departure"}
+                </p>
+                <p className="text-sm font-black text-dark-text leading-tight">
+                  {from}
+                </p>
+              </div>
+            </div>
+            
+            <div className="flex items-start gap-3">
+              <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center shrink-0 mt-0.5">
+                <HiArrowRight className="w-4 h-4 text-primary" />
+              </div>
+              <div className="flex-1 min-w-0">
+                <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-0.5">
+                  {rd("destination") || "Destination"}
+                </p>
+                <p className="text-sm font-black text-dark-text leading-tight">
+                  {to}
+                </p>
+              </div>
+            </div>
           </div>
-          <div className="flex items-center justify-between text-xs">
-            <span className="text-gray-500 font-bold">
-              {rd("date") || "Date"}
-            </span>
-            <span className="text-dark-text font-black">
-              {formatDate(trip.start_time)}
-            </span>
-          </div>
-          <div className="flex items-center justify-between pt-2 border-t border-border">
-            <span className="text-gray-600 font-black text-sm">
-              {rd("amountToPay") || "Total"}
-            </span>
-            <span className="text-xl font-black text-primary">
-              {formatCurrency(Number(trip.price_per_seat) * numSeats)}
-            </span>
+
+          <div className="pt-4 border-t border-border flex items-center justify-between">
+            <div className="space-y-1">
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
+                {rd("date") || "Date"}
+              </p>
+              <p className="text-sm font-black text-dark-text">
+                {formatDate(trip.start_time)}
+              </p>
+            </div>
+            <div className="text-right">
+              <p className="text-[10px] font-black text-gray-400 uppercase tracking-widest mb-1">
+                {rd("amountToPay") || "Total"}
+              </p>
+              <p className="text-2xl font-black text-primary leading-none">
+                {formatCurrency(Number(trip.price_per_seat) * numSeats)}
+              </p>
+            </div>
           </div>
         </div>
 
@@ -154,12 +196,21 @@ export const BookingModal = ({
                       <input
                         type="text"
                         value={p.name}
-                        onChange={(e) =>
-                          updatePassenger(i, "name", e.target.value)
-                        }
-                        className="w-full bg-light-bg border-none rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
+                        onChange={(e) => {
+                          updatePassenger(i, "name", e.target.value);
+                          if (errors[`name_${i}`]) setErrors(prev => {
+                            const n = { ...prev };
+                            delete n[`name_${i}`];
+                            return n;
+                          });
+                        }}
+                        className={cn(
+                          "w-full bg-light-bg border rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all",
+                          errors[`name_${i}`] ? "border-error" : "border-transparent"
+                        )}
                         placeholder={rd("enterName") || "Enter name"}
                       />
+                      {errors[`name_${i}`] && <p className="text-[9px] text-error font-bold mt-0.5">{errors[`name_${i}`]}</p>}
                     </div>
                     <div className="space-y-1">
                       <label className="text-[10px] font-black text-gray-400 uppercase">
@@ -168,12 +219,21 @@ export const BookingModal = ({
                       <input
                         type="text"
                         value={p.phone}
-                        onChange={(e) =>
-                          updatePassenger(i, "phone", e.target.value)
-                        }
-                        className="w-full bg-light-bg border-none rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all"
+                        onChange={(e) => {
+                          updatePassenger(i, "phone", e.target.value);
+                          if (errors[`phone_${i}`]) setErrors(prev => {
+                            const n = { ...prev };
+                            delete n[`phone_${i}`];
+                            return n;
+                          });
+                        }}
+                        className={cn(
+                          "w-full bg-light-bg border rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all",
+                          errors[`phone_${i}`] ? "border-error" : "border-transparent"
+                        )}
                         placeholder={rd("phonePlaceholder") || "+998..."}
                       />
+                      {errors[`phone_${i}`] && <p className="text-[9px] text-error font-bold mt-0.5">{errors[`phone_${i}`]}</p>}
                     </div>
                   </div>
 
@@ -194,20 +254,24 @@ export const BookingModal = ({
                       </div>
                       
                       {p.latitude && p.longitude ? (
-                        <div className="grid grid-cols-2 gap-3 p-3 bg-light-bg rounded-xl border border-border/50">
-                          <div className="space-y-0.5">
-                            <span className="text-[8px] font-black text-gray-400 uppercase">Lat</span>
-                            <p className="text-xs font-bold text-dark-text">{p.latitude}</p>
+                        <div className="flex items-center gap-2 p-3 bg-emerald-50 rounded-xl border border-emerald-100">
+                          <div className="w-6 h-6 rounded-lg bg-emerald-500/20 flex items-center justify-center shrink-0">
+                            <HiShieldCheck className="w-3.5 h-3.5 text-emerald-600" />
                           </div>
-                          <div className="space-y-0.5">
-                            <span className="text-[8px] font-black text-gray-400 uppercase">Lng</span>
-                            <p className="text-xs font-bold text-dark-text">{p.longitude}</p>
-                          </div>
+                          <p className="text-[10px] font-black text-emerald-700 uppercase tracking-widest">
+                            {rd("locationSelected") || "Location Selected"}
+                          </p>
                         </div>
                       ) : (
-                        <div className="py-2 text-center border-2 border-dashed border-border rounded-xl">
-                          <p className="text-[10px] font-bold text-gray-400">
-                            {rd("noLocationSelected") || "No location selected"}
+                        <div className={cn(
+                          "py-3 text-center border-2 border-dashed rounded-xl transition-colors",
+                          errors[`location_${i}`] ? "border-error/50 bg-error/5" : "border-border"
+                        )}>
+                          <p className={cn(
+                            "text-[10px] font-black uppercase tracking-widest",
+                            errors[`location_${i}`] ? "text-error" : "text-gray-400"
+                          )}>
+                            {errors[`location_${i}`] || rd("noLocationSelected") || "Pick location on map"}
                           </p>
                         </div>
                       )}
@@ -241,10 +305,14 @@ export const BookingModal = ({
           fullWidth
           size="lg"
           loading={isBooking}
-          onClick={() => handleBook("balance")}
+          onClick={onConfirm}
+          className="shadow-xl shadow-primary/20"
         >
           {rd("confirmBooking") || "Confirm Booking"}
         </Button>
+        <p className="text-[10px] text-gray-400 font-medium text-center leading-relaxed px-2">
+          {rd("smsNotice")}
+        </p>
       </div>
     </Modal>
   );

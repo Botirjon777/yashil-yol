@@ -204,9 +204,9 @@ const MainPage = () => {
         {/* Header Section */}
         <div className="text-center mb-16">
           <h1 className="text-4xl md:text-5xl font-black text-dark-text mb-6">
-            {t("becomeDriver", "title")?.split("Qadam")[0]}
-            <span className="text-primary">Qadam</span>
-            {t("becomeDriver", "title")?.split("Qadam")[1]}
+            {t("becomeDriver", "title")?.split("Ketamiz")[0]}
+            <span className="text-primary">Ketamiz</span>
+            {t("becomeDriver", "title")?.split("Ketamiz")[1]}
           </h1>
           <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto">
             {t("becomeDriver", "subtitle")}

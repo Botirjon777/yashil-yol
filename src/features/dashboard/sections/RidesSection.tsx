@@ -37,7 +37,7 @@ export function RidesSection({
   user,
 }: RidesSectionProps) {
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
-  const [passengerTab, setPassengerTab] = useState<"inprogress" | "completed" | "canceled" | "bookings">("inprogress");
+  const [passengerTab, setPassengerTab] = useState<"inprogress" | "completed" | "canceled" | "bookings">("bookings");
   const [driverTab, setDriverTab] = useState<"all" | "active" | "completed" | "canceled">("all");
   
   const isApproved = user?.driving_verification_status === "approved";
@@ -183,10 +183,10 @@ export function RidesSection({
                   { id: "canceled", name: ridesTranslations?.canceled }
                 ]
               : [
+                  { id: "bookings", name: ridesTranslations?.allBookings || "All Bookings" },
                   { id: "inprogress", name: ridesTranslations?.inprogress },
                   { id: "completed", name: ridesTranslations?.completed },
-                  { id: "canceled", name: ridesTranslations?.canceled },
-                  { id: "bookings", name: ridesTranslations?.allBookings }
+                  { id: "canceled", name: ridesTranslations?.canceled }
                 ]
           }
           value={rideType === "driver" ? driverTab : passengerTab}
@@ -198,10 +198,10 @@ export function RidesSection({
       {rideType === "passenger" && (
         <div className="hidden lg:flex flex-wrap gap-2 mb-6">
           {[
+            { id: "bookings", label: ridesTranslations?.allBookings || "All Bookings" },
             { id: "inprogress", label: ridesTranslations?.inprogress },
             { id: "completed", label: ridesTranslations?.completed },
-            { id: "canceled", label: ridesTranslations?.canceled },
-            { id: "bookings", label: ridesTranslations?.allBookings }
+            { id: "canceled", label: ridesTranslations?.canceled }
           ].map((tab) => (
             <button
               key={tab.id}

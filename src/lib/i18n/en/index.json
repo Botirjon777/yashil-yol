@@ -547,7 +547,8 @@
     "back": "Back",
     "available": "available",
     "pastTrip": "Past Trip",
-    "seatsBooked": "seats booked"
+    "seatsBooked": "seats booked",
+    "smsNotice": "Book the trip and all information will be additionally sent to your phone number via SMS"
   },
   "status": {
     "active": "Active",
