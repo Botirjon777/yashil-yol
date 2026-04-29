@@ -25,6 +25,7 @@ const RideDetailsPage = () => {
     isDriver,
     isPast,
     canCancel,
+    canCancelReason,
     from,
     to,
     driverName,
@@ -120,6 +121,7 @@ const RideDetailsPage = () => {
               isDriver={isDriver}
               isPast={isPast}
               canCancel={canCancel}
+              canCancelReason={canCancelReason}
               numSeats={numSeats}
               setNumSeats={setNumSeats}
               handleCancel={handleCancel}

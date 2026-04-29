@@ -24,6 +24,7 @@ import {
   handleError,
 } from "@/src/features/rides/hooks/useRides";
 import { useCarColors } from "@/src/features/rides/hooks/useVehicles";
+import { formatPhoneDisplay, cleanPhone } from "@/src/lib/utils";
 
 export function useRideDetails(id: string, mode?: "driver" | "public" | "passenger") {
   const router = useRouter();
@@ -87,7 +88,8 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     }
 
     // Case 2: bookingData is already the correct Booking object
-    if (String(bookingData.id) === String(id) && (bookingData.passengers || bookingData.total_price)) {
+    const bId = bookingData.id || (bookingData as any).booking_id || (bookingData as any).bookingId;
+    if (String(bId) === String(id) && (bookingData.passengers || bookingData.total_price)) {
       return bookingData;
     }
 
@@ -96,13 +98,13 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     const bookings = (bookingData as any).bookings || ride?.bookings;
     if (Array.isArray(bookings)) {
       // First try matching by ID
-      let found = bookings.find((b: any) => String(b.id) === String(id));
+      let found = bookings.find((b: any) => String(b.id || b.booking_id) === String(id));
       
       // If not found by ID, maybe 'id' from URL was the Trip ID. 
       // Try finding a booking owned by current user.
       if (!found && user) {
         found = bookings.find((b: any) => 
-          Number(b.user_id || b.booked_by_user?.id) === Number(user.id)
+          Number(b.user_id || b.booked_by_user?.id || b.booked_by?.id) === Number(user.id)
         );
       }
       
@@ -110,7 +112,6 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
       if (!found && bookings.length > 0) {
         found = bookings[0];
       }
-      
       return found;
     }
 
@@ -122,7 +123,7 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     if (mode !== "passenger") return isDriver ? driverTrip : publicTrip;
 
     // In passenger mode, bookingData is often the Trip or has a 'ride'/trip prop
-    return (
+    let t = (
       bookingData.trip || 
       (bookingData as any).ride?.trip || 
       (bookingData as any).ride || 
@@ -130,6 +131,28 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
       myBooking?.trip ||
       myBooking
     );
+
+    // Merge driver and vehicle if they are siblings in bookingData
+    if (t && (bookingData as any).driver && !t.driver) {
+      t = { ...t, driver: (bookingData as any).driver };
+    }
+    if (t && (bookingData as any).vehicle && !t.vehicle) {
+      t = { ...t, vehicle: (bookingData as any).vehicle };
+    }
+
+    // Normalize coordinates for maps
+    if (t) {
+      t = {
+        ...t,
+        start_lat: t.start_lat || t.from_latitude,
+        start_long: t.start_long || t.from_longitude,
+        end_lat: t.end_lat || t.to_latitude,
+        end_long: t.end_long || t.to_longitude,
+        total_seats: t.total_seats || t.vehicle?.total_seats || t.vehicle?.seats || 0,
+      };
+    }
+
+    return t;
   }, [bookingData, mode, isDriver, driverTrip, publicTrip, myBooking]);
 
   const isLoading = isPublicLoading || (isDriver && isDriverLoading) || (mode === "passenger" && isBookingLoading);
@@ -155,25 +178,32 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
   // Sync passengers array with numSeats
   useEffect(() => {
     setPassengers((prev) => {
-      const next = [...prev];
+      let next = [...prev];
+      
+      // If we have no passengers yet, or the first one is empty, try to prefill with user data
+      if (user && (next.length === 0 || (next.length === 1 && !next[0].name && !next[0].phone))) {
+        const userInfo = {
+          name: `${user.first_name || ""} ${user.last_name || ""}`.trim() || "",
+          phone: formatPhoneDisplay(user.phone || ""),
+          latitude: next[0]?.latitude || "",
+          longitude: next[0]?.longitude || "",
+        };
+        
+        if (next.length === 0) {
+          next.push(userInfo);
+        } else {
+          next[0] = userInfo;
+        }
+      }
+
       if (next.length < numSeats) {
         for (let i = next.length; i < numSeats; i++) {
-          // Prefill first passenger with user info if available
-          if (i === 0 && user) {
-            next.push({
-              name: `${user.first_name || ""} ${user.last_name || ""}`.trim() || "",
-              phone: user.phone || "",
-              latitude: prev[0]?.latitude || "",
-              longitude: prev[0]?.longitude || "",
-            });
-          } else {
-            next.push({
-              name: "",
-              phone: "",
-              latitude: sameLocation ? prev[0]?.latitude || "" : "",
-              longitude: sameLocation ? prev[0]?.longitude || "" : "",
-            });
-          }
+          next.push({
+            name: "",
+            phone: "",
+            latitude: sameLocation ? next[0]?.latitude || "" : "",
+            longitude: sameLocation ? next[0]?.longitude || "" : "",
+          });
         }
       } else if (next.length > numSeats) {
         return next.slice(0, numSeats);
@@ -195,7 +225,11 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
         return next.map(p => ({ ...p, [field]: value }));
       }
       
-      next[index] = { ...next[index], [field]: value };
+      if (field === "phone") {
+        next[index] = { ...next[index], [field]: formatPhoneDisplay(value) };
+      } else {
+        next[index] = { ...next[index], [field]: value };
+      }
       return next;
     });
   };
@@ -206,14 +240,15 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     return new Date(trip.start_time).getTime() < Date.now();
   }, [trip]);
 
-  const canCancel = useMemo(() => {
-    if (!trip || isPast) return false;
+  const { canCancel, canCancelReason } = useMemo(() => {
+    if (!trip) return { canCancel: false, canCancelReason: null };
+    if (isPast) return { canCancel: false, canCancelReason: rd("pastTrip") };
     
     const diffInMinutes = (new Date(trip.start_time).getTime() - Date.now()) / (1000 * 60);
 
     const tripStatus = (trip.status || "").toLowerCase();
     if (tripStatus === "canceled" || tripStatus === "cancelled" || tripStatus === "completed") {
-      return false;
+      return { canCancel: false, canCancelReason: null };
     }
 
     // For passengers, checking booking status is important
@@ -225,15 +260,36 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
         myBooking?.booked_by_user?.booking_status || 
         ""
       ).toLowerCase();
-      // Allow cancellation if confirmed, pending, active, or any other non-cancelled status if the trip is active
-      // AND it's more than 30 minutes before departure
-      return st !== "" && st !== "canceled" && st !== "cancelled" && st !== "completed" && diffInMinutes > 30;
+      
+      if (st === "canceled" || st === "cancelled" || st === "completed") {
+        return { canCancel: false, canCancelReason: null };
+      }
+      
+      if (diffInMinutes <= 30) {
+        return { canCancel: false, canCancelReason: rd("cancellationUnavailable") };
+      }
+      
+      return { canCancel: true, canCancelReason: null };
     }
 
-    if (!isDriver) return false;
+    if (!isDriver) return { canCancel: false, canCancelReason: null };
     
-    return diffInMinutes > 30;
-  }, [trip, isDriver, isPast, mode, myBooking]);
+    // Drivers cannot cancel if there are active bookings
+    const hasActiveBookings = (trip.bookings || []).some((b: any) => {
+      const status = (b.status || "").toLowerCase();
+      return status !== "canceled" && status !== "cancelled" && status !== "rejected";
+    });
+
+    if (hasActiveBookings) {
+      return { canCancel: false, canCancelReason: rd("hasBookings") || "Has Bookings" };
+    }
+    
+    if (diffInMinutes <= 30) {
+      return { canCancel: false, canCancelReason: rd("cancelBlocked") };
+    }
+
+    return { canCancel: true, canCancelReason: null };
+  }, [trip, isDriver, isPast, mode, myBooking, rd]);
 
   const from = useMemo(() => {
     if (!trip) return "";
@@ -287,14 +343,14 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
           onSuccess: () => {
             router.push("/dashboard");
           },
-          onError: (err: any) => toast.error(handleError(err)),
+          onError: (err: any) => toast.error(handleError(err, t)),
         });
       } else {
         cancelTrip(id, {
           onSuccess: () => {
             router.push("/dashboard");
           },
-          onError: (err: any) => toast.error(handleError(err)),
+          onError: (err: any) => toast.error(handleError(err, t)),
         });
       }
     }
@@ -327,7 +383,11 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     }
 
     bookTrip(
-      { trip_id: trip.id, passengers, payment_method: paymentMethod },
+      { 
+        trip_id: trip.id, 
+        passengers: passengers.map(p => ({ ...p, phone: `+998${cleanPhone(p.phone)}` })), 
+        payment_method: paymentMethod 
+      },
       {
         onSuccess: () => {
           toast.success(rd("bookingSuccess") || "Ride booked successfully!");
@@ -335,7 +395,7 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
           router.push("/dashboard");
         },
         onError: (err: any) => {
-          toast.error(handleError(err));
+          toast.error(handleError(err, t));
         },
       },
     );
@@ -352,12 +412,12 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     const targetId = myBooking?.id || id;
     
     addPassenger(
-      { bookingId: targetId, data },
+      { bookingId: targetId, data: { ...data, phone: `+998${cleanPhone(data.phone)}` } },
       {
         onSuccess: () => {
           setIsAddPassengerModalOpen(false);
         },
-        onError: (err: any) => toast.error(handleError(err))
+        onError: (err: any) => toast.error(handleError(err, t))
       }
     );
   };
@@ -372,7 +432,7 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
       {
         onSuccess: () => {
         },
-        onError: (err: any) => toast.error(handleError(err))
+        onError: (err: any) => toast.error(handleError(err, t))
       }
     );
   };
@@ -383,6 +443,7 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     isDriver,
     isPast,
     canCancel,
+    canCancelReason,
     from,
     to,
     driverName,
@@ -407,6 +468,7 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
                    myBooking?.booked_by_user?.booking_status || 
                    (mode === "passenger" ? undefined : trip?.status) || "")?.toLowerCase(),
     bookingPassengers: myBooking?.passengers || [],
+    bookedBy: myBooking?.booked_by || myBooking?.booked_by_user || null,
     totalPrice: myBooking?.total_price || (trip?.price_per_seat ? Number(trip.price_per_seat) * (myBooking?.passengers?.length || 1) : null),
     bookingId: id,
     handleBook,

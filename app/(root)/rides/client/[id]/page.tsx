@@ -2,7 +2,12 @@
 
 import React, { useState } from "react";
 import { useParams } from "next/navigation";
-import { HiChevronLeft, HiShieldCheck, HiOutlineUserGroup, HiOutlineTicket } from "react-icons/hi";
+import {
+  HiChevronLeft,
+  HiShieldCheck,
+  HiOutlineUserGroup,
+  HiOutlineTicket,
+} from "react-icons/hi";
 import Link from "next/link";
 import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useRideDetails } from "@/src/features/rides/hooks/useRideDetails";
@@ -22,7 +27,7 @@ const ClientRideDetailsPage = () => {
   const params = useParams();
   const bookingId = params.id as string;
   const { user } = useAuthStore();
-  
+
   const [isCancelChoiceModalOpen, setIsCancelChoiceModalOpen] = useState(false);
   const [confirmState, setConfirmState] = useState<{
     isOpen: boolean;
@@ -46,6 +51,7 @@ const ClientRideDetailsPage = () => {
     carColor,
     bookingStatus,
     bookingPassengers,
+    bookedBy,
     totalPrice,
     isCanceling,
     isAddingPassenger,
@@ -90,26 +96,22 @@ const ClientRideDetailsPage = () => {
   }
 
   return (
-    <div className="bg-light-bg min-h-screen py-8 md:py-12 pb-24">
+    <div className="bg-light-bg min-h-screen py-5 md:py-10">
       <div className="max-w-5xl mx-auto px-4">
         {/* Back Link */}
         <Link
           href="/dashboard"
           className="inline-flex items-center text-gray-500 font-bold hover:text-primary transition-colors mb-8"
         >
-          <HiChevronLeft className="mr-1 w-5 h-5" />{" "}
-          {rd("backToDashboard")}
+          <HiChevronLeft className="mr-1 w-5 h-5" /> {rd("backToDashboard")}
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Main Info */}
-          <div className="lg:col-span-2 space-y-5 md:space-y-8">
+          <div className="lg:col-span-2 space-y-2.5 md:space-y-5">
             {/* My Booking Status Banner */}
-            <div className="premium-card p-6 bg-linear-to-r from-primary/5 to-secondary/5 border-primary/20 flex items-center justify-between">
+            <div className="premium-card p-2.5 md:p-5 bg-linear-to-r from-primary/5 to-secondary/5 border-primary/20 flex items-center justify-between">
               <div className="flex items-center space-x-4">
-                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-primary shadow-soft">
-                  <HiOutlineTicket className="w-6 h-6" />
-                </div>
                 <div>
                   <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
                     {rd("bookingStatusLabel")}
@@ -130,52 +132,66 @@ const ClientRideDetailsPage = () => {
             </div>
 
             {/* Route Card */}
-            <RideRouteCard 
-              trip={trip} 
-              from={from} 
-              to={to} 
-              rd={rd} 
-              isBooked={bookingStatus === "confirmed" || bookingStatus === "active"} 
+            <RideRouteCard
+              trip={trip}
+              from={from}
+              to={to}
+              rd={rd}
+              isBooked={
+                bookingStatus === "confirmed" || bookingStatus === "active"
+              }
             />
 
             {/* Driver & Car Info */}
-            <RideInfoCard 
-              trip={trip} 
-              isDriver={false} 
-              driverName={driverName} 
-              carColor={carColor} 
-              rd={rd} 
+            <RideInfoCard
+              trip={trip}
+              isDriver={false}
+              driverName={driverName}
+              carColor={carColor}
+              rd={rd}
               showDriverInfo={true}
             />
 
             {/* My Passengers Section */}
-            <PassengerListCard 
-              trip={{ ...trip, bookings: [{ id: bookingId, passengers: bookingPassengers }] }} 
+            <PassengerListCard
+              trip={{
+                ...trip,
+                bookings: [{ id: bookingId, passengers: bookingPassengers }],
+              }}
               rd={rd}
               mode="passenger"
               myBookingId={bookingId}
+              bookedBy={bookedBy}
               onAddPassenger={() => setIsAddPassengerModalOpen(true)}
               onRemovePassenger={(passengerId) => {
                 setConfirmState({
                   isOpen: true,
                   title: rd("confirmRemovalTitle") || "Remove Passenger",
-                  message: rd("confirmRemovalMsg") || "Are you sure you want to remove this passenger from your booking?",
+                  message:
+                    rd("confirmRemovalMsg") ||
+                    "Are you sure you want to remove this passenger from your booking?",
                   onConfirm: () => {
                     handleRemovePassenger(passengerId);
-                    setConfirmState(prev => ({ ...prev, isOpen: false }));
-                  }
+                    setConfirmState((prev) => ({ ...prev, isOpen: false }));
+                  },
                 });
               }}
               isRemoving={isRemovingPassenger}
-              disabled={bookingStatus === "canceled" || bookingStatus === "cancelled" || isPast}
+              disabled={
+                bookingStatus === "canceled" ||
+                bookingStatus === "cancelled" ||
+                isPast
+              }
             />
           </div>
 
           {/* Sidebar Actions */}
           <div className="lg:col-span-1">
-            <div className="premium-card p-6 lg:p-8 space-y-6 sticky top-24">
-              <h3 className="font-black text-dark-text text-lg uppercase tracking-tight">{rd("bookingActions")}</h3>
-              
+            <div className="premium-card p-2.5 md:p-5 space-y-2.5 md:space-y-6 sticky top-24">
+              <h3 className="font-black text-dark-text text-lg uppercase tracking-tight">
+                {rd("bookingActions")}
+              </h3>
+
               {canCancel ? (
                 <div className="space-y-4">
                   <div className="p-4 bg-amber-50 text-amber-700 rounded-2xl text-xs font-bold border border-amber-100 leading-relaxed">
@@ -193,11 +209,16 @@ const ClientRideDetailsPage = () => {
                         setConfirmState({
                           isOpen: true,
                           title: rd("confirmCancelTitle") || "Cancel Booking",
-                          message: rd("confirmCancelMsg") || "Are you sure you want to cancel your booking? Your balance will be credited back to your account immediately.",
+                          message:
+                            rd("confirmCancelMsg") ||
+                            "Are you sure you want to cancel your booking? Your balance will be credited back to your account immediately.",
                           onConfirm: () => {
                             handleCancel();
-                            setConfirmState(prev => ({ ...prev, isOpen: false }));
-                          }
+                            setConfirmState((prev) => ({
+                              ...prev,
+                              isOpen: false,
+                            }));
+                          },
                         });
                       }
                     }}
@@ -207,12 +228,21 @@ const ClientRideDetailsPage = () => {
                 </div>
               ) : (
                 <div className="p-4 bg-gray-50 text-gray-400 rounded-2xl text-xs font-bold border border-gray-100 leading-relaxed italic">
-                  {isPast ? rd("departedNotice") : rd("cancellationUnavailable")}
+                  {bookingStatus === "canceled" ||
+                  bookingStatus === "cancelled" ||
+                  bookingStatus === "canceled" ||
+                  bookingStatus === "cancelled"
+                    ? rd("bookingCancelled") || "Booking already cancelled"
+                    : isPast
+                      ? rd("departedNotice")
+                      : rd("cancellationUnavailable")}
                 </div>
               )}
 
               <div className="pt-6 border-t border-border">
-                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">{rd("supportLabel")}</p>
+                <p className="text-[10px] font-bold text-gray-400 uppercase tracking-widest mb-1">
+                  {rd("supportLabel")}
+                </p>
                 <div className="space-y-3">
                   <p className="text-xs text-gray-500 leading-relaxed">
                     {rd("supportDesc")}
@@ -250,9 +280,10 @@ const ClientRideDetailsPage = () => {
         onRemoveSelf={() => {
           // Identify self by phone number or fallback to first passenger
           const userPhone = user?.phone?.replace(/\D/g, "");
-          const selfPassenger = bookingPassengers.find((p: any) => 
-            p.phone?.replace(/\D/g, "") === userPhone
-          ) || bookingPassengers[0];
+          const selfPassenger =
+            bookingPassengers.find(
+              (p: any) => p.phone?.replace(/\D/g, "") === userPhone,
+            ) || bookingPassengers[0];
 
           if (selfPassenger) {
             setIsCancelChoiceModalOpen(false);
@@ -263,11 +294,13 @@ const ClientRideDetailsPage = () => {
       {/* Confirmation Modal */}
       <ConfirmationModal
         isOpen={confirmState.isOpen}
-        onClose={() => setConfirmState(prev => ({ ...prev, isOpen: false }))}
+        onClose={() => setConfirmState((prev) => ({ ...prev, isOpen: false }))}
         onConfirm={confirmState.onConfirm}
         title={confirmState.title}
         message={confirmState.message}
         isLoading={isCanceling || isRemovingPassenger}
+        cancelText={t("dashboard", "back")}
+        confirmText={t("dashboard", "confirmCancel")}
       />
     </div>
   );

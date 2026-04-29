@@ -214,12 +214,13 @@
     "deleteRide": "Safarni o'chirish",
     "cancelBooking": "Bronni bekor qilish",
     "deleteConfirmTitle": "Haqiqatan ham ishonchingiz komilmi?",
-    "deleteConfirmMsg": "Ushbu amalni bekor qilib bo'lmaydi. Ushbu safar kelgusi qidiruvlardan olib tashlanadi. 6% xizmat haqi ushlab qolinadi.",
+    "deleteConfirmMsg": "Bekor qilingani uchun, xizmat haqqi ushlab qolinadi.",
     "rideSummary": "Safar xulosasi",
     "departure": "Ketish",
     "confirmDelete": "O'chirishni tasdiqlash",
     "confirmCancel": "Bekor qilishni tasdiqlash",
     "cancel": "Bekor qilish",
+    "back": "Ortga",
     "pastTrip": "O'tgan safar",
     "under30Mins": "30 daqiqadan kam",
     "hasBookings": "Bronlar bor",
@@ -248,7 +249,8 @@
       "canceled": "Bekor qilingan",
       "allBookings": "Barcha bandlar",
       "allTrips": "Barcha safarlar",
-      "activeLabel": "Faol"
+      "activeLabel": "Faol",
+      "pendingVerification": "Hujjatlaringiz tekshirilmoqda, iltimos kuting"
     },
     "balance": {
       "title": "To'lovlar va balans",
@@ -503,6 +505,9 @@
     "clickOnMap": "Joylashuvni tanlash uchun xaritaga bosing",
     "confirmLocation": "Joylashuvni tasdiqlash",
     "locationRequired": "Barcha yo'lovchilar uchun joylashuv ko'rsatilishi shart",
+    "locationRequiredDesc": "Xaritani ochish va olib ketish nuqtasini belgilash uchun bosing",
+    "change": "O'zgartirish",
+    "readyToBook": "Bron qilishga tayyor",
     "route": "Yo'nalish",
     "date": "Sana",
     "perSeat": "har bir o'rin uchun",
@@ -523,7 +528,7 @@
     "bookingStatusLabel": "Bron holati",
     "totalPaidLabel": "Jami to'langan",
     "bookingActions": "Bron harakatlari",
-    "cancelNotice": "Siz ushbu bronni bekor qilishingiz mumkin. 6% xizmat haqi ushlab qolinadi.",
+    "cancelNotice": "Siz ushbu bronni bekor qilishingiz mumkin. Bekor qilingani uchun, xizmat haqqi ushlab qolinadi.",
     "cancelBooking": "Bronni bekor qilish",
     "supportLabel": "Yordam",
     "supportDesc": "Safaringizda muammolar bormi? Yordam uchun jamoamiz bilan bog'laning.",
@@ -532,7 +537,7 @@
     "confirmRemovalTitle": "Yo'lovchini o'chirish",
     "confirmRemovalMsg": "Haqiqatan ham bu yo'lovchini broningizdan o'chirmoqchimisiz?",
     "confirmCancelTitle": "Bronni bekor qilish",
-    "confirmCancelMsg": "Haqiqatan ham bekor qilmoqchimisiz? 6% xizmat haqi ushlab qolinadi.",
+    "confirmCancelMsg": "Haqiqatan ham bekor qilmoqchimisiz? Bekor qilingani uchun, xizmat haqqi ushlab qolinadi.",
     "cancelBlocked": "Safarni jo'nashga 30 daqiqadan kam vaqt qolganda bekor qilib bo'lmaydi",
     "loginRequired": "Safar band qilish uchun tizimga kiring",
     "googleMaps": "Google Xaritalarda ochish",
@@ -543,14 +548,16 @@
     "cancelOptions": "Bekor qilish variantlari",
     "cancelDescription": "Siz ushbu bronga hamrohlarni qo'shgansiz. Iltimos, bekor qilishni qanday davom ettirishni tanlang.",
     "removeOnlySelf": "Faqat o'zingizni o'chirish",
-    "removeSelfDesc": "Sizning hamrohlaringiz safarda qolishadi. Faqat sizning joyingiz bekor qilinadi. 6% xizmat haqi ushlab qolinadi.",
+    "removeSelfDesc": "Sizning hamrohlaringiz safarda qolishadi. Faqat sizning joyingiz bekor qilinadi. Bekor qilingani uchun, xizmat haqqi ushlab qolinadi.",
     "cancelEntireBooking": "Butun bronni bekor qilish",
-    "cancelAllDesc": "Bu barcha yo'lovchilar, jumladan, hamrohlaringiz uchun bronni bekor qiladi. 6% xizmat haqi ushlab qolinadi.",
-    "back": "Orqaga",
+    "cancelAllDesc": "Bu barcha yo'lovchilar, jumladan, hamrohlaringiz uchun bronni bekor qiladi. Bekor qilingani uchun, xizmat haqqi ushlab qolinadi.",
+    "back": "Ortga",
     "available": "mavjud",
     "pastTrip": "O'tgan safar",
     "seatsBooked": "o'rin band qilindi",
-    "smsNotice": "Safarni band qilganingizdan so'ng, yo'nalish (qayerdan-qayerga), haydovchi malumotlari va uning telefon raqami sms tarzda telefoningizga yuboriladi."
+    "smsNotice": "Safarni band qilganingizdan so'ng, yo'nalish (qayerdan-qayerga), haydovchi malumotlari va uning telefon raqami sms tarzda telefoningizga yuboriladi.",
+    "contactSupport": "Yordam guruhiga murojaat qilish",
+    "bookingCancelled": "Bronlash bekor qilingan"
   },
   "status": {
     "active": "Faol",
@@ -622,5 +629,14 @@
       "community": "Ishonchli hamjamiyat",
       "innovation": "Doimiy innovatsiya"
     }
+  },
+  "apiErrors": {
+    "networkError": "Internet aloqasi mavjud emas. Iltimos, tarmog'ingizni tekshiring.",
+    "serverError": "Serverda xatolik yuz berdi. Iltimos, birozdan so'ng qayta urunib ko'ring.",
+    "unauthorized": "Telefon raqami yoki parol noto'g'ri.",
+    "validationError": "Ma'lumotlarni tekshirishda xatolik yuz berdi.",
+    "phoneTaken": "Ushbu telefon raqami allaqachon ro'yxatdan o'tgan.",
+    "tooManyRequests": "Juda ko'p urinishlar. Iltimos, biroz kuting.",
+    "unknownError": "Kutilmagan xatolik yuz berdi."
   }
 }

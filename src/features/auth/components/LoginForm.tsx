@@ -11,6 +11,7 @@ import { useLogin } from "../hooks/useAuth";
 import { useAuthStore } from "@/src/providers/AuthProvider";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { parseError, isValidPhone } from "@/src/lib/errorUtils";
+import { formatPhoneDisplay, cleanPhone } from "@/src/lib/utils";
 
 export const LoginForm = () => {
   const [phone, setPhone] = useState("");
@@ -19,7 +20,7 @@ export const LoginForm = () => {
 
   const { mutate, isPending, error: apiError } = useLogin();
   const setAuth = useAuthStore((state: any) => state.setAuth);
-  const { safeT } = useLanguageStore();
+  const { t, safeT } = useLanguageStore();
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -35,20 +36,20 @@ export const LoginForm = () => {
     }
 
     mutate(
-      { phone: `+998${phone}`, password },
+      { phone: `+998${cleanPhone(phone)}`, password },
       {
         onSuccess: (data) => {
           setAuth(data.user, data.authorisation?.token);
           window.location.href = "/dashboard";
         },
         onError: (err: any) => {
-          parseError(err, safeT("auth", "login", "loginFailed"));
+          // Error is handled by apiError from useLogin hook
         },
       },
     );
   };
 
-  const displayError = localError || (apiError ? parseError(apiError) : null);
+  const displayError = localError || (apiError ? parseError(apiError, t) : null);
 
   return (
     <form onSubmit={handleSubmit} className="space-y-4 md:space-y-5">
@@ -64,8 +65,8 @@ export const LoginForm = () => {
         required
         value={phone}
         onChange={(e) => {
-          const val = e.target.value.replace(/\D/g, ""); // Only digits
-          if (val.length <= 9) setPhone(val); // Limit to 9 digits for UZ
+          const val = formatPhoneDisplay(e.target.value);
+          setPhone(val);
           if (localError) setLocalError(null);
         }}
         error={

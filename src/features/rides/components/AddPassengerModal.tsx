@@ -3,7 +3,9 @@
 import { useState } from "react";
 import { HiUserAdd, HiMap } from "react-icons/hi";
 import Button from "@/src/components/ui/Button";
+import Input from "@/src/components/ui/Input";
 import Modal from "@/src/components/ui/Modal";
+import { formatPhoneDisplay } from "@/src/lib/utils";
 import dynamic from "next/dynamic";
 const MapPicker = dynamic(() => import("@/src/components/ui/MapPicker"), {
   ssr: false,
@@ -77,30 +79,23 @@ export const AddPassengerModal = ({
             </div>
 
             <div className="space-y-4">
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
-                  {rd("fullName") || "Full Name"}
-                </label>
-                <input
-                  type="text"
-                  value={name}
-                  onChange={(e) => setName(e.target.value)}
-                  className="w-full bg-light-bg border border-border/60 rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all outline-none"
-                  placeholder={rd("enterName") || "Enter name"}
-                />
-              </div>
-              <div className="space-y-1.5">
-                <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1">
-                  {rd("phone") || "Phone Number"}
-                </label>
-                <input
-                  type="text"
-                  value={phone}
-                  onChange={(e) => setPhone(e.target.value)}
-                  className="w-full bg-light-bg border border-border/60 rounded-2xl px-5 py-3 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all outline-none"
-                  placeholder="+998..."
-                />
-              </div>
+              <Input
+                label={rd("fullName") || "Full Name"}
+                value={name}
+                onChange={(e) => setName(e.target.value)}
+                placeholder={rd("enterName") || "Enter name"}
+                required
+              />
+              
+              <Input
+                label={rd("phone") || "Phone Number"}
+                value={phone}
+                onChange={(e) => setPhone(formatPhoneDisplay(e.target.value))}
+                prefixText="+998"
+                placeholder="XX XXX XX XX"
+                required
+              />
+            </div>
 
               <div className="pt-2 space-y-3 border-t border-dashed border-border">
                 <label className="text-[10px] font-black text-gray-400 uppercase tracking-widest ml-1 block mb-2">
@@ -146,7 +141,6 @@ export const AddPassengerModal = ({
                   </button>
                 )}
               </div>
-            </div>
 
             <Button
               fullWidth

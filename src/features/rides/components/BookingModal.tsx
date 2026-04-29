@@ -1,8 +1,9 @@
 "use client";
 
 import { HiArrowRight, HiCash, HiShieldCheck } from "react-icons/hi";
-import { formatCurrency, formatDate, cn } from "@/src/lib/utils";
+import { formatCurrency, formatDate, cn, formatPhoneDisplay } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
+import Input from "@/src/components/ui/Input";
 import Modal from "@/src/components/ui/Modal";
 import dynamic from "next/dynamic";
 const MapPicker = dynamic(() => import("@/src/components/ui/MapPicker"), {
@@ -188,13 +189,9 @@ export const BookingModal = ({
                     </span>
                   </div>
                   
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-black text-gray-400 uppercase">
-                        {rd("fullName") || "Full Name"}
-                      </label>
-                      <input
-                        type="text"
+                    <div className="space-y-4">
+                      <Input
+                        label={rd("fullName") || "Full Name"}
                         value={p.name}
                         onChange={(e) => {
                           updatePassenger(i, "name", e.target.value);
@@ -204,20 +201,12 @@ export const BookingModal = ({
                             return n;
                           });
                         }}
-                        className={cn(
-                          "w-full bg-light-bg border rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all",
-                          errors[`name_${i}`] ? "border-error" : "border-transparent"
-                        )}
+                        error={errors[`name_${i}`]}
                         placeholder={rd("enterName") || "Enter name"}
                       />
-                      {errors[`name_${i}`] && <p className="text-[9px] text-error font-bold mt-0.5">{errors[`name_${i}`]}</p>}
-                    </div>
-                    <div className="space-y-1">
-                      <label className="text-[10px] font-black text-gray-400 uppercase">
-                        {rd("phone") || "Phone"}
-                      </label>
-                      <input
-                        type="text"
+                      
+                      <Input
+                        label={rd("phone") || "Phone"}
                         value={p.phone}
                         onChange={(e) => {
                           updatePassenger(i, "phone", e.target.value);
@@ -227,15 +216,11 @@ export const BookingModal = ({
                             return n;
                           });
                         }}
-                        className={cn(
-                          "w-full bg-light-bg border rounded-xl px-3 py-2 text-sm font-bold focus:ring-2 focus:ring-primary/20 transition-all",
-                          errors[`phone_${i}`] ? "border-error" : "border-transparent"
-                        )}
-                        placeholder={rd("phonePlaceholder") || "+998..."}
+                        prefixText="+998"
+                        error={errors[`phone_${i}`]}
+                        placeholder="XX XXX XX XX"
                       />
-                      {errors[`phone_${i}`] && <p className="text-[9px] text-error font-bold mt-0.5">{errors[`phone_${i}`]}</p>}
                     </div>
-                  </div>
 
                   {showLocation && (
                     <div className="pt-2 space-y-3 border-t border-dashed border-border">

@@ -214,12 +214,13 @@
     "deleteRide": "Delete Ride",
     "cancelBooking": "Cancel Booking",
     "deleteConfirmTitle": "Are you absolutely sure?",
-    "deleteConfirmMsg": "This action cannot be undone. This trip will be removed from future searches. A 6% service fee will apply.",
+    "deleteConfirmMsg": "A service fee will be charged for the cancellation.",
     "rideSummary": "Ride Summary",
     "departure": "Departure",
     "confirmDelete": "Confirm Delete",
     "confirmCancel": "Confirm Cancel",
     "cancel": "Cancel",
+    "back": "Back",
     "pastTrip": "Past Trip",
     "under30Mins": "Under 30 mins",
     "hasBookings": "Has Bookings",
@@ -248,7 +249,8 @@
       "canceled": "Canceled",
       "allBookings": "All Bookings",
       "allTrips": "All Trips",
-      "activeLabel": "Active"
+      "activeLabel": "Active",
+      "pendingVerification": "Your documents are under verification, please wait"
     },
     "balance": {
       "title": "Payment & Balance",
@@ -503,6 +505,9 @@
     "clickOnMap": "Click on map to pick location",
     "confirmLocation": "Confirm Location",
     "locationRequired": "Location is required for all passengers",
+    "locationRequiredDesc": "Click to open map and set pick-up point",
+    "change": "Change",
+    "readyToBook": "Ready to book",
     "route": "Route",
     "date": "Date",
     "perSeat": "per seat",
@@ -521,7 +526,7 @@
     "bookingStatusLabel": "Booking Status",
     "totalPaidLabel": "Total Paid",
     "bookingActions": "Booking Actions",
-    "cancelNotice": "You can cancel this booking. A 6% service fee will be charged.",
+    "cancelNotice": "You can cancel this booking. A service fee will be charged for the cancellation.",
     "cancelBooking": "Cancel Booking",
     "supportLabel": "Support",
     "supportDesc": "Having issues with your ride? Contact our support team for assistance.",
@@ -530,7 +535,7 @@
     "confirmRemovalTitle": "Remove Passenger",
     "confirmRemovalMsg": "Are you sure you want to remove this passenger from your booking?",
     "confirmCancelTitle": "Cancel Booking",
-    "confirmCancelMsg": "Are you sure you want to cancel? A 6% service fee will be charged.",
+    "confirmCancelMsg": "Are you sure you want to cancel? A service fee will be charged for the cancellation.",
     "cancelBlocked": "Cannot cancel trip less than 30 minutes before departure",
     "loginRequired": "Please login to book a ride",
     "googleMaps": "Open in Google Maps",
@@ -541,14 +546,16 @@
     "cancelOptions": "Cancellation Options",
     "cancelDescription": "You have added companions to this booking. Please choose how you would like to proceed with the cancellation.",
     "removeOnlySelf": "Remove only yourself",
-    "removeSelfDesc": "Your companions will remain in the trip. Only your seat will be cancelled. A 6% service fee will apply.",
+    "removeSelfDesc": "Your companions will remain in the trip. Only your seat will be cancelled. A service fee will be charged for the cancellation.",
     "cancelEntireBooking": "Cancel entire booking",
-    "cancelAllDesc": "This will cancel the booking for all passengers including your companions. A 6% service fee will apply.",
+    "cancelAllDesc": "This will cancel the booking for all passengers including your companions. A service fee will be charged for the cancellation.",
     "back": "Back",
     "available": "available",
     "pastTrip": "Past Trip",
     "seatsBooked": "seats booked",
-    "smsNotice": "After a successful booking, full trip details (from and to), driver information, and contact number will be sent to you via SMS."
+    "smsNotice": "After a successful booking, full trip details (from and to), driver information, and contact number will be sent to you via SMS.",
+    "contactSupport": "Contact Support",
+    "bookingCancelled": "Booking cancelled"
   },
   "status": {
     "active": "Active",
@@ -620,5 +627,14 @@
       "community": "Trusted Community",
       "innovation": "Constant Innovation"
     }
+  },
+  "apiErrors": {
+    "networkError": "No internet connection. Please check your network.",
+    "serverError": "A server error occurred. Please try again later.",
+    "unauthorized": "Invalid phone number or password.",
+    "validationError": "A data validation error occurred.",
+    "phoneTaken": "This phone number is already registered.",
+    "tooManyRequests": "Too many attempts. Please wait a while.",
+    "unknownError": "An unexpected error occurred."
   }
 }

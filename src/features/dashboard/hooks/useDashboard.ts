@@ -17,12 +17,14 @@ import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { parseError } from "@/src/lib/errorUtils";
 import { toast } from "sonner";
 import { Card } from "../actions/payment";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 export function useDashboard() {
   const router = useRouter();
   const { user: storedUser, token, _hasHydrated } = useAuthStore();
   
   const { data: userData, isLoading: isUserLoading } = useMe(!!_hasHydrated && !!token);
+  const { t } = useLanguageStore();
   const { data: balanceData } = useBalance();
 
   const [activeTab, setActiveTab] = useState<"rides" | "balance" | "transactions" | "profile" | "driver">("rides");
@@ -192,7 +194,7 @@ export function useDashboard() {
         toast.success("Profile updated successfully");
         setIsFatherNameModalOpen(false);
       },
-      onError: (err: any) => toast.error(parseError(err, "Failed to update profile")),
+      onError: (err: any) => toast.error(parseError(err, t)),
     });
   };
 

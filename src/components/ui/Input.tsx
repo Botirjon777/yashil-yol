@@ -52,7 +52,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
           {prefixText && (
             <div
               className={cn(
-                "absolute top-1/2 -translate-y-1/2 text-dark-text font-bold text-sm select-none",
+                "absolute top-1/2 -translate-y-1/2 text-dark-text font-medium text-[16px] select-none",
                 iconLeft ? "left-11" : "left-4",
               )}
             >
@@ -65,7 +65,7 @@ const Input = React.forwardRef<HTMLInputElement, InputProps>(
             className={cn(
               "w-full px-4 py-2.5 bg-light-bg border border-border rounded-sm focus:ring-2 focus:ring-primary/20 focus:border-primary outline-none transition-all font-medium text-[16px]",
               iconLeft && "pl-12",
-              prefixText && (iconLeft ? "pl-20" : "pl-16"),
+              prefixText && (iconLeft ? "pl-[88px]" : "pl-[72px]"),
               iconRight && "pr-11",
               error && "border-error focus:ring-error/20 focus:border-error",
               className,
