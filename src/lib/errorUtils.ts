@@ -2,17 +2,38 @@
  * Extracts a human-readable error message from various API error structures.
  * Prevents long technical stack traces or Laravel-specific exceptions from being displayed.
  */
-export const parseError = (error: any, defaultMessage: string = "Something went wrong"): string => {
-  if (!error) return defaultMessage;
+export const parseError = (error: any, t?: (cat: string, key: string) => any): string => {
+  const defaultMsg = t ? t("apiErrors", "unknownError") : "Something went wrong";
+  if (!error) return defaultMsg;
 
-  // 1. Check for Laravel's standard error structures
+  // 1. Check for Network errors
+  if (error.message === "Network Error") {
+    return t ? t("apiErrors", "networkError") : "Internet aloqasi mavjud emas.";
+  }
+
+  // 2. Check for Laravel's standard error structures
   const responseData = error?.response?.data;
+  const status = error?.response?.status;
   
+  if (status === 401) {
+    return t ? t("apiErrors", "unauthorized") : "Telefon raqami yoki parol noto'g'ri.";
+  }
+
+  if (status >= 500) {
+    return t ? t("apiErrors", "serverError") : "Serverda xatolik yuz berdi.";
+  }
+
   if (responseData) {
     // If it's a validation error with an 'errors' object
     if (responseData.errors && typeof responseData.errors === 'object') {
       const firstKey = Object.keys(responseData.errors)[0];
       const firstError = responseData.errors[firstKey];
+      
+      // Special case for taken phone
+      if (firstKey === "phone" && String(firstError).includes("taken")) {
+        return t ? t("apiErrors", "phoneTaken") : "Ushbu telefon raqami allaqachon ro'yxatdan o'tgan.";
+      }
+
       if (Array.isArray(firstError) && firstError.length > 0) {
         return firstError[0];
       }
@@ -27,7 +48,7 @@ export const parseError = (error: any, defaultMessage: string = "Something went 
         responseData.message.includes("Illuminate\\") ||
         responseData.message.length > 200
       ) {
-        return "Tizimda xatolik yuz berdi. Iltimos, keyinroq qayta urunib ko'ring."; // System error, try again later
+        return t ? t("apiErrors", "serverError") : "Tizimda xatolik yuz berdi.";
       }
       return responseData.message;
     }
@@ -38,12 +59,12 @@ export const parseError = (error: any, defaultMessage: string = "Something went 
     }
   }
 
-  // 2. Fallback to axios error message
+  // 3. Fallback to axios error message
   if (error.message && !error.message.includes("status code")) {
     return error.message;
   }
 
-  return defaultMessage;
+  return defaultMsg;
 };
 
 /**

@@ -53,7 +53,10 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
   const departureDate = new Date(ride.start_time);
   const diffInMinutes = (departureDate.getTime() - Date.now()) / (1000 * 60);
 
-  const hasBookings = (ride.bookings?.length || 0) > 0;
+  const hasBookings = (ride.bookings || []).some((b: any) => {
+    const status = (b.status || "").toLowerCase();
+    return status !== "canceled" && status !== "cancelled" && status !== "rejected";
+  });
   const isTooLate = diffInMinutes < 30 && diffInMinutes > 0;
 
   const canCancel =
@@ -357,7 +360,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
               className="flex-1"
               onClick={() => setIsDeleteModalOpen(false)}
             >
-              {t("dashboard", "cancel")}
+              {t("dashboard", "back")}
             </Button>
             <Button
               variant="danger"

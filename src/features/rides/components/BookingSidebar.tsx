@@ -18,6 +18,7 @@ interface BookingSidebarProps {
   isDriver: boolean;
   isPast: boolean;
   canCancel: boolean;
+  canCancelReason?: string | null;
   numSeats: number;
   setNumSeats: (n: number) => void;
   handleCancel: () => void;
@@ -33,6 +34,7 @@ export const BookingSidebar = ({
   isDriver,
   isPast,
   canCancel,
+  canCancelReason,
   numSeats,
   setNumSeats,
   handleCancel,
@@ -84,7 +86,8 @@ export const BookingSidebar = ({
             {formatCurrency(earned)}
           </div>
           <div className="text-xs font-bold text-gray-400 mt-1">
-            {bookedSeats} / {trip.total_seats} {rd("seatsBooked") || "seats booked"}
+            {bookedSeats} / {trip.total_seats}{" "}
+            {rd("seatsBooked") || "seats booked"}
           </div>
         </div>
         <div className="p-6 space-y-3">
@@ -101,9 +104,10 @@ export const BookingSidebar = ({
             </Button>
           )}
           {!canCancel && !isPast && String(trip.status) === "active" && (
-            <p className="text-[10px] text-center text-gray-400 font-bold uppercase tracking-widest px-2">
-              {rd("cancelBlocked") ||
-                "Cannot cancel trip less than 4 hours before departure"}
+            <p className="text-[10px] text-center text-gray-400 font-bold uppercase tracking-widest px-2 leading-relaxed">
+              {canCancelReason ||
+                rd("cancelBlocked") ||
+                "Cannot cancel trip less than 30 minutes before departure"}
             </p>
           )}
         </div>
@@ -131,9 +135,9 @@ export const BookingSidebar = ({
         </div>
       </div>
 
-      <div className="p-6 space-y-4">
+      <div className="p-2.5 md:p-5 space-y-4">
         {/* Seat counter */}
-        <div className="bg-light-bg rounded-2xl border border-border/60 p-4 flex items-center justify-between">
+        <div className="bg-light-bg rounded-2xl border border-border/60 p-2.5 md:p-5 flex items-center justify-between">
           <div>
             <div className="text-[10px] font-black text-gray-400 uppercase tracking-widest">
               {rd("seats")}

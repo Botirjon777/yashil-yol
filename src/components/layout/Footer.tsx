@@ -27,12 +27,16 @@ const Footer = () => {
   };
 
   return (
-    <footer className="hidden md:block bg-navbar-bg border-t border-border py-5">
+    <footer className="hidden md:block bg-navbar-bg border-t border-border py-2.5 md:py-5">
       <div className="container-custom">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 mb-5">
+        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-5">
           <div className="col-span-1 md:col-span-1">
             <Link href="/" className="flex items-center mb-6">
-              <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-18 w-auto" />
+              <img
+                src="/assets/logo/ketamiz-logo.webp"
+                alt="Ketamiz"
+                className="h-18 w-auto"
+              />
             </Link>
             <p className="text-gray-500 leading-relaxed font-medium">
               {safeT("footer", "tagline")}
@@ -135,10 +139,13 @@ const Footer = () => {
 
         <div className="border-t border-border pt-8 flex flex-col md:flex-row justify-between items-center text-center md:text-left">
           <p className="text-gray-400 text-sm font-medium mb-4 md:mb-0">
-            © {new Date().getFullYear()} Ketamiz.{" "}
+            &copy; {new Date().getFullYear()} Ketamiz.{" "}
             {safeT("footer", "rights")}
           </p>
-          <div className="flex space-x-6 text-sm text-gray-400 font-medium" suppressHydrationWarning>
+          <div
+            className="flex space-x-6 text-sm text-gray-400 font-medium"
+            suppressHydrationWarning
+          >
             <Link href="/" className="hover:text-primary transition-colors">
               {safeT("footer", "privacy")}
             </Link>

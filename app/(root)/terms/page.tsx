@@ -1,64 +1,52 @@
 "use client";
 
-import React from "react";
-import { HiShieldCheck, HiScale, HiDocumentText, HiLockClosed } from "react-icons/hi";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 const TermsPage = () => {
   const { t } = useLanguageStore();
 
-  const sectionIcons: Record<string, React.ReactNode> = {
-    acceptance: <HiShieldCheck className="w-6 h-6" />,
-    eligibility: <HiLockClosed className="w-6 h-6" />,
-    services: <HiDocumentText className="w-6 h-6" />,
-    conduct: <HiScale className="w-6 h-6" />,
-    payment: <HiScale className="w-6 h-6" />,
-    cancellation: <HiDocumentText className="w-6 h-6" />,
-    liability: <HiShieldCheck className="w-6 h-6" />,
-    governingLaw: <HiScale className="w-6 h-6" />
-  };
-
   // Get localized sections
   const sectionsObj = t("terms", "sections") as any;
-  const sectionKeys = Object.keys(sectionIcons);
+  const sectionKeys = Object.keys(sectionsObj);
 
   return (
-    <div className="min-h-screen pt-24 pb-20 bg-light-bg">
+    <div className="min-h-screen py-10 bg-light-bg">
       <div className="max-w-5xl mx-auto px-4 lg:px-8">
         {/* Header */}
-        <div className="text-center mb-16">
-          <div className="inline-flex items-center justify-center w-20 h-20 bg-primary/10 text-primary rounded-3xl mb-6 shadow-sm">
-            <HiDocumentText className="w-10 h-10" />
-          </div>
-          <h1 className="text-4xl md:text-6xl font-black text-dark-text mb-6">
-            {t("terms", "title")}
-          </h1>
-          <p className="text-lg text-gray-500 font-medium max-w-2xl mx-auto">
-            {t("terms", "subtitle")}
-          </p>
-          <div className="mt-8 flex justify-center items-center gap-4 text-xs font-bold text-gray-400 uppercase tracking-widest">
-            <span>{t("terms", "lastUpdated")}: April 8, 2026</span>
-            <span>•</span>
-            <span>{t("terms", "version")} 2.1</span>
+        <div className="mb-10">
+          <div className="w-full">
+            <h1 className="text-xl md:text-3xl font-black text-dark-text mb-2.5">
+              {t("terms", "title")}
+            </h1>
+            <p className="text-base md:text-lg text-gray-500 font-medium max-w-2xl">
+              {t("terms", "subtitle")}
+            </p>
+            <div className="mt-2.5 flex flex-col md:flex-row items-start md:items-center gap-x-6 gap-y-2 text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">
+              <span className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+                {t("terms", "lastUpdated")}: April 8, 2026
+              </span>
+              <span className="flex items-center gap-2">
+                <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
+                {t("terms", "version")} 2.1
+              </span>
+            </div>
           </div>
         </div>
 
         {/* Content Grid */}
-        <div className="grid grid-cols-1 gap-8">
+        <div className="grid grid-cols-1 gap-5">
           {sectionKeys.map((key) => {
             const section = sectionsObj?.[key];
             if (!section) return null;
-            
+
             return (
-              <div 
+              <div
                 key={key}
                 id={key}
-                className="premium-card p-8 md:p-10 border border-border/50 hover:border-primary/20 transition-all group"
+                className="premium-card p-2.5 md:p-5 border border-border/50 hover:border-primary/20 transition-all group"
               >
                 <div className="flex flex-col md:flex-row gap-6">
-                  <div className="w-14 h-14 bg-light-bg rounded-2xl flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-white transition-all shrink-0 shadow-sm border border-border/50">
-                    {sectionIcons[key]}
-                  </div>
                   <div>
                     <h3 className="text-xl font-black text-dark-text mb-4 transition-colors group-hover:text-primary">
                       {section.title}
@@ -74,8 +62,10 @@ const TermsPage = () => {
         </div>
 
         {/* Footer Note */}
-        <div className="mt-16 p-8 bg-primary/5 rounded-3xl border border-primary/10 text-center">
-          <h4 className="text-lg font-black text-dark-text mb-2">{t("terms", "qTitle")}</h4>
+        <div className="mt-10 p-2.5 md:p-5 bg-primary/5 rounded-3xl border border-primary/10 text-center">
+          <h4 className="text-lg font-black text-dark-text mb-2">
+            {t("terms", "qTitle")}
+          </h4>
           <p className="text-gray-500 font-medium mb-6">
             {t("terms", "qSubtitle")}
           </p>
@@ -85,7 +75,7 @@ const TermsPage = () => {
                 {t("terms", "contactSupport")}
               </button>
             </a>
-            <button 
+            <button
               onClick={() => window.print()}
               className="px-8 py-3 bg-white text-dark-text border border-border font-black rounded-xl hover:bg-light-bg transition-all active:scale-95"
             >

@@ -1,4 +1,5 @@
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { parseError } from "@/src/lib/errorUtils";
 import {
   getPublicTrips,
   getAllPublicTrips,
@@ -272,34 +273,6 @@ export const useClientBookingById = (id: string | number | null) =>
   });
 
 /** Helper to handle messy API error responses (to prevent React object child error) */
-export const handleError = (err: any): string => {
-  const data = err.response?.data;
-  if (!data) return err.message || "An unexpected error occurred";
-
-  // Case 1: Simple message string
-  if (typeof data.message === "string") return data.message;
-
-  // Case 2: Validation errors nested in .errors
-  if (typeof data.errors === "object" && data.errors !== null) {
-    const firstError = Object.values(data.errors)[0];
-    if (Array.isArray(firstError)) return firstError[0];
-    if (typeof firstError === "string") return firstError;
-  }
-
-  // Case 3: Top-level dictionary of errors (like {"field": ["error"]})
-  if (typeof data === "object" && data !== null) {
-    const values = Object.values(data);
-    if (values.length > 0) {
-      const firstValue = values[0];
-      if (Array.isArray(firstValue)) return firstValue[0];
-      if (typeof firstValue === "string") return firstValue;
-    }
-  }
-
-  // Fallback to stringifying if it's still an object
-  if (typeof data.message === "object") {
-    return JSON.stringify(data.message);
-  }
-
-  return data.message || err.message || "An unexpected error occurred";
+export const handleError = (err: any, t?: (cat: string, key: string) => any): string => {
+  return parseError(err, t);
 };

@@ -37,7 +37,7 @@ export default function CreateTripModal({
     start_time: "",
     end_time: "",
     price_per_seat: "",
-    available_seats: "4",
+    available_seats: "",
     start_region_id: "",
     end_region_id: "",
     start_district_id: "",
@@ -56,14 +56,37 @@ export default function CreateTripModal({
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
+
+    if (name === "available_seats" && formData.vehicle_id) {
+      const selectedVehicle = vehicles?.find(
+        (v) => String(v.id) === String(formData.vehicle_id),
+      );
+      const maxSeats = selectedVehicle?.seats
+        ? Number(selectedVehicle.seats)
+        : 0;
+
+      if (Number(value) > maxSeats) {
+        return;
+      }
+    }
+
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSelectChange = (name: string, value: any) => {
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    if (name === "vehicle_id") {
+      const vehicle = vehicles?.find((v) => String(v.id) === String(value));
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+        available_seats: vehicle?.seats?.toString() || "",
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -92,6 +115,16 @@ export default function CreateTripModal({
       if (val.split(":").length === 3) return val;
       return `${val}:00`;
     };
+
+    const selectedVehicle = vehicles?.find((v) => String(v.id) === String(formData.vehicle_id));
+    const maxSeats = selectedVehicle?.seats ? Number(selectedVehicle.seats) : 0;
+
+    if (Number(formData.available_seats) > maxSeats) {
+      toast.error(
+        `Available seats cannot exceed vehicle capacity (${maxSeats})`,
+      );
+      return;
+    }
 
     const payload: any = {
       ...formData,
@@ -133,7 +166,7 @@ export default function CreateTripModal({
           start_time: "",
           end_time: "",
           price_per_seat: "",
-          available_seats: "4",
+          available_seats: "",
           start_region_id: "",
           end_region_id: "",
           start_district_id: "",
@@ -196,26 +229,6 @@ export default function CreateTripModal({
             />
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
-            <Input
-              label={ct?.pricePerSeat}
-              type="number"
-              name="price_per_seat"
-              value={formData.price_per_seat}
-              onChange={handleInputChange}
-              placeholder={ct?.pricePlaceholder}
-              required
-            />
-            <Input
-              label={ct?.availableSeats}
-              type="number"
-              name="available_seats"
-              value={formData.available_seats}
-              onChange={handleInputChange}
-              required
-            />
-          </div>
-
           <Dropdown
             label={ct?.selectVehicle}
             options={
@@ -228,6 +241,36 @@ export default function CreateTripModal({
             onChange={(val) => handleSelectChange("vehicle_id", val)}
             placeholder={ct?.vehiclePlaceholder}
           />
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
+            <Input
+              label={ct?.pricePerSeat}
+              type="number"
+              name="price_per_seat"
+              value={formData.price_per_seat}
+              onChange={handleInputChange}
+              placeholder={ct?.pricePlaceholder}
+              required
+            />
+            <div className="space-y-1">
+              <Input
+                label={ct?.availableSeats}
+                type="number"
+                name="available_seats"
+                value={formData.available_seats}
+                onChange={handleInputChange}
+                required
+                disabled={!formData.vehicle_id}
+                placeholder={!formData.vehicle_id ? "Avval avtomobilni tanlang" : ""}
+                max={vehicles?.find(v => String(v.id) === String(formData.vehicle_id))?.seats}
+              />
+              {formData.vehicle_id && (
+                <p className="text-[10px] text-gray-400 font-medium px-1">
+                  Maksimal: {vehicles?.find(v => String(v.id) === String(formData.vehicle_id))?.seats} ta joy
+                </p>
+              )}
+            </div>
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <div className="space-y-2">

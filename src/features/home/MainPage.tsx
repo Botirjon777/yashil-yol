@@ -1,13 +1,8 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import {
-  HiArrowRight,
-  HiFilter,
-  HiSearch,
-  HiStar,
-  HiX,
-} from "react-icons/hi";
+import { HiArrowRight, HiFilter, HiSearch, HiStar, HiX } from "react-icons/hi";
+import { motion, AnimatePresence } from "framer-motion";
 import { useRidesPage } from "@/src/features/rides/hooks/useRidesPage";
 import { GoArrowSwitch } from "react-icons/go";
 
@@ -17,8 +12,6 @@ import {
   RideResultCard,
 } from "@/src/features/rides/components";
 import Loader from "@/src/components/ui/Loader";
-import StatsSection from "./sections/StatsSection";
-import FeaturesSection from "./sections/FeaturesSection";
 import { LocationSearchModal } from "./components/LocationSearchModal";
 import { HiLocationMarker } from "react-icons/hi";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
@@ -52,20 +45,24 @@ const HomeContent = () => {
       {/* ── Hero Header + Swiper ── */}
       <div className="bg-white border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-3 md:py-8">
-          <div className="flex flex-col md:flex-row md:items-end justify-between gap-6 mb-5">
+          <div className="flex flex-col md:flex-row md:items-end justify-between gap-4 md:gap-6 mb-2 md:mb-5">
             <div className="max-w-2xl">
-              <h1 className="text-3xl md:text-5xl font-black tracking-tight leading-tight mb-5">
+              <h1 className="text-xl md:text-5xl font-black text-center tracking-tight leading-tight mb-2 md:mb-5">
                 {activeRoute ? (
                   <span className="flex items-center gap-3 flex-wrap">
                     <span className="text-primary">{activeRoute.from}</span>
-                    <GoArrowSwitch className="w-6 h-6 md:w-8 md:h-8 text-gray-300 shrink-0" />
+                    <GoArrowSwitch className="w-5 h-5 md:w-8 md:h-8 text-gray-300 shrink-0" />
                     <span className="text-secondary">{activeRoute.to}</span>
                   </span>
                 ) : manualSearch ? (
                   <span className="flex items-center gap-3 flex-wrap">
-                    <span className="text-primary">{manualSearch.from?.regionName || "---"}</span>
-                    <GoArrowSwitch className="w-6 h-6 md:w-8 md:h-8 text-gray-300 shrink-0" />
-                    <span className="text-secondary">{manualSearch.to?.regionName || "---"}</span>
+                    <span className="text-primary">
+                      {manualSearch.from?.regionName || "---"}
+                    </span>
+                    <GoArrowSwitch className="w-5 h-5 md:w-8 md:h-8 text-gray-300 shrink-0" />
+                    <span className="text-secondary">
+                      {manualSearch.to?.regionName || "---"}
+                    </span>
                   </span>
                 ) : (
                   <>
@@ -74,7 +71,7 @@ const HomeContent = () => {
                   </>
                 )}
               </h1>
-              <p className="text-gray-500 font-medium text-lg md:text-xl">
+              <p className="hidden md:block text-gray-500 font-medium text-lg md:text-xl">
                 {isLoading
                   ? "Sayohatlar qidirilmoqda..."
                   : activeRoute
@@ -101,7 +98,7 @@ const HomeContent = () => {
           </div>
 
           {/* Search Section */}
-          <div className="flex flex-row items-center gap-2 md:gap-4 mb-3">
+          <div className="flex items-center gap-1.5 mb-2.5 md:mb-5">
             <button
               onClick={() => setModalType("from")}
               className="flex-1 flex flex-col items-start gap-0.5 p-3 md:p-4 bg-light-bg/50 rounded-2xl border-2 border-border hover:border-primary/30 transition-all text-left group"
@@ -111,7 +108,10 @@ const HomeContent = () => {
                 {t("home", "from")}
               </div>
               <div className="text-sm md:text-base font-black text-dark-text truncate w-full">
-                {manualSearch?.from?.quarterName || manualSearch?.from?.districtName || manualSearch?.from?.regionName || t("home", "selectCity")}
+                {manualSearch?.from?.quarterName ||
+                  manualSearch?.from?.districtName ||
+                  manualSearch?.from?.regionName ||
+                  t("home", "selectCity")}
               </div>
             </button>
 
@@ -128,7 +128,10 @@ const HomeContent = () => {
                 {t("home", "to")}
               </div>
               <div className="text-sm md:text-base font-black text-dark-text truncate w-full">
-                {manualSearch?.to?.quarterName || manualSearch?.to?.districtName || manualSearch?.to?.regionName || t("home", "selectCity")}
+                {manualSearch?.to?.quarterName ||
+                  manualSearch?.to?.districtName ||
+                  manualSearch?.to?.regionName ||
+                  t("home", "selectCity")}
               </div>
             </button>
           </div>
@@ -143,9 +146,9 @@ const HomeContent = () => {
       </div>
 
       {/* ── Main Body ── */}
-      <div className="max-w-7xl mx-auto px-4 py-8 md:py-12 w-full">
+      <div className="max-w-7xl mx-auto px-4 py-2.5 md:py-5 w-full">
         {/* Mobile filter toggle */}
-        <div className="flex items-center justify-between mb-6 lg:hidden">
+        <div className="flex items-center justify-between mb-5 lg:hidden">
           <span className="text-sm font-bold text-gray-500">
             {filteredRides.length} ta sayohat
           </span>
@@ -163,7 +166,7 @@ const HomeContent = () => {
           </button>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-5">
           {/* Desktop sidebar */}
           <aside className="hidden lg:block lg:col-span-1">
             <div className="sticky top-24">
@@ -178,41 +181,61 @@ const HomeContent = () => {
           </aside>
 
           {/* Mobile sidebar drawer */}
-          {isSidebarOpen && (
-            <div className="fixed inset-0 z-50 lg:hidden flex">
-              <div
-                className="absolute inset-0 bg-dark-text/40 backdrop-blur-sm"
-                onClick={() => setIsSidebarOpen(false)}
-              />
-              <div className="relative ml-auto w-80 max-w-full bg-white h-full overflow-y-auto shadow-2xl">
-                <div className="flex items-center justify-between p-6 border-b border-border">
-                  <h3 className="font-black text-sm uppercase tracking-widest">
-                    Filtrlar
-                  </h3>
-                  <button
-                    onClick={() => setIsSidebarOpen(false)}
-                    className="p-2 hover:bg-gray-100 rounded-2xl transition-colors"
-                  >
-                    <HiX className="w-6 h-6" />
-                  </button>
-                </div>
-                <div className="p-6">
-                  <FilterSidebar
-                    filters={filters}
-                    updateFilter={updateFilter}
-                    toggleTimeSlot={toggleTimeSlot}
-                    onClear={clearFilters}
-                    activeFilterCount={activeFilterCount}
-                    onApply={() => setIsSidebarOpen(false)}
-                  />
-                </div>
+          <AnimatePresence>
+            {isSidebarOpen && (
+              <div className="fixed inset-0 z-50 lg:hidden flex">
+                {/* Backdrop */}
+                <motion.div
+                  initial={{ opacity: 0 }}
+                  animate={{ opacity: 1 }}
+                  exit={{ opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="absolute inset-0 bg-dark-text/40 backdrop-blur-sm"
+                  onClick={() => setIsSidebarOpen(false)}
+                />
+
+                {/* Sidebar Panel */}
+                <motion.div
+                  initial={{ x: "100%" }}
+                  animate={{ x: 0 }}
+                  exit={{ x: "100%" }}
+                  transition={{
+                    type: "spring",
+                    stiffness: 300,
+                    damping: 30,
+                    mass: 0.8,
+                  }}
+                  className="relative ml-auto w-80 max-w-[90%] bg-white h-full overflow-y-auto shadow-2xl flex flex-col"
+                >
+                  <div className="flex items-center justify-between p-6 border-b border-border">
+                    <h3 className="font-black text-sm uppercase tracking-widest text-dark-text">
+                      Filtrlar
+                    </h3>
+                    <button
+                      onClick={() => setIsSidebarOpen(false)}
+                      className="p-2 hover:bg-gray-100 rounded-2xl transition-colors"
+                    >
+                      <HiX className="w-6 h-6" />
+                    </button>
+                  </div>
+                  <div className="p-6 flex-1">
+                    <FilterSidebar
+                      filters={filters}
+                      updateFilter={updateFilter}
+                      toggleTimeSlot={toggleTimeSlot}
+                      onClear={clearFilters}
+                      activeFilterCount={activeFilterCount}
+                      onApply={() => setIsSidebarOpen(false)}
+                    />
+                  </div>
+                </motion.div>
               </div>
-            </div>
-          )}
+            )}
+          </AnimatePresence>
 
           {/* Results Area */}
           <div className="lg:col-span-3">
-            <div className="flex items-center justify-between mb-6">
+            <div className="flex items-center justify-between mb-5">
               <div className="flex items-center gap-2">
                 {activeRoute ? (
                   <div className="w-2 h-2 rounded-full bg-primary" />
@@ -236,8 +259,9 @@ const HomeContent = () => {
               </span>
             </div>
 
+
             {isLoading ? (
-              <div className="flex flex-col items-center justify-center py-32 bg-white rounded-[40px] border border-border/60 shadow-sm">
+              <div className="flex flex-col items-center justify-center py-10">
                 <Loader size="lg" />
                 <p className="mt-6 text-gray-400 font-bold text-sm animate-pulse">
                   Sayohatlar qidirilmoqda...
@@ -267,10 +291,7 @@ const HomeContent = () => {
                 )}
               </div>
             ) : (
-              <div className="premium-card p-16 text-center">
-                <div className="w-24 h-24 bg-gray-50 text-gray-200 rounded-[32px] flex items-center justify-center mx-auto mb-8 border border-border/40">
-                  <HiSearch className="w-12 h-12" />
-                </div>
+              <div className="p-10 text-center">
                 <h3 className="text-2xl font-black mb-3 text-dark-text">
                   Sayohat topilmadi
                 </h3>
@@ -295,9 +316,6 @@ const HomeContent = () => {
           </div>
         </div>
       </div>
-
-      <StatsSection />
-      <FeaturesSection />
 
       <LocationSearchModal
         isOpen={!!modalType}

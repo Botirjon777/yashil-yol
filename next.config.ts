@@ -12,6 +12,11 @@ const nextConfig: NextConfig = {
       },
     ];
   },
+  allowedDevOrigins: [
+    "192.168.0.41",
+    "localhost:3000",
+    "0d01-91-196-77-111.ngrok-free.app",
+  ],
 };
 
 export default nextConfig;

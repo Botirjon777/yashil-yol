@@ -19,7 +19,7 @@ import Button from "@/src/components/ui/Button";
 const DriverRideDetailsPage = () => {
   const params = useParams();
   const tripId = params.id as string;
-  
+
   const [isConfirmModalOpen, setIsConfirmModalOpen] = React.useState(false);
   const {
     trip,
@@ -75,49 +75,56 @@ const DriverRideDetailsPage = () => {
     );
   }
 
-
-
   return (
-    <div className="bg-light-bg min-h-screen py-8 md:py-12 pb-24">
+    <div className="bg-light-bg min-h-screen py-5 md:py-10">
       <div className="max-w-5xl mx-auto px-4">
         {/* Back Link */}
         <Link
           href="/dashboard"
           className="inline-flex items-center text-gray-500 font-bold hover:text-primary transition-colors mb-8"
         >
-          <HiChevronLeft className="mr-1 w-5 h-5" />{" "}
-          {rd("backToDashboard")}
+          <HiChevronLeft className="mr-1 w-5 h-5" /> {rd("backToDashboard")}
         </Link>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Main Info */}
-          <div className="lg:col-span-2 space-y-5 md:space-y-8">
+          <div className="lg:col-span-2 space-y-5 md:space-y-5">
             {/* Route Card */}
-            <RideRouteCard trip={trip} from={from} to={to} rd={rd} isDriver={true} />
+            <RideRouteCard
+              trip={trip}
+              from={from}
+              to={to}
+              rd={rd}
+              isDriver={true}
+            />
 
             {/* Driver & Car Info */}
-            <RideInfoCard 
-              trip={trip} 
-              isDriver={isDriver} 
-              driverName={driverName} 
-              carColor={carColor} 
-              rd={rd} 
+            <RideInfoCard
+              trip={trip}
+              isDriver={isDriver}
+              driverName={driverName}
+              carColor={carColor}
+              rd={rd}
             />
 
             {/* Passengers Section */}
             {trip.bookings && trip.bookings.length > 0 && (
-              <PassengerListCard 
-                trip={trip} 
-                rd={rd} 
-                isDriver={isDriver} 
-                disabled={bookingStatus === "canceled" || bookingStatus === "cancelled" || isPast}
+              <PassengerListCard
+                trip={trip}
+                rd={rd}
+                isDriver={isDriver}
+                disabled={
+                  bookingStatus === "canceled" ||
+                  bookingStatus === "cancelled" ||
+                  isPast
+                }
               />
             )}
           </div>
 
           {/* Sidebar Action */}
           <div className="lg:col-span-1">
-            <BookingSidebar 
+            <BookingSidebar
               trip={trip}
               isDriver={isDriver}
               isPast={isPast}
@@ -141,7 +148,9 @@ const DriverRideDetailsPage = () => {
           setIsConfirmModalOpen(false);
         }}
         title={rd("confirmCancelTitle") || "Cancel Trip"}
-        message={rd("confirmCancelMsg") || "Are you sure you want to cancel this trip?"}
+        message={
+          rd("confirmCancelMsg") || "Are you sure you want to cancel this trip?"
+        }
         isLoading={isCanceling}
       />
     </div>

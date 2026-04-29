@@ -1,16 +1,18 @@
 "use client";
 
 import React from "react";
-import { HiMail, HiPhone, HiLocationMarker } from "react-icons/hi";
+import { HiMail, HiPhone, HiLocationMarker, HiArrowLeft } from "react-icons/hi";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import Button from "@/src/components/ui/Button";
 import Input from "@/src/components/ui/Input";
 
 import { useSendSupportMessage } from "@/src/features/support/hooks/useSupport";
+import { useRouter } from "next/navigation";
 
 const SupportPage = () => {
   const { t } = useLanguageStore();
   const { mutate: sendMessage, isPending: loading } = useSendSupportMessage();
+  const router = useRouter();
 
   const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
@@ -30,29 +32,40 @@ const SupportPage = () => {
   };
 
   return (
-    <div className="min-h-screen pt-24 pb-12 bg-light-bg">
+    <div className="min-h-screen py-5 md:py-10 bg-light-bg">
+      <div className="max-w-7xl mx-auto px-4 mb-6">
+        <Button
+          variant="secondary"
+          size="sm"
+          onClick={() => router.push("/")}
+          className="flex items-center gap-2"
+        >
+          <HiArrowLeft className="w-4 h-4" />
+          {t("common", "back") || "Go Back"}
+        </Button>
+      </div>
       <div className="max-w-7xl mx-auto px-4">
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-6xl font-black text-dark-text mb-6 font-heading">
+        <div className="mb-5">
+          <h1 className="text-xl md:text-3xl font-black text-dark-text mb-2.5 font-heading">
             {t("support", "title")}
           </h1>
-          <p className="text-xl text-gray-500 max-w-2xl mx-auto font-medium">
+          <p className="text-sm md:text-lg text-gray-500 max-w-2xl mx-auto font-medium">
             {t("support", "subtitle")}
           </p>
         </div>
 
-        <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-5">
           {/* Contact Info */}
           <div className="lg:col-span-1 space-y-2.5 md:space-y-5">
-            <div className="premium-card p-8">
-              <h3 className="text-xl font-black text-dark-text mb-8 uppercase tracking-widest">
+            <div className="premium-card p-2.5 md:p-5">
+              <h3 className="text-md font-black text-dark-text mb-2.5 md:mb-8 uppercase tracking-widest">
                 {t("support", "contactInfo")}
               </h3>
 
               <div className="space-y-2.5 md:space-y-5">
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
-                    <HiMail className="w-6 h-6 text-primary" />
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+                    <HiMail className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-tighter">
@@ -65,8 +78,8 @@ const SupportPage = () => {
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
-                    <HiPhone className="w-6 h-6 text-primary" />
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+                    <HiPhone className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-tighter">
@@ -79,8 +92,8 @@ const SupportPage = () => {
                 </div>
 
                 <div className="flex items-center space-x-4">
-                  <div className="w-12 h-12 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
-                    <HiLocationMarker className="w-6 h-6 text-primary" />
+                  <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
+                    <HiLocationMarker className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-tighter">
@@ -97,8 +110,8 @@ const SupportPage = () => {
 
           {/* Contact Form */}
           <div className="lg:col-span-2">
-            <div className="premium-card p-8 md:p-12">
-              <h3 className="text-2xl font-black text-dark-text mb-8">
+            <div className="premium-card p-2.5 md:p-8">
+              <h3 className="text-md md:text-2xl font-black text-dark-text mb-2.5 md:mb-8">
                 {t("support", "formTitle")}
               </h3>
 

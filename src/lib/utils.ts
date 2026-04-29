@@ -136,3 +136,31 @@ export function getVehicleColorHex(colorName: string): string {
 
   return colorMap[name] || '#CBD5E1'; // Default to a neutral gray if not found
 }
+
+export function formatPhoneDisplay(val: string) {
+  let digits = val.replace(/\D/g, "");
+
+  // Only strip 998 if it's at the start AND the length is 10 or more
+  // (e.g., 998911223344 or 998 91 122 33 44)
+  if (digits.startsWith("998") && digits.length >= 10) {
+    digits = digits.substring(3);
+  }
+
+  // Limit to 9 digits (xx xxx xx xx)
+  digits = digits.substring(0, 9);
+
+  let formatted = "";
+  if (digits.length > 0) formatted += digits.substring(0, 2);
+  if (digits.length > 2) formatted += " " + digits.substring(2, 5);
+  if (digits.length > 5) formatted += " " + digits.substring(5, 7);
+  if (digits.length > 7) formatted += " " + digits.substring(7, 9);
+  return formatted;
+}
+
+export function cleanPhone(val: string) {
+  let digits = val.replace(/\D/g, "");
+  if (digits.startsWith("998") && digits.length >= 10) {
+    digits = digits.substring(3);
+  }
+  return digits.substring(0, 9);
+}

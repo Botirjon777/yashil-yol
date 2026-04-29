@@ -37,7 +37,14 @@ const statusConfig: Record<string, { bg: string; text: string; dot: string }> =
     },
   };
 
-export const RideRouteCard = ({ trip, from, to, rd, isDriver = false, isBooked = false }: RideRouteCardProps) => {
+export const RideRouteCard = ({
+  trip,
+  from,
+  to,
+  rd,
+  isDriver = false,
+  isBooked = false,
+}: RideRouteCardProps) => {
   const { t } = useLanguageStore();
   const status = String(trip.status || "active").toLowerCase();
   const sc = statusConfig[status] ?? statusConfig.active;
@@ -45,12 +52,12 @@ export const RideRouteCard = ({ trip, from, to, rd, isDriver = false, isBooked =
   return (
     <div className="premium-card overflow-hidden">
       {/* Header strip */}
-      <div className="px-6 pt-6 pb-5 flex items-center justify-between border-b border-border/60 bg-linear-to-r from-primary/3 to-transparent">
+      <div className="px-2.5 md:px-5 pt-2.5 md:pt-5 pb-2.5 md:pb-5 flex items-center justify-between border-b border-border/60 bg-linear-to-r from-primary/3 to-transparent">
         <div className="flex items-center gap-2.5">
           <div className={cn("w-2 h-2 rounded-full animate-pulse", sc.dot)} />
           <span
             className={cn(
-              "text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full",
+              "text-[10px] md:text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full",
               sc.bg,
               sc.text,
             )}
@@ -58,13 +65,13 @@ export const RideRouteCard = ({ trip, from, to, rd, isDriver = false, isBooked =
             {t("status", status)}
           </span>
         </div>
-        <div className="text-xs font-bold text-gray-400">
+        <div className="text-[10px] md:text-xs font-bold text-gray-400">
           {formatDateTime(trip.start_time).split(" ")[0]}
         </div>
       </div>
 
       {/* Route */}
-      <div className="p-6 md:p-8 space-y-0">
+      <div className="p-2.5 md:p-5 space-y-0">
         {/* Departure */}
         <div className="flex gap-4">
           <div className="flex flex-col items-center pt-1">
@@ -143,21 +150,23 @@ export const RideRouteCard = ({ trip, from, to, rd, isDriver = false, isBooked =
       </div>
 
       {/* Map Link - Visible to driver or booked passenger */}
-      {(isDriver || isBooked) && ((trip.start_lat && trip.start_long) || (trip.starting_point?.lat && trip.starting_point?.long)) && (
-        <div className="px-6 pb-6">
-          <a
-            href={`https://www.google.com/maps/dir/?api=1&origin=${trip.start_lat || trip.starting_point?.lat},${trip.start_long || trip.starting_point?.long}&destination=${trip.end_lat || trip.ending_point?.lat},${trip.end_long || trip.ending_point?.long}&mode=driving`}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="flex items-center justify-center gap-3 w-full py-4 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-2xl transition-all font-black uppercase text-xs tracking-widest shadow-xs group/btn active:scale-[0.98]"
-          >
-            <div className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center shadow-md shadow-primary/20 group-hover/btn:scale-110 transition-transform">
-              <HiMap className="w-4 h-4" />
-            </div>
-            {rd("googleMaps") || "Open in Google Maps"}
-          </a>
-        </div>
-      )}
+      {(isDriver || isBooked) &&
+        ((trip.start_lat && trip.start_long) ||
+          (trip.starting_point?.lat && trip.starting_point?.long)) && (
+          <div className="px-2.5 md:px-5 pb-2.5 md:pb-5">
+            <a
+              href={`https://www.google.com/maps/dir/?api=1&origin=${trip.start_lat || trip.starting_point?.lat},${trip.start_long || trip.starting_point?.long}&destination=${trip.end_lat || trip.ending_point?.lat},${trip.end_long || trip.ending_point?.long}&mode=driving`}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="flex items-center justify-center gap-3 w-full py-4 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-2xl transition-all font-black uppercase text-xs tracking-widest shadow-xs group/btn active:scale-[0.98]"
+            >
+              <div className="w-8 h-8 rounded-xl bg-primary text-white flex items-center justify-center shadow-md shadow-primary/20 group-hover/btn:scale-110 transition-transform">
+                <HiMap className="w-4 h-4" />
+              </div>
+              {rd("googleMaps") || "Open in Google Maps"}
+            </a>
+          </div>
+        )}
     </div>
   );
 };
