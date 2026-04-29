@@ -7,6 +7,7 @@ import {
 } from "react-icons/hi";
 import { cn } from "@/src/lib/utils";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import { useAuthStore } from "@/src/providers/AuthProvider";
 
 interface PassengerListCardProps {
   trip: any;
@@ -36,8 +37,15 @@ export const PassengerListCard = ({
   bookedBy,
 }: PassengerListCardProps) => {
   const { t } = useLanguageStore();
+  const { user } = useAuthStore();
   const isPassengerMode = mode === "passenger";
   const hasAvailableSeats = Number(trip.available_seats) > 0;
+
+  const isMe =
+    user &&
+    bookedBy &&
+    (String(bookedBy.id) === String(user.id) ||
+      bookedBy.phone?.replace(/\D/g, "") === user.phone?.replace(/\D/g, ""));
 
   return (
     <div className="premium-card overflow-hidden">
@@ -83,7 +91,7 @@ export const PassengerListCard = ({
                         </div>
                       </div>
                     </div>
-                    {bookedBy.phone && (
+                    {bookedBy.phone && !isMe && (
                       <a
                         href={`tel:${bookedBy.phone}`}
                         className="w-10 h-10 rounded-xl bg-white flex items-center justify-center text-primary border border-primary/20 hover:bg-primary hover:text-white transition-all shadow-sm"

@@ -249,7 +249,8 @@
       "canceled": "Canceled",
       "allBookings": "All Bookings",
       "allTrips": "All Trips",
-      "activeLabel": "Active"
+      "activeLabel": "Active",
+      "pendingVerification": "Your documents are under verification, please wait"
     },
     "balance": {
       "title": "Payment & Balance",
@@ -504,6 +505,9 @@
     "clickOnMap": "Click on map to pick location",
     "confirmLocation": "Confirm Location",
     "locationRequired": "Location is required for all passengers",
+    "locationRequiredDesc": "Click to open map and set pick-up point",
+    "change": "Change",
+    "readyToBook": "Ready to book",
     "route": "Route",
     "date": "Date",
     "perSeat": "per seat",

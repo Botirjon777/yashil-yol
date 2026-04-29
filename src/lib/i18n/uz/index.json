@@ -249,7 +249,8 @@
       "canceled": "Bekor qilingan",
       "allBookings": "Barcha bandlar",
       "allTrips": "Barcha safarlar",
-      "activeLabel": "Faol"
+      "activeLabel": "Faol",
+      "pendingVerification": "Hujjatlaringiz tekshirilmoqda, iltimos kuting"
     },
     "balance": {
       "title": "To'lovlar va balans",
@@ -504,6 +505,9 @@
     "clickOnMap": "Joylashuvni tanlash uchun xaritaga bosing",
     "confirmLocation": "Joylashuvni tasdiqlash",
     "locationRequired": "Barcha yo'lovchilar uchun joylashuv ko'rsatilishi shart",
+    "locationRequiredDesc": "Xaritani ochish va olib ketish nuqtasini belgilash uchun bosing",
+    "change": "O'zgartirish",
+    "readyToBook": "Bron qilishga tayyor",
     "route": "Yo'nalish",
     "date": "Sana",
     "perSeat": "har bir o'rin uchun",

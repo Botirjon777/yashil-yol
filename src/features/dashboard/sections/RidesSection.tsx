@@ -2,7 +2,7 @@ import { useState } from "react";
 import { RideCard } from "../components/RideCard";
 import CreateTripModal from "../components/CreateTripModal";
 import Button from "@/src/components/ui/Button";
-import { HiPlus } from "react-icons/hi";
+import { HiPlus, HiOutlineClock } from "react-icons/hi";
 import { AuthUser } from "../../auth/types";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import Dropdown from "@/src/components/ui/Dropdown";
@@ -41,6 +41,7 @@ export function RidesSection({
   const [driverTab, setDriverTab] = useState<"all" | "active" | "completed" | "canceled">("all");
   
   const isApproved = user?.driving_verification_status === "approved";
+  const isPending = user?.driving_verification_status === "pending";
   const { t } = useLanguageStore();
 
   const ridesTranslations = t("dashboard", "rides");
@@ -240,9 +241,18 @@ export function RidesSection({
           ))}
         </div>
       )}
+      
+      {rideType === "driver" && isPending && (
+        <div className="p-4 bg-amber-50 text-amber-700 rounded-2xl border border-amber-100 mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-500">
+          <HiOutlineClock className="w-5 h-5 shrink-0" />
+          <p className="text-sm font-bold">
+            {ridesTranslations?.pendingVerification || "Your documents are under verification, please wait"}
+          </p>
+        </div>
+      )}
 
       {/* Simple Create Trip Banner for Drivers */}
-      {isDriver && isApproved && rideType === "driver" && (
+      {isDriver && (isApproved || isPending) && rideType === "driver" && (
         <div className="animate-in-bottom transition-all duration-500">
           <div className="premium-card p-5 lg:p-6 bg-linear-to-r from-primary/5 to-secondary/5 border-primary/10 flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden">
             <div className="relative z-10">
@@ -252,6 +262,7 @@ export function RidesSection({
             </div>
             <Button
               onClick={() => setIsCreateModalOpen(true)}
+              disabled={isPending}
               className="px-8 shadow-lg relative z-10"
             >
               {ridesTranslations?.createTrip}
