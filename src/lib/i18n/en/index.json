@@ -281,7 +281,17 @@
       "manageCards": "Manage Cards",
       "back": "Back",
       "amountPlaceholder": "Enter amount (e.g. 50 000)",
-      "continue": "Continue"
+      "continue": "Continue",
+      "withdraw": "Withdraw Funds",
+      "withdrawals": "Withdrawal History",
+      "noWithdrawals": "No withdrawal requests yet.",
+      "withdrawAmount": "Withdrawal Amount",
+      "cardHolder": "Card Holder (Full Name)",
+      "cardHolderPlaceholder": "Enter card holder name",
+      "pendingWithdrawalNotice": "You have a pending withdrawal request. Please wait until it's finished.",
+      "pendingWithdrawalExists": "You already have an active withdrawal request.",
+      "insufficientBalance": "Insufficient balance",
+      "submit": "Submit"
     },
     "transactions": {
       "title": "Transaction History",

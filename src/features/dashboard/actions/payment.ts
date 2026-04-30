@@ -48,6 +48,23 @@ export interface BalanceResponse {
   balance: string;
 }
 
+export interface Withdraw {
+  id: number;
+  user_id: number;
+  amount: string;
+  card_id: string;
+  card_holder: string;
+  status: "pending" | "approved" | "rejected";
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateWithdrawRequest {
+  amount: number | string;
+  card_id: string | number;
+  card_holder: string;
+}
+
 /** GET /bank/my-registered-cards */
 export const getCards = async (): Promise<Card[]> => {
   try {
@@ -122,6 +139,26 @@ export const getTransactionHistory = async (): Promise<Transaction[]> => {
 export const deleteCard = async (id: number | string): Promise<{ status: string; message: string }> => {
   try {
     const res = await api.delete(`bank/delete-card/${id}`);
+    return res.data;
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+/** GET /withdraw */
+export const getWithdrawals = async (): Promise<Withdraw[]> => {
+  try {
+    const res = await api.get<{ data: Withdraw[] }>("withdraw");
+    return res.data?.data || [];
+  } catch (error: any) {
+    throw error;
+  }
+};
+
+/** POST /withdraw */
+export const createWithdraw = async (data: CreateWithdrawRequest): Promise<{ status: string; message: string }> => {
+  try {
+    const res = await api.post("withdraw", data);
     return res.data;
   } catch (error: any) {
     throw error;

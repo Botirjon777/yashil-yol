@@ -281,7 +281,17 @@
       "manageCards": "Управление картами",
       "back": "Назад",
       "amountPlaceholder": "Введите сумму (напр. 50 000)",
-      "continue": "Продолжить"
+      "continue": "Продолжить",
+      "withdraw": "Вывод средств",
+      "withdrawals": "История выводов",
+      "noWithdrawals": "История выводов пуста.",
+      "withdrawAmount": "Сумма для вывода",
+      "cardHolder": "Владелец карты (Ф.И.О)",
+      "cardHolderPlaceholder": "Введите имя и фамилию",
+      "pendingWithdrawalNotice": "У вас есть незавершенный запрос на вывод средств. Пожалуйста, дождитесь его завершения.",
+      "pendingWithdrawalExists": "У вас уже есть активный запрос на вывод средств.",
+      "insufficientBalance": "Недостаточно средств на балансе",
+      "submit": "Отправить"
     },
     "transactions": {
       "title": "История транзакций",
