@@ -281,7 +281,17 @@
       "manageCards": "Kartalarni boshqarish",
       "back": "Orqaga",
       "amountPlaceholder": "Miqdorni kiriting (masalan: 50 000)",
-      "continue": "Davom etish"
+      "continue": "Davom etish",
+      "withdraw": "Mablag' yechish",
+      "withdrawals": "Mablag' yechish tarixi",
+      "noWithdrawals": "Hozircha mablag' yechish so'rovlari yo'q.",
+      "withdrawAmount": "Yechib olinadigan summa",
+      "cardHolder": "Karta egasi (F.I.O)",
+      "cardHolderPlaceholder": "Ism familiyangizni kiriting",
+      "pendingWithdrawalNotice": "Sizda tugallanmagan mablag' yechish so'rovi bor. Iltimos, u yakunlanishini kuting.",
+      "pendingWithdrawalExists": "Sizda allaqachon faol yechib olish so'rovi mavjud.",
+      "insufficientBalance": "Balansda mablag' yetarli emas",
+      "submit": "Yuborish"
     },
     "transactions": {
       "title": "Tranzaksiyalar tarixi",

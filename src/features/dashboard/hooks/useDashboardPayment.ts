@@ -11,7 +11,10 @@ import {
   CreatePaymentRequest, 
   ConfirmPaymentRequest,
   getBalance,
-  getTransactionHistory
+  getTransactionHistory,
+  getWithdrawals,
+  createWithdraw,
+  CreateWithdrawRequest
 } from "../actions/payment";
 import { toast } from "sonner";
 
@@ -96,6 +99,28 @@ export const useDeleteCard = () => {
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Failed to delete card");
+    },
+  });
+};
+
+export const useWithdrawals = () =>
+  useQuery({
+    queryKey: ["withdrawals"],
+    queryFn: getWithdrawals,
+  });
+
+export const useCreateWithdraw = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (data: CreateWithdrawRequest) => createWithdraw(data),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["withdrawals"] });
+      queryClient.invalidateQueries({ queryKey: ["balance"] });
+      queryClient.invalidateQueries({ queryKey: ["me"] });
+      toast.success("Withdrawal request submitted successfully");
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to submit withdrawal request");
     },
   });
 };

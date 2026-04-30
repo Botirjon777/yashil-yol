@@ -11,6 +11,7 @@ import { TransactionsSection } from "./sections/TransactionsSection";
 import AddCardModal from "./components/AddCardModal";
 import TopUpModal from "./components/TopUpModal";
 import AddVehicleModal from "./components/AddVehicleModal";
+import WithdrawModal from "./components/WithdrawModal";
 import { FatherNameModal } from "./components/FatherNameModal";
 import { DashboardMobileFooter } from "./components/DashboardMobileFooter";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
@@ -33,6 +34,8 @@ export default function DashboardFeature() {
     handleTabChange,
     isTopUpOpen,
     setIsTopUpOpen,
+    isWithdrawOpen,
+    setIsWithdrawOpen,
     isAddCardOpen,
     setIsAddCardOpen,
     cardToVerify,
@@ -116,6 +119,7 @@ export default function DashboardFeature() {
         <BalanceSection
           balance={balance}
           onTopUpClick={() => setIsTopUpOpen(true)}
+          onWithdrawClick={() => setIsWithdrawOpen(true)}
           onAddCardClick={() => {
             setCardToVerify(null);
             setIsAddCardOpen(true);
@@ -196,6 +200,15 @@ export default function DashboardFeature() {
         onClose={() => setIsTopUpOpen(false)} 
         onAddCardClick={() => {
           setIsTopUpOpen(false);
+          setIsAddCardOpen(true);
+        }}
+      />
+      <WithdrawModal
+        isOpen={isWithdrawOpen}
+        onClose={() => setIsWithdrawOpen(false)}
+        balance={balance}
+        onAddCardClick={() => {
+          setIsWithdrawOpen(false);
           setIsAddCardOpen(true);
         }}
       />

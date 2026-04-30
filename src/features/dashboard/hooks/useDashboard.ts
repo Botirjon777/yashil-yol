@@ -31,6 +31,7 @@ export function useDashboard() {
   const [isSectionOpen, setIsSectionOpen] = useState(false);
   const [isTopUpOpen, setIsTopUpOpen] = useState(false);
   const [isAddCardOpen, setIsAddCardOpen] = useState(false);
+  const [isWithdrawOpen, setIsWithdrawOpen] = useState(false);
   const [cardToVerify, setCardToVerify] = useState<Card | null>(null);
   const [isAddVehicleOpen, setIsAddVehicleOpen] = useState(false);
   const [rideType, setRideType] = useState<"passenger" | "driver">("passenger");
@@ -208,6 +209,8 @@ export function useDashboard() {
     setIsSectionOpen,
     isTopUpOpen,
     setIsTopUpOpen,
+    isWithdrawOpen,
+    setIsWithdrawOpen,
     isAddCardOpen,
     setIsAddCardOpen,
     cardToVerify,
