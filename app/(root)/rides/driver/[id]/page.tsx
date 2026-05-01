@@ -13,8 +13,14 @@ import {
   BookingModal,
   ConfirmationModal,
 } from "@/src/features/rides/components";
+import dynamic from "next/dynamic";
 import Loader from "@/src/components/ui/Loader";
 import Button from "@/src/components/ui/Button";
+
+const RideMap = dynamic(
+  () => import("@/src/features/rides/components/RideMap").then((mod) => mod.RideMap),
+  { ssr: false, loading: () => <div className="h-[400px] bg-gray-50 animate-pulse rounded-2xl" /> }
+);
 
 const DriverRideDetailsPage = () => {
   const params = useParams();
@@ -97,6 +103,9 @@ const DriverRideDetailsPage = () => {
               rd={rd}
               isDriver={true}
             />
+
+            {/* Trip Map */}
+            <RideMap trip={trip} rd={rd} />
 
             {/* Driver & Car Info */}
             <RideInfoCard

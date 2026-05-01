@@ -1,4 +1,4 @@
-import { HiPlus, HiCreditCard, HiTrash } from "react-icons/hi";
+import { HiPlus, HiCreditCard, HiTrash, HiArrowRight } from "react-icons/hi";
 import Button from "@/src/components/ui/Button";
 import { formatCurrency } from "@/src/lib/utils";
 import {
@@ -47,16 +47,23 @@ export function BalanceSection({
             <div className="text-5xl font-black mb-10">
               {formatCurrency(balance)}
             </div>
-            <div className="flex gap-4">
-              <Button variant="secondary" size="lg" onClick={onTopUpClick}>
-                <HiPlus className="mr-2" /> {t("dashboard", "balance")?.topUp}
+            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+              <Button
+                variant="secondary"
+                size="lg"
+                onClick={onTopUpClick}
+                className="w-full sm:w-auto font-black"
+              >
+                <HiPlus className="mr-2 w-5 h-5" />{" "}
+                {t("dashboard", "balance")?.topUp}
               </Button>
               <Button
                 variant="outline"
                 size="lg"
                 onClick={onWithdrawClick}
-                className="bg-white/10 border-white/20 text-white hover:bg-white/20"
+                className="w-full sm:w-auto bg-white/10 border-white/20 text-white hover:bg-white/20 font-black"
               >
+                <HiArrowRight className="mr-2 w-5 h-5" />{" "}
                 {t("dashboard", "balance")?.withdraw || "Withdraw"}
               </Button>
             </div>

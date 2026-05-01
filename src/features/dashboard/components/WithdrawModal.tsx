@@ -89,8 +89,8 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, balance,
           <div className="flex flex-col items-center justify-center p-6 bg-error/5 rounded-2xl border border-error/10 gap-3 -mt-4 mb-4">
             <p className="text-sm text-error font-medium italic text-center">
               {cards.length > 0 
-                ? bt("needVerifyCard")
-                : bt("needAddCard")}
+                ? bt("needVerifyCardWithdraw") || bt("needVerifyCard")
+                : bt("needAddCardWithdraw") || bt("needAddCard")}
             </p>
             <Button 
               type="button" 

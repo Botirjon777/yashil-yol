@@ -10,7 +10,7 @@ interface Option {
 }
 
 interface DropdownProps {
-  label?: string;
+  label?: React.ReactNode;
   options: Option[];
   value?: string | number;
   onChange: (value: any) => void;
@@ -51,9 +51,9 @@ const Dropdown: React.FC<DropdownProps> = ({
   return (
     <div className={cn("w-full relative", className)} ref={dropdownRef}>
       {label && (
-        <label className="block text-xs font-bold text-gray-500 ml-1 mb-1">
+        <div className="block text-xs font-bold text-gray-500 ml-1 mb-1">
           {label}
-        </label>
+        </div>
       )}
       <button
         type="button"
