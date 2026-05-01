@@ -35,6 +35,11 @@ const statusConfig: Record<string, { bg: string; text: string; dot: string }> =
       text: "text-red-600",
       dot: "bg-red-500",
     },
+    in_progress: {
+      bg: "bg-blue-50 border border-blue-200",
+      text: "text-blue-600",
+      dot: "bg-blue-500",
+    },
   };
 
 export const RideRouteCard = ({
@@ -151,11 +156,15 @@ export const RideRouteCard = ({
 
       {/* Map Link - Visible to driver or booked passenger */}
       {(isDriver || isBooked) &&
-        ((trip.start_lat && trip.start_long) ||
+        (trip.google_map_url ||
+          (trip.start_lat && trip.start_long) ||
           (trip.starting_point?.lat && trip.starting_point?.long)) && (
           <div className="px-2.5 md:px-5 pb-2.5 md:pb-5">
             <a
-              href={`https://www.google.com/maps/dir/?api=1&origin=${trip.start_lat || trip.starting_point?.lat},${trip.start_long || trip.starting_point?.long}&destination=${trip.end_lat || trip.ending_point?.lat},${trip.end_long || trip.ending_point?.long}&mode=driving`}
+              href={
+                trip.google_map_url ||
+                `https://www.google.com/maps/dir/?api=1&origin=${trip.start_lat || trip.starting_point?.lat},${trip.start_long || trip.starting_point?.long}&destination=${trip.end_lat || trip.ending_point?.lat},${trip.end_long || trip.ending_point?.long}&mode=driving`
+              }
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-3 w-full py-4 bg-primary/5 hover:bg-primary/10 text-primary border border-primary/20 rounded-2xl transition-all font-black uppercase text-xs tracking-widest shadow-xs group/btn active:scale-[0.98]"

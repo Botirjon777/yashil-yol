@@ -69,7 +69,8 @@ export interface Trip {
   start_long?: string;
   end_lat?: string;
   end_long?: string;
-  status: "active" | "completed" | "canceled" | string;
+  status: "active" | "completed" | "canceled" | "in_progress" | string;
+  google_map_url?: string;
   
   // Relations (if included in response)
   driver?: TripDriver;

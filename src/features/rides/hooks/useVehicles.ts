@@ -7,7 +7,10 @@ export const useAddVehicle = () => {
   const qc = useQueryClient();
   return useMutation<{ status: string; message: string; data?: { id: number } }, Error, VehicleRequest>({
     mutationFn: addVehicle,
-    onSuccess: () => qc.invalidateQueries({ queryKey: ["me"] }),
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: ["me"] });
+      qc.invalidateQueries({ queryKey: ["vehicles"] });
+    },
   });
 };
 

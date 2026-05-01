@@ -98,7 +98,8 @@
     "scrollToTop": "Tepaga qaytish",
     "optional": "(ixtiyoriy)",
     "confirm": "Tasdiqlash",
-    "notSelected": "Tanlanmagan"
+    "notSelected": "Tanlanmagan",
+    "newVehicle": "Yangi avtomobil"
   },
   "footer": {
     "tagline": "Biz O'zbekistonda har bir kishi uchun hamroh topishni oson, xavfsiz va hamyonbop qilamiz.",
@@ -278,6 +279,8 @@
       "confirmAndPay": "Tasdiqlash va to'lash",
       "needVerifyCard": "Balansni to'ldirishdan oldin kartangizni tasdiqlashingiz kerak.",
       "needAddCard": "Balansni to'ldirish uchun avval karta qo'shishingiz kerak.",
+      "needAddCardWithdraw": "Mablag' yechib olish uchun avval karta qo'shishingiz kerak.",
+      "needVerifyCardWithdraw": "Mablag' yechib olishdan oldin kartangizni tasdiqlashingiz kerak.",
       "manageCards": "Kartalarni boshqarish",
       "back": "Orqaga",
       "amountPlaceholder": "Miqdorni kiriting (masalan: 50 000)",
@@ -567,7 +570,11 @@
     "seatsBooked": "o'rin band qilindi",
     "smsNotice": "Safarni band qilganingizdan so'ng, yo'nalish (qayerdan-qayerga), haydovchi malumotlari va uning telefon raqami sms tarzda telefoningizga yuboriladi.",
     "contactSupport": "Yordam guruhiga murojaat qilish",
-    "bookingCancelled": "Bronlash bekor qilingan"
+    "bookingCancelled": "Bronlash bekor qilingan",
+    "startTrip": "Safarni boshlash",
+    "finishTrip": "Safarni yakunlash",
+    "tripMap": "Safar xaritasi",
+    "noMapData": "Ushbu safar uchun xarita ma'lumotlari mavjud emas"
   },
   "status": {
     "active": "Faol",
@@ -576,6 +583,7 @@
     "cancelled": "Bekor qilingan",
     "pending": "Kutilmoqda",
     "confirmed": "Tasdiqlangan",
+    "in_progress": "Jarayonda",
     "full": "To'lgan"
   },
   "terms": {

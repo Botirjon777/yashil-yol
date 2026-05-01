@@ -11,9 +11,10 @@ import { useVehicles } from "@/src/features/rides/hooks/useVehicles";
 import { toast } from "sonner";
 import Calendar from "@/src/components/ui/Calendar";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
-import { HiLocationMarker } from "react-icons/hi";
-import { cn } from "@/src/lib/utils";
 import TripLocationModal from "./TripLocationModal";
+import AddVehicleModal from "./AddVehicleModal";
+import { HiLocationMarker, HiPlusCircle } from "react-icons/hi";
+import { cn } from "@/src/lib/utils";
 
 interface CreateTripModalProps {
   isOpen: boolean;
@@ -32,6 +33,7 @@ export default function CreateTripModal({
   const [modalType, setModalType] = useState<"start" | "end" | null>(null);
   const [startAddress, setStartAddress] = useState("");
   const [endAddress, setEndAddress] = useState("");
+  const [isAddVehicleModalOpen, setIsAddVehicleModalOpen] = useState(false);
 
   const [formData, setFormData] = useState({
     start_time: "",
@@ -116,7 +118,9 @@ export default function CreateTripModal({
       return `${val}:00`;
     };
 
-    const selectedVehicle = vehicles?.find((v) => String(v.id) === String(formData.vehicle_id));
+    const selectedVehicle = vehicles?.find(
+      (v) => String(v.id) === String(formData.vehicle_id),
+    );
     const maxSeats = selectedVehicle?.seats ? Number(selectedVehicle.seats) : 0;
 
     if (Number(formData.available_seats) > maxSeats) {
@@ -229,18 +233,34 @@ export default function CreateTripModal({
             />
           </div>
 
-          <Dropdown
-            label={ct?.selectVehicle}
-            options={
-              vehicles?.map((v) => ({
-                id: v.id,
-                name: `${v.model} (${v.car_number})`,
-              })) || []
-            }
-            value={formData.vehicle_id}
-            onChange={(val) => handleSelectChange("vehicle_id", val)}
-            placeholder={ct?.vehiclePlaceholder}
-          />
+          <div className="relative">
+            <Dropdown
+              label={
+                <div className="flex items-center justify-between w-full">
+                  <span>{ct?.selectVehicle}</span>
+                  <button
+                    type="button"
+                    onClick={() => setIsAddVehicleModalOpen(true)}
+                    className="flex items-center gap-1.5 text-primary hover:text-primary-hover transition-colors group"
+                  >
+                    <HiPlusCircle className="w-3.5 h-3.5" />
+                    <span className="text-[9px] font-black uppercase tracking-widest border-b border-primary/30 group-hover:border-primary">
+                      {t("common", "newVehicle") || "New Vehicle"}
+                    </span>
+                  </button>
+                </div>
+              }
+              options={
+                vehicles?.map((v) => ({
+                  id: v.id,
+                  name: `${v.model} (${v.car_number})`,
+                })) || []
+              }
+              value={formData.vehicle_id}
+              onChange={(val) => handleSelectChange("vehicle_id", val)}
+              placeholder={ct?.vehiclePlaceholder}
+            />
+          </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-5">
             <Input
@@ -261,12 +281,24 @@ export default function CreateTripModal({
                 onChange={handleInputChange}
                 required
                 disabled={!formData.vehicle_id}
-                placeholder={!formData.vehicle_id ? "Avval avtomobilni tanlang" : ""}
-                max={vehicles?.find(v => String(v.id) === String(formData.vehicle_id))?.seats}
+                placeholder={
+                  !formData.vehicle_id ? "Avval avtomobilni tanlang" : ""
+                }
+                max={
+                  vehicles?.find(
+                    (v) => String(v.id) === String(formData.vehicle_id),
+                  )?.seats
+                }
               />
               {formData.vehicle_id && (
                 <p className="text-[10px] text-gray-400 font-medium px-1">
-                  Maksimal: {vehicles?.find(v => String(v.id) === String(formData.vehicle_id))?.seats} ta joy
+                  Maksimal:{" "}
+                  {
+                    vehicles?.find(
+                      (v) => String(v.id) === String(formData.vehicle_id),
+                    )?.seats
+                  }{" "}
+                  ta joy
                 </p>
               )}
             </div>
@@ -289,10 +321,15 @@ export default function CreateTripModal({
               >
                 <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-70">
                   <HiLocationMarker className="w-3.5 h-3.5" />
-                  {isStartFilled ? "Jo'nash manzili tanlandi" : "Jo'nash manzilini tanlang"}
+                  {isStartFilled
+                    ? "Jo'nash manzili tanlandi"
+                    : "Jo'nash manzilini tanlang"}
                 </div>
                 <div className="text-sm font-black truncate w-full">
-                  {startAddress || (isStartFilled ? `${formData.start_lat}, ${formData.start_long}` : "Tanlanmagan")}
+                  {startAddress ||
+                    (isStartFilled
+                      ? `${formData.start_lat}, ${formData.start_long}`
+                      : "Tanlanmagan")}
                 </div>
               </button>
             </div>
@@ -313,10 +350,15 @@ export default function CreateTripModal({
               >
                 <div className="flex items-center gap-2 text-[10px] font-black uppercase tracking-widest opacity-70">
                   <HiLocationMarker className="w-3.5 h-3.5" />
-                  {isEndFilled ? "Borish manzili tanlandi" : "Borish manzilini tanlang"}
+                  {isEndFilled
+                    ? "Borish manzili tanlandi"
+                    : "Borish manzilini tanlang"}
                 </div>
                 <div className="text-sm font-black truncate w-full">
-                  {endAddress || (isEndFilled ? `${formData.end_lat}, ${formData.end_long}` : "Tanlanmagan")}
+                  {endAddress ||
+                    (isEndFilled
+                      ? `${formData.end_lat}, ${formData.end_long}`
+                      : "Tanlanmagan")}
                 </div>
               </button>
             </div>
@@ -342,7 +384,11 @@ export default function CreateTripModal({
       <TripLocationModal
         isOpen={!!modalType}
         onClose={() => setModalType(null)}
-        title={modalType === "start" ? rd("selectStartLocation") : rd("selectEndLocation")}
+        title={
+          modalType === "start"
+            ? rd("selectStartLocation")
+            : rd("selectEndLocation")
+        }
         initialData={
           modalType === "start"
             ? {
@@ -385,6 +431,11 @@ export default function CreateTripModal({
             setEndAddress(data.address);
           }
         }}
+      />
+
+      <AddVehicleModal
+        isOpen={isAddVehicleModalOpen}
+        onClose={() => setIsAddVehicleModalOpen(false)}
       />
     </>
   );

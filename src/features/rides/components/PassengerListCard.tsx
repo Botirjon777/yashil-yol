@@ -60,6 +60,18 @@ export const PassengerListCard = ({
           {Number(trip.total_seats || 0) - Number(trip.available_seats || 0)} /{" "}
           {Number(trip.total_seats || 0)} {rd("booked") || "Booked"}
         </span>
+        {isDriver && trip.google_map_url && (
+          <div className="flex items-center gap-2">
+            <a
+              href={trip.google_map_url}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="h-8 px-4 flex items-center justify-center bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-lg hover:bg-primary/90 transition-all shadow-sm"
+            >
+              {rd("startTrip") || "Start Trip"}
+            </a>
+          </div>
+        )}
       </div>
 
       <div className="p-2.5 md:p-5">
