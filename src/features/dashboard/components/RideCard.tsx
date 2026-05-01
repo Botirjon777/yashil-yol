@@ -61,14 +61,13 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
 
   const canCancel =
     !isHistory &&
-    (isDriver || isPassenger) &&
-    !isTooLate &&
-    (isDriver ? !hasBookings : true);
+    (isDriver ? (hasBookings ? !isTooLate : true) : !isTooLate);
 
   let cannotCancelReason = null;
   if (isHistory) cannotCancelReason = t("dashboard", "pastTrip");
+  else if (isDriver && hasBookings && isTooLate)
+    cannotCancelReason = t("dashboard", "hasBookingsTooLate");
   else if (isTooLate) cannotCancelReason = t("dashboard", "under30Mins");
-  else if (isDriver && hasBookings) cannotCancelReason = t("dashboard", "hasBookings");
 
 
 
@@ -172,13 +171,14 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
         <div
           className={cn(
             "absolute top-3 right-3 z-20 px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full shadow-sm",
-            isHistory
-              ? "bg-gray-100 text-gray-400"
-              : String(ride.status) === "active"
-                ? "bg-success/10 text-success"
-                : String(ride.status) === "completed"
-                  ? "bg-primary/10 text-primary"
-                  : "bg-error/10 text-error",
+            String(ride.status) === "active"
+              ? "bg-success/10 text-success"
+              : String(ride.status) === "completed"
+                ? "bg-primary/10 text-primary"
+                : String(ride.status) === "canceled" ||
+                    String(ride.status) === "cancelled"
+                  ? "bg-error/10 text-error"
+                  : "bg-gray-100 text-gray-400",
           )}
         >
           {t("status", ride.status) || ride.status}
@@ -335,7 +335,11 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
                 {t("dashboard", "deleteConfirmTitle")}
               </h3>
               <p className="text-sm text-gray-500 mt-1">
-                {t("dashboard", "deleteConfirmMsg")}
+                {isDriver
+                  ? hasBookings
+                    ? t("dashboard", "deleteWithBookingsMsg")
+                    : t("dashboard", "deleteNoBookingsMsg")
+                  : t("dashboard", "deleteConfirmMsg")}
               </p>
             </div>
           </div>

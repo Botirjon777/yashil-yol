@@ -24,7 +24,7 @@ const Modal: React.FC<ModalProps> = ({
   children,
   className,
   size = "md",
-  fullMobile = false,
+  fullMobile = true,
 }) => {
   const [shouldRender, setShouldRender] = useState(isOpen);
   const [animate, setAnimate] = useState(false);

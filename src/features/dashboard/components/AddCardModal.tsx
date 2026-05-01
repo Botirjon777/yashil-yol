@@ -16,7 +16,8 @@ interface AddCardModalProps {
 
 const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCard }) => {
   const { t } = useLanguageStore();
-  const bt = (key: string) => t("dashboard", `balance.${key}`);
+  const balanceTranslations = t("dashboard", "balance");
+  const bt = (key: string) => balanceTranslations?.[key] || key;
 
   const [step, setStep] = useState<"input" | "verify">("input");
   const [cardId, setCardId] = useState<number | string | null>(null);
@@ -28,6 +29,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
     phone: "",
   });
   const [verificationCode, setVerificationCode] = useState("");
+  const [timeLeft, setTimeLeft] = useState(60);
 
   const { mutate: addCard, isPending: isAdding } = useAddCard();
   const { mutate: verifyCard, isPending: isVerifying } = useVerifyCard();
@@ -37,6 +39,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
       setCardId(initialCard.id);
       setCardKey(initialCard.card_id); // Using card_id as key for verification
       setStep("verify");
+      setTimeLeft(60);
     } else if (!isOpen) {
       // Reset when modal closes
       setStep("input");
@@ -44,8 +47,47 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
       setCardKey(null);
       setVerificationCode("");
       setFormData({ card_number: "", expiry: "", holder_name: "", phone: "" });
+      setTimeLeft(60);
     }
   }, [initialCard, isOpen]);
+
+  useEffect(() => {
+    let timer: any;
+    if (step === "verify" && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [step, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const handleResend = () => {
+    if (initialCard) {
+      // If verifying existing card, we don't have fields to re-submit
+      // but usually the user wants to resend. Since we don't have a separate 
+      // resend endpoint for cards yet, we can only re-submit if we have data.
+      toast.info(t("dashboard", "balance.resendNotAvailable") || "Please contact support if you didn't receive the code.");
+      return;
+    }
+
+    addCard({
+      number: formData.card_number.replace(/\s/g, ""),
+      expiry: formData.expiry.replace("/", ""),
+      holder_name: formData.holder_name,
+      phone: formData.phone,
+    }, {
+      onSuccess: () => {
+        setTimeLeft(60);
+        toast.success(t("dashboard", "balance.codeResent") || "Verification code sent again");
+      }
+    });
+  };
 
   const handleAddSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -62,6 +104,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
           setCardId(card.id || card.card_id);
           setCardKey(card.key || card.card_key || card.card_id || card.id);
           setStep("verify");
+          setTimeLeft(60);
         } else {
           // Fallback: search for anything that looks like an ID or key
           const fallbackId = res.id || res.card_id || res.pay_id;
@@ -70,6 +113,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
              setCardId(fallbackId);
              setCardKey(fallbackKey);
              setStep("verify");
+           setTimeLeft(60);
           } else {
              toast.error("Failed to get card information for verification");
           }
@@ -175,7 +219,7 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
               {t("common", "cancel")}
             </Button>
             <Button variant="primary" loading={isAdding} type="submit" size="lg" className="px-12">
-              {t("auth", "forgotPassword.submitButton")}
+              {bt("continue")}
             </Button>
           </div>
         </form>
@@ -201,6 +245,25 @@ const AddCardModal: React.FC<AddCardModalProps> = ({ isOpen, onClose, initialCar
             autoFocus
             className="text-center text-3xl tracking-[0.5em] font-black h-20 bg-light-bg/30 border-2"
           />
+
+          <div className="flex flex-col items-center gap-3">
+            <div className={`text-sm font-bold ${timeLeft > 0 ? "text-gray-400" : "text-primary"}`}>
+              {timeLeft > 0 ? (
+                <span className="flex items-center gap-2">
+                  {t("dashboard", "balance.resendSmsIn") || "Resend SMS in"} {formatTime(timeLeft)}
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  disabled={isAdding}
+                  className="text-primary hover:underline font-black"
+                >
+                  {t("dashboard", "balance.resendSms") || "Resend SMS"}
+                </button>
+              )}
+            </div>
+          </div>
 
           <div className="flex items-center justify-end gap-4 pt-4">
             <Button 

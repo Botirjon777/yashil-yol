@@ -1,12 +1,21 @@
 "use client";
 
 import React, { useEffect, useMemo } from "react";
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
+import {
+  MapContainer,
+  TileLayer,
+  Marker,
+  Popup,
+  useMap,
+  Circle,
+  Tooltip,
+} from "react-leaflet";
 import L from "leaflet";
 import "leaflet/dist/leaflet.css";
 import "leaflet-routing-machine/dist/leaflet-routing-machine.css";
 import "leaflet-routing-machine";
 import { HiMap } from "react-icons/hi";
+import { cn } from "@/src/lib/utils";
 
 // Only initialize Leaflet icons on the client side
 let DefaultIcon: L.Icon | undefined;
@@ -17,20 +26,23 @@ if (typeof window !== "undefined") {
   DefaultIcon = L.icon({
     iconUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon.png",
     shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
-    iconRetinaUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
+    iconRetinaUrl:
+      "https://unpkg.com/leaflet@1.7.1/dist/images/marker-icon-2x.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
   });
 
   PassengerIcon = L.icon({
-    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
+    iconUrl:
+      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-green.png",
     shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
   });
 
   EndIcon = L.icon({
-    iconUrl: "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
+    iconUrl:
+      "https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-2x-red.png",
     shadowUrl: "https://unpkg.com/leaflet@1.7.1/dist/images/marker-shadow.png",
     iconSize: [25, 41],
     iconAnchor: [12, 41],
@@ -73,9 +85,20 @@ const Routing = ({ waypoints }: RoutingProps) => {
 interface RideMapProps {
   trip: any;
   rd: (key: string) => string;
+  hideHeader?: boolean;
+  height?: string;
+  interactive?: boolean;
+  obfuscated?: boolean;
 }
 
-export const RideMap = ({ trip, rd }: RideMapProps) => {
+export const RideMap = ({
+  trip,
+  rd,
+  hideHeader = false,
+  height = "400px",
+  interactive = true,
+  obfuscated = false,
+}: RideMapProps) => {
   if (typeof window === "undefined") return null;
 
   const waypoints = useMemo(() => {
@@ -95,7 +118,7 @@ export const RideMap = ({ trip, rd }: RideMapProps) => {
         }
 
         if (waypointsStr) {
-          waypointsStr.split("|").forEach(wp => {
+          waypointsStr.split("|").forEach((wp) => {
             const [lat, lng] = wp.split(",");
             points.push(L.latLng(parseFloat(lat), parseFloat(lng)));
           });
@@ -123,7 +146,9 @@ export const RideMap = ({ trip, rd }: RideMapProps) => {
       trip.bookings?.forEach((b: any) => {
         b.passengers?.forEach((p: any) => {
           if (p.latitude && p.longitude) {
-            passengerPoints.push(L.latLng(parseFloat(p.latitude), parseFloat(p.longitude)));
+            passengerPoints.push(
+              L.latLng(parseFloat(p.latitude), parseFloat(p.longitude)),
+            );
           }
         });
       });
@@ -151,35 +176,77 @@ export const RideMap = ({ trip, rd }: RideMapProps) => {
   }
 
   return (
-    <div className="premium-card overflow-hidden">
-      <div className="px-6 py-4 border-b border-border/60 bg-linear-to-r from-primary/3 to-transparent flex items-center justify-between">
-        <h3 className="text-sm font-black text-dark-text uppercase tracking-widest flex items-center gap-2">
-          <HiMap className="w-4 h-4 text-primary" />
-          {rd("tripMap") || "Trip Route"}
-        </h3>
-      </div>
-      <div className="h-[400px] w-full relative z-0">
+    <div
+      className={cn(
+        "premium-card overflow-hidden",
+        interactive ? "" : "pointer-events-none",
+      )}
+    >
+      {!hideHeader && (
+        <div className="px-6 py-4 border-b border-border/60 bg-linear-to-r from-primary/3 to-transparent flex items-center justify-between">
+          <h3 className="text-sm font-black text-dark-text uppercase tracking-widest flex items-center gap-2">
+            <HiMap className="w-4 h-4 text-primary" />
+            {rd("tripMap") || "Trip Route"}
+          </h3>
+        </div>
+      )}
+      <div style={{ height }} className="w-full relative z-0">
         <MapContainer
           center={waypoints[0]}
           zoom={13}
           style={{ height: "100%", width: "100%" }}
           className="z-0"
+          dragging={interactive}
+          touchZoom={interactive}
+          doubleClickZoom={interactive}
+          scrollWheelZoom={interactive}
+          zoomControl={interactive}
+          boxZoom={interactive}
+          keyboard={interactive}
         >
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
           />
-          
+
           <Routing waypoints={waypoints} />
 
-          {/* Markers */}
+          {/* Markers or Circles */}
           {waypoints.map((point, idx) => {
+            const isStart = idx === 0;
+            const isEnd = idx === waypoints.length - 1;
+
+            if (obfuscated && (isStart || isEnd)) {
+              return (
+                <Circle
+                  key={idx}
+                  center={point}
+                  radius={300}
+                  pathOptions={{
+                    color: isStart ? "#6366f1" : "#ef4444",
+                    fillColor: isStart ? "#6366f1" : "#ef4444",
+                    fillOpacity: 0.15,
+                    weight: 2,
+                    dashArray: "5, 10",
+                  }}
+                >
+                  <Tooltip
+                    permanent
+                    direction="top"
+                    className="bg-white/90! backdrop-blur-sm! px-2! py-1! rounded-lg shadow-xl text-[9px] font-black uppercase tracking-widest text-dark-text border-none opacity-100"
+                  >
+                    {rd("approxLocation") || "Approx. 300m"}
+                  </Tooltip>
+                </Circle>
+              );
+            }
+
             let icon = DefaultIcon;
             let label = "Point";
-            
-            if (idx === 0) {
+
+            if (isStart) {
               label = "Start";
-            } else if (idx === waypoints.length - 1) {
+            } else if (isEnd) {
               label = "Finish";
               icon = EndIcon;
             } else {

@@ -1,9 +1,20 @@
+import { useState } from "react";
+import dynamic from "next/dynamic";
 import Link from "next/link";
-import { HiStar, HiTruck, HiUserGroup } from "react-icons/hi";
+import { HiStar, HiTruck, HiUserGroup, HiMap } from "react-icons/hi";
 import { formatCurrency, formatDate, formatDateTime, cn } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { useLocationStore } from "@/src/providers/LocationStore";
+import { RideMapModal } from "./RideMapModal";
+
+const RideMap = dynamic(
+  () => import("./RideMap").then((mod) => mod.RideMap),
+  { 
+    ssr: false, 
+    loading: () => <div className="w-full h-full bg-gray-50 animate-pulse rounded-xl" /> 
+  }
+);
 
 interface RideResultCardProps {
   ride: any;
@@ -15,6 +26,9 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
   const { regions, districts, quarters, resolveLocationName } =
     useLocationStore();
 
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
+  const rd = (key: string) => t("rides", key);
+  
   const fromRegion =
     typeof ride.start_region === "string"
       ? ride.start_region
@@ -102,32 +116,34 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
         isPast && "opacity-75 select-none",
       )}
     >
-      <Link
-        href={isClickable ? `/rides/${ride.id}` : "#"}
-        className={cn("block", !isClickable && "cursor-default pointer-events-none")}
+      <div
+        className={cn(
+          "premium-card p-5 md:p-6 transition-all duration-300 bg-white border-2",
+          isPast
+             ? "border-gray-100 grayscale-[0.2]"
+            : "hover:border-primary hover:shadow-2xl hover:shadow-primary/5 border-transparent",
+        )}
       >
-        <div
-          className={cn(
-            "premium-card p-5 md:p-6 transition-all duration-300 bg-white border-2",
-            isPast
-               ? "border-gray-100 grayscale-[0.2]"
-              : "hover:border-primary hover:shadow-2xl hover:shadow-primary/5 border-transparent",
-          )}
-        >
-          {isPast ? (
-            <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-gray-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
-              {t("status", "past") || "PAST"}
-            </div>
-          ) : isFull ? (
-            <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
-              {t("status", "full") || "FULL"}
-            </div>
-          ) : null}
+        <Link
+          href={isClickable ? `/rides/${ride.id}` : "#"}
+          className={cn("absolute inset-0 z-0", !isClickable && "cursor-default pointer-events-none")}
+        />
 
-          <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
-            <div className="grow min-w-0">
-              {/* Redesigned Vertical Route Info */}
-              <div className="flex items-start space-x-4 mb-6">
+        {isPast ? (
+          <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-gray-500 text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
+            {t("status", "past") || "PAST"}
+          </div>
+        ) : isFull ? (
+          <div className="absolute top-4 right-4 z-10 px-3 py-1 bg-primary text-white text-[10px] font-black uppercase tracking-widest rounded-full shadow-lg">
+            {t("status", "full") || "FULL"}
+          </div>
+        ) : null}
+
+        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6 relative z-10">
+          <div className="grow min-w-0">
+            {/* Redesigned Vertical Route Info + Map Preview */}
+            <div className="flex flex-col sm:flex-row items-start gap-6 mb-6">
+              <div className="flex items-start space-x-4 flex-1">
                 <div className="flex flex-col items-center self-stretch py-1 shrink-0">
                   <div
                     className={cn(
@@ -179,6 +195,31 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
                   </div>
                 </div>
               </div>
+
+              {/* Map Preview Thumbnail */}
+              <div 
+                onClick={(e) => {
+                  e.preventDefault();
+                  e.stopPropagation();
+                  setIsMapModalOpen(true);
+                }}
+                className="w-full sm:w-32 h-24 sm:h-32 md:w-40 md:h-40 shrink-0 relative group/map cursor-pointer rounded-2xl overflow-hidden border border-border/60 hover:border-primary/50 transition-all shadow-sm"
+              >
+                <div className="absolute inset-0 bg-dark-text/0 group-hover/map:bg-dark-text/5 transition-colors z-20 flex items-center justify-center">
+                  <div className="bg-white/90 backdrop-blur-sm p-2 rounded-xl shadow-xl scale-0 group-hover/map:scale-100 transition-all duration-300 text-primary">
+                    <HiMap className="w-5 h-5" />
+                  </div>
+                </div>
+                <RideMap 
+                  trip={ride} 
+                  rd={rd} 
+                  hideHeader={true} 
+                  height="100%" 
+                  interactive={false} 
+                  obfuscated={true}
+                />
+              </div>
+            </div>
 
               <div className="flex flex-wrap items-center gap-6">
                 <div className="flex items-center">
@@ -252,11 +293,16 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
                   : isFull
                     ? t("status", "full") || "FULL"
                     : t("rides", "joinRide")}
-              </Button>
-            </div>
+            </Button>
           </div>
         </div>
-      </Link>
+
+        <RideMapModal 
+          isOpen={isMapModalOpen} 
+          onClose={() => setIsMapModalOpen(false)} 
+          ride={ride} 
+        />
+      </div>
     </div>
   );
 };
