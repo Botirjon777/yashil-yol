@@ -10,4 +10,5 @@ export { default as RideResultCard } from "./RideResultCard";
 export * from "./ConfirmationModal";
 export * from "./FilterSidebar";
 export * from "./RoutesSwiper";
+export * from "./RideMapModal";
 // RideMap is exported separately to avoid SSR window errors

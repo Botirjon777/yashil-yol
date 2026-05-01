@@ -36,6 +36,8 @@ const HomeContent = () => {
     setManualSearch,
   } = useRidesPage();
 
+  console.log("MainPage Trips Data:", filteredRides);
+
   const { t } = useLanguageStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [modalType, setModalType] = useState<"from" | "to" | null>(null);
