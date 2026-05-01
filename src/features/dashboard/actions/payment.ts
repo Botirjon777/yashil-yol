@@ -105,6 +105,16 @@ export const createPayment = async (data: CreatePaymentRequest): Promise<{ statu
   }
 };
 
+/** POST /bank/resend-sms */
+export const resendSms = async (data: { pay_id?: string; card_id?: string }): Promise<{ status: string; message: string }> => {
+  try {
+    const res = await api.post("bank/resend-sms", data);
+    return res.data;
+  } catch (error: any) {
+    throw error;
+  }
+};
+
 /** POST /bank/confirm-payment */
 export const confirmPayment = async (data: ConfirmPaymentRequest): Promise<{ status: string; message: string }> => {
   try {

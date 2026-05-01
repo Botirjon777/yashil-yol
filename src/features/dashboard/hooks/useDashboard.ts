@@ -140,6 +140,18 @@ export function useDashboard() {
     t.status === "completed" || t.status === "canceled"
   );
 
+  const combinedDriverAll = [
+    ...(driverActive || []),
+    ...(driverCompleted || []),
+    ...(driverCanceled || []),
+    ...(driverAll || [])
+  ];
+  
+  // Deduplicate by ID
+  const driverAllMerged = Array.from(
+    new Map(combinedDriverAll.map((item) => [item.id, item])).values()
+  );
+
   const allActive = (rideType === "driver" ? driverActive : passengerActiveTrips) || [];
   
   // Filter out trips where departure time is in the past for current display
@@ -224,7 +236,7 @@ export function useDashboard() {
     driverActive: driverActive || [],
     driverCompleted: driverCompleted || [],
     driverCanceled: driverCanceled || [],
-    driverAll: driverAll || [],
+    driverAll: driverAllMerged || [],
     passengerInprogress: (passengerInprogress || []).map(b => mapPassengerTrip(b)),
     passengerCompleted: (passengerCompleted || []).map(b => mapPassengerTrip(b)),
     passengerCanceled: (passengerCanceled || []).map(b => mapPassengerTrip(b, "canceled")),

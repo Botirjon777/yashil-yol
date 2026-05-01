@@ -1,11 +1,16 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Modal from "@/src/components/ui/Modal";
 import Input from "@/src/components/ui/Input";
 import Button from "@/src/components/ui/Button";
 import Dropdown from "@/src/components/ui/Dropdown";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { HiPlus } from "react-icons/hi";
-import { useCards, useCreatePayment, useConfirmPayment } from "../hooks/useDashboardPayment";
+import {
+  useCards,
+  useCreatePayment,
+  useConfirmPayment,
+  useResendSms,
+} from "../hooks/useDashboardPayment";
 import { formatCurrency } from "@/src/lib/utils";
 import { toast } from "sonner";
 import { CreatePaymentRequest } from "../actions/payment";
@@ -16,7 +21,11 @@ interface TopUpModalProps {
   onAddCardClick?: () => void;
 }
 
-const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick }) => {
+const TopUpModal: React.FC<TopUpModalProps> = ({
+  isOpen,
+  onClose,
+  onAddCardClick,
+}) => {
   const { t } = useLanguageStore();
   const balanceTranslations = t("dashboard", "balance");
   const bt = (key: string) => balanceTranslations?.[key] || key;
@@ -25,67 +34,105 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
   const [paymentId, setPaymentId] = useState<string | null>(null);
   const { data: cards = [], isLoading: isLoadingCards } = useCards();
   const { mutate: createPayment, isPending: isCreating } = useCreatePayment();
-  const { mutate: confirmPayment, isPending: isConfirming } = useConfirmPayment();
+  const { mutate: confirmPayment, isPending: isConfirming } =
+    useConfirmPayment();
 
   const [selectedCardId, setSelectedCardId] = useState<string | "">("");
   const [amount, setAmount] = useState("");
   const [confirmationCode, setConfirmationCode] = useState("");
+  const [timeLeft, setTimeLeft] = useState(60);
+  const { mutate: resendSms, isPending: isResending } = useResendSms();
+
+  useEffect(() => {
+    let timer: any;
+    if (step === "confirm" && timeLeft > 0) {
+      timer = setInterval(() => {
+        setTimeLeft((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(timer);
+  }, [step, timeLeft]);
+
+  const formatTime = (seconds: number) => {
+    const mins = Math.floor(seconds / 60);
+    const secs = seconds % 60;
+    return `${mins}:${secs.toString().padStart(2, "0")}`;
+  };
+
+  const handleResend = () => {
+    if (!paymentId) return;
+    resendSms(
+      { pay_id: paymentId },
+      {
+        onSuccess: () => {
+          setTimeLeft(60);
+        },
+      },
+    );
+  };
 
   const handleCreateSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!selectedCardId || !amount) return;
 
-    createPayment({
-      card_id: String(selectedCardId),
-      amount: String(amount),
-    }, {
-      onSuccess: (res: any) => {
-        // Robust extraction: backend might return it at root or inside data
-        const id = res.pay_id || res.data?.pay_id || res.result?.pay_id;
-        if (id) {
-          setPaymentId(id);
-          setStep("confirm");
-        } else {
-          toast.error("Failed to get Payment ID from server");
-        }
+    createPayment(
+      {
+        card_id: String(selectedCardId),
+        amount: String(amount),
       },
-      onError: (err: any) => {
-        // Error handling (removed log)
-      }
-    });
+      {
+        onSuccess: (res: any) => {
+          // Robust extraction: backend might return it at root or inside data
+          const id = res.pay_id || res.data?.pay_id || res.result?.pay_id;
+          if (id) {
+            setPaymentId(id);
+            setStep("confirm");
+            setTimeLeft(60);
+          } else {
+            toast.error("Failed to get Payment ID from server");
+          }
+        },
+        onError: (err: any) => {
+          // Error handling (removed log)
+        },
+      },
+    );
   };
 
   const handleConfirmSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (!paymentId || !confirmationCode) return;
 
-    confirmPayment({
-      pay_id: paymentId,
-      confirm_code: confirmationCode,
-    }, {
-      onSuccess: () => {
-        setAmount("");
-        setSelectedCardId("");
-        setConfirmationCode("");
-        setStep("input");
-        onClose();
+    confirmPayment(
+      {
+        pay_id: paymentId,
+        confirm_code: confirmationCode,
       },
-    });
+      {
+        onSuccess: () => {
+          setAmount("");
+          setSelectedCardId("");
+          setConfirmationCode("");
+          setStep("input");
+          onClose();
+        },
+      },
+    );
   };
 
   const cardOptions = cards
-    .filter(card => card.status === "verified")
-    .map(card => ({
+    .filter((card) => card.status === "verified")
+    .map((card) => ({
       id: String(card.id), // Change back to numeric ID (as string)
-      name: `${card.number} (${card.brand || card.label || "Card"})`
+      name: `${card.number} (${card.brand || card.label || "Card"})`,
     }));
 
   const quickAmounts = [50000, 100000, 200000, 500000];
 
   return (
-    <Modal 
-      isOpen={isOpen} 
-      onClose={onClose} 
+    <Modal
+      isOpen={isOpen}
+      onClose={onClose}
       title={step === "input" ? bt("topUp") : bt("verifyPayment")}
       size="md"
       className="max-w-xl"
@@ -97,20 +144,20 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
             options={cardOptions}
             value={selectedCardId}
             onChange={setSelectedCardId}
-            placeholder={isLoadingCards ? t("common", "loading") : bt("chooseSavedCard")}
+            placeholder={
+              isLoadingCards ? t("common", "loading") : bt("chooseSavedCard")
+            }
             disabled={isLoadingCards || cardOptions.length === 0}
           />
 
           {cardOptions.length === 0 && !isLoadingCards && (
             <div className="flex flex-col items-center justify-center p-6 bg-error/5 rounded-2xl border border-error/10 gap-3 -mt-4 mb-4">
               <p className="text-sm text-error font-medium italic text-center">
-                {cards.length > 0 
-                  ? bt("needVerifyCard")
-                  : bt("needAddCard")}
+                {cards.length > 0 ? bt("needVerifyCard") : bt("needAddCard")}
               </p>
-              <Button 
-                type="button" 
-                variant="primary" 
+              <Button
+                type="button"
+                variant="primary"
                 onClick={onAddCardClick}
                 className="font-black px-8 h-10"
               >
@@ -150,12 +197,17 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
           </div>
 
           <div className="flex items-center justify-end gap-4 pt-6 border-t border-border">
-            <Button variant="ghost" onClick={onClose} type="button" className="text-gray-400 hover:text-gray-600 px-4">
+            <Button
+              variant="ghost"
+              onClick={onClose}
+              type="button"
+              className="text-gray-400 hover:text-gray-600 px-4"
+            >
               {t("common", "cancel")}
             </Button>
-            <Button 
-              variant="primary" 
-              loading={isCreating} 
+            <Button
+              variant="primary"
+              loading={isCreating}
               type="submit"
               size="lg"
               className="px-12"
@@ -166,17 +218,23 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
           </div>
         </form>
       ) : (
-        <form onSubmit={handleConfirmSubmit} className="space-y-8 p-2 text-center">
+        <form
+          onSubmit={handleConfirmSubmit}
+          className="space-y-8 p-2 text-center"
+        >
           <div className="space-y-3">
             <div className="w-16 h-16 bg-primary/10 text-primary rounded-2xl flex items-center justify-center mx-auto mb-6">
               <HiPlus className="w-8 h-8" />
             </div>
-            <h4 className="text-lg font-black text-dark-text">{bt("verifyPayment")}</h4>
+            <h4 className="text-lg font-black text-dark-text">
+              {bt("verifyPayment")}
+            </h4>
             <p className="text-gray-500 font-medium max-w-sm mx-auto">
               {bt("enterConfirmCode")}
             </p>
             <p className="text-gray-500 text-xs font-medium mt-4">
-              {bt("paymentAmount")}: <strong>{formatCurrency(Number(amount))}</strong>
+              {bt("paymentAmount")}:{" "}
+              <strong>{formatCurrency(Number(amount))}</strong>
             </p>
           </div>
 
@@ -185,17 +243,51 @@ const TopUpModal: React.FC<TopUpModalProps> = ({ isOpen, onClose, onAddCardClick
             placeholder="000000"
             maxLength={6}
             value={confirmationCode}
-            onChange={(e) => setConfirmationCode(e.target.value.replace(/\D/g, ""))}
+            onChange={(e) =>
+              setConfirmationCode(e.target.value.replace(/\D/g, ""))
+            }
             required
             autoFocus
             className="text-center text-3xl tracking-[0.5em] font-black h-20 bg-light-bg/30 border-2"
           />
 
+          <div className="flex flex-col items-center gap-3">
+            <div
+              className={`text-sm font-bold ${timeLeft > 0 ? "text-gray-400" : "text-primary"}`}
+            >
+              {timeLeft > 0 ? (
+                <span className="flex items-center gap-2">
+                  {bt("resendSmsIn") || "Resend SMS in"} {formatTime(timeLeft)}
+                </span>
+              ) : (
+                <button
+                  type="button"
+                  onClick={handleResend}
+                  disabled={isResending}
+                  className="text-primary hover:underline font-black"
+                >
+                  {bt("resendSms") || "Resend SMS"}
+                </button>
+              )}
+            </div>
+          </div>
+
           <div className="flex items-center justify-end gap-4 pt-4">
-            <Button variant="ghost" onClick={() => setStep("input")} type="button" className="text-gray-400 px-4">
+            <Button
+              variant="ghost"
+              onClick={() => setStep("input")}
+              type="button"
+              className="text-gray-400 px-4"
+            >
               {bt("back")}
             </Button>
-            <Button variant="primary" loading={isConfirming} type="submit" size="lg" className="px-12">
+            <Button
+              variant="primary"
+              loading={isConfirming}
+              type="submit"
+              size="lg"
+              className="px-12"
+            >
               {bt("confirmAndPay")}
             </Button>
           </div>

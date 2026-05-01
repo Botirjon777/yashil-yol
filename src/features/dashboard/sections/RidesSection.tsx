@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { RideCard } from "../components/RideCard";
 import CreateTripModal from "../components/CreateTripModal";
 import Button from "@/src/components/ui/Button";
@@ -39,6 +39,13 @@ export function RidesSection({
   const [isCreateModalOpen, setIsCreateModalOpen] = useState(false);
   const [passengerTab, setPassengerTab] = useState<"inprogress" | "completed" | "canceled" | "all">("all");
   const [driverTab, setDriverTab] = useState<"all" | "active" | "completed" | "canceled">("all");
+  const [currentPage, setCurrentPage] = useState(1);
+  const PAGE_SIZE = 10;
+  
+  // Reset pagination when tabs change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [passengerTab, driverTab, rideType]);
   
   const isApproved = user?.driving_verification_status === "approved";
   const isPending = user?.driving_verification_status === "pending";
@@ -77,13 +84,21 @@ export function RidesSection({
       );
     }
 
-    return currentList.map((ride: any, index: number) => (
-      <RideCard 
-        key={`${passengerTab}-${ride.bookingId || "nb"}-${ride.id || index}`} 
-        ride={ride} 
-        isHistory={passengerTab === "completed" || passengerTab === "canceled"} 
-      />
-    ));
+    const totalPages = Math.ceil(currentList.length / PAGE_SIZE);
+    const paginatedList = currentList.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+    return (
+      <div className="space-y-4">
+        {paginatedList.map((ride: any, index: number) => (
+          <RideCard 
+            key={`${passengerTab}-${ride.bookingId || "nb"}-${ride.id || index}`} 
+            ride={ride} 
+            isHistory={passengerTab === "completed" || passengerTab === "canceled"} 
+          />
+        ))}
+        {totalPages > 1 && renderPagination(totalPages)}
+      </div>
+    );
   };
 
   const renderDriverList = () => {
@@ -117,13 +132,67 @@ export function RidesSection({
       );
     }
 
-    return currentList.map((ride: any, index: number) => (
-      <RideCard 
-        key={`driver-${driverTab}-${ride.id || index}`} 
-        ride={ride} 
-        isHistory={driverTab === "completed" || driverTab === "canceled"} 
-      />
-    ));
+    const totalPages = Math.ceil(currentList.length / PAGE_SIZE);
+    const paginatedList = currentList.slice((currentPage - 1) * PAGE_SIZE, currentPage * PAGE_SIZE);
+
+    return (
+      <div className="space-y-4">
+        {paginatedList.map((ride: any, index: number) => (
+          <RideCard 
+            key={`driver-${driverTab}-${ride.id || index}`} 
+            ride={ride} 
+            isHistory={driverTab === "completed" || driverTab === "canceled"} 
+          />
+        ))}
+        {totalPages > 1 && renderPagination(totalPages)}
+      </div>
+    );
+  };
+
+  const renderPagination = (totalPages: number) => {
+    return (
+      <div className="flex items-center justify-center gap-2 mt-8 py-4">
+        <button
+          onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+          disabled={currentPage === 1}
+          className="px-4 py-2 rounded-xl text-sm font-bold border border-border disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+        >
+          {t("dashboard", "back") || "Back"}
+        </button>
+        
+        <div className="flex items-center gap-1">
+          {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => {
+            // Only show a few pages if there are many
+            if (totalPages > 5 && Math.abs(page - currentPage) > 1 && page !== 1 && page !== totalPages) {
+              if (page === 2 || page === totalPages - 1) return <span key={page} className="px-2 text-gray-400">...</span>;
+              return null;
+            }
+            
+            return (
+              <button
+                key={page}
+                onClick={() => setCurrentPage(page)}
+                className={`w-10 h-10 rounded-xl text-sm font-black transition-all ${
+                  currentPage === page
+                    ? "bg-primary text-white shadow-md shadow-primary/20"
+                    : "text-gray-500 hover:bg-gray-100"
+                }`}
+              >
+                {page}
+              </button>
+            );
+          })}
+        </div>
+
+        <button
+          onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+          disabled={currentPage === totalPages}
+          className="px-4 py-2 rounded-xl text-sm font-bold border border-border disabled:opacity-30 disabled:cursor-not-allowed hover:bg-gray-50 transition-colors"
+        >
+          {t("common", "next") || "Next"}
+        </button>
+      </div>
+    );
   };
 
   return (

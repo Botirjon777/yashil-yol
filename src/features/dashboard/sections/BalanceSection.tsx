@@ -1,4 +1,4 @@
-import { HiPlus, HiCreditCard, HiTrash, HiArrowRight } from "react-icons/hi";
+import { HiPlus, HiCreditCard, HiTrash, HiArrowUp } from "react-icons/hi";
 import Button from "@/src/components/ui/Button";
 import { formatCurrency } from "@/src/lib/utils";
 import {
@@ -38,7 +38,7 @@ export function BalanceSection({
       </h1>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-        <div className="premium-card bg-linear-to-br from-primary to-primary-dark text-white p-5 lg:p-10 border-none shadow-xl shadow-primary/30 relative overflow-hidden">
+        <div className="premium-card bg-linear-to-br from-primary to-primary-dark text-white p-2.5 lg:p-5 border-none shadow-xl shadow-primary/30 relative overflow-hidden">
           <div className="absolute top-0 right-0 w-32 h-32 bg-white/10 rounded-full -translate-y-16 translate-x-16" />
           <div className="relative z-10">
             <div className="text-indigo-100 font-bold uppercase tracking-widest text-xs mb-2">
@@ -47,24 +47,24 @@ export function BalanceSection({
             <div className="text-5xl font-black mb-10">
               {formatCurrency(balance)}
             </div>
-            <div className="flex flex-col sm:flex-row gap-4 mt-8">
+            <div className="flex flex-row gap-2.5 mt-5">
               <Button
                 variant="secondary"
-                size="lg"
+                size="sm"
                 onClick={onTopUpClick}
-                className="w-full sm:w-auto font-black"
+                className="flex-1 font-black flex items-center justify-center"
               >
                 <HiPlus className="mr-2 w-5 h-5" />{" "}
                 {t("dashboard", "balance")?.topUp}
               </Button>
               <Button
                 variant="outline"
-                size="lg"
+                size="sm"
                 onClick={onWithdrawClick}
-                className="w-full sm:w-auto bg-white/10 border-white/20 text-white hover:bg-white/20 font-black"
+                className="flex-1 bg-white/10 border-white/20 text-white hover:bg-white/20 font-black flex items-center justify-center"
               >
-                <HiArrowRight className="mr-2 w-5 h-5" />{" "}
-                {t("dashboard", "balance")?.withdraw || "Withdraw"}
+                <HiArrowUp className="mr-2 w-5 h-5" />{" "}
+                {t("dashboard", "balance")?.withdraw}
               </Button>
             </div>
           </div>
@@ -130,7 +130,7 @@ export function BalanceSection({
                   </div>
                   <button
                     onClick={() => deleteCard(card.id)}
-                    className="p-2 text-gray-300 hover:text-error hover:bg-error/5 rounded-lg transition-all opacity-0 group-hover/card:opacity-100"
+                    className="p-2 text-gray-300 hover:text-error hover:bg-error/5 rounded-lg transition-all opacity-100 lg:opacity-0 lg:group-hover/card:opacity-100"
                     title={
                       t("dashboard", "balance")?.deleteCard || "Delete card"
                     }

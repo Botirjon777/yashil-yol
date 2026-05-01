@@ -16,6 +16,7 @@ const nextConfig: NextConfig = {
     "192.168.0.41",
     "localhost:3000",
     "0d01-91-196-77-111.ngrok-free.app",
+    "a8b6-91-196-77-111.ngrok-free.app",
   ],
 };
 

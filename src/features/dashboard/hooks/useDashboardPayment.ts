@@ -14,7 +14,8 @@ import {
   getTransactionHistory,
   getWithdrawals,
   createWithdraw,
-  CreateWithdrawRequest
+  CreateWithdrawRequest,
+  resendSms
 } from "../actions/payment";
 import { toast } from "sonner";
 
@@ -85,6 +86,18 @@ export const useConfirmPayment = () => {
     },
     onError: (error: any) => {
       toast.error(error.response?.data?.message || "Failed to confirm payment");
+    },
+  });
+};
+
+export const useResendSms = () => {
+  return useMutation({
+    mutationFn: (data: { pay_id?: string; card_id?: string }) => resendSms(data),
+    onSuccess: (res: any) => {
+      toast.success(res.message || "Verification code resent successfully");
+    },
+    onError: (error: any) => {
+      toast.error(error.response?.data?.message || "Failed to resend code");
     },
   });
 };
