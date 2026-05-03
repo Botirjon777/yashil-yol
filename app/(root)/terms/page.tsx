@@ -24,7 +24,7 @@ const TermsPage = () => {
             <div className="mt-2.5 flex flex-col md:flex-row items-start md:items-center gap-x-6 gap-y-2 text-[10px] md:text-xs font-bold text-gray-400 uppercase tracking-widest">
               <span className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />
-                {t("terms", "lastUpdated")}: April 8, 2026
+                {t("terms", "lastUpdated")}: May 3, 2026
               </span>
               <span className="flex items-center gap-2">
                 <span className="w-1.5 h-1.5 rounded-full bg-primary/40" />

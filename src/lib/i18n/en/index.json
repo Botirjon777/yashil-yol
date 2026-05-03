@@ -608,37 +608,41 @@
     "contactSupport": "Contact Support",
     "print": "Print Document",
     "sections": {
-      "acceptance": {
-        "title": "1. Agreement to Terms",
-        "content": "By accessing or using the Ketamiz platform, you agree to be bound by these Terms and Conditions. If you do not agree with any part of these terms, you may not use our services. These terms apply to all users, including drivers, passengers, and bus booking customers."
+      "general": {
+        "title": "1. General Rules and User Types",
+        "content": "Ketamiz.com is a platform designed to organize trips between clients (Client) and drivers (Driver). By using the platform, you fully agree to these terms. Client — the one booking the trip, Driver — the one offering the trip."
       },
-      "eligibility": {
-        "title": "2. Eligibility & Account Security",
-        "content": "Users must be at least 18 years old to create an account. You are responsible for maintaining the confidentiality of your account credentials and for all activities that occur under your account. You must provide accurate and complete information during registration."
+      "booking": {
+        "title": "2. Booking and Payment Rules",
+        "content": "When a client books a trip, payment is deducted from the balance in advance. If the balance is insufficient, the booking will not proceed. The platform charges a service fee for each booking. Clients can add passengers or remove them up to 2 hours before the start. When a passenger is removed or a booking is cancelled, a partial refund is issued, and the service fee is retained."
       },
-      "services": {
-        "title": "3. Services Overview",
-        "content": "Ketamiz provides a technology platform that connects passengers with independent drivers for carpool services and facilitates ticket bookings for professional bus operators. Ketamiz does not provide transportation services directly and is not a transportation carrier."
-      },
-      "conduct": {
-        "title": "4. User Obligations & Conduct",
-        "content": "All users agree to behave respectfully and legally. Drivers must maintain valid licenses and vehicle documentation. Passengers must cooperate with safety rules. Any form of harassment, discrimination, or illegal activity will result in immediate termination of account access."
-      },
-      "payment": {
-        "title": "5. Booking & Payment Policies",
-        "content": "Payments are processed securely through our partners (e.g., Hamkorbank). Fees include the cost of the ride/ticket and any applicable platform service fees. By confirming a booking, you authorize us to charge your selected payment method."
-      },
-      "cancellation": {
-        "title": "6. Cancellations & Refunds",
-        "content": "Cancellation policies vary by service type. For carpool rides, cancellations made within a specific timeframe may incur a fee. Bus ticket refunds are subject to the operator's policy and platform processing fees. Detailed rules are available in the booking section."
+      "status": {
+        "title": "3. Trip Statuses and Information",
+        "content": "Trips can be Active, Full, In Progress, Completed, or Cancelled. Users can view all active trips, but detailed information (exact location and contact) is only available for trips they have booked."
       },
       "liability": {
-        "title": "7. Limitation of Liability",
-        "content": "Ketamiz is not liable for any damages, personal injuries, or property loss resulting from rides arranged through the platform. We provide the technology to facilitate connections but do not guarantee the quality, safety, or legality of the transportation provided."
+        "title": "4. Responsibility and Data Accuracy",
+        "content": "Ketamiz.com is only an intermediary platform and is not fully responsible for real trips or delays between the driver and the client. The driver is responsible for passenger safety, and the client is responsible for the accuracy of the entered information. The platform is not responsible for technical errors or internet outages."
       },
-      "governingLaw": {
-        "title": "8. Governing Law",
-        "content": "These terms are governed by and construed in accordance with the laws of the Republic of Uzbekistan. Any disputes arising from these terms shall be subject to the exclusive jurisdiction of the courts of Uzbekistan."
+      "time": {
+        "title": "5. Important Time Constraints (CRITICAL)",
+        "content": "Cancelling a trip or removing a passenger can only be done at least 2 hours before the trip starts. If less than 2 hours remain before the start, cancellation is prohibited and no refund is possible."
+      },
+      "financial": {
+        "title": "6. Balance, Transactions, and Security",
+        "content": "The platform maintains a history of all payments. Fake bookings, entering false information, or attempting to bypass payment will lead to account blocking and balance freezing. A driver's balance may become negative (-) due to cancellations, and the platform will deduct this from future payments."
+      },
+      "driver": {
+        "title": "7. Driver Responsibilities and Trip Creation",
+        "content": "The driver must correctly enter the route, time, price, and number of seats. Trips must not overlap in time. If a driver cancels a trip, all bookings are cancelled, clients receive a 100% refund, and compensation and platform service fees are deducted from the driver."
+      },
+      "privacy": {
+        "title": "8. Registration, SMS, and Privacy",
+        "content": "Registration requires phone number verification via SMS. The verified number is used for trip coordination, sending SMS notifications, and driver/client communication. Phone numbers are not shared with third parties, and using them for spam is prohibited."
+      },
+      "agreement": {
+        "title": "9. Changes and Final Agreement",
+        "content": "By registering, the user expresses full consent to all rules. The platform reserves the right to change these terms at any time, block accounts, or freeze the balance of users who violate the rules."
       }
     }
   },
