@@ -161,7 +161,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
               ? `/rides/driver/${ride.id}`
               : `/rides/${ride.id}`
         }
-        className="absolute inset-0 z-10"
+        className="absolute inset-0 z-20"
         aria-label="View ride details"
       />
 
@@ -310,7 +310,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
                 }}
                 disabled={!canCancel}
                 className={cn(
-                  "mt-1 shadow-md font-black uppercase text-[10px] tracking-widest w-full md:min-w-[120px] py-3",
+                  "mt-1 shadow-md font-black uppercase text-[10px] tracking-widest w-full md:min-w-[120px] py-3 relative z-30",
                   canCancel
                     ? "shadow-error/10"
                     : "opacity-60 cursor-not-allowed bg-gray-50 border-gray-200 text-gray-400",
@@ -334,7 +334,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
               e.stopPropagation();
               setIsMapModalOpen(true);
             }}
-            className="flex items-center justify-center gap-2 w-full md:w-auto px-4 py-2 text-primary font-black text-[10px] uppercase tracking-widest hover:bg-primary/5 rounded-xl transition-all border border-transparent hover:border-primary/20"
+            className="flex items-center justify-center gap-2 w-full md:w-auto px-4 py-2 text-primary font-black text-[10px] uppercase tracking-widest hover:bg-primary/5 rounded-xl transition-all border border-transparent hover:border-primary/20 relative z-30"
           >
             <HiMap className="w-3.5 h-3.5" />
             {t("rideDetails", "viewOnMap")}
