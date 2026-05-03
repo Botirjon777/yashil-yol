@@ -301,6 +301,7 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
           isOpen={isMapModalOpen} 
           onClose={() => setIsMapModalOpen(false)} 
           ride={ride} 
+          obfuscated={true}
         />
       </div>
     </div>

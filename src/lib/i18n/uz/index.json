@@ -211,7 +211,9 @@
     "maxPrice": "Maksimal narx",
     "seatsLeft": "joy qoldi",
     "joinRide": "Safarga qo'shilish",
-    "approxLocation": "Taxminiy joylashuv (~300m radius)"
+    "approxLocation": "Taxminiy joylashuv (~300m radius)",
+    "tripMap": "Safar xaritasi",
+    "noMapData": "Ushbu safar uchun xarita ma'lumotlari mavjud emas"
   },
   "dashboard": {
     "deleteRide": "Safarni o'chirish",
