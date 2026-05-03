@@ -17,9 +17,10 @@ interface RideMapModalProps {
   isOpen: boolean;
   onClose: () => void;
   ride: any;
+  obfuscated?: boolean;
 }
 
-export const RideMapModal = ({ isOpen, onClose, ride }: RideMapModalProps) => {
+export const RideMapModal = ({ isOpen, onClose, ride, obfuscated = false }: RideMapModalProps) => {
   const { t } = useLanguageStore();
   const rd = (key: string) => t("rides", key);
 
@@ -37,7 +38,7 @@ export const RideMapModal = ({ isOpen, onClose, ride }: RideMapModalProps) => {
           hideHeader={true} 
           height="500px" 
           interactive={true}
-          obfuscated={true}
+          obfuscated={obfuscated}
         />
       </div>
     </Modal>

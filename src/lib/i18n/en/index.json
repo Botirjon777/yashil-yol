@@ -211,7 +211,9 @@
     "maxPrice": "Max Price",
     "seatsLeft": "seats left",
     "joinRide": "Join Ride",
-    "approxLocation": "Approximate location (~300m radius)"
+    "approxLocation": "Approximate location (~300m radius)",
+    "tripMap": "Trip Map",
+    "noMapData": "No map data available for this trip"
   },
   "dashboard": {
     "deleteRide": "Delete Ride",

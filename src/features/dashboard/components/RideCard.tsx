@@ -1,6 +1,7 @@
-import { HiTruck, HiX, HiTrash, HiExclamation } from "react-icons/hi";
+import { HiTruck, HiX, HiTrash, HiExclamation, HiMap } from "react-icons/hi";
 import { formatCurrency, formatDate, cn } from "@/src/lib/utils";
 import Link from "next/link";
+import dynamic from "next/dynamic";
 import { Trip } from "@/src/features/rides/types";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { useLocationStore } from "@/src/providers/LocationStore";
@@ -17,6 +18,15 @@ import {
 } from "@/src/features/rides/hooks/useRides";
 import Button from "@/src/components/ui/Button";
 import Modal from "@/src/components/ui/Modal";
+import { RideMapModal } from "@/src/features/rides/components/RideMapModal";
+
+const RideMap = dynamic(
+  () => import("@/src/features/rides/components/RideMap").then((mod) => mod.RideMap),
+  { 
+    ssr: false, 
+    loading: () => <div className="w-full h-full bg-gray-50 animate-pulse rounded-xl" /> 
+  }
+);
 
 interface RideCardProps {
   ride: Trip;
@@ -40,6 +50,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
   } = useLocationStore();
 
   const [isDeleteModalOpen, setIsDeleteModalOpen] = useState(false);
+  const [isMapModalOpen, setIsMapModalOpen] = useState(false);
 
   // Loose check for driver ownership to handle different API schemas
   const isDriver =
@@ -274,6 +285,30 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           </div>
         </div>
 
+        {/* Map Preview Thumbnail */}
+        <div 
+          onClick={(e) => {
+            e.preventDefault();
+            e.stopPropagation();
+            setIsMapModalOpen(true);
+          }}
+          className="w-full sm:w-32 h-24 sm:h-32 shrink-0 relative group/map cursor-pointer rounded-2xl overflow-hidden border border-border/60 hover:border-primary transition-all shadow-sm z-20"
+        >
+          <div className="absolute inset-0 bg-dark-text/0 group-hover/map:bg-dark-text/5 transition-colors z-20 flex items-center justify-center">
+            <div className="bg-white/90 backdrop-blur-sm p-2 rounded-xl shadow-xl scale-0 group-hover/map:scale-100 transition-all duration-300 text-primary">
+              <HiMap className="w-5 h-5" />
+            </div>
+          </div>
+          <RideMap 
+            trip={ride} 
+            rd={(key: string) => t("rides", key)} 
+            hideHeader={true} 
+            height="100%" 
+            interactive={false} 
+            obfuscated={!isDriver}
+          />
+        </div>
+
         {/* Action Panel - Lifted to z-20 to override the overlay link */}
         <div className="relative z-20 flex md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 md:border-l border-border pt-6 md:pt-0 md:pl-10 shrink-0 space-y-1 gap-4">
           <div className="text-center md:text-right">
@@ -388,6 +423,13 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           </div>
         </div>
       </Modal>
+
+      <RideMapModal 
+        isOpen={isMapModalOpen} 
+        onClose={() => setIsMapModalOpen(false)} 
+        ride={ride} 
+        obfuscated={!isDriver}
+      />
     </div>
   );
 }
