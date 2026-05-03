@@ -285,23 +285,9 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           </div>
         </div>
 
-        {/* View on Map Button */}
-        <div className="shrink-0 flex items-center md:items-end md:pr-4">
-          <button
-            onClick={(e) => {
-              e.preventDefault();
-              e.stopPropagation();
-              setIsMapModalOpen(true);
-            }}
-            className="flex items-center gap-2 px-4 py-2 bg-light-bg hover:bg-primary/5 text-gray-600 hover:text-primary rounded-xl border border-border/60 hover:border-primary/30 transition-all font-black text-[10px] uppercase tracking-widest group/btn shadow-sm z-20"
-          >
-            <HiMap className="w-4 h-4 text-primary group-hover/btn:scale-110 transition-transform" />
-            {t("rideDetails", "viewOnMap")}
-          </button>
-        </div>
 
         {/* Action Panel - Lifted to z-20 to override the overlay link */}
-        <div className="relative z-20 flex md:flex-col items-center md:items-end justify-between md:justify-center border-t md:border-t-0 md:border-l border-border pt-6 md:pt-0 md:pl-10 shrink-0 space-y-1 gap-4">
+        <div className="relative z-20 flex flex-col items-stretch md:items-end justify-center border-t md:border-t-0 md:border-l border-border pt-6 md:pt-0 md:pl-10 shrink-0 gap-3">
           <div className="text-center md:text-right">
             <div className="text-2xl font-black text-primary">
               {formatCurrency(Number(price))}
@@ -324,7 +310,7 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
                 }}
                 disabled={!canCancel}
                 className={cn(
-                  "mt-1 shadow-md font-black uppercase text-[10px] tracking-widest min-w-[120px]",
+                  "mt-1 shadow-md font-black uppercase text-[10px] tracking-widest w-full md:min-w-[120px] py-3",
                   canCancel
                     ? "shadow-error/10"
                     : "opacity-60 cursor-not-allowed bg-gray-50 border-gray-200 text-gray-400",
@@ -342,6 +328,17 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
               </Button>
             </div>
           )}
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsMapModalOpen(true);
+            }}
+            className="flex items-center justify-center gap-2 w-full md:w-auto px-4 py-2 text-primary font-black text-[10px] uppercase tracking-widest hover:bg-primary/5 rounded-xl transition-all border border-transparent hover:border-primary/20"
+          >
+            <HiMap className="w-3.5 h-3.5" />
+            {t("rideDetails", "viewOnMap")}
+          </button>
         </div>
       </div>
 
