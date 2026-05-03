@@ -119,22 +119,7 @@ export function useRidesPage() {
     return true;
   });
 
-  // Debugging logs
-  useEffect(() => {
-    if (activeRoute) {
-      console.log("Popular Route Active:", `${activeRoute.from} - ${activeRoute.to}`);
-      console.log("Region IDs:", activeRoute.from_id, "->", activeRoute.to_id);
-      console.log("Region Rides Data:", regionRidesData);
-      if (regionError) console.error("Region Search Error:", regionError);
-    }
-    if (manualSearch) {
-      console.log("Manual Search Active:", manualSearch);
-      console.log("Search Rides Data:", searchRidesData);
-      if (searchError) console.error("Search Error:", searchError);
-    }
-    console.log("Raw Rides:", rawRides.length);
-    console.log("Filtered Rides:", filteredRides.length);
-  }, [activeRoute, manualSearch, regionRidesData, searchRidesData, rawRides, filteredRides, regionError, searchError]);
+
 
   const activeFilterCount =
     (filters.timeSlots.length > 0 ? 1 : 0) +

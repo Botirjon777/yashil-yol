@@ -196,28 +196,19 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
                 </div>
               </div>
 
-              {/* Map Preview Thumbnail */}
-              <div 
-                onClick={(e) => {
-                  e.preventDefault();
-                  e.stopPropagation();
-                  setIsMapModalOpen(true);
-                }}
-                className="w-full sm:w-32 h-24 sm:h-32 md:w-40 md:h-40 shrink-0 relative group/map cursor-pointer rounded-2xl overflow-hidden border border-border/60 hover:border-primary/50 transition-all shadow-sm"
-              >
-                <div className="absolute inset-0 bg-dark-text/0 group-hover/map:bg-dark-text/5 transition-colors z-20 flex items-center justify-center">
-                  <div className="bg-white/90 backdrop-blur-sm p-2 rounded-xl shadow-xl scale-0 group-hover/map:scale-100 transition-all duration-300 text-primary">
-                    <HiMap className="w-5 h-5" />
-                  </div>
-                </div>
-                <RideMap 
-                  trip={ride} 
-                  rd={rd} 
-                  hideHeader={true} 
-                  height="100%" 
-                  interactive={false} 
-                  obfuscated={true}
-                />
+              {/* View on Map Button */}
+              <div className="flex-1 w-full sm:w-auto flex items-center justify-center sm:justify-end">
+                <button
+                  onClick={(e) => {
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsMapModalOpen(true);
+                  }}
+                  className="flex items-center gap-2 px-5 py-2.5 bg-light-bg hover:bg-primary/5 text-gray-600 hover:text-primary rounded-xl border border-border/60 hover:border-primary/30 transition-all font-black text-[11px] uppercase tracking-widest group/btn shadow-sm z-20"
+                >
+                  <HiMap className="w-4 h-4 text-primary group-hover/btn:scale-110 transition-transform" />
+                  {t("rideDetails", "viewOnMap")}
+                </button>
               </div>
             </div>
 
