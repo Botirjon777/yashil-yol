@@ -211,6 +211,7 @@
     "maxPrice": "Max Price",
     "seatsLeft": "seats left",
     "joinRide": "Join Ride",
+    "viewDetails": "View Details",
     "approxLocation": "Approximate location (~1km radius)",
     "tripMap": "Trip Map",
     "noMapData": "No map data available for this trip"

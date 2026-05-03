@@ -153,17 +153,6 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
   return (
     <div className="relative group">
       {/* Absolute Overlay Link for the whole card area */}
-      <Link
-        href={
-          bookingId
-            ? `/rides/client/${bookingId}`
-            : isDriver
-              ? `/rides/driver/${ride.id}`
-              : `/rides/${ride.id}`
-        }
-        className="absolute inset-0 z-20"
-        aria-label="View ride details"
-      />
 
       <div className="premium-card p-6 flex flex-col md:flex-row items-stretch md:items-center justify-between gap-6 group hover:border-primary transition-all bg-white overflow-hidden relative">
         {/* Status indicator line */}
@@ -178,22 +167,6 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           )}
         ></div>
 
-        {/* Status Badge - Top Right */}
-        <div
-          className={cn(
-            "absolute top-3 right-3 z-20 px-3 py-1 text-[10px] font-black uppercase tracking-widest rounded-full shadow-sm",
-            String(ride.status) === "active"
-              ? "bg-success/10 text-success"
-              : String(ride.status) === "completed"
-                ? "bg-primary/10 text-primary"
-                : String(ride.status) === "canceled" ||
-                    String(ride.status) === "cancelled"
-                  ? "bg-error/10 text-error"
-                  : "bg-gray-100 text-gray-400",
-          )}
-        >
-          {t("status", ride.status) || ride.status}
-        </div>
 
         <div className="flex items-start md:items-center space-x-5 flex-1 min-w-0 pl-2">
           {/* Vertical Route Indicator - now reactive to height */}
@@ -296,6 +269,24 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
               {t("rideDetails", "perSeat")}
             </div>
           </div>
+          <Link
+            href={
+              bookingId
+                ? `/rides/client/${bookingId}`
+                : isDriver
+                  ? `/rides/driver/${ride.id}`
+                  : `/rides/${ride.id}`
+            }
+            className="w-full md:w-auto"
+          >
+            <Button
+              variant="outline"
+              size="sm"
+              className="w-full md:min-w-[120px] py-2.5 font-black uppercase text-[10px] tracking-widest border-primary/20 text-primary hover:bg-primary/5"
+            >
+              {t("rides", "viewDetails")}
+            </Button>
+          </Link>
           {(isDriver || isPassenger) && String(ride.status) === "active" && (
             <div className="flex flex-col items-center">
               <Button
@@ -330,11 +321,16 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           )}
           <button
             onClick={(e) => {
+              if (isHistory) return;
               e.preventDefault();
               e.stopPropagation();
               setIsMapModalOpen(true);
             }}
-            className="flex items-center justify-center gap-2 w-full md:w-auto px-4 py-2 text-primary font-black text-[10px] uppercase tracking-widest hover:bg-primary/5 rounded-xl transition-all border border-transparent hover:border-primary/20 relative z-30"
+            disabled={isHistory}
+            className={cn(
+              "flex items-center justify-center gap-2 w-full md:w-auto px-4 py-2 text-primary font-black text-[10px] uppercase tracking-widest hover:bg-primary/5 rounded-xl transition-all border border-transparent hover:border-primary/20",
+              isHistory && "opacity-40 cursor-not-allowed grayscale"
+            )}
           >
             <HiMap className="w-3.5 h-3.5" />
             {t("rideDetails", "viewOnMap")}
