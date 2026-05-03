@@ -120,7 +120,7 @@ const BlurMarker = ({ center, radius }: BlurMarkerProps) => {
 
   const icon = React.useMemo(() => L.divIcon({
     className: "",
-    html: `<div style="width: ${pxRadius * 2}px; height: ${pxRadius * 2}px; margin-left: -${pxRadius}px; margin-top: -${pxRadius}px; border-radius: 50%; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background-color: rgba(255, 255, 255, 0.2);"></div>`,
+    html: `<div style="width: ${pxRadius * 2}px; height: ${pxRadius * 2}px; margin-left: -${pxRadius}px; margin-top: -${pxRadius}px; border-radius: 50%; backdrop-filter: blur(40px); -webkit-backdrop-filter: blur(40px); background-color: rgba(255, 255, 255, 0.95); box-shadow: inset 0 0 40px rgba(0,0,0,0.05);"></div>`,
     iconSize: [0, 0],
   }), [pxRadius]);
 
