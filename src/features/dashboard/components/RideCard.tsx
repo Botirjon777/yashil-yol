@@ -285,28 +285,19 @@ export function RideCard({ ride, isHistory = false }: RideCardProps) {
           </div>
         </div>
 
-        {/* Map Preview Thumbnail */}
-        <div 
-          onClick={(e) => {
-            e.preventDefault();
-            e.stopPropagation();
-            setIsMapModalOpen(true);
-          }}
-          className="w-full sm:w-32 h-24 sm:h-32 shrink-0 relative group/map cursor-pointer rounded-2xl overflow-hidden border border-border/60 hover:border-primary transition-all shadow-sm z-20"
-        >
-          <div className="absolute inset-0 bg-dark-text/0 group-hover/map:bg-dark-text/5 transition-colors z-20 flex items-center justify-center">
-            <div className="bg-white/90 backdrop-blur-sm p-2 rounded-xl shadow-xl scale-0 group-hover/map:scale-100 transition-all duration-300 text-primary">
-              <HiMap className="w-5 h-5" />
-            </div>
-          </div>
-          <RideMap 
-            trip={ride} 
-            rd={(key: string) => t("rides", key)} 
-            hideHeader={true} 
-            height="100%" 
-            interactive={false} 
-            obfuscated={!isDriver}
-          />
+        {/* View on Map Button */}
+        <div className="shrink-0 flex items-center md:items-end md:pr-4">
+          <button
+            onClick={(e) => {
+              e.preventDefault();
+              e.stopPropagation();
+              setIsMapModalOpen(true);
+            }}
+            className="flex items-center gap-2 px-4 py-2 bg-light-bg hover:bg-primary/5 text-gray-600 hover:text-primary rounded-xl border border-border/60 hover:border-primary/30 transition-all font-black text-[10px] uppercase tracking-widest group/btn shadow-sm z-20"
+          >
+            <HiMap className="w-4 h-4 text-primary group-hover/btn:scale-110 transition-transform" />
+            {t("rideDetails", "viewOnMap")}
+          </button>
         </div>
 
         {/* Action Panel - Lifted to z-20 to override the overlay link */}

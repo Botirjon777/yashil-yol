@@ -82,6 +82,51 @@ const Routing = ({ waypoints }: RoutingProps) => {
   return null;
 };
 
+const MapEffect = () => {
+  const map = useMap();
+  React.useEffect(() => {
+    // Force Leaflet to recalculate size after a short delay
+    // to handle dynamic layout and container shifts
+    const timer = setTimeout(() => {
+      map.invalidateSize();
+    }, 250);
+    return () => clearTimeout(timer);
+  }, [map]);
+  return null;
+};
+
+interface BlurMarkerProps {
+  center: L.LatLng;
+  radius: number;
+}
+
+const BlurMarker = ({ center, radius }: BlurMarkerProps) => {
+  const map = useMap();
+  const [pxRadius, setPxRadius] = React.useState(0);
+
+  React.useEffect(() => {
+    const update = () => {
+      const p1 = map.latLngToLayerPoint(center);
+      // Rough estimation: 1 degree latitude is ~111320 meters
+      const p2 = map.latLngToLayerPoint(L.latLng(center.lat + (radius / 111320), center.lng));
+      setPxRadius(Math.abs(p1.y - p2.y));
+    };
+    map.on("zoom move", update);
+    update();
+    return () => {
+      map.off("zoom move", update);
+    };
+  }, [map, center, radius]);
+
+  const icon = React.useMemo(() => L.divIcon({
+    className: "",
+    html: `<div style="width: ${pxRadius * 2}px; height: ${pxRadius * 2}px; margin-left: -${pxRadius}px; margin-top: -${pxRadius}px; border-radius: 50%; backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); background-color: rgba(255, 255, 255, 0.2);"></div>`,
+    iconSize: [0, 0],
+  }), [pxRadius]);
+
+  return <Marker position={center} icon={icon} interactive={false} />;
+};
+
 interface RideMapProps {
   trip: any;
   rd: (key: string) => string;
@@ -177,6 +222,7 @@ export const RideMap = ({
 
   return (
     <div
+      style={{ height: height === "100%" ? "100%" : "auto" }}
       className={cn(
         "premium-card overflow-hidden",
         interactive ? "" : "pointer-events-none",
@@ -207,8 +253,9 @@ export const RideMap = ({
           <TileLayer
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
             url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
-            className={obfuscated ? "blur-[5px]" : ""}
           />
+
+          <MapEffect />
 
           <Routing waypoints={waypoints} />
 
@@ -219,26 +266,27 @@ export const RideMap = ({
 
             if (obfuscated && (isStart || isEnd)) {
               return (
-                <Circle
-                  key={idx}
-                  center={point}
-                  radius={300}
-                  pathOptions={{
-                    color: isStart ? "#6366f1" : "#ef4444",
-                    fillColor: isStart ? "#6366f1" : "#ef4444",
-                    fillOpacity: 0.15,
-                    weight: 2,
-                    dashArray: "5, 10",
-                  }}
-                >
-                  <Tooltip
-                    permanent
-                    direction="top"
-                    className="bg-white/90! backdrop-blur-sm! px-2! py-1! rounded-lg shadow-xl text-[9px] font-black uppercase tracking-widest text-dark-text border-none opacity-100"
+                <React.Fragment key={idx}>
+                  <BlurMarker center={point} radius={300} />
+                  <Circle
+                    center={point}
+                    radius={300}
+                    pathOptions={{
+                      color: isStart ? "#6366f1" : "#ef4444",
+                      fillColor: "transparent",
+                      weight: 2,
+                      dashArray: "5, 10",
+                    }}
                   >
-                    {rd("approxLocation") || "Approx. 300m"}
-                  </Tooltip>
-                </Circle>
+                    <Tooltip
+                      permanent
+                      direction="top"
+                      className="bg-white/90! backdrop-blur-sm! px-2! py-1! rounded-lg shadow-xl text-[9px] font-black uppercase tracking-widest text-dark-text border-none opacity-100"
+                    >
+                      {rd("approxLocation") || "Approx. 300m"}
+                    </Tooltip>
+                  </Circle>
+                </React.Fragment>
               );
             }
 
