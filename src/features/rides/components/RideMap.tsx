@@ -267,10 +267,10 @@ export const RideMap = ({
             if (obfuscated && (isStart || isEnd)) {
               return (
                 <React.Fragment key={idx}>
-                  <BlurMarker center={point} radius={300} />
+                  <BlurMarker center={point} radius={1000} />
                   <Circle
                     center={point}
-                    radius={300}
+                    radius={1000}
                     pathOptions={{
                       color: isStart ? "#6366f1" : "#ef4444",
                       fillColor: "transparent",
@@ -283,7 +283,7 @@ export const RideMap = ({
                       direction="top"
                       className="bg-white/90! backdrop-blur-sm! px-2! py-1! rounded-lg shadow-xl text-[9px] font-black uppercase tracking-widest text-dark-text border-none opacity-100"
                     >
-                      {rd("approxLocation") || "Approx. 300m"}
+                      {rd("approxLocation") || "Approx. 1km"}
                     </Tooltip>
                   </Circle>
                 </React.Fragment>
