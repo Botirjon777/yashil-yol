@@ -610,41 +610,201 @@
     "contactSupport": "Yordam guruhiga murojaat qilish",
     "print": "Hujjatni chop etish",
     "sections": {
-      "general": {
-        "title": "1. Umumiy qoidalar va Foydalanuvchi turlari",
-        "content": "Ketamiz.com — bu mijozlar (Client) va haydovchilar (Driver) o‘rtasida safarlarni tashkil qilish uchun mo‘ljallangan platforma. Platformadan foydalanish orqali siz ushbu shartlarga to‘liq rozilik bildirasiz. Mijoz — safar band qiluvchi, Haydovchi — safar taklif qiluvchi hisoblanadi."
+      "section1": {
+        "title": "1. Umumiy qoidalar",
+        "content": "Ketamiz.com — bu foydalanuvchilar (mijozlar) va haydovchilar o‘rtasida safarlarni tashkil qilish uchun mo‘ljallangan platforma hisoblanadi. Platformadan foydalanish orqali siz ushbu shartlarga to‘liq rozilik bildirasiz. Agar siz ushbu shartlarga rozi bo‘lmasangiz, platformadan foydanishingiz mumkin emas."
       },
-      "booking": {
-        "title": "2. Booking va To‘lov qoidalari",
-        "content": "Mijoz safarni band qilganda to‘lov oldindan balansdan yechiladi. Agar balans yetarli bo‘lmasa, booking amalga oshmaydi. Platforma har bir booking uchun xizmat haqi (service fee) ushlab qoladi. Mijoz yo‘lovchi qo‘shishi yoki 2 soat oldingacha olib tashlashi mumkin. Yo‘lovchi olib tashlanganda yoki booking bekor qilinganda to‘lovning bir qismi qaytariladi, xizmat haqi ushlab qolinadi."
+      "section2": {
+        "title": "2. Foydalanuvchi turlari",
+        "content": "Platformada 2 turdagi foydalanuvchilar mavjud: Mijoz (Client) — safar band qiluvchi Haydovchi (Driver) — safar taklif qiluvchi"
       },
-      "status": {
-        "title": "3. Safar Statuslari va Ma’lumotlar",
-        "content": "Safarlar Active (faol), Full (joy yo‘q), In Progress (boshlangan), Completed (tugagan) yoki Cancelled (bekor qilingan) holatida bo‘lishi mumkin. Foydalanuvchi barcha faol safarlarni ko‘ra oladi, ammo batafsil ma’lumotlar (aniq lokatsiya va aloqa) faqat o‘zi band qilgan safarlar uchun ochiq bo‘ladi."
+      "section3": {
+        "title": "3. Booking (Bron qilish) qoidalari",
+        "content": "Mijoz safarni band qilganda: To‘lov oldindan balansdan yechib olinadi Booking tasdiqlangandan keyin o‘rindiqlar rezerv qilinadi Mijoz o‘z safarini o‘zi band qila olmaydi (driver bo‘lsa ham)"
       },
-      "liability": {
-        "title": "4. Javobgarlik va Ma’lumotlar aniqligi",
-        "content": "Ketamiz.com faqat vositachi platforma bo‘lib, haydovchi va mijoz o‘rtasidagi real safar yoki kechikishlar uchun to‘liq javobgar emas. Haydovchi yo‘lovchilar xavfsizligi uchun, mijoz esa kiritilgan ma’lumotlarning aniqligi uchun javobgar hisoblanadi. Texnik xatoliklar yoki internet uzilishi holatlarida platforma javobgarlikni o‘z zimmasiga olmaydi."
+      "section4": {
+        "title": "4. To‘lov va balans",
+        "content": "Mijoz uchun: To‘lov booking vaqtida yechiladi Agar balans yetarli bo‘lmasa — booking amalga oshmaydi Haydovchi uchun: To‘lov booking tasdiqlangandan so‘ng balansga tushadi Platforma xizmat haqi (service fee) ushlab qoladi"
       },
-      "time": {
-        "title": "5. Muhim vaqt cheklovlari (CRITICAL)",
-        "content": "Safarni bekor qilish yoki yo‘lovchini olib tashlash faqat safar boshlanishidan kamida 2 soat oldin amalga oshirilishi mumkin. Agar safar boshlanishiga 2 soatdan kam vaqt qolsa, bekor qilish taqiqlanadi va refund (pulni qaytarish) imkoniyati mavjud bo‘lmaydi."
+      "section5": {
+        "title": "5. Service Fee (Komissiya)",
+        "content": "Har bir booking uchun platforma komissiya oladi Komissiya: Booking paytida Yoki cancel paytida qo‘llanilishi mumkin Komissiya qaytarilmaydi (agar shartlarda boshqacha yozilmagan bo‘lsa)"
       },
-      "financial": {
-        "title": "6. Balans, Tranzaksiyalar va Xavfsizlik",
-        "content": "Platforma barcha to‘lovlar tarixini saqlaydi. Fake booking, soxta ma’lumot kiritish yoki to‘lovni chetlab o‘tishga urinish account bloklanishiga va balans muzlatilishiga olib keladi. Haydovchi balansi bekor qilishlar natijasida manfiy (-) bo‘lishi mumkin va platforma buni keyingi to‘lovlardan ushlab qoladi."
+      "section6": {
+        "title": "6. Passenger qo‘shish (Qo‘shimcha yo‘lovchi)",
+        "content": "Mijoz mavjud bookingga yangi yo‘lovchi qo‘shishi mumkin Har bir qo‘shimcha yo‘lovchi uchun: Alohida to‘lov olinadi Balansdan pul yechiladi Agar joy bo‘lmasa — qo‘shib bo‘lmaydi"
       },
-      "driver": {
-        "title": "7. Haydovchi majburiyatlari va Safar yaratish",
-        "content": "Haydovchi yo‘nalish, vaqt, narx va o‘rindiqlar sonini to‘g‘ri kiritishi shart. Safarlar vaqt bo‘yicha kesishmasligi (overlap) kerak. Agar haydovchi safarni bekor qilsa, barcha bookinglar bekor qilinadi, mijozlarga 100% pul qaytariladi va haydovchidan kompensatsiya hamda platforma xizmat haqi ushlab qolinadi."
+      "section7": {
+        "title": "7. Passenger olib tashlash",
+        "content": "Mijoz yo‘lovchini olib tashlashi mumkin agar: Safar boshlanishiga kamida 2 soat vaqt qolgan bo‘lsa Qaytarish: To‘lovning bir qismi qaytariladi Service fee ushlab qolinadi"
       },
-      "privacy": {
-        "title": "8. Ro‘yxatdan o‘tish, SMS va Maxfiylik",
-        "content": "Ro‘yxatdan o‘tish uchun telefon raqami SMS orqali tasdiqlanishi shart. Tasdiqlangan raqam safar muvofiqlashtirish, SMS bildirishnomalar yuborish va haydovchi/mijoz aloqasi uchun ishlatiladi. Telefon raqamlar uchinchi shaxslarga berilmaydi va ulardan spam maqsadida foydalanish taqiqlanadi."
+      "section8": {
+        "title": "8. Bookingni bekor qilish",
+        "content": "Bekor qilish mumkin: Faqat safar boshlanishidan kamida 2 soat oldin Bekor qilinganda: Mijozga pulning bir qismi qaytariladi Cancellation fee ushlab qolinadi Haydovchi: Bekor qilish natijasida balansdan pul yechilishi mumkin Kompensatsiya berilishi mumkin"
       },
-      "agreement": {
-        "title": "9. O‘zgarishlar va Yakuniy rozilik",
-        "content": "Ro‘yxatdan o‘tish orqali foydalanuvchi barcha qoidalarga to‘liq rozilik bildiradi. Platforma ushbu shartlarni istalgan vaqtda o‘zgartirish, qoidalarni buzgan foydalanuvchilar hisobini bloklash yoki balansini muzlatish huquqiga ega."
+      "section9": {
+        "title": "9. Trip (Safar) holati",
+        "content": "Trip quyidagi holatlarda bo‘ladi: active — faol full — joy qolmagan cancelled — bekor qilingan completed — tugagan Agar joy tugasa — avtomatik full bo‘ladi"
+      },
+      "section10": {
+        "title": "10. Javobgarlik",
+        "content": "Ketamiz.com: Haydovchi va mijoz o‘rtasidagi real safar uchun to‘liq javobgar emas Faqat platforma sifatida xizmat qiladi Haydovchi: Yo‘lovchilar xavfsizligi uchun javobgar Mijoz: To‘g‘ri ma’lumot kiritishi shart"
+      },
+      "section11": {
+        "title": "11. Balans va tranzaksiyalar",
+        "content": "Har bir to‘lov yozib boriladi Platforma: Debit (yechish) Credit (qo‘shish) History saqlaydi"
+      },
+      "section12": {
+        "title": "12. Firibgarlik va noto‘g‘ri foydalanish",
+        "content": "Quyidagilar taqiqlanadi: Fake booking Soxta ma’lumot To‘lovni chetlab o‘tish Bunday holatda: Account bloklanadi Balans muzlatilishi mumkin"
+      },
+      "section13": {
+        "title": "13. O‘zgarishlar",
+        "content": "Ketamiz.com ushbu shartlarni istalgan vaqtda o‘zgartirish huquqiga ega."
+      },
+      "section14": {
+        "title": "14. Rozilik",
+        "content": "Ro‘yxatdan o‘tish orqali foydalanuvchi: ✅ Ushbu shartlarga to‘liq rozilik bildiradi ✅ Platforma qoidalariga amal qilishga majbur"
+      },
+      "section15": {
+        "title": "15. Trip ko‘rish va foydalanish",
+        "content": "Foydalanuvchi platformadagi barcha faol (active) va to‘ldirilgan (full) safarlarni ko‘rishi mumkin Har bir safar: Yo‘nalish Vaqt Narx Bo‘sh joylar asosida taqdim etiladi"
+      },
+      "section16": {
+        "title": "16. Trip ma’lumotlariga kirish",
+        "content": "Foydalanuvchi quyidagi shartlarda safar ma’lumotlarini ko‘rishi mumkin: Faqat o‘zi band qilgan safarlarni to‘liq (detailed) ko‘ra oladi Boshqa safarlar faqat umumiy ko‘rinishda beriladi"
+      },
+      "section17": {
+        "title": "17. Trip statuslari (Muhim)",
+        "content": "Platformada safarlar quyidagi statuslarga ega: 🟢 Active Safar mavjud Booking qilish mumkin 🔴 Full Barcha o‘rindiqlar band qilingan Yangi booking qabul qilinmaydi 🟡 In Progress Safar boshlangan O‘zgartirishlar cheklangan ⚫ Completed Safar yakunlangan Endi o‘zgartirish yoki refund mumkin emas ❌ Cancelled Safar yoki booking bekor qilingan"
+      },
+      "section18": {
+        "title": "18. In Progress (davom etayotgan safar)",
+        "content": "Safar quyidagi shartlarda in progress hisoblanadi: Start time ≤ hozirgi vaqt End time ≥ hozirgi vaqt Cheklovlar: Passenger qo‘shib bo‘lmaydi Cancel qilish mumkin emas Refund yo‘q"
+      },
+      "section19": {
+        "title": "19. Completed (yakunlangan safar)",
+        "content": "Safar tugagandan keyin: Hech qanday refund berilmaydi Booking o‘zgartirib bo‘lmaydi Platforma barcha tranzaksiyalarni yakunlangan deb hisoblaydi"
+      },
+      "section20": {
+        "title": "20. Cancelled trips",
+        "content": "Bekor qilingan safarlar: History’da saqlanadi Foydalanuvchi ko‘ra oladi Bekor qilingan safar qayta tiklanmaydi"
+      },
+      "section21": {
+        "title": "21. Foydalanuvchi tarixlari (History)",
+        "content": "Platforma foydalanuvchiga quyidagilarni ko‘rsatadi: Bekor qilingan safarlar Davom etayotgan safarlar Yakunlangan safarlar Bu ma’lumotlar: Faqat foydalanuvchining o‘ziga tegishli bo‘ladi Boshqalarga ko‘rsatilmaydi"
+      },
+      "section22": {
+        "title": "22. Vaqtga bog‘liq cheklovlar (CRITICAL)",
+        "content": "Platformada quyidagi vaqt qoidalari mavjud: Safar boshlanishidan 2 soat oldin: Cancel qilish mumkin Safar boshlanishiga 2 soatdan kam qolsa: ❌ Cancel taqiqlanadi ❌ Passenger olib tashlab bo‘lmaydi"
+      },
+      "section23": {
+        "title": "23. Ma’lumotlar aniqligi",
+        "content": "Foydalanuvchi: Ism Telefon Lokatsiya to‘g‘ri kiritishi shart. Noto‘g‘ri ma’lumot: Booking bekor qilinishiga olib kelishi mumkin Platforma javobgar emas"
+      },
+      "section24": {
+        "title": "24. Platforma cheklovlari",
+        "content": "Ketamiz.com: Safar vaqtiga kechikishlar uchun javobgar emas Haydovchi va mijoz o‘rtasidagi kelishmovchiliklarga to‘liq javob bermaydi Faqat vositachi platforma hisoblanadi"
+      },
+      "section25": {
+        "title": "25. Texnik xatoliklar",
+        "content": "Quyidagi holatlarda platforma javobgar emas: Internet uzilishi Server xatolari To‘lov tizimidagi muammolar"
+      },
+      "section26": {
+        "title": "26. Hisob bloklanishi",
+        "content": "Quyidagi holatlarda account bloklanadi: Ko‘p marotaba bekor qilish (abuse) Fake booking To‘lov manipulyatsiyasi"
+      },
+      "section27": {
+        "title": "27. Qoidalarni buzish",
+        "content": "Platforma quyidagi huquqlarga ega: Bookingni bekor qilish Balansni muzlatish Accountni bloklash"
+      },
+      "section28": {
+        "title": "28. Haydovchi (Driver) roli",
+        "content": "Haydovchi platformada: Safar (Trip) yaratadi Narx belgilaydi Yo‘lovchilarni qabul qiladi Haydovchi o‘z safarlari uchun to‘liq javobgar hisoblanadi."
+      },
+      "section29": {
+        "title": "29. Trip yaratish qoidalari",
+        "content": "Haydovchi quyidagilarni to‘g‘ri kiritishi shart: Yo‘nalish (start/end) Vaqt (start_time / end_time) Narx (price_per_seat) Bo‘sh o‘rindiqlar ❌ Taqiqlanadi: Bir xil tripni qayta yaratish Bir vaqtning o‘zida overlap qiluvchi safar yaratish 👉 (sening koddan): where start_time < end_time AND overlap check Agar bu buzilsa: Trip yaratilmaydi"
+      },
+      "section30": {
+        "title": "30. Driver trip ko‘rish huquqi",
+        "content": "Haydovchi: Faqat o‘z safarlarini ko‘ra oladi Active / Completed / Cancelled bo‘yicha filtrlay oladi"
+      },
+      "section31": {
+        "title": "31. Trip statuslari (Driver uchun)",
+        "content": "active → booking qabul qilinadi full → joy yo‘q completed → yakunlangan cancelled → bekor qilingan"
+      },
+      "section32": {
+        "title": "32. Tripni bekor qilish (ENG MUHIM)",
+        "content": "Haydovchi safarni bekor qilsa: ⚠️ Quyidagilar sodir bo‘ladi: 1. Barcha bookinglar bekor qilinadi Mijozlarga pul qaytariladi 2. Mijozga kompensatsiya beriladi % asosida (config orqali) 3. Driverdan pul yechiladi Booking summasi Komissiya Kompensatsiya"
+      },
+      "section33": {
+        "title": "33. Financial javobgarlik (Driver uchun)",
+        "content": "Agar haydovchi tripni bekor qilsa: Driver quyidagilarni to‘laydi: ❗ Mijozga to‘liq refund ❗ Qo‘shimcha kompensatsiya ❗ Platforma service fee 👉 (sening real logikang): Driver loses: = total_price + client_compensation + company_fee"
+      },
+      "section34": {
+        "title": "34. Manfiy balans (VERY IMPORTANT)",
+        "content": "Haydovchi balansi manfiy bo‘lishi mumkin Platforma: Keyingi to‘lovlardan ushlab qoladi Yoki accountni bloklaydi 👉 (sening kodda bor): $driverAfter = -20000"
+      },
+      "section35": {
+        "title": "35. Mijoz kompensatsiyasi",
+        "content": "Agar trip haydovchi tomonidan bekor qilinsa: Mijoz: 100% pulini qaytarib oladi Qo‘shimcha kompensatsiya oladi"
+      },
+      "section36": {
+        "title": "36. Platforma komissiyasi",
+        "content": "Trip bekor qilinganda: Platforma o‘z komissiyasini ushlab qolishi mumkin Yoki qayta hisob-kitob qiladi"
+      },
+      "section37": {
+        "title": "37. Driver uchun cheklovlar",
+        "content": "Haydovchi: ❌ Safarni asossiz bekor qilmasligi kerak ❌ Soxta trip yaratmasligi kerak ❌ Mijozlarni chalg‘itmasligi kerak"
+      },
+      "section38": {
+        "title": "38. Driver account bloklanishi",
+        "content": "Quyidagilar uchun: Ko‘p cancel qilish Noto‘g‘ri ma’lumot Moliyaviy manipulyatsiya 👉 Account bloklanadi"
+      },
+      "section39": {
+        "title": "39. Expired trips",
+        "content": "Bekor qilingan safarlar alohida saqlanadi (expired_trips table) Bu audit va history uchun ishlatiladi"
+      },
+      "section40": {
+        "title": "40. Tranzaksiyalar",
+        "content": "Har bir amal yoziladi: Debit (yechish) Credit (qo‘shish) Driver bunga rozilik bildiradi"
+      },
+      "section41": {
+        "title": "41. Platforma huquqlari",
+        "content": "Ketamiz.com quyidagi huquqlarga ega: Tripni majburiy bekor qilish Balansni muzlatish Komissiyani o‘zgartirish"
+      },
+      "section42": {
+        "title": "42. Ro‘yxatdan o‘tish va SMS tasdiqlash",
+        "content": "Foydalanuvchi platformada ro‘yxatdan o‘tishda: Telefon raqamini kiritishi shart Ushbu raqam SMS orqali tasdiqlanishi kerak Tasdiqlash: Platforma bir martalik kod (OTP) yuboradi Foydalanuvchi ushbu kodni kiritib: Accountni faollashtiradi ❗ Muhim: Tasdiqlanmagan akkaunt: Booking qila olmaydi Trip yarata olmaydi"
+      },
+      "section43": {
+        "title": "43. Telefon raqamdan foydalanish",
+        "content": "Foydalanuvchi rozilik bildiradi: Uning telefon raqami quyidagi maqsadlarda ishlatiladi: SMS tasdiqlash Booking haqida xabarlar Trip o‘zgarishlari Driver va client o‘rtasidagi aloqa"
+      },
+      "section44": {
+        "title": "44. Driver va Client o‘rtasidagi aloqa",
+        "content": "Agar booking tasdiqlansa: Platforma: Client va Driver telefon raqamlarini bir-biriga taqdim etishi mumkin Maqsad: Safarni tezroq tashkil qilish Oson aloqa o‘rnatish"
+      },
+      "section45": {
+        "title": "45. SMS orqali bildirishnomalar",
+        "content": "Platforma quyidagi holatlarda SMS yuborishi mumkin: Yangi booking Booking bekor qilinishi Passenger qo‘shilishi yoki olib tashlanishi Trip bekor qilinishi To‘lov va balans o‘zgarishlari"
+      },
+      "section46": {
+        "title": "46. Maxfiylik (Privacy)",
+        "content": "Telefon raqamlar: Faqat safar bilan bog‘liq foydalanuvchilar orasida ulashiladi Uchinchi shaxslarga berilmaydi (qonuniy talab bo‘lmasa)"
+      },
+      "section47": {
+        "title": "47. Foydalanuvchi majburiyatlari",
+        "content": "Foydalanuvchi: ❗ Boshqa foydalanuvchining telefon raqamini: Spam yuborish uchun ishlatmasligi kerak Marketing uchun ishlatmasligi kerak Uchinchi shaxslarga bermasligi kerak"
+      },
+      "section48": {
+        "title": "48. Platforma javobgarligi (Aloqa bo‘yicha)",
+        "content": "Ketamiz.com: Foydalanuvchilar o‘rtasidagi telefon orqali muloqot uchun javobgar emas Faqat aloqa vositasini taqdim etadi"
+      },
+      "section49": {
+        "title": "49. Noto‘g‘ri foydalanish",
+        "content": "Quyidagilar taqiqlanadi: SMS spam Fake raqamlar Boshqa userni bezovta qilish 👉 Natijada: Account bloklanadi"
       }
     }
   },

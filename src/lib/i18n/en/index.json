@@ -608,41 +608,201 @@
     "contactSupport": "Contact Support",
     "print": "Print Document",
     "sections": {
-      "general": {
-        "title": "1. General Rules and User Types",
-        "content": "Ketamiz.com is a platform designed to organize trips between clients (Client) and drivers (Driver). By using the platform, you fully agree to these terms. Client — the one booking the trip, Driver — the one offering the trip."
+      "section1": {
+        "title": "1. General Rules",
+        "content": "Ketamiz.com is a platform designed to organize trips between users (clients) and drivers. By using the platform, you fully agree to these terms. If you do not agree to these terms, you may not use the platform."
       },
-      "booking": {
-        "title": "2. Booking and Payment Rules",
-        "content": "When a client books a trip, payment is deducted from the balance in advance. If the balance is insufficient, the booking will not proceed. The platform charges a service fee for each booking. Clients can add passengers or remove them up to 2 hours before the start. When a passenger is removed or a booking is cancelled, a partial refund is issued, and the service fee is retained."
+      "section2": {
+        "title": "2. User Types",
+        "content": "There are 2 types of users on the platform: Client — trip booker, Driver — trip provider."
       },
-      "status": {
-        "title": "3. Trip Statuses and Information",
-        "content": "Trips can be Active, Full, In Progress, Completed, or Cancelled. Users can view all active trips, but detailed information (exact location and contact) is only available for trips they have booked."
+      "section3": {
+        "title": "3. Booking Rules",
+        "content": "When a client books a trip: Payment is deducted from the balance in advance. Seats are reserved after the booking is confirmed. Clients cannot book their own trips (even if they are a driver)."
       },
-      "liability": {
-        "title": "4. Responsibility and Data Accuracy",
-        "content": "Ketamiz.com is only an intermediary platform and is not fully responsible for real trips or delays between the driver and the client. The driver is responsible for passenger safety, and the client is responsible for the accuracy of the entered information. The platform is not responsible for technical errors or internet outages."
+      "section4": {
+        "title": "4. Payment and Balance",
+        "content": "For Client: Payment is deducted at the time of booking. If the balance is insufficient, the booking will not proceed. For Driver: Payment is credited to the balance after the booking is confirmed. The platform deducts a service fee."
       },
-      "time": {
-        "title": "5. Important Time Constraints (CRITICAL)",
-        "content": "Cancelling a trip or removing a passenger can only be done at least 2 hours before the trip starts. If less than 2 hours remain before the start, cancellation is prohibited and no refund is possible."
+      "section5": {
+        "title": "5. Service Fee (Commission)",
+        "content": "The platform charges a commission for each booking. Commission may be applied at the time of booking or cancellation. Commission is non-refundable (unless otherwise stated in the terms)."
       },
-      "financial": {
-        "title": "6. Balance, Transactions, and Security",
-        "content": "The platform maintains a history of all payments. Fake bookings, entering false information, or attempting to bypass payment will lead to account blocking and balance freezing. A driver's balance may become negative (-) due to cancellations, and the platform will deduct this from future payments."
+      "section6": {
+        "title": "6. Adding a Passenger",
+        "content": "A client can add a new passenger to an existing booking. For each additional passenger: A separate fee is charged, and money is deducted from the balance. If no seats are available, adding is not possible."
       },
-      "driver": {
-        "title": "7. Driver Responsibilities and Trip Creation",
-        "content": "The driver must correctly enter the route, time, price, and number of seats. Trips must not overlap in time. If a driver cancels a trip, all bookings are cancelled, clients receive a 100% refund, and compensation and platform service fees are deducted from the driver."
+      "section7": {
+        "title": "7. Removing a Passenger",
+        "content": "A client can remove a passenger if: At least 2 hours remain before the trip starts. Refund: A portion of the payment is returned, and the service fee is retained."
       },
-      "privacy": {
-        "title": "8. Registration, SMS, and Privacy",
-        "content": "Registration requires phone number verification via SMS. The verified number is used for trip coordination, sending SMS notifications, and driver/client communication. Phone numbers are not shared with third parties, and using them for spam is prohibited."
+      "section8": {
+        "title": "8. Cancelling a Booking",
+        "content": "Cancellation is possible: Only at least 2 hours before the trip starts. When cancelled: A portion of the money is returned to the client, and a cancellation fee is retained. Driver: Money may be deducted from the balance or compensation may be provided as a result of cancellation."
       },
-      "agreement": {
-        "title": "9. Changes and Final Agreement",
-        "content": "By registering, the user expresses full consent to all rules. The platform reserves the right to change these terms at any time, block accounts, or freeze the balance of users who violate the rules."
+      "section9": {
+        "title": "9. Trip Status",
+        "content": "A trip can be in the following states: active — available, full — no seats left, cancelled — aborted, completed — finished. If seats run out, it automatically becomes full."
+      },
+      "section10": {
+        "title": "10. Responsibility",
+        "content": "Ketamiz.com: Not fully responsible for the real trip between the driver and the client. Serves only as a platform. Driver: Responsible for passenger safety. Client: Must enter correct information."
+      },
+      "section11": {
+        "title": "11. Balance and Transactions",
+        "content": "Every payment is recorded. The platform maintains a history of Debits (deductions) and Credits (additions)."
+      },
+      "section12": {
+        "title": "12. Fraud and Misuse",
+        "content": "The following are prohibited: Fake bookings, false information, bypassing payment. In such cases: The account will be blocked and the balance may be frozen."
+      },
+      "section13": {
+        "title": "13. Changes",
+        "content": "Ketamiz.com reserves the right to change these terms at any time."
+      },
+      "section14": {
+        "title": "14. Consent",
+        "content": "By registering, the user: Fully agrees to these terms and is obligated to follow platform rules."
+      },
+      "section15": {
+        "title": "15. Viewing and Using Trips",
+        "content": "Users can view all active and full trips on the platform. Each trip is presented based on route, time, price, and available seats."
+      },
+      "section16": {
+        "title": "16. Accessing Trip Details",
+        "content": "Users can view trip details under the following conditions: Full (detailed) view is only available for trips they have booked. Other trips are shown in a general view only."
+      },
+      "section17": {
+        "title": "17. Trip Statuses (Important)",
+        "content": "Trips have the following statuses on the platform: 🟢 Active — Trip available, booking possible. 🔴 Full — All seats occupied, no new bookings accepted. 🟡 In Progress — Trip started, changes are limited. ⚫ Completed — Trip finished, no changes or refunds possible. ❌ Cancelled — Trip or booking cancelled."
+      },
+      "section18": {
+        "title": "18. In Progress",
+        "content": "A trip is considered in progress if: Start time ≤ current time and End time ≥ current time. Restrictions: Cannot add passengers, cannot cancel, no refunds."
+      },
+      "section19": {
+        "title": "19. Completed",
+        "content": "After the trip ends: No refunds are issued, booking cannot be changed, and the platform considers all transactions finalized."
+      },
+      "section20": {
+        "title": "20. Cancelled Trips",
+        "content": "Cancelled trips are saved in history, remain visible to the user, and cannot be restored."
+      },
+      "section21": {
+        "title": "21. User History",
+        "content": "The platform shows the user: Cancelled trips, ongoing trips, and completed trips. This information is private to the user and not shown to others."
+      },
+      "section22": {
+        "title": "22. Time Constraints (CRITICAL)",
+        "content": "The following time rules apply on the platform: At least 2 hours before trip starts: Cancellation is possible. Less than 2 hours before trip starts: Cancellation is prohibited, and passengers cannot be removed."
+      },
+      "section23": {
+        "title": "23. Data Accuracy",
+        "content": "Users must correctly enter: Name, Phone, and Location. Incorrect data may lead to booking cancellation, and the platform is not responsible."
+      },
+      "section24": {
+        "title": "24. Platform Limitations",
+        "content": "Ketamiz.com: Not responsible for trip delays and does not fully answer for disputes between driver and client. It is only an intermediary platform."
+      },
+      "section25": {
+        "title": "25. Technical Errors",
+        "content": "The platform is not responsible for: Internet outages, server errors, or payment system issues."
+      },
+      "section26": {
+        "title": "26. Account Blocking",
+        "content": "Accounts will be blocked for: Excessive cancellations (abuse), fake bookings, or payment manipulation."
+      },
+      "section27": {
+        "title": "27. Violation of Rules",
+        "content": "The platform has the right to: Cancel bookings, freeze balances, and block accounts."
+      },
+      "section28": {
+        "title": "28. Driver Role",
+        "content": "On the platform, a Driver: Creates trips, sets prices, and accepts passengers. The driver is fully responsible for their trips."
+      },
+      "section29": {
+        "title": "29. Trip Creation Rules",
+        "content": "Drivers must correctly enter: Route, Time, Price per seat, and Available seats. Prohibited: Re-creating the same trip or creating overlapping trips. If violated, the trip will not be created."
+      },
+      "section30": {
+        "title": "30. Driver Trip View Rights",
+        "content": "Drivers can view only their own trips and filter by Active / Completed / Cancelled."
+      },
+      "section31": {
+        "title": "31. Trip Statuses (for Drivers)",
+        "content": "active → bookings accepted, full → no seats, completed → finished, cancelled → aborted."
+      },
+      "section32": {
+        "title": "32. Cancelling a Trip (MOST IMPORTANT)",
+        "content": "If a driver cancels a trip: 1. All bookings are cancelled and clients receive refunds. 2. Clients receive compensation based on a percentage. 3. Money is deducted from the driver (Booking amount, commission, and compensation)."
+      },
+      "section33": {
+        "title": "33. Financial Responsibility (for Drivers)",
+        "content": "If a driver cancels a trip, they pay: Full refund to clients, additional compensation, and platform service fee. Total loss = total_price + client_compensation + company_fee."
+      },
+      "section34": {
+        "title": "34. Negative Balance (VERY IMPORTANT)",
+        "content": "A driver's balance may become negative (-). The platform will deduct this from future payments or block the account."
+      },
+      "section35": {
+        "title": "35. Client Compensation",
+        "content": "If a trip is cancelled by the driver, the client receives a 100% refund plus additional compensation."
+      },
+      "section36": {
+        "title": "36. Platform Commission",
+        "content": "When a trip is cancelled, the platform may retain its commission or perform a recalculation."
+      },
+      "section37": {
+        "title": "37. Driver Restrictions",
+        "content": "Drivers must not: Cancel trips without justification, create fake trips, or mislead clients."
+      },
+      "section38": {
+        "title": "38. Driver Account Blocking",
+        "content": "Accounts will be blocked for: Excessive cancellations, incorrect information, or financial manipulation."
+      },
+      "section39": {
+        "title": "39. Expired Trips",
+        "content": "Cancelled trips are stored separately for audit and history purposes."
+      },
+      "section40": {
+        "title": "40. Transactions",
+        "content": "Every action is recorded: Debit (deduction) and Credit (addition). The driver consents to this."
+      },
+      "section41": {
+        "title": "41. Platform Rights",
+        "content": "Ketamiz.com has the right to: Manually cancel trips, freeze balances, and change commissions."
+      },
+      "section42": {
+        "title": "42. Registration and SMS Verification",
+        "content": "When registering, users must enter a phone number which must be verified via SMS (OTP). Unverified accounts cannot book or create trips."
+      },
+      "section43": {
+        "title": "43. Phone Number Usage",
+        "content": "Users consent to their phone number being used for: SMS verification, booking notifications, trip changes, and driver/client communication."
+      },
+      "section44": {
+        "title": "44. Driver and Client Communication",
+        "content": "If a booking is confirmed, the platform may provide the phone numbers of the client and driver to each other to facilitate the trip."
+      },
+      "section45": {
+        "title": "45. SMS Notifications",
+        "content": "The platform may send SMS for: New bookings, cancellations, passenger updates, trip cancellations, and payment changes."
+      },
+      "section46": {
+        "title": "46. Privacy",
+        "content": "Phone numbers are only shared between users associated with a trip and are not given to third parties (unless legally required)."
+      },
+      "section47": {
+        "title": "47. User Obligations",
+        "content": "Users must not use other users' phone numbers for: Spam, marketing, or sharing with third parties."
+      },
+      "section48": {
+        "title": "48. Platform Responsibility (Communication)",
+        "content": "Ketamiz.com is not responsible for phone communication between users and only provides the means of contact."
+      },
+      "section49": {
+        "title": "49. Misuse",
+        "content": "Prohibited: SMS spam, fake numbers, or harassing other users. Results in account blocking."
       }
     }
   },
