@@ -7,7 +7,11 @@ const TermsPage = () => {
 
   // Get localized sections
   const sectionsObj = t("terms", "sections") as any;
-  const sectionKeys = Object.keys(sectionsObj);
+  const sectionKeys = Object.keys(sectionsObj || {}).sort((a, b) => {
+    const numA = parseInt(a.replace(/\D/g, ""));
+    const numB = parseInt(b.replace(/\D/g, ""));
+    return numA - numB;
+  });
 
   return (
     <div className="min-h-screen py-10 bg-light-bg">
