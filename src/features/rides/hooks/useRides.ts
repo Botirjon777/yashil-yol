@@ -74,18 +74,21 @@ export const useClientInprogressTrips = () =>
   useQuery<Trip[], Error>({
     queryKey: ["client-trips", "inprogress"],
     queryFn: getClientInprogressTrips,
+    staleTime: 0,
   });
 
 export const useClientCompletedTrips = () =>
   useQuery<Trip[], Error>({
     queryKey: ["client-trips", "completed"],
     queryFn: getClientCompletedTrips,
+    staleTime: 0,
   });
 
 export const useClientCanceledTrips = () =>
   useQuery<Trip[], Error>({
     queryKey: ["client-trips", "canceled"],
     queryFn: getClientCanceledTrips,
+    staleTime: 0,
   });
 
 // ─── Driver Trips ─────────────────────────────────────────────────────────────
@@ -94,24 +97,28 @@ export const useDriverActiveTrips = () =>
   useQuery<Trip[], Error>({
     queryKey: ["driver-trips", "active"],
     queryFn: getDriverActiveTrips,
+    staleTime: 0,
   });
 
 export const useDriverCompletedTrips = () =>
   useQuery<Trip[], Error>({
     queryKey: ["driver-trips", "completed"],
     queryFn: getDriverCompletedTrips,
+    staleTime: 0,
   });
 
 export const useDriverCanceledTrips = () =>
   useQuery<Trip[], Error>({
     queryKey: ["driver-trips", "canceled"],
     queryFn: getDriverCanceledTrips,
+    staleTime: 0,
   });
 
 export const useDriverAllTrips = () =>
   useQuery<Trip[], Error>({
     queryKey: ["driver-trips", "all"],
     queryFn: getDriverAllTrips,
+    staleTime: 0,
   });
 
 export const useDriverTripById = (id: string | number | null) =>
@@ -125,8 +132,8 @@ export const useCreateTrip = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: CreateTripRequest) => createTrip(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
     },
   });
 };
@@ -135,10 +142,13 @@ export const useBookTrip = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (data: { trip_id: number | string; seats_booked?: number; passengers?: { name: string; phone: string }[]; payment_method?: string }) => bookTrip(data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["client-trips"] });
-      queryClient.invalidateQueries({ queryKey: ["trip"] });
-      queryClient.invalidateQueries({ queryKey: ["client-bookings"] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["client-trips"] }),
+        queryClient.invalidateQueries({ queryKey: ["trip"] }),
+        queryClient.invalidateQueries({ queryKey: ["client-bookings"] }),
+        queryClient.invalidateQueries({ queryKey: ["balance"] }),
+      ]);
     },
   });
 };
@@ -147,14 +157,15 @@ export const useClientBookings = () =>
   useQuery<Booking[], Error>({
     queryKey: ["client-bookings"],
     queryFn: getClientBookings,
+    staleTime: 0,
   });
 
 export const useCancelTrip = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string | number) => cancelTrip(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
+    onSuccess: async () => {
+      await queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
       toast.success("Trip canceled successfully");
     },
     onError: (err: any) => {
@@ -167,9 +178,12 @@ export const useCancelClientBooking = () => {
   const queryClient = useQueryClient();
   return useMutation({
     mutationFn: (id: string | number) => cancelClientBooking(id),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["client-trips"] });
-      queryClient.invalidateQueries({ queryKey: ["trip"] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["client-trips"] }),
+        queryClient.invalidateQueries({ queryKey: ["trip"] }),
+        queryClient.invalidateQueries({ queryKey: ["balance"] }),
+      ]);
       toast.success("Booking canceled successfully");
     },
     onError: (err: any) => {
@@ -183,10 +197,13 @@ export const useAddPassenger = () => {
   return useMutation({
     mutationFn: ({ bookingId, data }: { bookingId: string | number; data: { name: string; phone: string } }) =>
       addPassengerToBooking(bookingId, data),
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["trip"] });
-      queryClient.invalidateQueries({ queryKey: ["client-bookings"] });
-      queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["trip"] }),
+        queryClient.invalidateQueries({ queryKey: ["client-bookings"] }),
+        queryClient.invalidateQueries({ queryKey: ["driver-trips"] }),
+        queryClient.invalidateQueries({ queryKey: ["balance"] }),
+      ]);
       toast.success("Passenger added successfully");
     },
     onError: (err: any) => {
@@ -252,12 +269,15 @@ export const useRemovePassenger = () => {
       }
       toast.error(handleError(err));
     },
-    onSettled: (data, error, variables) => {
+    onSettled: async (data, error, variables) => {
       // Always refetch after error or success to keep server in sync
-      queryClient.invalidateQueries({ queryKey: ["client-bookings", "detail", variables.bookingId] });
-      queryClient.invalidateQueries({ queryKey: ["trip"] });
-      queryClient.invalidateQueries({ queryKey: ["client-bookings"] });
-      queryClient.invalidateQueries({ queryKey: ["driver-trips"] });
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["client-bookings", "detail", variables.bookingId] }),
+        queryClient.invalidateQueries({ queryKey: ["trip"] }),
+        queryClient.invalidateQueries({ queryKey: ["client-bookings"] }),
+        queryClient.invalidateQueries({ queryKey: ["driver-trips"] }),
+        queryClient.invalidateQueries({ queryKey: ["balance"] }),
+      ]);
     },
     onSuccess: () => {
       toast.success("Passenger removed successfully");

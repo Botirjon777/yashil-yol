@@ -81,4 +81,5 @@ export const useMe = (enabled = true) =>
     queryFn: getMe,
     enabled,
     retry: false,
+    staleTime: 0,
   });

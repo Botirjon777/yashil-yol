@@ -9,6 +9,7 @@ export const useBalance = () =>
   useQuery({
     queryKey: ["balance"],
     queryFn: getBalance,
+    staleTime: 0,
   });
 
 export const useTransactions = () =>
