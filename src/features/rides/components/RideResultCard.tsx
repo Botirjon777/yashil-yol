@@ -228,8 +228,9 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
               </div>
             </div>
 
-            <div className="flex flex-col items-stretch md:items-end justify-center gap-3 shrink-0 mt-4 md:mt-0 border-t md:border-t-0 pt-4 md:pt-0 border-border/50">
-              <div className="text-center md:text-right">
+            <div className="flex flex-row md:flex-col items-center md:items-end justify-between gap-4 md:gap-3 shrink-0 mt-4 md:mt-0 border-t md:border-t-0 pt-4 md:pt-0 border-border/50">
+              {/* Left Column: Price and Seats */}
+              <div className="flex-1 md:flex-none flex flex-col items-start md:items-end justify-center">
                 <div
                   className={cn(
                     "text-xl md:text-2xl font-black leading-none mb-1",
@@ -238,48 +239,52 @@ const RideResultCard = ({ ride, showDriverInfo = false }: RideResultCardProps) =
                 >
                   {formatCurrency(Number(ride.price_per_seat || 0))}
                 </div>
-                <div className="flex items-center text-[9px] font-black text-gray-400 uppercase tracking-widest justify-center md:justify-end">
+                <div className="flex items-center text-[9px] font-black text-gray-400 uppercase tracking-widest">
                   <HiUserGroup className="mr-1 w-3.5 h-3.5 text-secondary/60" />{" "}
                   {ride.available_seats} {t("rides", "seatsLeft")}
                 </div>
               </div>
-              <Link 
-                href={isClickable ? `/rides/${ride.id}` : "#"} 
-                className={cn("w-full md:w-auto", !isClickable && "cursor-default pointer-events-none")}
-              >
-                <Button
-                  variant={isPast || isFull ? "outline" : "primary"}
-                  size="md"
-                  disabled={!isClickable}
+
+              {/* Right Column: Buttons */}
+              <div className="flex-1 md:flex-none flex flex-col gap-2 w-full md:w-auto">
+                <Link 
+                  href={isClickable ? `/rides/${ride.id}` : "#"} 
+                  className={cn("w-full md:w-auto", !isClickable && "cursor-default pointer-events-none")}
+                >
+                  <Button
+                    variant={isPast || isFull ? "outline" : "primary"}
+                    size="sm"
+                    disabled={!isClickable}
+                    className={cn(
+                      "shadow-lg transition-all w-full md:px-8 py-2.5 md:py-3",
+                      !isPast && "shadow-primary/10 group-hover:scale-[1.02]",
+                    )}
+                  >
+                    {isPast
+                      ? t("status", "past") || "PAST"
+                      : isFull
+                        ? t("status", "full") || "FULL"
+                        : t("rides", "joinRide")}
+                  </Button>
+                </Link>
+                <button
+                  onClick={(e) => {
+                    if (isPast) return;
+                    e.preventDefault();
+                    e.stopPropagation();
+                    setIsMapModalOpen(true);
+                  }}
+                  disabled={isPast}
                   className={cn(
-                    "shadow-lg transition-all w-full md:w-auto md:px-8 py-3",
-                    !isPast && "shadow-primary/10 group-hover:scale-[1.02]",
+                    "flex items-center justify-center gap-2 w-full md:w-auto px-4 py-2 text-primary font-black text-[10px] uppercase tracking-widest hover:bg-primary/5 rounded-xl transition-all border border-border/40 md:border-transparent hover:border-primary/20",
+                    isPast && "opacity-40 cursor-not-allowed grayscale"
                   )}
                 >
-                  {isPast
-                    ? t("status", "past") || "PAST"
-                    : isFull
-                      ? t("status", "full") || "FULL"
-                      : t("rides", "joinRide")}
-                </Button>
-              </Link>
-            <button
-              onClick={(e) => {
-                if (isPast) return;
-                e.preventDefault();
-                e.stopPropagation();
-                setIsMapModalOpen(true);
-              }}
-              disabled={isPast}
-              className={cn(
-                "flex items-center justify-center gap-2 w-full md:w-auto px-4 py-2 text-primary font-black text-[10px] uppercase tracking-widest hover:bg-primary/5 rounded-xl transition-all border border-transparent hover:border-primary/20",
-                isPast && "opacity-40 cursor-not-allowed grayscale"
-              )}
-            >
-              <HiMap className="w-3.5 h-3.5" />
-              {t("rideDetails", "viewOnMap")}
-            </button>
-          </div>
+                  <HiMap className="w-3.5 h-3.5" />
+                  {t("rideDetails", "viewOnMap")}
+                </button>
+              </div>
+            </div>
         </div>
 
         <RideMapModal 

@@ -100,10 +100,10 @@ const HomeContent = () => {
           </div>
 
           {/* Search Section */}
-          <div className="flex items-center gap-1.5 mb-2.5 md:mb-5">
+          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-1.5 mb-2.5 md:mb-5">
             <button
               onClick={() => setModalType("from")}
-              className="flex-1 flex flex-col items-start gap-0.5 p-3 md:p-4 bg-light-bg/50 rounded-2xl border-2 border-border hover:border-primary/30 transition-all text-left group"
+              className="w-full md:flex-1 flex flex-col items-start gap-0.5 p-3 md:p-4 bg-light-bg/50 rounded-2xl border-2 border-border hover:border-primary/30 transition-all text-left group"
             >
               <div className="flex items-center gap-1.5 text-[9px] font-black uppercase text-gray-400 tracking-widest group-hover:text-primary transition-colors">
                 <HiLocationMarker className="w-3 h-3" />
@@ -117,13 +117,13 @@ const HomeContent = () => {
               </div>
             </button>
 
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-300 shrink-0">
+            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-300 shrink-0 rotate-90 md:rotate-0">
               <HiArrowRight className="w-4 h-4" />
             </div>
 
             <button
               onClick={() => setModalType("to")}
-              className="flex-1 flex flex-col items-start gap-0.5 p-3 md:p-4 bg-light-bg/50 rounded-2xl border-2 border-border hover:border-secondary/30 transition-all text-left group"
+              className="w-full md:flex-1 flex flex-col items-start gap-0.5 p-3 md:p-4 bg-light-bg/50 rounded-2xl border-2 border-border hover:border-secondary/30 transition-all text-left group"
             >
               <div className="flex items-center gap-1.5 text-[9px] font-black uppercase text-gray-400 tracking-widest group-hover:text-secondary transition-colors">
                 <HiLocationMarker className="w-3 h-3" />
