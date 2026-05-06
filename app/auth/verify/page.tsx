@@ -13,19 +13,24 @@ const VerifyForm = () => {
   const router = useRouter();
   const { safeT } = useLanguageStore();
   const phone = searchParams.get("phone") || "";
-  const initialCode = searchParams.get("code") || "";
-  
   const [code, setCode] = useState(["", "", "", "", "", ""]);
+  const [timer, setTimer] = useState(60);
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
 
   const { mutate: verify, isPending: isVerifying } = useVerifyCode();
   const { mutate: resend, isPending: isResending } = useResendCode();
 
   useEffect(() => {
-    if (initialCode && initialCode.length === 6) {
-      setCode(initialCode.split(""));
+    let interval: NodeJS.Timeout;
+    if (timer > 0) {
+      interval = setInterval(() => {
+        setTimer((prev) => prev - 1);
+      }, 1000);
     }
-  }, [initialCode]);
+    return () => {
+      if (interval) clearInterval(interval);
+    };
+  }, [timer]);
 
   const handleChange = (index: number, value: string) => {
     if (isNaN(Number(value)) && value !== "") return;
@@ -73,10 +78,7 @@ const VerifyForm = () => {
       {
         onSuccess: (data: any) => {
           toast.success(data.message || safeT("auth", "verify", "resendSuccess"));
-          if (data.code) {
-             // If backend returns the new code (dev mode), update URL or state
-             console.log("New code:", data.code);
-          }
+          setTimer(60);
         },
         onError: (err: any) => {
           toast.error(err?.response?.data?.message || err.message || safeT("auth", "verify", "resendError"));
@@ -118,10 +120,10 @@ const VerifyForm = () => {
             <button 
               type="button" 
               onClick={handleResend}
-              disabled={isResending}
+              disabled={isResending || timer > 0}
               className="text-primary font-black uppercase text-[10px] md:text-xs tracking-widest hover:text-primary-dark transition-colors disabled:opacity-50"
             >
-              {isResending ? "..." : safeT("auth", "verify", "resend")}
+              {isResending ? "..." : timer > 0 ? safeT("auth", "verify", "resendCodeIn").replace("{seconds}", timer.toString()) : safeT("auth", "verify", "resend")}
             </button>
           </div>
         </div>

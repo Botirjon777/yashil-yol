@@ -57,7 +57,7 @@ export const RegisterForm = () => {
           toast.success(
             data.message || safeT("auth", "register", "accountCreated"),
           );
-          window.location.href = `/auth/verify?phone=${encodeURIComponent(`+998${cleanPhone(formData.phone)}`)}&code=${data.code}`;
+          window.location.href = `/auth/verify?phone=${encodeURIComponent(`+998${cleanPhone(formData.phone)}`)}`;
         },
         onError: (err: any) => {
           toast.error(parseError(err, t));

@@ -15,6 +15,21 @@ export function DriverStatusBanner({
 }: DriverStatusBannerProps) {
   const { t } = useLanguageStore();
 
+  const renderTextWithLinks = (text: string) => {
+    if (!text) return null;
+    const parts = text.split("/support");
+    return parts.map((part, index) => (
+      <span key={index}>
+        {part}
+        {index < parts.length - 1 && (
+          <Link href="/support" className="text-primary hover:underline font-black">
+            /support
+          </Link>
+        )}
+      </span>
+    ));
+  };
+
   if (isDriver) return null;
 
   if (user?.driving_verification_status && user.driving_verification_status !== "none") {
@@ -54,13 +69,15 @@ export function DriverStatusBanner({
             </h3>
             <p className="text-sm font-bold text-gray-500 capitalize">
               {user.driving_verification_status} –{" "}
-              {user.driving_verification_status === "pending"
-                ? t("dashboard", "driver")?.pending
-                : user.driving_verification_status === "approved"
-                  ? t("dashboard", "driver")?.approved
-                  : user.driving_verification_status === "rejected"
-                    ? t("dashboard", "driver")?.rejected
-                    : t("dashboard", "driver")?.blocked}
+              {renderTextWithLinks(
+                user.driving_verification_status === "pending"
+                  ? t("dashboard", "driver")?.pending
+                  : user.driving_verification_status === "approved"
+                    ? t("dashboard", "driver")?.approved
+                    : user.driving_verification_status === "rejected"
+                      ? t("dashboard", "driver")?.rejected
+                      : t("dashboard", "driver")?.blocked
+              )}
             </p>
           </div>
         </div>
