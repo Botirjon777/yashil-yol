@@ -236,6 +236,14 @@ const Navbar = () => {
                     <span>{safeT("nav", "login")}</span>
                   </Link>
                   <Link
+                    href="/auth/register"
+                    onClick={() => setIsProfileOpen(false)}
+                    className="flex items-center space-x-3 px-3 py-2.5 text-xs md:text-sm font-bold text-dark-text hover:bg-light-bg hover:text-primary rounded-lg transition-all"
+                  >
+                    <HiUserCircle className="w-5 h-5 opacity-70" />
+                    <span>{safeT("nav", "signup")}</span>
+                  </Link>
+                  <Link
                     href="/support"
                     onClick={() => setIsProfileOpen(false)}
                     className="flex items-center space-x-3 px-3 py-2.5 text-xs md:text-sm font-bold text-dark-text hover:bg-light-bg hover:text-primary rounded-lg transition-all border-t border-border mt-2 pt-3"

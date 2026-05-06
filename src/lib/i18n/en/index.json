@@ -186,6 +186,7 @@
       "subtitle": "We've sent a 6-digit verification code to {phone}. Please enter it below.",
       "button": "Verify & Log In",
       "resend": "Didn't receive code? Resend",
+      "resendCodeIn": "Resend code in {seconds}s",
       "success": "Verified successfully!"
     }
   },
@@ -348,8 +349,8 @@
       "statusTitle": "Driver Application Status",
       "pending": "We're reviewing your information.",
       "approved": "Congratulations! You can now start driving.",
-      "rejected": "Your application was rejected. Please contact support.",
-      "blocked": "Your account has been blocked.",
+      "rejected": "Your application was rejected. You are not able to create trips, please contact with /support",
+      "blocked": "Your account is blocked for some reasons, please contact to /support",
       "noneTitle": "Want to earn with us?",
       "noneDesc": "Become a driver and start earning by sharing your rides!",
       "becomeDriver": "Become a Driver"

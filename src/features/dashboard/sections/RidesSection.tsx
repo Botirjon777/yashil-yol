@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { RideCard } from "../components/RideCard";
 import CreateTripModal from "../components/CreateTripModal";
 import Button from "@/src/components/ui/Button";
+import Link from "next/link";
 import { HiPlus, HiOutlineClock } from "react-icons/hi";
 import { AuthUser } from "../../auth/types";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
@@ -49,9 +50,26 @@ export function RidesSection({
   
   const isApproved = user?.driving_verification_status === "approved";
   const isPending = user?.driving_verification_status === "pending";
+  const isRejected = user?.driving_verification_status === "rejected";
+  const isBlocked = user?.driving_verification_status === "blocked";
   const { t } = useLanguageStore();
 
   const ridesTranslations = t("dashboard", "rides");
+
+  const renderTextWithLinks = (text: string) => {
+    if (!text) return null;
+    const parts = text.split("/support");
+    return parts.map((part, index) => (
+      <span key={index}>
+        {part}
+        {index < parts.length - 1 && (
+          <Link href="/support" className="text-primary hover:underline font-black">
+            /support
+          </Link>
+        )}
+      </span>
+    ));
+  };
 
   const renderPassengerList = () => {
     let currentList = [];
@@ -320,8 +338,24 @@ export function RidesSection({
         </div>
       )}
 
+      {rideType === "driver" && isRejected && (
+        <div className="p-4 bg-error/5 text-error rounded-2xl border border-error/20 mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-500">
+          <p className="text-sm font-bold">
+            {renderTextWithLinks(t("dashboard", "driver")?.rejected)}
+          </p>
+        </div>
+      )}
+
+      {rideType === "driver" && isBlocked && (
+        <div className="p-4 bg-error/5 text-error rounded-2xl border border-error/20 mb-6 flex items-center gap-3 animate-in fade-in slide-in-from-top-2 duration-500">
+          <p className="text-sm font-bold">
+            {renderTextWithLinks(t("dashboard", "driver")?.blocked)}
+          </p>
+        </div>
+      )}
+
       {/* Simple Create Trip Banner for Drivers */}
-      {isDriver && (isApproved || isPending) && rideType === "driver" && (
+      {isDriver && (isApproved || isPending || isRejected || isBlocked) && rideType === "driver" && (
         <div className="animate-in-bottom transition-all duration-500">
           <div className="premium-card p-5 lg:p-6 bg-linear-to-r from-primary/5 to-secondary/5 border-primary/10 flex flex-col md:flex-row items-center justify-between gap-4 relative overflow-hidden">
             <div className="relative z-10">
@@ -331,7 +365,7 @@ export function RidesSection({
             </div>
             <Button
               onClick={() => setIsCreateModalOpen(true)}
-              disabled={isPending}
+              disabled={isPending || isRejected || isBlocked}
               className="px-8 shadow-lg relative z-10"
             >
               {ridesTranslations?.createTrip}

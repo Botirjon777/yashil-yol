@@ -186,6 +186,7 @@
       "subtitle": "Biz {phone} raqamiga 6 xonali tasdiqlash kodini yubordik. Uni quyida kiriting.",
       "button": "Tasdiqlash va kirish",
       "resend": "Kod kelmadimi? Qayta yuborish",
+      "resendCodeIn": "Kodni qayta yuborish: {seconds}s",
       "success": "Muvaffaqiyatli tasdiqlandi!"
     }
   },
@@ -348,8 +349,8 @@
       "statusTitle": "Haydovchi arizasi holati",
       "pending": "Biz sizning ma'lumotingizni ko'rib chiqyapmiz.",
       "approved": "Tabriklaymiz! Siz endi hayday olasiz.",
-      "rejected": "Sizning arizangiz rad etildi. Iltimos, qo'llab-quvvatlash xizmatiga murojaat qiling.",
-      "blocked": "Sizning hisobingiz bloklangan.",
+      "rejected": "Sizning arizangiz rad etildi. Siz safar yarata olmaysiz, iltimos /support sahifasi orqali murojaat qiling.",
+      "blocked": "Sizning hisobingiz bloklangan, iltimos /support sahifasi orqali murojaat qiling.",
       "noneTitle": "Biz bilan pul ishlashni xohlaysizmi?",
       "noneDesc": "Haydovchi bo'ling va safarlaringizni baham ko'rish orqali pul ishlashni boshlang!",
       "becomeDriver": "Haydovchi bo'lish"
