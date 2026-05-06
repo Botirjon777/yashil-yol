@@ -12,7 +12,7 @@ import {
   RideResultCard,
 } from "@/src/features/rides/components";
 import Loader from "@/src/components/ui/Loader";
-import { LocationSearchModal } from "./components/LocationSearchModal";
+import { RouteSearchModal } from "./components/RouteSearchModal";
 import { HiLocationMarker } from "react-icons/hi";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { Pagination } from "@/src/components/ui/Pagination";
@@ -40,7 +40,8 @@ const HomeContent = () => {
 
   const { t } = useLanguageStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
-  const [modalType, setModalType] = useState<"from" | "to" | null>(null);
+  const [routeModalOpen, setRouteModalOpen] = useState(false);
+  const [routeModalStep, setRouteModalStep] = useState(0);
 
   return (
     <div className="flex flex-col min-h-screen bg-light-bg text-dark-text">
@@ -100,41 +101,45 @@ const HomeContent = () => {
           </div>
 
           {/* Search Section */}
-          <div className="flex flex-col md:flex-row items-center gap-2 md:gap-1.5 mb-2.5 md:mb-5">
+          <div className="">
             <button
-              onClick={() => setModalType("from")}
-              className="w-full md:flex-1 flex flex-col items-start gap-0.5 p-3 md:p-4 bg-light-bg/50 rounded-2xl border-2 border-border hover:border-primary/30 transition-all text-left group"
+              onClick={() => {
+                setRouteModalStep(0);
+                setRouteModalOpen(true);
+              }}
+              className="w-full group relative overflow-hidden flex items-center justify-between p-2.5 md:p-5 bg-white border-2 border-border rounded-md hover:border-primary/40 hover:shadow-2xl hover:shadow-primary/10 transition-all duration-500 text-left"
             >
-              <div className="flex items-center gap-1.5 text-[9px] font-black uppercase text-gray-400 tracking-widest group-hover:text-primary transition-colors">
-                <HiLocationMarker className="w-3 h-3" />
-                {t("home", "from")}
+              <div className="relative z-10 flex flex-col gap-1.5">
+                <div className="flex items-center gap-2">
+                  <div className="w-2 h-2 rounded-full bg-primary animate-pulse" />
+                  <span className="text-[10px] md:text-xs font-black uppercase text-gray-400 tracking-[0.2em] group-hover:text-primary transition-colors">
+                    Sayohatni rejalashtirish
+                  </span>
+                </div>
+                <h2 className="text-2xl md:text-4xl font-black text-dark-text tracking-tight leading-tight">
+                  Yo'nalishingizni <span className="text-primary italic">tez</span> toping
+                </h2>
+                <p className="text-sm md:text-base text-gray-500 font-medium mt-1 opacity-80">
+                  O'zbekiston bo'ylab istalgan manzilga qulay hamroh toping
+                </p>
               </div>
-              <div className="text-sm md:text-base font-black text-dark-text truncate w-full">
-                {manualSearch?.from?.quarterName ||
-                  manualSearch?.from?.districtName ||
-                  manualSearch?.from?.regionName ||
-                  t("home", "selectCity")}
-              </div>
-            </button>
 
-            <div className="flex items-center justify-center w-8 h-8 rounded-full bg-gray-100 text-gray-300 shrink-0 rotate-90 md:rotate-0">
-              <HiArrowRight className="w-4 h-4" />
-            </div>
+              <div className="relative z-10 flex items-center gap-4">
+                <div className="hidden lg:flex flex-col items-end gap-1 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-8 group-hover:translate-x-0">
+                  <span className="text-[10px] font-black text-primary uppercase tracking-[0.15em]">Qidirishni boshlash</span>
+                  <div className="flex gap-1">
+                    <div className="w-6 h-1 bg-primary/20 rounded-full" />
+                    <div className="w-12 h-1 bg-primary rounded-full" />
+                  </div>
+                </div>
+                <div className="w-16 h-16 md:w-20 md:h-20 rounded-[24px] bg-primary/5 group-hover:bg-primary text-primary group-hover:text-white flex items-center justify-center transition-all duration-500 shadow-xl shadow-primary/5 group-hover:shadow-primary/30 group-hover:rotate-6">
+                  <HiSearch className="w-8 h-8 md:w-10 md:h-10 group-hover:scale-110 transition-transform duration-500" />
+                </div>
+              </div>
 
-            <button
-              onClick={() => setModalType("to")}
-              className="w-full md:flex-1 flex flex-col items-start gap-0.5 p-3 md:p-4 bg-light-bg/50 rounded-2xl border-2 border-border hover:border-secondary/30 transition-all text-left group"
-            >
-              <div className="flex items-center gap-1.5 text-[9px] font-black uppercase text-gray-400 tracking-widest group-hover:text-secondary transition-colors">
-                <HiLocationMarker className="w-3 h-3" />
-                {t("home", "to")}
-              </div>
-              <div className="text-sm md:text-base font-black text-dark-text truncate w-full">
-                {manualSearch?.to?.quarterName ||
-                  manualSearch?.to?.districtName ||
-                  manualSearch?.to?.regionName ||
-                  t("home", "selectCity")}
-              </div>
+              {/* Decorative elements */}
+              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/5 to-transparent rounded-full -mr-32 -mt-32 blur-3xl group-hover:from-primary/10 transition-colors duration-700" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/5 to-transparent rounded-full -ml-24 -mb-24 blur-3xl" />
             </button>
           </div>
 
@@ -319,15 +324,18 @@ const HomeContent = () => {
         </div>
       </div>
 
-      <LocationSearchModal
-        isOpen={!!modalType}
-        onClose={() => setModalType(null)}
-        title={modalType === "from" ? t("home", "from") : t("home", "to")}
-        onConfirm={(loc) => {
-          setManualSearch((prev) => ({
-            ...prev,
-            [modalType as "from" | "to"]: loc,
-          }));
+      <RouteSearchModal
+        isOpen={routeModalOpen}
+        onClose={() => setRouteModalOpen(false)}
+        initialStep={routeModalStep}
+        onConfirm={(fromLoc, toLoc) => {
+          setManualSearch((prev) => {
+            const current = prev || {};
+            return {
+              from: fromLoc || current.from,
+              to: toLoc || current.to,
+            } as any; // Cast as any if exact type complains, though it should match
+          });
         }}
       />
     </div>
