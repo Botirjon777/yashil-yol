@@ -1,7 +1,9 @@
 "use client";
 
 import React from "react";
-import { HiMail, HiPhone, HiLocationMarker, HiArrowLeft } from "react-icons/hi";
+import { HiPhone, HiLocationMarker, HiArrowLeft } from "react-icons/hi";
+import { FaTelegram } from "react-icons/fa";
+
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import Button from "@/src/components/ui/Button";
 import Input from "@/src/components/ui/Input";
@@ -65,15 +67,20 @@ const SupportPage = () => {
               <div className="space-y-2.5 md:space-y-5">
                 <div className="flex items-center space-x-4">
                   <div className="w-10 h-10 bg-primary/10 rounded-lg flex items-center justify-center shrink-0">
-                    <HiMail className="w-5 h-5 text-primary" />
+                    <FaTelegram className="w-5 h-5 text-primary" />
                   </div>
                   <div>
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-tighter">
-                      Email
+                      Telegram
                     </p>
-                    <p className="text-dark-text font-bold">
-                      support@yashilyol.uz
-                    </p>
+                    <a
+                      href="https://t.me/ketamizcom"
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-dark-text font-bold hover:text-primary transition-colors"
+                    >
+                      @ketamizcom
+                    </a>
                   </div>
                 </div>
 
@@ -85,9 +92,12 @@ const SupportPage = () => {
                     <p className="text-xs font-bold text-gray-400 uppercase tracking-tighter">
                       Phone
                     </p>
-                    <p className="text-dark-text font-bold">
-                      +998 71 200 00 00
-                    </p>
+                    <a
+                      href="tel:+998916650127"
+                      className="text-dark-text font-bold hover:text-primary transition-colors"
+                    >
+                      +998 91 665 01 27
+                    </a>
                   </div>
                 </div>
 
@@ -100,7 +110,7 @@ const SupportPage = () => {
                       Address
                     </p>
                     <p className="text-dark-text font-bold">
-                      Tashkent city, Uzbekistan
+                      Samarqand Urgut, Uzbekistan.
                     </p>
                   </div>
                 </div>
