@@ -175,7 +175,7 @@ const MainPage = () => {
     file: File | null,
     callback: (f: File | null) => void,
   ) => {
-    if (file && file.size > 1 * 1024 * 1024) {
+    if (file && file.size > 10 * 1024 * 1024) {
       toast.error(t("becomeDriver", "toasts")?.fileSizeError);
       return;
     }
@@ -186,7 +186,7 @@ const MainPage = () => {
     if (!files) return;
     const newFiles = Array.from(files);
     const validFiles = newFiles.filter((f) => {
-      if (f.size > 1 * 1024 * 1024) {
+      if (f.size > 10 * 1024 * 1024) {
         toast.error(`${f.name} ${t("becomeDriver", "toasts")?.fileSizeError}`);
         return false;
       }
