@@ -66,7 +66,13 @@ export const AuthPageLayout = ({
 
         <div className="w-full max-w-2xl mx-auto my-auto animate-in fade-in slide-in-from-bottom-8 duration-1000 ease-out px-6 py-10 md:px-0 md:py-0">
           <div className="mb-6 md:mb-8 text-center lg:text-left">
+            <div className="flex justify-center lg:justify-start mb-6">
+              <Link href="/">
+                <img src="/assets/logo/ketamiz-logo.webp" alt="Ketamiz" className="h-12 w-auto" />
+              </Link>
+            </div>
             <h1 className="text-2xl md:text-3xl lg:text-4xl font-black text-dark-text tracking-tight mb-2">
+
               {title}
             </h1>
             {subtitle && (

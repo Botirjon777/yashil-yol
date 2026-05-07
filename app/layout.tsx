@@ -19,9 +19,51 @@ const manrope = Manrope({
 });
 
 export const metadata: Metadata = {
-  title: "Ketamiz | Ride-sharing Uzbekistan",
-  description: "Find affordable rides across Uzbekistan regions.",
+  metadataBase: new URL("https://ketamiz.com"),
+  title: {
+    default: "Ketamiz | O'zbekiston bo'ylab arzon va qulay sayohatlar",
+    template: "%s | Ketamiz",
+  },
+
+  description: "O'zbekiston bo'ylab viloyatlararo qulay va arzon sayohatlar. Hamroh toping yoki haydovchi bo'ling. Ketamiz - sizning ishonchli yo'l hamrohingiz.",
+
+  keywords: ["ride-sharing", "Uzbekistan", "sayohat", "hamroh", "taksi", "viloyatlararo", "arzon taksi", "Ketamiz"],
+  authors: [{ name: "Ketamiz Team" }],
+  openGraph: {
+    title: "Ketamiz | Ride-sharing Uzbekistan",
+    description: "O'zbekiston bo'ylab viloyatlararo qulay va arzon sayohatlar. Ketamiz - sizning ishonchli yo'l hamrohingiz.",
+    url: "https://ketamiz.com",
+    siteName: "Ketamiz",
+    locale: "uz_UZ",
+    type: "website",
+    images: [
+      {
+        url: "/assets/logo/ketamiz-logo.webp",
+        width: 1200,
+        height: 630,
+        alt: "Ketamiz Logo",
+      },
+    ],
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "Ketamiz | Ride-sharing Uzbekistan",
+    description: "O'zbekiston bo'ylab viloyatlararo qulay va arzon sayohatlar. Ketamiz - sizning ishonchli yo'l hamrohingiz.",
+    images: ["/assets/logo/ketamiz-logo.webp"],
+  },
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/assets/logo/ketamiz-logo-small.webp",
+  },
+  manifest: "/manifest.json",
+  robots: {
+    index: true,
+    follow: true,
+  },
 };
+
+
+
 
 export const viewport: Viewport = {
   width: "device-width",
