@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, Suspense } from "react";
-import { HiArrowRight, HiFilter, HiSearch, HiStar, HiX } from "react-icons/hi";
+import { HiFilter, HiSearch, HiStar, HiX } from "react-icons/hi";
 import { motion, AnimatePresence } from "framer-motion";
 import { useRidesPage } from "@/src/features/rides/hooks/useRidesPage";
 import { GoArrowSwitch } from "react-icons/go";
@@ -13,7 +13,6 @@ import {
 } from "@/src/features/rides/components";
 import Loader from "@/src/components/ui/Loader";
 import { RouteSearchModal } from "./components/RouteSearchModal";
-import { HiLocationMarker } from "react-icons/hi";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { Pagination } from "@/src/components/ui/Pagination";
 
@@ -36,8 +35,6 @@ const HomeContent = () => {
     setManualSearch,
   } = useRidesPage();
 
-
-
   const { t } = useLanguageStore();
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
   const [routeModalOpen, setRouteModalOpen] = useState(false);
@@ -45,6 +42,43 @@ const HomeContent = () => {
 
   return (
     <div className="flex flex-col min-h-screen bg-light-bg text-dark-text">
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Organization",
+            name: "Ketamiz",
+            url: "https://ketamiz.com",
+            logo: "https://ketamiz.com/favicon.ico",
+            description:
+              "O'zbekiston bo'ylab viloyatlararo qulay va arzon sayohatlar platformasi.",
+            contactPoint: {
+              "@type": "ContactPoint",
+              telephone: "+998-XX-XXX-XXXX",
+              contactType: "customer service",
+            },
+          }),
+        }}
+      />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{
+          __html: JSON.stringify({
+            "@context": "https://schema.org",
+            "@type": "Service",
+            name: "Ride-sharing Service",
+            provider: {
+              "@type": "Organization",
+              name: "Ketamiz",
+            },
+            areaServed: "Uzbekistan",
+            description:
+              "Connecting drivers and passengers for intercity travel in Uzbekistan.",
+          }),
+        }}
+      />
+
       {/* ── Hero Header + Swiper ── */}
       <div className="bg-white border-b border-border">
         <div className="max-w-7xl mx-auto px-4 py-3 md:py-8">
@@ -117,7 +151,8 @@ const HomeContent = () => {
                   </span>
                 </div>
                 <h2 className="text-2xl md:text-4xl font-black text-dark-text tracking-tight leading-tight">
-                  Yo'nalishingizni <span className="text-primary italic">tez</span> toping
+                  Yo'nalishingizni{" "}
+                  <span className="text-primary italic">tez</span> toping
                 </h2>
                 <p className="text-sm md:text-base text-gray-500 font-medium mt-1 opacity-80">
                   O'zbekiston bo'ylab istalgan manzilga qulay hamroh toping
@@ -126,7 +161,9 @@ const HomeContent = () => {
 
               <div className="relative z-10 flex items-center gap-4">
                 <div className="hidden lg:flex flex-col items-end gap-1 opacity-0 group-hover:opacity-100 transition-all duration-500 transform translate-x-8 group-hover:translate-x-0">
-                  <span className="text-[10px] font-black text-primary uppercase tracking-[0.15em]">Qidirishni boshlash</span>
+                  <span className="text-[10px] font-black text-primary uppercase tracking-[0.15em]">
+                    Qidirishni boshlash
+                  </span>
                   <div className="flex gap-1">
                     <div className="w-6 h-1 bg-primary/20 rounded-full" />
                     <div className="w-12 h-1 bg-primary rounded-full" />
@@ -138,8 +175,8 @@ const HomeContent = () => {
               </div>
 
               {/* Decorative elements */}
-              <div className="absolute top-0 right-0 w-64 h-64 bg-gradient-to-br from-primary/5 to-transparent rounded-full -mr-32 -mt-32 blur-3xl group-hover:from-primary/10 transition-colors duration-700" />
-              <div className="absolute bottom-0 left-0 w-48 h-48 bg-gradient-to-tr from-secondary/5 to-transparent rounded-full -ml-24 -mb-24 blur-3xl" />
+              <div className="absolute top-0 right-0 w-64 h-64 bg-linear-to-br from-primary/5 to-transparent rounded-full -mr-32 -mt-32 blur-3xl group-hover:from-primary/10 transition-colors duration-700" />
+              <div className="absolute bottom-0 left-0 w-48 h-48 bg-linear-to-tr from-secondary/5 to-transparent rounded-full -ml-24 -mb-24 blur-3xl" />
             </button>
           </div>
 
@@ -265,7 +302,6 @@ const HomeContent = () => {
                 {filteredRides.length} ta natija
               </span>
             </div>
-
 
             {isLoading ? (
               <div className="flex flex-col items-center justify-center py-10">

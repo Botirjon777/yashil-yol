@@ -491,8 +491,15 @@
       "datePastError": "Birthday must be in the past",
       "expirationBirthError": "Expiration date must be after birth year",
       "processError": "Process error: Vehicle ID does not exist"
+    },
+    "alreadyDriver": {
+      "title": "You're Already a Driver!",
+      "subtitle": "You have already completed the registration process. You can manage your vehicles and view your status in the dashboard.",
+      "goToDashboard": "Go to Dashboard",
+      "backHome": "Back to Home"
     }
   },
+
   "rideDetails": {
     "backToDashboard": "Back to Dashboard",
     "backToResults": "Back to results",

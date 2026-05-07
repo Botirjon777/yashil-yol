@@ -133,93 +133,108 @@ export const PassengerListCard = ({
                           String(booking.id) === String(myBookingId),
                       })),
                     )
-                    .filter((passenger: any) => {
+                    .map((passenger: any, index: number) => {
                       const st = (
                         passenger.booking_status ||
                         passenger.passenger_status ||
                         passenger.status ||
                         ""
                       ).toLowerCase();
-                      return st !== "cancelled" && st !== "canceled";
-                    })
-                    .map((passenger: any, index: number) => (
-                      <div
-                        key={`${passenger.bookingId}-${passenger.id || index}`}
-                        className={cn(
-                          "flex items-center justify-between p-4 rounded-2xl border transition-all duration-300",
-                          passenger.isMine
-                            ? "bg-white border-primary/20 shadow-sm ring-1 ring-primary/5"
-                            : "bg-white/50 border-border/40",
-                        )}
-                      >
-                        <div className="flex items-center gap-4">
-                          <div
-                            className={cn(
-                              "w-11 h-11 rounded-xl flex items-center justify-center font-black text-sm border shadow-sm shrink-0",
-                              passenger.isMine
-                                ? "bg-primary text-white border-primary/20"
-                                : "bg-white text-gray-400 border-border",
-                            )}
-                          >
-                            {isPublic ? "P" : passenger.name?.charAt(0) || "P"}
-                          </div>
-                          <div>
-                            <div className="flex items-center gap-2">
-                              <div className="font-black text-dark-text text-sm">
-                                {isPublic
-                                  ? rd("passenger") || "Passenger"
-                                  : passenger.name}
-                              </div>
-                            </div>
-                            {!isPublic && passenger.phone && (
-                              <div className="text-[10px] font-bold text-gray-400 mt-1 flex items-center gap-1">
-                                <HiPhone className="w-3 h-3 text-primary/60" />
-                                {passenger.phone}
-                              </div>
-                            )}
-                          </div>
-                        </div>
+                      const isCancelled = st === "cancelled" || st === "canceled" || st === "rejected";
 
-                        <div className="flex items-center gap-2">
-                          {(isDriver || passenger.isMine) &&
-                            passenger.latitude &&
-                            passenger.longitude && (
+                      return (
+                        <div
+                          key={`${passenger.bookingId}-${passenger.id || index}`}
+                          className={cn(
+                            "flex items-center justify-between p-4 rounded-2xl border transition-all duration-300",
+                            passenger.isMine
+                              ? "bg-white border-primary/20 shadow-sm ring-1 ring-primary/5"
+                              : isCancelled 
+                                ? "bg-gray-50 border-gray-200 opacity-80" 
+                                : "bg-white/50 border-border/40",
+                          )}
+                        >
+                          <div className="flex items-center gap-4">
+                            <div
+                              className={cn(
+                                "w-11 h-11 rounded-xl flex items-center justify-center font-black text-sm border shadow-sm shrink-0",
+                                passenger.isMine
+                                  ? "bg-primary text-white border-primary/20"
+                                  : isCancelled
+                                    ? "bg-gray-100 text-gray-400 border-gray-200"
+                                    : "bg-white text-gray-400 border-border",
+                              )}
+                            >
+                              {isPublic ? "P" : passenger.name?.charAt(0) || "P"}
+                            </div>
+                            <div>
+                              <div className="flex items-center gap-2">
+                                <div className={cn(
+                                  "font-black text-sm",
+                                  isCancelled ? "text-gray-400" : "text-dark-text"
+                                )}>
+                                  {isPublic
+                                    ? rd("passenger") || "Passenger"
+                                    : passenger.name}
+                                </div>
+                                {isCancelled && (
+                                  <span className="text-[8px] font-black bg-error/10 text-error px-1.5 py-0.5 rounded-md uppercase tracking-tighter">
+                                    {rd("cancelled") || "Cancelled"}
+                                  </span>
+                                )}
+                              </div>
+                              {!isPublic && passenger.phone && !isCancelled && (
+                                <div className="text-[10px] font-bold text-gray-400 mt-1 flex items-center gap-1">
+                                  <HiPhone className="w-3 h-3 text-primary/60" />
+                                  {passenger.phone}
+                                </div>
+                              )}
+                            </div>
+                          </div>
+
+                          <div className="flex items-center gap-2">
+                            {(isDriver || passenger.isMine) &&
+                              !isCancelled &&
+                              passenger.latitude &&
+                              passenger.longitude && (
+                                <a
+                                  href={`https://www.google.com/maps/search/?api=1&query=${passenger.latitude},${passenger.longitude}`}
+                                  target="_blank"
+                                  rel="noopener noreferrer"
+                                  className="p-2.5 bg-white text-emerald-600 rounded-xl border border-border hover:bg-emerald-50 transition-all shadow-sm"
+                                  title={rd("viewOnMap") || "View on Map"}
+                                >
+                                  <HiMap className="w-4 h-4" />
+                                </a>
+                              )}
+                            {isDriver && passenger.phone && !isCancelled && (
                               <a
-                                href={`https://www.google.com/maps/search/?api=1&query=${passenger.latitude},${passenger.longitude}`}
-                                target="_blank"
-                                rel="noopener noreferrer"
-                                className="p-2.5 bg-white text-emerald-600 rounded-xl border border-border hover:bg-emerald-50 transition-all shadow-sm"
-                                title={rd("viewOnMap") || "View on Map"}
+                                href={`tel:${passenger.phone}`}
+                                className="p-2.5 bg-white text-primary rounded-xl border border-border hover:bg-primary hover:text-white transition-all shadow-sm"
                               >
-                                <HiMap className="w-4 h-4" />
+                                <HiPhone className="w-4 h-4" />
                               </a>
                             )}
-                          {isDriver && passenger.phone && (
-                            <a
-                              href={`tel:${passenger.phone}`}
-                              className="p-2.5 bg-white text-primary rounded-xl border border-border hover:bg-primary hover:text-white transition-all shadow-sm"
-                            >
-                              <HiPhone className="w-4 h-4" />
-                            </a>
-                          )}
 
-                          {passenger.isMine &&
-                            onRemovePassenger &&
-                            !disabled && (
-                              <button
-                                disabled={isRemoving}
-                                onClick={() => onRemovePassenger(passenger.id)}
-                                className="p-2.5 bg-white text-error rounded-xl border border-error/20 hover:bg-error hover:text-white transition-all shadow-sm disabled:opacity-50"
-                                title={
-                                  rd("removePassenger") || "Remove Passenger"
-                                }
-                              >
-                                <HiTrash className="w-4 h-4" />
-                              </button>
-                            )}
+                            {passenger.isMine &&
+                              onRemovePassenger &&
+                              !disabled &&
+                              !isCancelled && (
+                                <button
+                                  disabled={isRemoving}
+                                  onClick={() => onRemovePassenger(passenger.id)}
+                                  className="p-2.5 bg-white text-error rounded-xl border border-error/20 hover:bg-error hover:text-white transition-all shadow-sm disabled:opacity-50"
+                                  title={
+                                    rd("removePassenger") || "Remove Passenger"
+                                  }
+                                >
+                                  <HiTrash className="w-4 h-4" />
+                                </button>
+                              )}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                 </div>
               </div>
             </div>

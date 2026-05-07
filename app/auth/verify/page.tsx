@@ -7,6 +7,7 @@ import { useLanguageStore } from "@/src/providers/LanguageProvider";
 import { toast } from "sonner";
 import { useVerifyCode, useResendCode } from "@/src/features/auth/hooks/useAuth";
 import { AuthPageLayout } from "@/src/features/auth/components/AuthPageLayout";
+import { useAuthStore } from "@/src/providers/AuthProvider";
 
 const VerifyForm = () => {
   const searchParams = useSearchParams();
@@ -16,6 +17,7 @@ const VerifyForm = () => {
   const [code, setCode] = useState(["", "", "", "", "", ""]);
   const [timer, setTimer] = useState(60);
   const inputs = useRef<(HTMLInputElement | null)[]>([]);
+  const { setAuth } = useAuthStore();
 
   const { mutate: verify, isPending: isVerifying } = useVerifyCode();
   const { mutate: resend, isPending: isResending } = useResendCode();
@@ -60,9 +62,15 @@ const VerifyForm = () => {
     verify(
       { phone, code: verificationCode },
       {
-        onSuccess: () => {
+        onSuccess: (data) => {
           toast.success(safeT("auth", "verify", "success"));
-          router.push("/auth/login"); // After verification, go to login
+          
+          if (data.authorisation?.token) {
+            setAuth(data.user, data.authorisation.token);
+            router.push("/dashboard");
+          } else {
+            router.push("/auth/login");
+          }
         },
         onError: (err: any) => {
           toast.error(err?.response?.data?.message || err.message || safeT("auth", "verify", "error"));

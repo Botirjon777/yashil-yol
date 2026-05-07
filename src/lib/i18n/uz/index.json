@@ -491,8 +491,15 @@
       "datePastError": "Tug'ilgan sana o'tmishda bo'lishi kerak",
       "expirationBirthError": "Amal qilish muddati tug'ilgan yildan katta bo'lishi kerak",
       "processError": "Jarayon xatosi: Mashina ID raqami mavjud emas"
+    },
+    "alreadyDriver": {
+      "title": "Siz allaqachon haydovchisiz!",
+      "subtitle": "Siz ro'yxatdan o'tish jarayonini yakunlagansiz. Mashinalaringizni boshqarishingiz va holatingizni boshqaruv panelida ko'rishingiz mumkin.",
+      "goToDashboard": "Boshqaruv paneliga o'tish",
+      "backHome": "Asosiyga qaytish"
     }
   },
+
   "rideDetails": {
     "backToDashboard": "Boshqaruvga qaytish",
     "backToResults": "Natijalarga qaytish",
