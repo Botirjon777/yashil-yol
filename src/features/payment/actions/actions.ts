@@ -29,7 +29,6 @@ export const getTransactionHistory = async (): Promise<Transaction[]> => {
   const res = await api.get<{ data: Transaction[] }>(
     "/user/balance-transactions",
   );
-  console.log("getTransactionHistory - API Response:", res.data);
   return res.data?.data || [];
 };
 

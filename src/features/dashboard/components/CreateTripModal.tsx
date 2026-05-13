@@ -253,7 +253,7 @@ export default function CreateTripModal({
               options={
                 vehicles?.map((v) => ({
                   id: v.id,
-                  name: `${v.model} (${v.car_number})`,
+                  label: `${v.model} (${v.car_number})`,
                 })) || []
               }
               value={formData.vehicle_id}

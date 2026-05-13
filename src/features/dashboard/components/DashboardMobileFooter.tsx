@@ -43,11 +43,6 @@ export const DashboardMobileFooter: React.FC<DashboardMobileFooterProps> = ({
       icon: <HiOutlineDocumentText className="w-6 h-6" />,
       label: t("nav", "transactions") || "History",
     },
-    {
-      id: "profile",
-      icon: <HiUser className="w-6 h-6" />,
-      label: t("dashboard", "sidebar")?.profile || "Profile",
-    },
   ];
 
   if (isDriver) {
@@ -58,38 +53,53 @@ export const DashboardMobileFooter: React.FC<DashboardMobileFooterProps> = ({
     });
   }
 
+  // Profile is always last
+  navItems.push({
+    id: "profile",
+    icon: <HiUser className="w-6 h-6" />,
+    label: t("dashboard", "sidebar")?.profile || "Profile",
+  });
+
   return (
-    <div className="lg:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-border z-50 pb-safe shadow-[0_-4px_16px_rgba(0,0,0,0.05)]">
-      <div className="flex justify-around items-center h-16 relative">
-        {navItems.map((item) => (
-          <button
-            key={item.id}
-            onClick={() => handleTabChange(item.id as any)}
-            className={cn(
-              "flex flex-col items-center justify-center flex-1 h-full transition-colors relative z-10",
-              activeTab === item.id ? "text-primary" : "text-gray-400"
-            )}
-          >
-            <div className="relative p-1">
-              {activeTab === item.id && (
-                <motion.div
-                  layoutId="activeTabIndicator"
-                  className="absolute inset-0 bg-primary/10 rounded-full"
-                  transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                />
-              )}
-              <div className="relative z-10">{item.icon}</div>
-            </div>
-            <span
-              className={cn(
-                "text-[9px] font-semibold uppercase tracking-tighter mt-1 transition-colors relative z-10",
-                activeTab === item.id ? "text-primary" : "text-gray-400"
-              )}
-            >
-              {item.label}
-            </span>
-          </button>
-        ))}
+    <div className="lg:hidden fixed bottom-6 left-6 right-6 z-50 pb-safe">
+      <div className="bg-secondary rounded-[2.5rem] shadow-[0_20px_50px_rgba(14,165,233,0.4)] border border-white/20 p-1">
+        <div className="bg-[#0369a1] rounded-[2.2rem] flex justify-around items-center h-16 px-2 relative">
+          {navItems.map((item) => {
+            const isActive = activeTab === item.id;
+            return (
+              <button
+                key={item.id}
+                onClick={() => handleTabChange(item.id as any)}
+                className="flex flex-col items-center justify-center flex-1 h-full relative"
+              >
+                <div
+                  className={cn(
+                    "relative p-3 rounded-full transition-all duration-500 flex items-center justify-center",
+                    isActive
+                      ? "bg-white text-secondary -translate-y-6 shadow-[0_15px_30px_rgba(0,0,0,0.3)] border-4 border-[#0369a1] scale-110"
+                      : "text-white hover:text-white"
+                  )}
+                >
+                  {item.icon}
+                  {isActive && (
+                    <motion.div
+                      layoutId="active-glow"
+                      className="absolute -inset-2 bg-white/20 blur-2xl rounded-full -z-10"
+                    />
+                  )}
+                </div>
+                <span
+                  className={cn(
+                    "text-[8px] font-medium uppercase tracking-tighter transition-all duration-300 absolute bottom-1.5",
+                    isActive ? "text-white opacity-100 font-semibold" : "text-white"
+                  )}
+                >
+                  {item.label}
+                </span>
+              </button>
+            );
+          })}
+        </div>
       </div>
     </div>
   );

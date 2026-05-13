@@ -67,13 +67,22 @@ export function DriverSection({
             {ds?.registeredVehicles}
           </h2>
           {user?.role === "driver" ? (
-            <Button variant="outline" size="sm" onClick={onAddVehicleClick}>
-              <HiPlus className="mr-1" /> {ds?.addNew}
+            <Button 
+              variant="outline" 
+              size="md" 
+              onClick={onAddVehicleClick}
+              className="font-black uppercase tracking-widest shadow-sm"
+            >
+              <HiPlus className="mr-1.5 w-4 h-4" /> {ds?.addNew}
             </Button>
           ) : (
             <Link href="/become-a-driver">
-              <Button variant="outline" size="sm">
-                <HiPlus className="mr-1" /> {ds?.addNew}
+              <Button 
+                variant="outline" 
+                size="md"
+                className="font-black uppercase tracking-widest shadow-sm"
+              >
+                <HiPlus className="mr-1.5 w-4 h-4" /> {ds?.addNew}
               </Button>
             </Link>
           )}

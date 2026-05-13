@@ -1,10 +1,10 @@
 "use client";
 
 import React, { useState } from "react";
-import { 
-  HiDocumentDownload, 
-  HiOutlineDocumentText, 
-  HiArrowNarrowDown, 
+import {
+  HiDocumentDownload,
+  HiOutlineDocumentText,
+  HiArrowNarrowDown,
   HiArrowNarrowUp,
   HiDownload,
   HiChevronRight
@@ -20,9 +20,6 @@ import { TransactionDetailModal } from "../components/TransactionDetailModal";
 
 export function TransactionsSection() {
   const { data: transactions = [], isLoading } = useTransactions();
-  
-  // Console log to see transaction data structure
-  console.log("TransactionsSection - Received Data:", transactions);
 
   const { t } = useLanguageStore();
   const [downloadingId, setDownloadingId] = useState<number | string | null>(null);
@@ -73,10 +70,10 @@ export function TransactionsSection() {
         <h1 className="text-2xl font-black text-dark-text tracking-tight">
           {t("dashboard", "transactions")?.title || "Transactions History"}
         </h1>
-        
-        <Button 
-          variant="outline" 
-          size="sm" 
+
+        <Button
+          variant="outline"
+          size="sm"
           onClick={handleDownloadFullReport}
           loading={isFullReportDownloading}
           icon={<HiDocumentDownload className="w-3 h-3" />}
@@ -117,8 +114,8 @@ export function TransactionsSection() {
                 </tr>
               ) : transactions.length > 0 ? (
                 transactions.map((tx) => (
-                  <tr 
-                    key={tx.id} 
+                  <tr
+                    key={tx.id}
                     className="hover:bg-light-bg/60 transition-colors group cursor-pointer border-l-2 border-transparent hover:border-primary"
                     onClick={() => openDetails(tx)}
                   >
@@ -129,13 +126,12 @@ export function TransactionsSection() {
                       </div>
                     </td>
                     <td className="px-5 py-3">
-                      <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-none text-[9px] font-black uppercase tracking-wider ${
-                        tx.type === 'credit' 
-                          ? 'bg-success/10 text-success' 
+                      <div className={`inline-flex items-center gap-1 px-2 py-0.5 rounded-none text-[9px] font-black uppercase tracking-wider ${tx.type === 'credit'
+                          ? 'bg-success/10 text-success'
                           : 'bg-error/10 text-error'
-                      }`}>
+                        }`}>
                         {tx.type === 'credit' ? <HiArrowNarrowUp className="w-2.5 h-2.5" /> : <HiArrowNarrowDown className="w-2.5 h-2.5" />}
-                        {tx.type === 'credit' 
+                        {tx.type === 'credit'
                           ? (t("dashboard", "transactions")?.income || "Income")
                           : (t("dashboard", "transactions")?.outcome || "Outcome")
                         }
@@ -154,9 +150,8 @@ export function TransactionsSection() {
                       </div>
                     </td>
                     <td className="px-5 py-3 text-right">
-                      <span className={`text-xs font-black whitespace-nowrap ${
-                        tx.type === 'credit' ? 'text-success' : 'text-error'
-                      }`}>
+                      <span className={`text-xs font-black whitespace-nowrap ${tx.type === 'credit' ? 'text-success' : 'text-error'
+                        }`}>
                         {tx.type === 'credit' ? '+' : '-'} {formatCurrency(Math.abs(parseFloat(tx.amount)))}
                       </span>
                     </td>
@@ -195,7 +190,7 @@ export function TransactionsSection() {
         </div>
       </div>
 
-      <TransactionDetailModal 
+      <TransactionDetailModal
         isOpen={isDetailModalOpen}
         onClose={() => setIsDetailModalOpen(false)}
         transaction={selectedTransaction}

@@ -253,8 +253,8 @@ export function RidesSection({
         {isDriver && (
           <Dropdown
             options={[
-              { id: "passenger", name: ridesTranslations?.asPassenger },
-              { id: "driver", name: ridesTranslations?.asDriver }
+              { id: "passenger", label: ridesTranslations?.asPassenger },
+              { id: "driver", label: ridesTranslations?.asDriver }
             ]}
             value={rideType}
             onChange={(val) => handleRideTypeChange(val)}
@@ -265,16 +265,16 @@ export function RidesSection({
           options={
             rideType === "driver"
               ? [
-                  { id: "all", name: ridesTranslations?.allTrips || "All Trips" },
-                  { id: "active", name: ridesTranslations?.activeLabel || ridesTranslations?.active || "Active" },
-                  { id: "completed", name: ridesTranslations?.completed },
-                  { id: "canceled", name: ridesTranslations?.canceled }
+                  { id: "all", label: ridesTranslations?.allTrips || "All Trips" },
+                  { id: "active", label: ridesTranslations?.activeLabel || ridesTranslations?.active || "Active" },
+                  { id: "completed", label: ridesTranslations?.completed },
+                  { id: "canceled", label: ridesTranslations?.canceled }
                 ]
               : [
-                  { id: "all", name: ridesTranslations?.allTrips || "All Trips" },
-                  { id: "inprogress", name: ridesTranslations?.inprogress },
-                  { id: "completed", name: ridesTranslations?.completed },
-                  { id: "canceled", name: ridesTranslations?.canceled }
+                  { id: "all", label: ridesTranslations?.allTrips || "All Trips" },
+                  { id: "inprogress", label: ridesTranslations?.inprogress },
+                  { id: "completed", label: ridesTranslations?.completed },
+                  { id: "canceled", label: ridesTranslations?.canceled }
                 ]
           }
           value={rideType === "driver" ? driverTab : passengerTab}

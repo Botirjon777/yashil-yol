@@ -16,6 +16,7 @@ import {
 import dynamic from "next/dynamic";
 import Loader from "@/src/components/ui/Loader";
 import Button from "@/src/components/ui/Button";
+import SlideButton from "@/src/components/ui/SlideButton";
 
 const RideMap = dynamic(
   () => import("@/src/features/rides/components/RideMap").then((mod) => mod.RideMap),
@@ -48,6 +49,10 @@ const DriverRideDetailsPage = () => {
     bookingStatus,
     handleBook,
     handleCancel,
+    handleStartTrip,
+    handleFinishTrip,
+    isStartingTrip,
+    isFinishingTrip,
     rd,
   } = useRideDetails(tripId, "driver");
 
@@ -149,6 +154,7 @@ const DriverRideDetailsPage = () => {
           </div>
         </div>
       </div>
+
       <ConfirmationModal
         isOpen={isConfirmModalOpen}
         onClose={() => setIsConfirmModalOpen(false)}
@@ -162,6 +168,23 @@ const DriverRideDetailsPage = () => {
         }
         isLoading={isCanceling}
       />
+      
+      {/* Sticky Bottom Slide Action for Driver */}
+      {isDriver && !isPast && (String(trip.status) === "active" || String(trip.status) === "in_progress") && (
+        <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-xl border-t border-border z-40 animate-in-bottom">
+          <div className="max-w-5xl mx-auto">
+            <SlideButton
+              label={String(trip.status) === "active" ? (rd("startTrip") || "Slide to Start") : (rd("finishTrip") || "Slide to Finish")}
+              onSuccess={String(trip.status) === "active" ? handleStartTrip : handleFinishTrip}
+              isLoading={isStartingTrip || isFinishingTrip}
+              successLabel={String(trip.status) === "active" ? "Trip Started!" : "Trip Finished!"}
+            />
+          </div>
+        </div>
+      )}
+      
+      {/* Padding for fixed button on mobile */}
+      <div className="h-24 lg:hidden" />
     </div>
   );
 };

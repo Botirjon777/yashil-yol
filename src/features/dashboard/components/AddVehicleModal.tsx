@@ -20,6 +20,7 @@ import { useUploadCarImages } from "@/src/features/become-a-driver/hooks/useBeco
 import { cn, getVehicleColorHex } from "@/src/lib/utils";
 import { toast } from "sonner";
 import { CarColor } from "@/src/features/rides/types";
+import { useLanguageStore } from "@/src/providers/LanguageProvider";
 
 interface AddVehicleModalProps {
   isOpen: boolean;
@@ -39,8 +40,9 @@ export default function AddVehicleModal({
     useUploadCarImages();
 
   const [vehicleId, setVehicleId] = useState<number | null>(null);
-  const [isColorOpen, setIsColorOpen] = useState(false);
-  const colorRef = React.useRef<HTMLDivElement>(null);
+
+  const { t } = useLanguageStore();
+  const av = t("dashboard", "addVehicle");
 
   // Step 1 Data
   const [details, setDetails] = useState({
@@ -79,9 +81,9 @@ export default function AddVehicleModal({
         if (res.data?.id) {
           setVehicleId(res.data.id);
           setStep("documents");
-          toast.success("Vehicle info saved! Now upload documents.");
+          toast.success(av?.successSaved || "Vehicle info saved! Now upload documents.");
         } else {
-          toast.error("Failed to get vehicle ID");
+          toast.error(av?.errorGetId || "Failed to get vehicle ID");
         }
       },
       onError: (err: any) => {
@@ -98,7 +100,7 @@ export default function AddVehicleModal({
       !files.tech_passport_back ||
       files.car_images.length === 0
     ) {
-      toast.error("Please upload all required files");
+      toast.error(av?.errorFillAll || "Please upload all required files");
       return;
     }
 
@@ -112,7 +114,7 @@ export default function AddVehicleModal({
       {
         onSuccess: () => {
           toast.success(
-            "Vehicle registered successfully and pending approval!",
+            av?.successRegistered || "Vehicle registered successfully and pending approval!",
           );
           handleClose();
         },
@@ -140,26 +142,9 @@ export default function AddVehicleModal({
     });
     onClose();
   };
-  React.useEffect(() => {
-    const handleClickOutside = (event: MouseEvent) => {
-      if (
-        colorRef.current &&
-        !colorRef.current.contains(event.target as Node)
-      ) {
-        setIsColorOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => document.removeEventListener("mousedown", handleClickOutside);
-  }, []);
-
   const handleFileChange = (name: string, file: File | null) => {
     setFiles((prev) => ({ ...prev, [name]: file }));
   };
-
-  const selectedColor = colors?.find(
-    (c: any) => String(c.id) === String(details.car_color_id),
-  );
 
   const handleCarImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
@@ -175,14 +160,14 @@ export default function AddVehicleModal({
     <Modal
       isOpen={isOpen}
       onClose={handleClose}
-      title="Add New Vehicle"
+      title={av?.title || "Add New Vehicle"}
       size="lg"
     >
       <div className="mb-8">
         <div className="flex items-center space-x-4">
           <div
             className={cn(
-              "flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold",
+              "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold",
               step === "details"
                 ? "bg-primary text-white"
                 : "bg-success text-white",
@@ -193,7 +178,7 @@ export default function AddVehicleModal({
           <div className="h-px bg-border flex-1" />
           <div
             className={cn(
-              "flex items-center justify-center w-8 h-8 rounded-full text-sm font-bold",
+              "flex items-center justify-center w-8 h-8 rounded-full text-sm font-semibold",
               step === "documents"
                 ? "bg-primary text-white"
                 : "bg-gray-100 text-gray-400",
@@ -202,9 +187,9 @@ export default function AddVehicleModal({
             2
           </div>
         </div>
-        <div className="flex justify-between mt-2 text-[10px] font-black uppercase tracking-widest text-gray-400">
-          <span>Vehicle Details</span>
-          <span>Documents & Photos</span>
+        <div className="flex justify-between mt-2 text-[10px] font-semibold uppercase tracking-widest text-gray-400">
+          <span>{av?.step1 || "Vehicle Details"}</span>
+          <span>{av?.step2 || "Documents & Photos"}</span>
         </div>
       </div>
 
@@ -212,8 +197,8 @@ export default function AddVehicleModal({
         <form onSubmit={handleDetailsSubmit} className="space-y-6">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <Input
-              label="Car Model"
-              placeholder="e.g. Chevrolet Nexia 3"
+              label={av?.carModel || "Car Model"}
+              placeholder={av?.carModelPlaceholder || "e.g. Chevrolet Nexia 3"}
               value={details.car_model}
               onChange={(e) =>
                 setDetails({ ...details, car_model: e.target.value })
@@ -221,8 +206,8 @@ export default function AddVehicleModal({
               required
             />
             <Input
-              label="Plate Number"
-              placeholder="e.g. 01 A 123 AA"
+              label={av?.plateNumber || "Plate Number"}
+              placeholder={av?.plateNumberPlaceholder || "e.g. 01 A 123 AA"}
               value={details.vehicle_number}
               onChange={(e) =>
                 setDetails({ ...details, vehicle_number: e.target.value })
@@ -232,97 +217,39 @@ export default function AddVehicleModal({
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <div className="w-full relative" ref={colorRef}>
-              <label className="text-xs font-black uppercase text-gray-400 ml-1">
-                Car Color
-              </label>
-              <button
-                type="button"
-                onClick={() => setIsColorOpen(!isColorOpen)}
-                className="w-full px-4 py-3 bg-light-bg border border-border rounded-xl outline-none transition-all font-bold text-base mt-1.5 flex items-center justify-between hover:border-primary group"
-              >
-                <div className="flex items-center space-x-3">
-                  {selectedColor ? (
-                    <>
+            <Dropdown
+              label={av?.carColor || "Car Color"}
+              placeholder={av?.selectColor || "Select Color"}
+              value={details.car_color_id}
+              onChange={(val) =>
+                setDetails({ ...details, car_color_id: String(val) })
+              }
+              options={
+                colors?.map((color: any) => ({
+                  id: String(color.id),
+                  label: (
+                    <div className="flex items-center space-x-3">
                       <div
-                        className="w-6 h-6 rounded-full border border-gray-200 shadow-sm"
-                        style={{
-                          backgroundColor:
-                            selectedColor.code ||
-                            getVehicleColorHex(
-                              selectedColor.name ||
-                                selectedColor.title_en ||
-                                "",
-                            ),
-                        }}
-                      />
-                      <span className="text-dark-text">
-                        {getColorName(selectedColor)}
-                      </span>
-                    </>
-                  ) : (
-                    <span className="text-gray-400">Select Color</span>
-                  )}
-                </div>
-                <HiChevronDown
-                  className={cn(
-                    "text-gray-400 transition-transform",
-                    isColorOpen && "rotate-180",
-                  )}
-                />
-              </button>
-
-              {isColorOpen && (
-                <div className="absolute z-50 w-full mt-2 bg-white border border-border rounded-xl shadow-2xl max-h-64 overflow-y-auto py-2 animate-in fade-in zoom-in duration-200">
-                  {colors?.map((color: any) => (
-                    <button
-                      key={color.id}
-                      type="button"
-                      onClick={() => {
-                        setDetails({
-                          ...details,
-                          car_color_id: String(color.id),
-                        });
-                        setIsColorOpen(false);
-                      }}
-                      className={cn(
-                        "w-full flex items-center space-x-4 px-5 py-3 hover:bg-light-bg transition-colors text-left",
-                        String(details.car_color_id) === String(color.id) &&
-                          "bg-primary/5 border-l-4 border-primary",
-                      )}
-                    >
-                      <div
-                        className="w-8 h-8 rounded-full border border-gray-100 shadow-sm"
+                        className="w-5 h-5 rounded-full border border-gray-200 shadow-sm shrink-0"
                         style={{
                           backgroundColor:
                             color.code ||
                             getVehicleColorHex(
                               color.name ||
-                                color.title_en ||
-                                color.title_uz ||
-                                "",
+                              color.title_en ||
+                              color.title_uz ||
+                              "",
                             ),
                         }}
                       />
-                      <div className="flex flex-col">
-                        <span
-                          className={cn(
-                            "font-bold text-sm",
-                            String(details.car_color_id) === String(color.id)
-                              ? "text-primary"
-                              : "text-dark-text",
-                          )}
-                        >
-                          {getColorName(color)}
-                        </span>
-                      </div>
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
+                      <span>{getColorName(color)}</span>
+                    </div>
+                  ),
+                })) || []
+              }
+            />
             <Input
-              label="Available Seats"
+              label={av?.availableSeats || "Available Seats"}
               type="number"
               min="1"
               max="8"
@@ -335,8 +262,8 @@ export default function AddVehicleModal({
           </div>
 
           <Input
-            label="Tech Passport Number"
-            placeholder="e.g. TTR1234567"
+            label={av?.techPassportNumber || "Tech Passport Number"}
+            placeholder={av?.techPassportPlaceholder || "e.g. TTR1234567"}
             value={details.tech_passport_number}
             onChange={(e) =>
               setDetails({ ...details, tech_passport_number: e.target.value })
@@ -351,14 +278,14 @@ export default function AddVehicleModal({
               className="mr-3"
               onClick={handleClose}
             >
-              Cancel
+              {av?.cancel || "Cancel"}
             </Button>
             <Button
               type="submit"
               loading={isAddingVehicle}
               icon={<HiChevronRight className="ml-1" />}
             >
-              Next: Documents
+              {av?.nextDocuments || "Next: Documents"}
             </Button>
           </div>
         </form>
@@ -367,7 +294,7 @@ export default function AddVehicleModal({
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
             <div className="space-y-2">
               <label className="text-xs font-black uppercase text-gray-400">
-                Tech Passport (Front)
+                {av?.techPassportFront || "Tech Passport (Front)"}
               </label>
               <div className="relative border-2 border-dashed border-border rounded-xl p-4 text-center hover:border-primary transition-colors cursor-pointer group">
                 <input
@@ -388,14 +315,14 @@ export default function AddVehicleModal({
                 ) : (
                   <div className="text-gray-400 py-4">
                     <HiUpload className="mx-auto text-2xl mb-2 group-hover:scale-110 transition-transform" />
-                    <span className="text-xs font-bold">Upload Front Side</span>
+                    <span className="text-xs font-bold">{av?.uploadFront || "Upload Front Side"}</span>
                   </div>
                 )}
               </div>
             </div>
             <div className="space-y-2">
               <label className="text-xs font-black uppercase text-gray-400">
-                Tech Passport (Back)
+                {av?.techPassportBack || "Tech Passport (Back)"}
               </label>
               <div className="relative border-2 border-dashed border-border rounded-xl p-4 text-center hover:border-primary transition-colors cursor-pointer group">
                 <input
@@ -416,7 +343,7 @@ export default function AddVehicleModal({
                 ) : (
                   <div className="text-gray-400 py-4">
                     <HiUpload className="mx-auto text-2xl mb-2 group-hover:scale-110 transition-transform" />
-                    <span className="text-xs font-bold">Upload Back Side</span>
+                    <span className="text-xs font-bold">{av?.uploadBack || "Upload Back Side"}</span>
                   </div>
                 )}
               </div>
@@ -425,7 +352,7 @@ export default function AddVehicleModal({
 
           <div className="space-y-2">
             <label className="text-xs font-black uppercase text-gray-400">
-              Car Images (Min 1)
+              {av?.carImages || "Car Images (Min 1)"}
             </label>
             <div className="relative border-2 border-dashed border-border rounded-xl p-8 text-center hover:border-primary transition-colors cursor-pointer group">
               <input
@@ -437,10 +364,10 @@ export default function AddVehicleModal({
               <div className="text-gray-400">
                 <HiUpload className="mx-auto text-3xl mb-2 group-hover:scale-110 transition-transform" />
                 <p className="text-sm font-bold">
-                  Drop files here or click to upload
+                  {av?.dropFiles || "Drop files here or click to upload"}
                 </p>
                 <p className="text-[10px] font-black uppercase tracking-widest mt-1">
-                  Exterior, interior, etc.
+                  {av?.exteriorInterior || "Exterior, interior, etc."}
                 </p>
               </div>
             </div>
@@ -468,7 +395,7 @@ export default function AddVehicleModal({
               onClick={() => setStep("details")}
               disabled={isUploadingImages}
             >
-              <HiChevronLeft className="mr-1" /> Back
+              <HiChevronLeft className="mr-1" /> {av?.back || "Back"}
             </Button>
             <div className="flex">
               <Button
@@ -478,10 +405,10 @@ export default function AddVehicleModal({
                 onClick={handleClose}
                 disabled={isUploadingImages}
               >
-                Cancel
+                {av?.cancel || "Cancel"}
               </Button>
               <Button type="submit" loading={isUploadingImages}>
-                Submit Registration
+                {av?.submit || "Submit Registration"}
               </Button>
             </div>
           </div>

@@ -101,6 +101,7 @@ export interface Booking {
     id?: number;
     latitude?: string;
     longitude?: string;
+    status?: string;
   }[];
 }
 

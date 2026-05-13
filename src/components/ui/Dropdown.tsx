@@ -6,7 +6,8 @@ import { HiChevronDown } from "react-icons/hi";
 
 interface Option {
   id: string | number;
-  name: string;
+  label: string | React.ReactNode;
+  name?: string; // Optional string name for simple display/alt
 }
 
 interface DropdownProps {
@@ -67,9 +68,9 @@ const Dropdown: React.FC<DropdownProps> = ({
           !selectedOption && "text-gray-400",
         )}
       >
-        <span className="truncate mr-2">
-          {selectedOption ? selectedOption.name : placeholder}
-        </span>
+        <div className="truncate mr-2 flex items-center">
+          {selectedOption ? selectedOption.label : placeholder}
+        </div>
         <HiChevronDown
           className={cn(
             "w-5 h-5 transition-transform duration-200 shrink-0",
@@ -79,7 +80,7 @@ const Dropdown: React.FC<DropdownProps> = ({
       </button>
 
       {isOpen && (
-        <ul className="absolute z-100 w-full mt-2 bg-white border border-border rounded-xl shadow-xl max-h-60 overflow-auto py-1 animate-in fade-in zoom-in duration-200 left-0">
+        <ul className="absolute z-[100] w-full mt-2 bg-white border border-border rounded-xl shadow-xl max-h-60 overflow-auto py-1 animate-in fade-in zoom-in duration-200 left-0">
           {options.length > 0 ? (
             options.map((option) => (
               <li
@@ -89,11 +90,11 @@ const Dropdown: React.FC<DropdownProps> = ({
                   setIsOpen(false);
                 }}
                 className={cn(
-                  "px-4 py-2.5 hover:bg-primary/5 cursor-pointer transition-colors text-dark-text text-sm",
+                  "px-4 py-2.5 hover:bg-primary/5 cursor-pointer transition-colors text-dark-text text-sm flex items-center",
                   value === option.id && "bg-primary/10 text-primary font-bold",
                 )}
               >
-                {option.name}
+                {option.label}
               </li>
             ))
           ) : (

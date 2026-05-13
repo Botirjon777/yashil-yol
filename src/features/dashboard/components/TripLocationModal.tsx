@@ -112,7 +112,7 @@ export default function TripLocationModal({
             options={
               regions?.map((r) => ({
                 id: r.id,
-                name: getLocalizedName(r),
+                label: getLocalizedName(r),
               })) || []
             }
             value={regionId}
@@ -124,7 +124,7 @@ export default function TripLocationModal({
             options={
               districts?.map((d) => ({
                 id: d.id,
-                name: getLocalizedName(d),
+                label: getLocalizedName(d),
               })) || []
             }
             value={districtId}
@@ -137,7 +137,7 @@ export default function TripLocationModal({
             options={
               quarters?.map((q) => ({
                 id: q.id,
-                name: getLocalizedName(q),
+                label: getLocalizedName(q),
               })) || []
             }
             value={quarterId}

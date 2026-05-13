@@ -43,3 +43,15 @@ export const cancelTrip = async (
   );
   return res.data;
 };
+
+/** POST /driver/trips/:id/start-trip */
+export const startTrip = async (id: string | number): Promise<any> => {
+  const res = await api.post(`driver/trips/${id}/start-trip`);
+  return res.data;
+};
+
+/** POST /driver/trips/:id/finish-trip */
+export const finishTrip = async (id: string | number): Promise<any> => {
+  const res = await api.post(`driver/trips/${id}/finish-trip`);
+  return res.data;
+};
