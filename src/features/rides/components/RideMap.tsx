@@ -74,7 +74,14 @@ const Routing = ({ waypoints }: RoutingProps) => {
 
     return () => {
       if (map && routingControl) {
-        map.removeControl(routingControl);
+        try {
+          // Check if map still has a container (is not destroyed)
+          if ((map as any)._container) {
+            map.removeControl(routingControl);
+          }
+        } catch (e) {
+          console.warn("Leaflet routing cleanup error:", e);
+        }
       }
     };
   }, [map, waypoints]);
@@ -88,7 +95,9 @@ const MapEffect = () => {
     // Force Leaflet to recalculate size after a short delay
     // to handle dynamic layout and container shifts
     const timer = setTimeout(() => {
-      map.invalidateSize();
+      if (map && (map as any)._container) {
+        map.invalidateSize();
+      }
     }, 250);
     return () => clearTimeout(timer);
   }, [map]);
@@ -106,6 +115,7 @@ const BlurMarker = ({ center, radius }: BlurMarkerProps) => {
 
   React.useEffect(() => {
     const update = () => {
+      if (!map || !(map as any)._container) return;
       const p1 = map.latLngToLayerPoint(center);
       // Rough estimation: 1 degree latitude is ~111320 meters
       const p2 = map.latLngToLayerPoint(L.latLng(center.lat + (radius / 111320), center.lng));

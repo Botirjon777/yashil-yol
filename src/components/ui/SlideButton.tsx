@@ -12,6 +12,7 @@ interface SlideButtonProps {
   className?: string;
   disabled?: boolean;
   isLoading?: boolean;
+  icon?: React.ReactNode;
 }
 
 const SlideButton: React.FC<SlideButtonProps> = ({
@@ -21,6 +22,7 @@ const SlideButton: React.FC<SlideButtonProps> = ({
   className,
   disabled = false,
   isLoading = false,
+  icon,
 }) => {
   const [isSuccess, setIsSuccess] = useState(false);
   const containerRef = useRef<HTMLDivElement>(null);
@@ -109,7 +111,7 @@ const SlideButton: React.FC<SlideButtonProps> = ({
         style={{ x, scale }}
         className="absolute top-1 bottom-1 left-1 w-14 bg-primary rounded-xl flex items-center justify-center text-white shadow-[0_4px_12px_rgba(79,70,229,0.4)] cursor-grab active:cursor-grabbing z-10 transition-colors hover:bg-primary-dark"
       >
-        <HiChevronRight className="w-8 h-8" />
+        {icon || <HiChevronRight className="w-8 h-8" />}
       </motion.div>
     </div>
   );

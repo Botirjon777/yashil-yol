@@ -122,13 +122,17 @@ const Footer = () => {
               </a>
 
               <a
-                href="#"
+                href="https://www.instagram.com/ketamiz_com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-light-bg flex items-center justify-center rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300"
               >
                 <FaInstagram size={20} />
               </a>
               <a
                 href="#"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-10 h-10 bg-light-bg flex items-center justify-center rounded-xl text-primary hover:bg-primary hover:text-white transition-all duration-300"
               >
                 <FaFacebook size={20} />

@@ -19,6 +19,7 @@ const nextConfig: NextConfig = {
     "a8b6-91-196-77-111.ngrok-free.app",
     "0dd4-213-230-112-58.ngrok-free.app",
     "98c2-84-54-94-187.ngrok-free.app",
+    "0044-91-196-77-111.ngrok-free.app",
   ],
 };
 

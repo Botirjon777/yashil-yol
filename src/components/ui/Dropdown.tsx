@@ -19,6 +19,7 @@ interface DropdownProps {
   error?: string;
   className?: string;
   disabled?: boolean;
+  large?: boolean;
 }
 
 const Dropdown: React.FC<DropdownProps> = ({
@@ -30,6 +31,7 @@ const Dropdown: React.FC<DropdownProps> = ({
   error,
   className,
   disabled = false,
+  large = false,
 }) => {
   const [isOpen, setIsOpen] = useState(false);
   const dropdownRef = useRef<HTMLDivElement>(null);
@@ -62,9 +64,11 @@ const Dropdown: React.FC<DropdownProps> = ({
         disabled={disabled}
         className={cn(
           "w-full bg-light-bg border border-border text-dark-text rounded-xl px-4 py-2.5 text-left flex items-center justify-between transition-all duration-200 focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary text-sm font-medium",
+          large && "py-4 px-6 text-lg font-black rounded-2xl shadow-md",
           isOpen && "border-primary ring-2 ring-primary/20",
           error && "border-error focus:ring-error/20 focus:border-error",
-          disabled && "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed",
+          disabled &&
+            "bg-gray-50 border-gray-200 text-gray-400 cursor-not-allowed",
           !selectedOption && "text-gray-400",
         )}
       >
@@ -74,13 +78,19 @@ const Dropdown: React.FC<DropdownProps> = ({
         <HiChevronDown
           className={cn(
             "w-5 h-5 transition-transform duration-200 shrink-0",
+            large && "w-6 h-6",
             isOpen && "rotate-180",
           )}
         />
       </button>
 
       {isOpen && (
-        <ul className="absolute z-[100] w-full mt-2 bg-white border border-border rounded-xl shadow-xl max-h-60 overflow-auto py-1 animate-in fade-in zoom-in duration-200 left-0">
+        <ul
+          className={cn(
+            "absolute z-100 w-full mt-2 bg-white border border-border rounded-xl shadow-xl max-h-60 overflow-auto py-1 animate-in fade-in zoom-in duration-200 left-0",
+            large && "rounded-2xl mt-3 shadow-2xl",
+          )}
+        >
           {options.length > 0 ? (
             options.map((option) => (
               <li
@@ -91,6 +101,7 @@ const Dropdown: React.FC<DropdownProps> = ({
                 }}
                 className={cn(
                   "px-4 py-2.5 hover:bg-primary/5 cursor-pointer transition-colors text-dark-text text-sm flex items-center",
+                  large && "px-6 py-4 text-base",
                   value === option.id && "bg-primary/10 text-primary font-bold",
                 )}
               >

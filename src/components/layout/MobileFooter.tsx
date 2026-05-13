@@ -48,19 +48,25 @@ const MobileFooter = () => {
           <div className="flex flex-col items-center space-y-2.5 md:space-y-5">
             <div className="flex justify-center space-x-6">
               <a
-                href="#"
+                href="https://t.me/ketamizcom"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-12 h-12 bg-light-bg flex items-center justify-center rounded-2xl text-primary border border-border"
               >
                 <FaTelegram size={24} />
               </a>
               <a
-                href="#"
+                href="https://www.instagram.com/ketamiz_com"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-12 h-12 bg-light-bg flex items-center justify-center rounded-2xl text-primary border border-border"
               >
                 <FaInstagram size={24} />
               </a>
               <a
                 href="#"
+                target="_blank"
+                rel="noopener noreferrer"
                 className="w-12 h-12 bg-light-bg flex items-center justify-center rounded-2xl text-primary border border-border"
               >
                 <FaFacebook size={24} />

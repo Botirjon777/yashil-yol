@@ -150,6 +150,10 @@ const DriverRideDetailsPage = () => {
               isCanceling={isCanceling}
               driverName={driverName}
               rd={rd}
+              handleStartTrip={handleStartTrip}
+              handleFinishTrip={handleFinishTrip}
+              isStartingTrip={isStartingTrip}
+              isFinishingTrip={isFinishingTrip}
             />
           </div>
         </div>
@@ -168,23 +172,6 @@ const DriverRideDetailsPage = () => {
         }
         isLoading={isCanceling}
       />
-      
-      {/* Sticky Bottom Slide Action for Driver */}
-      {isDriver && !isPast && (String(trip.status) === "active" || String(trip.status) === "in_progress") && (
-        <div className="lg:hidden fixed bottom-0 left-0 right-0 p-4 bg-white/80 backdrop-blur-xl border-t border-border z-40 animate-in-bottom">
-          <div className="max-w-5xl mx-auto">
-            <SlideButton
-              label={String(trip.status) === "active" ? (rd("startTrip") || "Slide to Start") : (rd("finishTrip") || "Slide to Finish")}
-              onSuccess={String(trip.status) === "active" ? handleStartTrip : handleFinishTrip}
-              isLoading={isStartingTrip || isFinishingTrip}
-              successLabel={String(trip.status) === "active" ? "Trip Started!" : "Trip Finished!"}
-            />
-          </div>
-        </div>
-      )}
-      
-      {/* Padding for fixed button on mobile */}
-      <div className="h-24 lg:hidden" />
     </div>
   );
 };
