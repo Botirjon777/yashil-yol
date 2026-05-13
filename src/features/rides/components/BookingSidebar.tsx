@@ -7,11 +7,13 @@ import {
   HiPlusSm,
   HiX,
   HiQuestionMarkCircle,
+  HiMap,
 } from "react-icons/hi";
 import { useState } from "react";
 import { AnimatePresence, motion } from "framer-motion";
 import { formatCurrency } from "@/src/lib/utils";
 import Button from "@/src/components/ui/Button";
+import SlideButton from "@/src/components/ui/SlideButton";
 
 interface BookingSidebarProps {
   trip: any;
@@ -27,6 +29,10 @@ interface BookingSidebarProps {
   driverName: string;
   rd: (key: string) => string;
   showDriverInfo?: boolean;
+  handleStartTrip?: () => void;
+  handleFinishTrip?: () => void;
+  isStartingTrip?: boolean;
+  isFinishingTrip?: boolean;
 }
 
 export const BookingSidebar = ({
@@ -43,6 +49,10 @@ export const BookingSidebar = ({
   driverName,
   rd,
   showDriverInfo = true,
+  handleStartTrip,
+  handleFinishTrip,
+  isStartingTrip,
+  isFinishingTrip,
 }: BookingSidebarProps) => {
   const [showTooltip, setShowTooltip] = useState(false);
 
@@ -91,6 +101,49 @@ export const BookingSidebar = ({
           </div>
         </div>
         <div className="p-6 space-y-3">
+          {isDriver &&
+            !isPast &&
+            ((String(trip.status) === "active" &&
+              (trip.google_map_url ||
+                (trip.start_lat && trip.start_long) ||
+                (trip.starting_point?.lat && trip.starting_point?.long))) ||
+              String(trip.status) === "in_progress") && (
+              <div className="mb-4">
+                <SlideButton
+                  label={
+                    String(trip.status) === "active"
+                      ? rd("googleMaps") || "Open in Google Maps"
+                      : rd("finishTrip") || "Slide to Finish"
+                  }
+                  icon={
+                    String(trip.status) === "active" ? (
+                      <HiMap className="w-6 h-6" />
+                    ) : undefined
+                  }
+                  onSuccess={() => {
+                    if (String(trip.status) === "active") {
+                      // We don't call handleStartTrip here because the user wants it to ONLY open the map
+                      const googleMapsUrl =
+                        trip.google_map_url ||
+                        `https://www.google.com/maps/dir/?api=1&origin=${trip.start_lat || trip.starting_point?.lat},${trip.start_long || trip.starting_point?.long}&destination=${trip.end_lat || trip.ending_point?.lat},${trip.end_long || trip.ending_point?.long}&mode=driving`;
+
+                      // Small delay to allow the "Success!" animation state to be visible
+                      setTimeout(() => {
+                        window.open(googleMapsUrl, "_blank");
+                      }, 500);
+                    } else {
+                      if (handleFinishTrip) handleFinishTrip();
+                    }
+                  }}
+                  isLoading={isStartingTrip || isFinishingTrip}
+                  successLabel={
+                    String(trip.status) === "active"
+                      ? rd("googleMaps") || "Opening Maps..."
+                      : "Trip Finished!"
+                  }
+                />
+              </div>
+            )}
           {canCancel && (
             <Button
               fullWidth
