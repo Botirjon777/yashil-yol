@@ -149,8 +149,6 @@ export const searchTripsByRegion = async (
     per_page,
   });
 
-  console.log("Raw Response from Region Search API:", res.data);
-
   const data =
     res.data?.data?.data ??
     res.data?.data ??
@@ -219,6 +217,19 @@ export const removePassengerFromBooking = async (
   const res = await api.post(
     `client/booking/${bookingId}/remove-passenger/${passengerId}`,
     {},
+  );
+  return res.data;
+};
+
+/** PUT /client/booking/:bookingId/passengers/:passengerId/address */
+export const updatePassengerAddress = async (
+  bookingId: string | number,
+  passengerId: string | number,
+  data: { latitude: number; longitude: number },
+): Promise<any> => {
+  const res = await api.put(
+    `client/booking/${bookingId}/passengers/${passengerId}/address`,
+    data,
   );
   return res.data;
 };

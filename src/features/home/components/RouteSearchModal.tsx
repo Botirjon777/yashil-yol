@@ -50,6 +50,45 @@ export function RouteSearchModal({
   const [toDistrictId, setToDistrictId] = useState<string>("");
   const [toQuarterId, setToQuarterId] = useState<string>("");
 
+  const [overlayConfig, setOverlayConfig] = useState<{
+    show: boolean;
+    text: string;
+    color: "primary" | "secondary";
+  }>({ show: false, text: "", color: "primary" });
+
+  useEffect(() => {
+    if (!isOpen) {
+      setOverlayConfig({ show: false, text: "", color: "primary" });
+      return;
+    }
+
+    if (step === 0) {
+      setOverlayConfig({
+        show: true,
+        text: t("home", "from") || "Qayerdan",
+        color: "primary",
+      });
+      const timer = setTimeout(
+        () => setOverlayConfig((p) => ({ ...p, show: false })),
+        650,
+      );
+      return () => clearTimeout(timer);
+    }
+
+    if (step === 3) {
+      setOverlayConfig({
+        show: true,
+        text: t("home", "to") || "Qayerga",
+        color: "secondary",
+      });
+      const timer = setTimeout(
+        () => setOverlayConfig((p) => ({ ...p, show: false })),
+        650,
+      );
+      return () => clearTimeout(timer);
+    }
+  }, [step, isOpen, t]);
+
   useEffect(() => {
     if (isOpen) {
       setStep(initialStep);
@@ -197,6 +236,9 @@ export function RouteSearchModal({
   };
 
   const handleSelect = (id: string | null) => {
+    const selectedItem = items.find((item) => String(item.id) === id);
+    const label = selectedItem ? getLocalizedName(selectedItem) : "";
+
     if (step === 0) {
       if (id) setFromRegionId(id);
       handleNext();
@@ -327,9 +369,18 @@ export function RouteSearchModal({
                     <HiChevronLeft className="w-6 h-6" />
                   </button>
                 )}
-                <h2 className="text-xl font-black text-dark-text tracking-tight">
-                  {title}
-                </h2>
+                <AnimatePresence mode="wait">
+                  <motion.h2
+                    key={title}
+                    initial={{ y: 10, opacity: 0 }}
+                    animate={{ y: 0, opacity: 1 }}
+                    exit={{ y: -10, opacity: 0 }}
+                    transition={{ duration: 0.2 }}
+                    className="text-xl font-black text-dark-text tracking-tight"
+                  >
+                    {title}
+                  </motion.h2>
+                </AnimatePresence>
               </div>
               <button
                 onClick={onClose}
@@ -340,19 +391,33 @@ export function RouteSearchModal({
             </div>
 
             {/* Progress bar */}
-            <div className="h-1 bg-gray-100 w-full">
+            <div className="h-1.5 bg-gray-100 w-full overflow-hidden">
               <motion.div
-                className="h-full bg-primary"
-                initial={{ width: `${(step / 6) * 100}%` }}
-                animate={{ width: `${((step + 1) / 6) * 100}%` }}
-                transition={{ duration: 0.3 }}
+                className="h-full"
+                initial={{ width: `${(step / 6) * 100}%`, backgroundColor: "#4f46e5" }}
+                animate={{ 
+                  width: `${((step + 1) / 6) * 100}%`,
+                  backgroundColor: step < 3 ? "#4f46e5" : "#0ea5e9"
+                }}
+                transition={{ duration: 0.4, ease: "circOut" }}
               />
             </div>
 
-            <div className="bg-white px-6 py-4 shadow-sm z-10">
-              <h3 className="text-sm font-black uppercase text-blue-800 underline underline-offset-4 tracking-widest">
-                {subtitle}
-              </h3>
+
+
+            <div className="bg-white px-6 py-4 shadow-sm z-10 overflow-hidden">
+              <AnimatePresence mode="wait">
+                <motion.h3
+                  key={subtitle}
+                  initial={{ y: 5, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  exit={{ y: -5, opacity: 0 }}
+                  transition={{ duration: 0.2 }}
+                  className="text-sm font-black uppercase text-blue-800 underline underline-offset-4 tracking-widest"
+                >
+                  {subtitle}
+                </motion.h3>
+              </AnimatePresence>
             </div>
 
             {/* List Content */}
@@ -410,12 +475,20 @@ export function RouteSearchModal({
                               onClick={() => handleSelect(String(item.id))}
                               className={`w-full text-left p-4 rounded-2xl border transition-all ${
                                 isActive
-                                  ? "bg-primary/5 border-primary shadow-sm"
+                                  ? step < 3
+                                    ? "bg-primary/5 border-primary shadow-sm"
+                                    : "bg-secondary/5 border-secondary shadow-sm"
                                   : "bg-white border-border hover:border-primary/30 shadow-sm hover:shadow-md"
                               }`}
                             >
                               <span
-                                className={`font-bold ${isActive ? "text-primary" : "text-dark-text"}`}
+                                className={`font-bold ${
+                                  isActive
+                                    ? step < 3
+                                      ? "text-primary"
+                                      : "text-secondary"
+                                    : "text-dark-text"
+                                }`}
                               >
                                 {getLocalizedName(item)}
                               </span>
@@ -426,6 +499,44 @@ export function RouteSearchModal({
                     </div>
                   )}
                 </motion.div>
+              </AnimatePresence>
+
+              {/* Phase Transition Overlay */}
+              <AnimatePresence>
+                {overlayConfig.show && (
+                  <motion.div
+                    initial={{ opacity: 0, scale: 0.8 }}
+                    animate={{ opacity: 1, scale: 1 }}
+                    exit={{ opacity: 0, scale: 1.1 }}
+                    className="absolute inset-0 z-50 flex items-center justify-center bg-dark-text/40 backdrop-blur-md"
+                  >
+                    <motion.div
+                      initial={{ y: 20 }}
+                      animate={{ y: 0 }}
+                      className="text-center"
+                    >
+                      <h4
+                        className={`text-6xl font-black uppercase tracking-tighter mb-2 ${
+                          overlayConfig.color === "primary"
+                            ? "text-primary"
+                            : "text-secondary"
+                        }`}
+                        style={{
+                          textShadow: "0 0 40px rgba(255,255,255,0.5)",
+                        }}
+                      >
+                        {overlayConfig.text}
+                      </h4>
+                      <div
+                        className={`h-2 w-24 mx-auto rounded-full ${
+                          overlayConfig.color === "primary"
+                            ? "bg-primary"
+                            : "bg-secondary"
+                        }`}
+                      />
+                    </motion.div>
+                  </motion.div>
+                )}
               </AnimatePresence>
             </div>
           </motion.div>

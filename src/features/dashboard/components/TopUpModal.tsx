@@ -124,7 +124,7 @@ const TopUpModal: React.FC<TopUpModalProps> = ({
     .filter((card) => card.status === "verified")
     .map((card) => ({
       id: String(card.id), // Change back to numeric ID (as string)
-      name: `${card.number} (${card.brand || card.label || "Card"})`,
+      label: `${card.number} (${card.brand || card.label || "Card"})`,
     }));
 
   const quickAmounts = [50000, 100000, 200000, 500000];

@@ -21,6 +21,9 @@ import {
   useCancelClientBooking,
   useAddPassenger,
   useRemovePassenger,
+  useUpdatePassengerAddress,
+  useStartTrip,
+  useFinishTrip,
   handleError,
 } from "@/src/features/rides/hooks/useRides";
 import { useCarColors } from "@/src/features/rides/hooks/useVehicles";
@@ -165,6 +168,9 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
   const { mutate: cancelBooking, isPending: isCancelingBooking } = useCancelClientBooking();
   const { mutate: addPassenger, isPending: isAddingPassenger } = useAddPassenger();
   const { mutate: removePassenger, isPending: isRemovingPassenger } = useRemovePassenger();
+  const { mutate: updatePassengerAddress, isPending: isUpdatingAddress } = useUpdatePassengerAddress();
+  const { mutate: startTrip, isPending: isStartingTrip } = useStartTrip();
+  const { mutate: finishTrip, isPending: isFinishingTrip } = useFinishTrip();
 
   // States
   const [isBookModalOpen, setIsBookModalOpen] = useState(false);
@@ -436,6 +442,29 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
       }
     );
   };
+  
+  const handleUpdatePassengerAddress = (passengerId: string | number, data: { latitude: number; longitude: number }) => {
+    if (!token || mode !== "passenger") return;
+    
+    const targetId = myBooking?.id || id;
+    
+    updatePassengerAddress(
+      { bookingId: targetId, passengerId, data },
+      {
+        onError: (err: any) => toast.error(handleError(err, t))
+      }
+    );
+  };
+  
+  const handleStartTrip = () => {
+    if (!token || !isDriver || !trip) return;
+    startTrip(trip.id);
+  };
+
+  const handleFinishTrip = () => {
+    if (!token || !isDriver || !trip) return;
+    finishTrip(trip.id);
+  };
 
   return {
     trip,
@@ -460,6 +489,7 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     isCanceling: isCanceling || isCancelingBooking,
     isAddingPassenger,
     isRemovingPassenger,
+    isUpdatingAddress,
     isAddPassengerModalOpen,
     setIsAddPassengerModalOpen,
     bookingStatus: (myBooking?.booking_status || 
@@ -475,6 +505,11 @@ export function useRideDetails(id: string, mode?: "driver" | "public" | "passeng
     handleCancel,
     handleAddPassenger: handleAddPassengerToBooking,
     handleRemovePassenger: handleRemovePassengerFromBooking,
+    handleUpdatePassengerAddress,
+    handleStartTrip,
+    handleFinishTrip,
+    isStartingTrip,
+    isFinishingTrip,
     t,
     rd,
   };

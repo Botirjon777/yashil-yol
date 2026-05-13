@@ -83,9 +83,9 @@ export const SelectionSection = ({
         <Dropdown
           label="Select Role"
           options={[
-            { id: "driver", name: "Professional Driver" },
-            { id: "passenger", name: "Frequent Traveler" },
-            { id: "admin", name: "System Administrator" },
+            { id: "driver", label: "Professional Driver" },
+            { id: "passenger", label: "Frequent Traveler" },
+            { id: "admin", label: "System Administrator" },
           ]}
           value={dropdownVal}
           onChange={setDropdownVal}

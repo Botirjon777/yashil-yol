@@ -230,9 +230,9 @@ const MobileSidebar: React.FC<MobileSidebarProps> = ({ isOpen, onClose }) => {
               </div>
               <Dropdown
                 options={[
-                  { id: "uz", name: "O'zbekcha" },
-                  { id: "ru", name: "Русский" },
-                  { id: "en", name: "English" },
+                  { id: "uz", label: "O'zbekcha" },
+                  { id: "ru", label: "Русский" },
+                  { id: "en", label: "English" },
                 ]}
                 value={language}
                 onChange={(val) => setLanguage(val)}

@@ -9,6 +9,7 @@ import {
   bookTrip,
   addPassengerToBooking,
   removePassengerFromBooking,
+  updatePassengerAddress,
   searchTripsByRegion,
 } from "../actions/actions";
 import {
@@ -26,6 +27,8 @@ import {
   getDriverAllTrips,
   getDriverTripById,
   cancelTrip,
+  startTrip,
+  finishTrip,
 } from "../../dashboard/actions/driverTrips";
 import { Trip, TripSearchParams, CreateTripRequest, Booking } from "../types";
 import { PaginatedTrips } from "../actions/actions";
@@ -281,6 +284,68 @@ export const useRemovePassenger = () => {
     },
     onSuccess: () => {
       toast.success("Passenger removed successfully");
+    },
+  });
+};
+
+export const useUpdatePassengerAddress = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: ({
+      bookingId,
+      passengerId,
+      data,
+    }: {
+      bookingId: string | number;
+      passengerId: string | number;
+      data: { latitude: number; longitude: number };
+    }) => updatePassengerAddress(bookingId, passengerId, data),
+    onSuccess: async (_, variables) => {
+      await Promise.all([
+        queryClient.invalidateQueries({
+          queryKey: ["client-bookings", "detail", variables.bookingId],
+        }),
+        queryClient.invalidateQueries({ queryKey: ["trip"] }),
+        queryClient.invalidateQueries({ queryKey: ["client-bookings"] }),
+      ]);
+      toast.success("Address updated successfully");
+    },
+    onError: (err: any) => {
+      toast.error(handleError(err));
+    },
+  });
+};
+
+export const useStartTrip = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string | number) => startTrip(id),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["driver-trips"] }),
+        queryClient.invalidateQueries({ queryKey: ["trip"] }),
+      ]);
+      toast.success("Trip started!");
+    },
+    onError: (err: any) => {
+      toast.error(handleError(err));
+    },
+  });
+};
+
+export const useFinishTrip = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: (id: string | number) => finishTrip(id),
+    onSuccess: async () => {
+      await Promise.all([
+        queryClient.invalidateQueries({ queryKey: ["driver-trips"] }),
+        queryClient.invalidateQueries({ queryKey: ["trip"] }),
+      ]);
+      toast.success("Trip finished!");
+    },
+    onError: (err: any) => {
+      toast.error(handleError(err));
     },
   });
 };

@@ -22,7 +22,8 @@
   "home": {
     "from": "Qayerdan",
     "to": "Qayerga",
-    "selectCity": "Shaharni tanlang"
+    "selectCity": "Shaharni tanlang",
+    "skip": "O'tkazib yuborish / Barchasi"
   },
   "hero": {
     "title": "Sayohatingiz uchun eng yaxshi hamroh",
@@ -354,6 +355,35 @@
       "noneTitle": "Biz bilan pul ishlashni xohlaysizmi?",
       "noneDesc": "Haydovchi bo'ling va safarlaringizni baham ko'rish orqali pul ishlashni boshlang!",
       "becomeDriver": "Haydovchi bo'lish"
+    },
+    "addVehicle": {
+      "title": "Yangi mashina qo'shish",
+      "step1": "Mashina ma'lumotlari",
+      "step2": "Hujjatlar va suratlar",
+      "carModel": "Mashina modeli",
+      "carModelPlaceholder": "masalan, Chevrolet Nexia 3",
+      "plateNumber": "Davlat raqami",
+      "plateNumberPlaceholder": "masalan, 01 A 123 AA",
+      "carColor": "Mashina rangi",
+      "selectColor": "Rangni tanlang",
+      "availableSeats": "Mavjud o'rinlar",
+      "techPassportNumber": "Texnik pasport raqami",
+      "techPassportPlaceholder": "masalan, TTR1234567",
+      "nextDocuments": "Keyingisi: Hujjatlar",
+      "techPassportFront": "Texnik pasport (Oldi)",
+      "techPassportBack": "Texnik pasport (Orqasi)",
+      "carImages": "Mashina suratlari (Kamida 1 ta)",
+      "uploadFront": "Oldi tomonini yuklang",
+      "uploadBack": "Orqa tomonini yuklang",
+      "dropFiles": "Fayllarni bu yerga tashlang yoki yuklash uchun bosing",
+      "exteriorInterior": "Tashqi ko'rinish, salon va h.k.",
+      "submit": "Ro'yxatdan o'tkazish",
+      "cancel": "Bekor qilish",
+      "back": "Orqaga",
+      "successSaved": "Ma'lumotlar saqlandi! Endi hujjatlarni yuklang.",
+      "successRegistered": "Mashina muvaffaqiyatli ro'yxatdan o'tkazildi va tasdiqlash kutilmoqda!",
+      "errorGetId": "Mashina ID raqamini olib bo'lmadi",
+      "errorFillAll": "Iltimos, barcha majburiy fayllarni yuklang"
     },
     "driverSection": {
       "title": "Haydovchi profili",

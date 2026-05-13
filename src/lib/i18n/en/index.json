@@ -22,7 +22,8 @@
   "home": {
     "from": "From",
     "to": "To",
-    "selectCity": "Select City"
+    "selectCity": "Select City",
+    "skip": "Skip / All"
   },
   "hero": {
     "title": "Your best companion for your journey",
@@ -354,6 +355,35 @@
       "noneTitle": "Want to earn with us?",
       "noneDesc": "Become a driver and start earning by sharing your rides!",
       "becomeDriver": "Become a Driver"
+    },
+    "addVehicle": {
+      "title": "Add New Vehicle",
+      "step1": "Vehicle Details",
+      "step2": "Documents & Photos",
+      "carModel": "Car Model",
+      "carModelPlaceholder": "e.g. Chevrolet Nexia 3",
+      "plateNumber": "Plate Number",
+      "plateNumberPlaceholder": "e.g. 01 A 123 AA",
+      "carColor": "Car Color",
+      "selectColor": "Select Color",
+      "availableSeats": "Available Seats",
+      "techPassportNumber": "Tech Passport Number",
+      "techPassportPlaceholder": "e.g. TTR1234567",
+      "nextDocuments": "Next: Documents",
+      "techPassportFront": "Tech Passport (Front)",
+      "techPassportBack": "Tech Passport (Back)",
+      "carImages": "Car Images (Min 1)",
+      "uploadFront": "Upload Front Side",
+      "uploadBack": "Upload Back Side",
+      "dropFiles": "Drop files here or click to upload",
+      "exteriorInterior": "Exterior, interior, etc.",
+      "submit": "Submit Registration",
+      "cancel": "Cancel",
+      "back": "Back",
+      "successSaved": "Vehicle info saved! Now upload documents.",
+      "successRegistered": "Vehicle registered successfully and pending approval!",
+      "errorGetId": "Failed to get vehicle ID",
+      "errorFillAll": "Please upload all required files"
     },
     "driverSection": {
       "title": "Driver Profile",

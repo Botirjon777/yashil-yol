@@ -64,7 +64,7 @@ const WithdrawModal: React.FC<WithdrawModalProps> = ({ isOpen, onClose, balance,
     .filter(card => card.status === "verified")
     .map(card => ({
       id: String(card.id),
-      name: `${card.number} (${card.brand || card.label || "Card"})`
+      label: `${card.number} (${card.brand || card.label || "Card"})`
     }));
 
   return (
