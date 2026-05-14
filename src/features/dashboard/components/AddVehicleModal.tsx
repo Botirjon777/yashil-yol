@@ -18,6 +18,7 @@ import {
 } from "@/src/features/rides/hooks/useVehicles";
 import { useUploadCarImages } from "@/src/features/become-a-driver/hooks/useBecomeDriver";
 import { cn, getVehicleColorHex } from "@/src/lib/utils";
+import { compressImage } from "@/src/lib/image-utils";
 import { toast } from "sonner";
 import { CarColor } from "@/src/features/rides/types";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
@@ -142,16 +143,35 @@ export default function AddVehicleModal({
     });
     onClose();
   };
-  const handleFileChange = (name: string, file: File | null) => {
-    setFiles((prev) => ({ ...prev, [name]: file }));
+  const handleFileChange = async (name: string, file: File | null) => {
+    if (!file) {
+      setFiles((prev) => ({ ...prev, [name]: null }));
+      return;
+    }
+    try {
+      const compressed = await compressImage(file);
+      setFiles((prev) => ({ ...prev, [name]: compressed }));
+    } catch (err) {
+      setFiles((prev) => ({ ...prev, [name]: file }));
+    }
   };
 
-  const handleCarImagesChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCarImagesChange = async (e: React.ChangeEvent<HTMLInputElement>) => {
     if (e.target.files) {
       const newFiles = Array.from(e.target.files);
+      toast.info("Processing images...");
+      const compressedFiles = await Promise.all(
+        newFiles.map(async (f) => {
+          try {
+            return await compressImage(f);
+          } catch (err) {
+            return f;
+          }
+        })
+      );
       setFiles((prev) => ({
         ...prev,
-        car_images: [...prev.car_images, ...newFiles],
+        car_images: [...prev.car_images, ...compressedFiles],
       }));
     }
   };

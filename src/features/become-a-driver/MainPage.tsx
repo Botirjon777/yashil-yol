@@ -24,6 +24,7 @@ import { CompleteStep } from "./sections/CompleteStep";
 
 import { useBecomeDriverStore } from "./store/becomeDriverStore";
 import { useLanguageStore } from "@/src/providers/LanguageProvider";
+import { compressImage } from "@/src/lib/image-utils";
 
 const MainPage = () => {
   const {
@@ -171,27 +172,51 @@ const MainPage = () => {
     );
   };
 
-  const validateAndSetFile = (
+  const validateAndSetFile = async (
     file: File | null,
     callback: (f: File | null) => void,
   ) => {
-    if (file && file.size > 10 * 1024 * 1024) {
-      toast.error(t("becomeDriver", "toasts")?.fileSizeError);
+    if (!file) {
+      callback(null);
       return;
     }
-    callback(file);
+
+    if (file.size > 15 * 1024 * 1024) {
+      toast.error(t("becomeDriver", "toasts")?.fileSizeError || "File too large");
+      return;
+    }
+
+    try {
+      const compressed = await compressImage(file);
+      callback(compressed);
+    } catch (err) {
+      console.error("Compression error:", err);
+      callback(file);
+    }
   };
 
-  const handleCarImagesChange = (files: FileList | null) => {
+  const handleCarImagesChange = async (files: FileList | null) => {
     if (!files) return;
     const newFiles = Array.from(files);
-    const validFiles = newFiles.filter((f) => {
-      if (f.size > 10 * 1024 * 1024) {
-        toast.error(`${f.name} ${t("becomeDriver", "toasts")?.fileSizeError}`);
-        return false;
-      }
-      return true;
-    });
+    
+    toast.info("Processing images...");
+    
+    const processedFiles = await Promise.all(
+      newFiles.map(async (f) => {
+        if (f.size > 15 * 1024 * 1024) {
+          toast.error(`${f.name} ${t("becomeDriver", "toasts")?.fileSizeError || "is too large"}`);
+          return null;
+        }
+        try {
+          return await compressImage(f);
+        } catch (err) {
+          return f;
+        }
+      })
+    );
+
+    const validFiles = processedFiles.filter((f): f is File => f !== null);
+
     setStep4Data((prev) => ({
       ...prev,
       car_images: [...prev.car_images, ...validFiles],
