@@ -159,6 +159,14 @@ const Footer = () => {
             <Link href="/" className="hover:text-primary transition-colors">
               {safeT("footer", "cookie")}
             </Link>
+            <a
+              href="https://info.ketamiz.com/"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-primary transition-colors"
+            >
+              info.ketamiz.com
+            </a>
           </div>
         </div>
       </div>

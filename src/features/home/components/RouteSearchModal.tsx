@@ -394,16 +394,17 @@ export function RouteSearchModal({
             <div className="h-1.5 bg-gray-100 w-full overflow-hidden">
               <motion.div
                 className="h-full"
-                initial={{ width: `${(step / 6) * 100}%`, backgroundColor: "#4f46e5" }}
-                animate={{ 
+                initial={{
+                  width: `${(step / 6) * 100}%`,
+                  backgroundColor: "#4f46e5",
+                }}
+                animate={{
                   width: `${((step + 1) / 6) * 100}%`,
-                  backgroundColor: step < 3 ? "#4f46e5" : "#0ea5e9"
+                  backgroundColor: step < 3 ? "#4f46e5" : "#0ea5e9",
                 }}
                 transition={{ duration: 0.4, ease: "circOut" }}
               />
             </div>
-
-
 
             <div className="bg-white px-6 py-4 shadow-sm z-10 overflow-hidden">
               <AnimatePresence mode="wait">

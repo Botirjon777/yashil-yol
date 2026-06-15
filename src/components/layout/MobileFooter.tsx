@@ -83,6 +83,13 @@ const MobileFooter = () => {
               <Link href="/about-us">{safeT("footer", "about")}</Link>
               <Link href="/support">{safeT("footer", "contact")}</Link>
               <Link href="/terms">{safeT("footer", "terms")}</Link>
+              <a
+                href="https://info.ketamiz.com/"
+                target="_blank"
+                rel="noopener noreferrer"
+              >
+                info.ketamiz.com
+              </a>
             </div>
             <p className="text-gray-400 text-sm font-medium">
               &copy; {new Date().getFullYear()} Ketamiz.{" "}

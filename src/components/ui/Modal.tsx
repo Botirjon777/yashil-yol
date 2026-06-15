@@ -32,13 +32,14 @@ const Modal: React.FC<ModalProps> = ({
   useEffect(() => {
     if (isOpen) {
       setShouldRender(true);
-      
+
       // Prevent shift by adding padding equal to scrollbar width
-      const scrollbarWidth = window.innerWidth - document.documentElement.clientWidth;
+      const scrollbarWidth =
+        window.innerWidth - document.documentElement.clientWidth;
       if (openModalsCount === 0 && scrollbarWidth > 0) {
         document.body.style.paddingRight = `${scrollbarWidth}px`;
       }
-      
+
       document.body.style.overflow = "hidden";
       openModalsCount++;
 
@@ -48,7 +49,7 @@ const Modal: React.FC<ModalProps> = ({
       setAnimate(false);
       const timer = setTimeout(() => {
         setShouldRender(false);
-        
+
         openModalsCount = Math.max(0, openModalsCount - 1);
         if (openModalsCount === 0) {
           document.body.style.overflow = "";
